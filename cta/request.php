@@ -126,7 +126,10 @@ else if(isset($changeReport) && $change==false){
 <label for="location">Location:</label>
 <input name="location" type="text" size="40" value="<?php echo (isset($_POST['location'])? $_POST['location'] : isset($rqlocation)? $rqlocation:'')
  ?>"  placeholder="around where?"/>
-<input name="<?php echo (isset($_GET['placed'])? ($_GET['placed']==1 ? 'change' : $_GET['placed']==0 ? 'request' : ''): '')?>" type="submit" size="30" value="<?php echo (isset($_GET['placed'])?  ($_GET['placed']==1 ? 'change' : $_GET['placed']==0 ? 'request' : ''): '') ?>"/>
+<input name="<?php echo (isset($_GET['p'])? ($_GET['p']==1 ? 'change' : ($_GET['p']==0 ? 'request' : '')): '')?>" 
+	  value="<?php echo (isset($_GET['p'])? ($_GET['p']==1 ? 'change' : ($_GET['p']==0 ? 'request' : '')): '') ?>"
+type="submit" size="30" 
+ />
 
 </fieldset>
 </form>

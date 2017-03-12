@@ -44,7 +44,7 @@ echo "<div class=\"account-nav-container\">
 	<a href=\"$root/cta/?src=clipped\" class=\"account-nav-link\">($clipcounter) Clipped properties</a>
 	<a href=\"\" class=\"account-nav-link\">($following) Following Agents</a>
 	<a href=\"\" class=\"account-nav-link\">(0) Agents Suggestions</a>
-	<a href=\"$root/cta/request.php?placed=$rqstatus\" class=\"account-nav-link\">Adjust request</a>
+	<a href=\"$root/cta/request.php?p=$rqstatus\" class=\"account-nav-link\">Adjust request</a>
 	<a href=\"\" class=\"account-nav-link\">Change CTA details</a>
 	<a href=\"\" class=\"account-nav-link\">Deactivate this CTA</a>								
 	</div>";
