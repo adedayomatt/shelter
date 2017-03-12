@@ -1,2 +1,1 @@
-<?php require('../profile.php') 
-?>
+<?php require('../profile.php') ?>
