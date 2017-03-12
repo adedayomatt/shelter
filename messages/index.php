@@ -16,28 +16,36 @@ if($status==0){
 ?>
 </head>
 <style>
-#notifications-content{
+#messages-content{
 	padding-top:20px;
 	width:70%;
 	margin:auto;
 	min-height:400px;
 border-radius:10px;
 }
-.notice,.client-follow-notice{
+.message{
+	
 	display:block;
 	list-style-type:none;
 	margin-bottom:2px;
 	padding-left:5px;
 	background-color:#eeeeee;
-	height:30px;
+	height:50px;
 	width:100%;
 	cursor:default;
 }
-.client-follow-notice{
-	height:50px;
-}
-.notice:hover{
+
+.message:hover{
 	opacity:0.8;
+}
+.message-heading{
+	display:inline-block;
+	font-size:15px;
+}
+.lastmessage{
+	display:inline;
+	font-size:12px;
+	line-height:0px;
 }
 .period{
 	padding-left:50px;
@@ -46,21 +54,31 @@ border-radius:10px;
 	
 }
 .since{
+	display:inline;
 	float:right;
 	padding-right:10px;
 	font-size:12px;
 	color:;
 }
+a:hover{
+	text-decoration:none;
+}
+#outbox{
+	background-position: -288px -144px;
+}
+#inbox{
+	background-position: -312px -144px;
+}
 </style>
 <body class="pic-background">
-<div id="notifications-content">
+<div id="messages-content">
 
 <?php
 /*
 @id = conversationid
 @target = logged in user
 */
-function inbox($id,$initiator,$participant,$subject,$receiver,$timestamp,$totalmsg){
+function inbox($id,$initiator,$participant,$subject,$lastmessage,$sender,$receiver,$timestamp,$totalmsg){
 	$time = time() - $timestamp;
 //if less than 60 secs
 	if($time<60){
@@ -85,8 +103,17 @@ if($initiator==$receiver){
 else if($participant==$receiver){
 	$head = $initiator;
 }
-	return "<li class=\"msg\">
-					 <a href=\"\">".$head."[$subject]</a>
+//if the message was sent by this particular user, then it is an outbox message
+if($sender==$receiver){
+	$messageclass='outbox';
+}
+else{
+	$messageclass='inbox';
+}
+	return "<li class=\"message\">
+					<div><i class=\"black-icon\" id=\"$messageclass\"></i>
+					 <a class=\"message-heading\" href=\"\">".$head." [$subject]</a></div>
+					 <p class=\"lastmessage\">".substr($lastmessage,0,100)."</p>
 					 <i class=\"since\">$since</i>
 					 
 						</li>";		
@@ -104,7 +131,7 @@ $getmsgsummary = mysql_query("SELECT * FROM messagelinker WHERE (initiator='$tar
 $allmsg = '';
 
 while($ms = @mysql_fetch_array($getmsgsummary,MYSQL_ASSOC)){
-$allmsg .= inbox($ms['conversationid'],$ms['initiator'],$ms['participant'],$ms['subject'],$target,$ms['lastmsgtime'],$ms['totalmsg']);
+$allmsg .= inbox($ms['conversationid'],$ms['initiator'],$ms['participant'],$ms['subject'],$ms['lastmsg'],$ms['sender'],$target,$ms['lastmsgtime'],$ms['totalmsg']);
 	}
 
 	mysql_close($db_connection);

@@ -23,9 +23,10 @@ hr{
 	padding-left:20px;
 }
 .recent-uploads{
-	width:100%;
-	margin-left:10px;
+	width:80%;
+	margin:auto;
 	padding:10px;	
+	min-height:400px;
 }
 #edit-icon{
 	background-position: 0px -72px;

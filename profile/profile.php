@@ -56,10 +56,22 @@ while($user = mysql_fetch_array($getprofile,MYSQL_ASSOC)){
 <p><?php echo $OTel?></p>
 <p> <?php echo $email?></p>
 <?php
-
+//check if conversation has existed between the users 
+$possible1 = $myid.$key;
+$possible2 = $key.$myid;
+$mutual = mysql_query("SELECT conversationid FROM messagelinker WHERE (conversationid='$possible1' OR conversationid='$possible2')");
+//if conversation has exited before, get the conversationid and take as the token
+if(mysql_num_rows($mutual) ==1){
+	$x = mysql_fetch_array($mutual,MYSQL_ASSOC);
+	$token = $x['conversationid'];
+}
+//if there exist any conversation before, create a conversation id
+else{
+	$token = $myid.$key;
+}
 switch($status){
 	case 1:
-	$sendmessage = "<a href=\"$root/messages/compose.php?cv=".$myid.$key."&i=$Business_Name&rcpt=$key\">send message</a>";
+	$sendmessage = "<a href=\"$root/messages/compose.php?cv=".$token."&i=$Business_Name&rcpt=$key\">send message</a>";
 	if($BizName != $Business_Name)
 	{
 	echo "<p align=\"right\"><a href=\"$root/profile/follow.php?flwer=$Business_Name&flwerId=$profile_name&flwing=$BizName&t=A4A&r=$Agent_Id\"><i class=\"black-icon\" id=\"edit-icon\"></i>".checkfollow($Business_Name,$BizName)."</a></p>";
@@ -70,7 +82,7 @@ switch($status){
 	}
 break;
 	case 9:
-	$sendmessage = "<a href=\"$root/messages/compose.php?cv=".$myid.$key."&i=$ctaname&rcpt=$key\">send message</a>";
+	$sendmessage = "<a href=\"$root/messages/compose.php?cv=".$token."&i=$ctaname&rcpt=$key\">send message</a>";
 echo "<p align=\"right\"><a href=\"$root/profile/follow.php?flwer=$ctaname&flwerId=$ctaid&flwing=$BizName&t=C4A&r=$Agent_Id\"><i class=\"black-icon\" id=\"edit-icon\"></i>".checkfollow($ctaname,$BizName)."</a></p>";
 echo $sendmessage;
 }
@@ -78,11 +90,13 @@ echo $sendmessage;
 </div>
 </div><hr style="width:100%; "/>
 <div class="recent-uploads">
-<h4>Recent uploads by <?php echo $BizName?></h4></div>
+<h4>Recent uploads by <?php echo $BizName?></h4>
 <?php
 $fetchproperties = mysql_query("SELECT property_ID,directory,type,location,rent,min_payment,bath,toilet,description,uploadby,date_uploaded FROM
                                properties WHERE (uploadby='".$Aid."')ORDER BY date_uploaded DESC");
+//if there is any record fetched
 if($fetchproperties){
+	if(mysql_num_rows($fetchproperties)>=1){
 	$count=0;
 	while($property = mysql_fetch_array($fetchproperties,MYSQL_ASSOC)){
 	$propertyId[$count] = $property['property_ID'];
@@ -101,10 +115,26 @@ if($fetchproperties){
 		}
 require("../require/propertyboxes.php");
 	}
+//if zero file was fetched
+	else{
+	//if it's the owner of the account that is accessing this page
+		if($status==1 && $BizName == $Business_Name){
+		echo "You have not uploaded any property yet, <a href=\"$root/upload\">upload one now</a>";
+		}
+		else{
+			echo "$BizName have not upload any property yet";
+		}
+	}
+}
 else{
 	echo "<p align=\"center\"><b>An error occured!!</b></p>";
 			}
 
+
+?>
+</div>
+<?php
+mysql_close($db_connection);
 require("../require/footer.html");
 ?>
 </div>

@@ -103,6 +103,7 @@ if($getclipped){
 else{
 	$clipcounter = 999;
 }
+$messages = mysql_num_rows(mysql_query("SELECT * FROM messages WHERE receiver='$ctaname' AND status='unseen'"));
 	$notifications = mysql_num_rows(mysql_query("SELECT * FROM notifications WHERE receiver='$ctaname' AND status='unseen'"));
 $following = mysql_num_rows(mysql_query("SELECT * FROM follow WHERE follower='$ctaname'"));
 

@@ -40,6 +40,7 @@ break;
 case 9:
 echo "<div class=\"account-nav-container\">
 	<p align=\"center\" style=\"margin-bottom:0px \"><strong>Client Temporary Account (CTA)</strong><br/>$ctaname</p>
+	<a href=\"$root/messages\" class=\"account-nav-link\">($messages) Messages</a>
 	<a href=\"$root/cta/?src=matches\" class=\"account-nav-link\">($matchcounter) Matches</a>
 	<a href=\"$root/cta/?src=clipped\" class=\"account-nav-link\">($clipcounter) Clipped properties</a>
 	<a href=\"\" class=\"account-nav-link\">($following) Following Agents</a>
