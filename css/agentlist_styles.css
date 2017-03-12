@@ -1,0 +1,60 @@
+
+div.maincontent{
+	height:500px;
+	width:100%;
+	background-color:#eeeeee;
+}
+div.mainlist{
+	float:left;
+	height:500px;
+	width:80%;
+	background-color:inherit;
+	overflow-y:scroll;
+	overflow-x:hidden;
+}
+
+
+.Agentbox{
+	background-color:white;
+	height:180px;
+	width:98%;
+	margin:5px;
+	padding:5px;
+	border-radius:5px;
+	
+}
+hr{
+	color:purple;
+}
+ul{
+	list-style-type:none;
+}
+
+.address{
+	list-style-image:url("image/mm.png");
+}
+.contact{
+	list-style-image:url("ping.png");
+}
+.tel{
+	list-style-image:url("ping.png");
+}
+.mail{
+	list-style-image:url("ping.png");
+}
+div.contacts-container{
+	width:100%;
+	height:75%;
+}
+div.fav-container{
+	width:100%;
+	height:15%;
+	background-color:blue;
+	margin-top:0;
+}
+div.RHSr{
+	height:500px;
+	width:18%;
+	float:right;
+	background-color:#eeeeee;
+}

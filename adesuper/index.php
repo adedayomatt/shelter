@@ -1,0 +1,1 @@
+<?php $BN = "Ade Super & Coy.";$Aid ="adesuper";$key = "1477562968";require('../profile/profile.php');?>

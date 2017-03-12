@@ -1,0 +1,100 @@
+<html>
+<header>
+<title>iono!</title>
+<script>
+
+var k = 2 ;
+function confirm(){
+//var x = prompt("your name","type here");
+document.write(Date());
+}
+function hover(){
+if(document.myform.second.value != document.myform.first.value){
+alert("...do not match");
+document.myform.first.focus() ;
+return false;
+}
+else{
+return (true);
+}
+}
+function go(){
+
+
+
+}
+
+var i = 0;
+/*
+This function is called every 2 seconds by slides() and each call increases the value of i and evaluate its modulo against 3(number)
+of the images in the slide so that the values will range between 0,1...(no of images) - 1 and assign it as index for the next image.
+*/
+function im(){
+var slides = ["images5.jpeg","images6.jpeg","images7.jpeg"];
+var img= document.getElementById("pic");
+img.src=slides[i];
+i = (i+1)%3;
+}
+/*
+This function calls the function im() every 2 seconds
+*/
+function slide(){
+setInterval(im,2000);
+}
+var count = 0;
+var start;
+
+function start(){
+var c = document.getElementById("counter");
+c.value =  count;
+count += 1;
+}
+function startcount(){
+ start = setInterval(start,1000);
+}
+
+function stop(){
+clearInterval(start);
+}
+var R = 0; 
+var G = 0;
+var B = 0;
+function spiral(){
+var mar = document.getElementById("pic");
+mar.width="160px";
+mar.src="images7.jpeg";
+}
+function time(){
+var t = document.getElementById("time");
+var datetime = Date().toString();
+t.value = datetime.substring(0,datetime.indexOf("GMT-0700 (Pacific Standard Time"));
+}
+function animate(){
+setInterval(time,1000);
+setInterval(im,2000);
+}
+</script>
+</header>
+<body onload="animate()">
+ <marquee   style="background-color: RGB(20,50,120)" scrolldelay="100">
+        <h2 id="s"> <i>This is just to test some javascript</i></h2></marquee>
+		
+<div id="scroll" onmouseenter="" style="background-color: RGB(200,100,120)">this is a block</div>
+<input type="button"  id="time" style="width: 100%; height: 40px; font-size: 20px; border:0px; text-align:right;"/>
+<img height="100px" width="300px" name="myimage" id="pic" src="images5.jpeg" onclick="slide()"/>
+
+<button id="but" name="slide" onclick="" >start slide</button>
+<input id="counter" name="w" type="button" value="0"/>
+ <button id="but2" name="count" onclick="startcount()" style="width: 200px; height: 40px;">start count</button>
+ <button  onclick="stop()" style="width: 200px; height: 40px;">stop!</button>
+
+<form name="myform" action="http://localhost/shelter" onsubmit="return(hover());">
+<input name ="first" type="password" size="20" value="a"/>
+<input name="second" type="password" size="20" value="b" />
+<input name="" type="submit" size="20" />
+</form>
+<p id="parag"> This is a paragragh click <a href="../../">here</a> to visit our main site</p>
+<p>listen to <a href="media/bob.mp3">song</a></p>
+<p>watch my funny session Click  <a href="media/funny-session.mov">here</a></p>
+</body>
+</html>

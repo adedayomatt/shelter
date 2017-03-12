@@ -1,0 +1,115 @@
+
+#image-tray{
+	min-height:300px;
+	min-width:1200px;
+}
+div.photo-container{
+	float:left;
+	border: 2px solid white;
+	margin-right:5px;
+}
+.property-photo{
+width:300px;
+	height:300px;
+}
+div#detail-tray{
+	width:70%;
+	padding-left:15%;
+	padding-right:15%;
+}
+#details-tab{
+	width:100%;
+	min-width:200px;
+	min-height:50px;
+	
+}
+div.tab{
+	cursor:pointer;
+	background-color:white;
+	border-radius:15px 15px 0px 0px;
+	margin-bottom:0;
+	padding:bottom:0;
+	margin-top:4px;
+	text-align:center;
+	width:30%;
+	height:35px;
+	border-bottom:5px solid #6D0AAA;
+}
+#tab1{
+	border-bottom:5px solid white;
+}
+div.switch-display{
+	background-color:white;
+	margin-top:0;
+	border-radius:0px 0px 10px 10px;
+	position:absolute;
+	width:70%;
+	padding-left:30px;
+	padding-right:30px;
+	min-height:350px;
+	min-width:500px;
+}
+div#rating{
+	display:none;
+}
+div#agent-contacts{
+	margin-left:50%;
+	color:white;
+	background-color:#6D0AAA;
+	margin-top:0;
+	border-radius:0px 0px 10px 10px;
+	position:absolute;
+	min-width:250px;
+	height:150px;
+	display:none;
+}
+#info-ul,#contacts-ul{
+	list-style-type:none;
+}
+li.info-list,li.contact-list{
+	height:20px;
+}
+hr{
+	color:#6D0AAA;
+	height:0px;
+}
+#info-btn{
+	float:left;
+}
+
+.rating-bar{
+	height:300px;
+	width:40px;
+	border:2px solid #6D0AAA;
+	margin: 5px;
+	background-color:#6D0AAA;
+}
+.wiped{
+	width:100%;
+	background-color:white;
+}
+
+td.bar-label{
+	font-size:12px;
+	text-align:left;
+}
+div#facilities-box{
+	float:left;
+	margin-top:50px;
+	height:100%;
+	width:30%;
+	background-color:inherit;
+}
+tr.facilities-row{
+	border-bottom:2px solid #6D0AAA;
+	text-align:left;
+}
+
+div#bars-box{
+	float:left;
+	height:100%;
+	width:70%;
+}
+li.contact-list{
+	height:30px;
+}

@@ -1,0 +1,93 @@
+/*Index style*/
+#whole-page{
+width:100%;
+min-height:600px;
+}
+#manage{
+	float:left;
+	width:70%;	
+
+}
+#manage-acct{
+	float:left;
+	width:50%
+}
+#manage-prop{
+	float:left;
+	width:50%
+}
+#misc{
+	float:left;
+	width:30%;
+}
+ul{
+	list-style-type:none;
+}
+li.link:hover{
+	text-decoration:underline;
+}
+div#hidden-form{
+	display:none;
+}
+
+.property-photo{
+		width:200px;
+		height:200px;
+		margin-right: 10px;
+	}
+fieldset{
+		border:2px solid #6D0AAA;
+	}
+legend{
+		font-size:20px;
+	}
+#deletebtn,#deactivatebtn{
+		margin-left:75%;
+		cursor:pointer;
+		font-weight:bold;
+		color:white;
+		background-color:red;
+		border:none;
+	}
+#deactivatebtn{
+		width:200px;
+		height:20px;
+	}
+#deletebtn{
+		width:80px;
+		height:30px;
+	}
+.icon{
+		display: inline-block;
+width: 14px;
+height: 14px;
+line-height: 14px;
+margin-top:1px;
+vertical-align: text-top;
+	background-image:url("../resrc/black-icons.png");
+		background-position:0px -72px;
+		}
+#delete-icon{
+		background-image:url("../resrc/white-icons.png");
+		background-position:-456px 0px;
+	}
+
+	div#edit-area,div#images-area{
+		width: 70%;
+		margin-left:15%;
+		margin-right:15%;
+	}
+	.edit-link{
+		color:blue;
+		margin-left:20%;
+		cursor:pointer;
+	}
+	.edit-link:hover{
+		text-decoration:underline;
+	}
+	div.edit-box{
+		display:none;
+	}
+	.dumb-input{
+		display:none;
+	}

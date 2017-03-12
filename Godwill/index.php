@@ -1,0 +1,1 @@
+<?php $BN = "Gods Will";$Aid ="Godwill";$key = "1477596792";require('../profile/profile.php');?>

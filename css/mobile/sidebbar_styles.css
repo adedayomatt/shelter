@@ -1,0 +1,10 @@
+.menu{
+border:0px;
+border-radius:10px;
+width:100%;
+height:50px;
+
+}
+.menu:hover{
+background-color:white;
+}

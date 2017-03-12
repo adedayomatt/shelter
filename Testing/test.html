@@ -1,0 +1,54 @@
+<html><head>
+<title>Table</title>
+<script type="text/javascript" language="javascript" src="js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" language="javascript">
+$(document).ready(function(){
+$(".btndropdown").click(function(){
+$(".dropdown").toggle();
+});
+});
+</script>
+<style>
+.dropdown{
+position:absolute;
+display:none;
+}
+ul{
+list-style-type:none;
+background-color:green;
+margin:0;
+padding:0;
+min-width:160px;
+box-shadow:10px 0px 10px 0px #eeeeee;
+}
+li,li a{
+color:white;
+text-decoration:none;
+padding-left:10px;
+}
+
+.divider{
+padding:0;
+}
+</style>
+</head>
+<body>
+<button class="btndropdown">Dropdown Example
+<span class="caret">>></span></button>
+<div class="dropdown">
+
+                        <ul class="dropdown-menu">
+                            <a href="#"><li>Profile</li></a>
+                            <li class="divider"><hr/></li>
+                            <a href="#"><li>Sign Out</li></a>
+                        </ul>
+                    </div>
+<table>
+<tr style="background-color:blue"><td>a</td>
+<td>b</td>
+</tr>
+<tr><td>x</td><td>y</td></tr>
+</table>
+<style>
+</style>
+</body></html>

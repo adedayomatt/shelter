@@ -1,0 +1,8 @@
+table,tr,td{
+	border-collapse:collapse;
+	border-right:1px solid black;
+	text-align:center;
+}
+.noborder{
+	border:0px;
+}

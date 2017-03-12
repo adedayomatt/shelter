@@ -1,0 +1,47 @@
+.property-photo{
+		width:200px;
+		height:200px;
+		margin-right: 10px;
+	}
+	fieldset{
+		border:2px solid #6D0AAA;
+	}
+	legend{
+		font-size:20px;
+	}
+	#deletebtn{
+		width:80px;
+		height:30px;
+		margin-left:90%;
+		cursor:pointer;
+		font-weight:bold;
+		color:white;
+		background-color:red;
+		border:none;
+	}
+.icon{
+		background-position:0px -72px;
+		}
+#delete-icon{
+		background-position:-456px 0px;
+	}
+
+div#edit-area,div#images-area{
+		width: 80%;
+		margin-left:10%;
+		margin-right:10%;
+	}
+	.edit-link{
+		color:blue;
+		margin-left:20%;
+		cursor:pointer;
+	}
+	.edit-link:hover{
+		text-decoration:underline;
+	}
+	div.edit-box{
+		display:none;
+	}
+	.dumb-input{
+		display:none;
+	}

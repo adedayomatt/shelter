@@ -1,0 +1,46 @@
+		
+html {
+    -webkit-text-size-adjust: 100%; /* 2 */
+    }
+	
+div#top-nav-bar,body{
+	width:100%;
+	min-width:1250px;
+}
+body{ 
+font-family: "Helvetica Neue","Helvetica",Helvetica,Arial,sans-serif;
+margin: 0px;
+font-size:100%;
+	}
+
+body.pic-background{
+		background-image: url("../image/ground.png");
+	}
+body.no-pic-background{
+		background-color:#eeeeee;
+	}
+a{
+		text-decoration:none;
+		color:#6D0AAA;
+	}
+a:hover{
+	text-decoration:underline;
+}
+.white-icon{
+	display: inline-block;
+width: 14px;
+height: 14px;
+line-height: 14px;
+margin-top:1px;
+vertical-align: text-top;
+	background-image:url("../resrc/white-icons.png");
+}
+.black-icon{
+display: inline-block;
+width: 14px;
+height: 14px;
+line-height: 14px;
+margin-top:1px;
+vertical-align: text-top;
+	background-image:url("../resrc/black-icons.png");
+}

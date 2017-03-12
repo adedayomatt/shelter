@@ -1,0 +1,56 @@
+
+.learn{
+color:purple;
+text-decoration:underline;
+}
+.learn:hover{
+	font-size: 17px;
+	
+}
+div.maincontent{
+	height:500px;
+	width:100%;
+	background-color:#eeeeee;
+}
+div.mainlist{
+	float:left;
+	height:500px;
+	width:80%;
+	background-color:inherit;
+	overflow-y:scroll;
+	overflow-x:hidden;
+}
+
+
+.Agent{
+	background-color:white;
+	height:250px;
+	width:98%;
+	margin:5px;
+	
+}
+hr{
+	color:purple;
+}
+.agent{
+	list-style-type:none;
+}
+
+.address{
+	list-style-image:url("image/mm.png");
+}
+.contact{
+	list-style-image:url("ping.png");
+}
+.tel{
+	list-style-image:url("ping.png");
+}
+.mail{
+	list-style-image:url("ping.png");
+}
+div.RHSr{
+	height:500px;
+	width:18%;
+	float:right;
+	background-color:#eeeeee;
+}

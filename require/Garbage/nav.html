@@ -1,0 +1,50 @@
+<title>Shelter | <?php echo $pagetitle; ?></title>
+<script>
+function time(){
+var t = document.getElementById("time");
+var datetime = Date().toString();
+t.value = datetime.substring(0,datetime.indexOf("GMT-0700 (Pacific Standard Time"));
+}
+</script>
+<div class="logobox">
+<!--<img id = "logo" src="" alt="Shelter logo"  />-->
+<div id="templogo"><i><h2 style="display: inline" align="center">Shelter</h2><h6 style="display: inline">.com</h6></i></div>
+</div>
+<div id="nav-bar">
+<ul>
+<a href="#"><li class="nav-menu">Home</li></a>
+<a href="#"><li class="nav-menu">Agent</li></a>
+<a href="#"><li class="nav-menu">Contact</li></a>
+<a href="#"><li class="nav-menu">About</li></a>
+</ul>
+</div>
+<p><i><b>NOTICE: you are currently not logged in as agent</b></i></p>
+<style>
+#templogo{
+	width:250px;
+	color:white;
+	font-size:25px;
+	padding-left:10px;
+	background-color:#6D0AAA;
+	border-radius:10px 10px 0px 0px;
+}
+
+ul{
+	width:100%;
+list-style-type:none;
+background-color:#6D0AAA;
+margin:0;
+padding:0;
+}
+li.nav-menu{
+			display:inline-block;
+			height:30px;
+			width:50px;
+			padding:10px;
+			color:white;
+			
+		}
+		li.nav-menu:hover{
+		background-color:#6D0ACC;
+		}
+</style>

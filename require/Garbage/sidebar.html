@@ -1,0 +1,78 @@
+
+<div class="sidebar" id="sidebarcontainer">
+<button id="upload-btn"><i class="white-icon" id="upload-icon"></i>Upload property</button>
+	<div id="upload-dropdown" class="dropdowns">
+<ul  class="category-dropdown-content">
+<a href="http://localhost/shelter/upload"><li  class="dropdown-menu">To Let</li></a>
+<li><hr/></li>
+<a href="http://localhost/shelter/upload""><li class="dropdown-menu">For Sale</li></a>
+</ul></div>
+<!--CTA begins here-->
+<div class="CTA-container">
+<h5 align="center" style="margin-bottom:0px ">Client Temporary Account (CTA)</h5>
+<a href="" class="cta-link" >what is CTA?</a>
+<a href=""  class="cta-link" >Checkin my CTA</a>
+<a href=""  class="cta-link" >Clipped properties</a>
+<a href=""  class="cta-link" >My agents</a>
+</div>
+<div class="user-menu">
+<?php if($status==1){
+echo "<a href=\"\">Messages</a>";
+echo "<a href=\"\">Edit profile</a>";
+echo "<a href=\"\">My properties</a>";
+echo "<a href=\"\">Fellow agents</a>";
+
+} ?>
+</div>
+
+<div id="category-container">
+<button id="categories"><i class="white-icon" id="category-icon"></i>Categories</button>
+<div id="flat-dropdown" class="dropdowns">
+<ul  class="category-dropdown-content">
+<a href="#"><li  class="dropdown-menu">4 Bedroom</li></a>
+<li><hr/></li>
+<a href="#"><li class="dropdown-menu">3 Bedroom</li></a>
+<li><hr/></li>
+<a href="#"><li class = "dropdown-menu">2 Bedroom</li></a>
+</ul></div>
+<button id="flats" class = "btn-dropdown" style="font: Arial"><i class="black-icon" id="flat-icon"></i>Flats<span class="arrow">»</span></button>
+
+
+<div  id="sc-dropdown" class="dropdowns">
+<ul  class="category-dropdown-content">
+<a href="#"><li  class="dropdown-menu">3 Rooms</li></a>
+<li><hr/></li>
+<a href="#"><li  class="dropdown-menu">2 Rooms</li></a>
+</ul></div>
+<button id="sc" class = "btn-dropdown"><i class="black-icon" id="sc-icon"></i>Self Contain<span class="arrow">»</span></button>
+
+
+<div  id="wings-dropdown"class="dropdowns">
+<ul  class="category-dropdown-content">
+<a href="#"><li  class="dropdown-menu">3 Rooms</li></a>
+<li><hr/></li>
+<a href="#"><li  class="dropdown-menu">2 Rooms</li></a>
+</ul></div>
+<button id="wings" class = "btn-dropdown"><i class="black-icon" id="wing-icon"></i>Wings<span class="arrow">»</span></button>
+
+
+<div  id="other-dropdown" class="dropdowns">
+<ul  class="category-dropdown-content">
+<a href="#"><li  class="dropdown-menu">Single Room</li></a>
+<li><hr/></li>
+<a href="#"><li  class="dropdown-menu">Single Room and Parlour</li></a>
+</ul></div>
+<button id="other" class = "btn-dropdown"><i class="black-icon" id="others-icon"></i>Others<span class="arrow">»</span></button>
+
+
+<div  id="sales-dropdown" class="dropdowns">
+<ul  class="category-dropdown-content">
+<a href="#"><li  class="dropdown-menu">House</li></a>
+<li><hr/></li>
+<a href="#"><li  class="dropdown-menu">Land</li></a>
+</ul></div>
+<button id="sale" class = "btn-dropdown">FOR SALE<span class="arrow">»</span></button>
+</div>
+</div>
+
+<div id="sidebar-under" class="sidebar"></div>

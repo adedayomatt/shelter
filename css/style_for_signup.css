@@ -1,0 +1,21 @@
+.mainsignup{
+	margin-left:15%;
+	margin-right:15%;
+	width:70%;
+	height:100%;}
+form{
+	
+}
+.Business, .personal{
+	width:80%;
+}
+.signupbutton{
+	cursor:pointer;
+	margin-left:80%;
+	background-color:#6D0AAA;
+	color:white;
+	font-size:20px;
+	width:120px;
+	height:40px;
+	border-radius:5px;
+}

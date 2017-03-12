@@ -1,0 +1,11 @@
+#search-icon{
+	background-position: -48px 2px;
+}
+#search-btn{
+	cursor:pointer;
+	background-color:#6D0AAA;
+	border:none;
+	border-radius:5px;
+	font-weight:bold;
+	color:white;
+}
