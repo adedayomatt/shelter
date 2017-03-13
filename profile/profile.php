@@ -9,7 +9,7 @@ $getfollows = mysql_query("SELECT * FROM follow WHERE (follower='$follower' AND 
 	else{
 	return 'follow';	
 	}
-
+mysql_close($db_connection);
 }
 ?>
 <html>
@@ -45,18 +45,32 @@ while($user = mysql_fetch_array($getprofile,MYSQL_ASSOC)){
 	exit();
 }	
 ?>
+<?php
+/*theis javascript source url is like this because this profile.php is dependent on another which
+is outside this directory, since it'll be included, the url of followAjax has to be relative to the 
+parent file where this would be included
+*/
+?>
+<script src="../profile/followAjax.js" type="text/javascript"></script>
+
 </head>
 <body class="no-pic-background">
 <div class="left">
 <div class="maincontent">
 <div id="biz-logo">
+
+<input name="sample" onkeyup="sampling(this.value)"/>
+<p id="sampletext"></p>
+
 <img src="logo" alt="Business Logo" style="border:2px solid white; border-radius:30px;" height="100px" width="100px"/></div>
 <div id="about-biz"><h4 align="center"><?php echo $BizName?></h4>
 <p><?php echo $OAddress?></p>
 <p><?php echo $OTel?></p>
 <p> <?php echo $email?></p>
 <?php
-//check if conversation has existed between the users 
+//if current user is logged in as an agen or a client
+if($status==1 || $status==9){
+	//check if conversation has existed between the users 
 $possible1 = $myid.$key;
 $possible2 = $key.$myid;
 $mutual = mysql_query("SELECT conversationid FROM messagelinker WHERE (conversationid='$possible1' OR conversationid='$possible2')");
@@ -69,22 +83,41 @@ if(mysql_num_rows($mutual) ==1){
 else{
 	$token = $myid.$key;
 }
+}
+//if an agent is logged in
 switch($status){
-	case 1:
-	$sendmessage = "<a href=\"$root/messages/compose.php?cv=".$token."&i=$Business_Name&rcpt=$key\">send message</a>";
+case 1:
+	$sendmessage = "<a href=\"$root/messages/compose.php?cv=".$token."&i=$Business_Name&rcpt=$key\"><button class=\"profile-buttons\"><i class=\"white-icon\" id=\"message-icon\"></i>send message</button></a>";
 	if($BizName != $Business_Name)
 	{
-	echo "<p align=\"right\"><a href=\"$root/profile/follow.php?flwer=$Business_Name&flwerId=$profile_name&flwing=$BizName&t=A4A&r=$Agent_Id\"><i class=\"black-icon\" id=\"edit-icon\"></i>".checkfollow($Business_Name,$BizName)."</a></p>";
+		$followornot = checkfollow($Business_Name,$BizName);
+		$followicon = ($followornot=='follow' ? 'follow-icon' : 'unfollow-icon');
+	
+	$followup = "<button class=\"profile-buttons\" id=\"followbutton\" onclick=\"follow('$Business_Name','$profile_name','$BizName','A4A')\"><i class=\"white-icon\" id=\"$followicon\"></i> $followornot</button>";
+	echo $followup;
 	echo $sendmessage;
 	}
 	else{
-	echo "<p align=\"right\"><a href=\"$root/manage/account.php\"><i class=\"black-icon\" id=\"edit-icon\"></i>Edit profile</a></p>";
+	$editprofile = "<a href=\"$root/manage/account.php\"><button class=\"profile-buttons\"><i class=\"white-icon\" id=\"edit-icon\"></i> Edit profile</button></a>";
+	echo $editprofile;
 	}
 break;
+//if a client is logged in
 	case 9:
-	$sendmessage = "<a href=\"$root/messages/compose.php?cv=".$token."&i=$ctaname&rcpt=$key\">send message</a>";
-echo "<p align=\"right\"><a href=\"$root/profile/follow.php?flwer=$ctaname&flwerId=$ctaid&flwing=$BizName&t=C4A&r=$Agent_Id\"><i class=\"black-icon\" id=\"edit-icon\"></i>".checkfollow($ctaname,$BizName)."</a></p>";
-echo $sendmessage;
+	$followornot = checkfollow($ctaname,$BizName);
+		$followicon = ($followornot=='follow' ? 'follow-icon' : 'unfollow-icon');
+	$sendmessage = "<a href=\"$root/messages/compose.php?cv=".$token."&i=$ctaname&rcpt=$key\"><button class=\"profile-buttons\"><i class=\"white-icon\" id=\"message-icon\"></i> send message</button></a>";
+	$followup = "<button class=\"profile-buttons\" id=\"followbutton\" onclick=\"follow('$ctaname','$ctaid','$BizName','C4A')\"><i class=\"white-icon\" id=\"$followicon\"></i> $followornot</button>";
+echo $followup;
+	echo $sendmessage;
+	break;
+//for visitors
+default:
+$sendmessage = "<a href=\"$root/cta/checkin.php?_rdr=0\"><button class=\"profile-buttons\"><i class=\"white-icon\" id=\"message-icon\"></i> send message</button></a>";
+	$followup =  "<a href=\"$root/cta/checkin.php?_rdr=0\"><button class=\"profile-buttons\"><i class=\"white-icon\" id=\"follow-icon\"></i> follow</button></a>";
+	echo $followup;
+	echo $sendmessage;
+	break;
 }
 ?>
 </div>

@@ -393,7 +393,9 @@
 	margin-left:50%;
 }
 .like-pane{
-	height:10%;
+background-color:#EEEFEE;
+	height:9%;
+	margin-bottom:1%;
 	font-size:80%;
 }
 
@@ -422,11 +424,37 @@
 #report{
 	background-position: -24px -144px;
 }
-.show-contacts{
-	cursor:pointer;
+
+.status,ul.option-list{
+	display:inline; 
+	height:100%;
+	}
+.options,.status{
+	display:inline-block;
+	
 }
-#like,#report,#contact-agent{
-	margin-left:5%;
+.status{
+	
+}
+li.options{
+	cursor:pointer;
+	background-color:white;
+	color:#6D0AAA;
+	list-style-type:none;
+	border-left:3px solid #6D0AAA;
+	height:80%;
+	padding:1px;
+	margin-top:2px;
+	width:150px;
+	text-align:center;
+	margin-left:5px;
+}
+li.disabled{
+	opacity:0.5;
+}
+li#clip-property:hover,li#report-property:hover,li#agent-contacts:hover{
+	background-color:#EEEEEE;
+	text-decoration:none;
 }
 #contact-agent{
 	background-position: -168px 0px;
@@ -442,7 +470,5 @@
 	margin-left:30%;
 	font-weight:bold;
 }
-.love-property,.report-property,.show-contacts{
-	color:blue;
-}
+
 }

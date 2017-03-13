@@ -22,15 +22,33 @@ hr{
 	float:left;
 	padding-left:20px;
 }
+.profile-buttons{
+	cursor:pointer;
+	color:white;
+	background-color:#6D0AAA;
+	border:none;
+	border-radius:2px;
+	padding:5px;
+}
+#edit-icon{
+	background-position: 0px -72px;
+}
+#follow-icon{
+	background-position: 0px -96px;
+}
+#unfollow-icon{
+	background-position: -24px -96px;
+}
+#message-icon{
+	background-position: -72px 0px ;
+}
 .recent-uploads{
 	width:80%;
 	margin:auto;
 	padding:10px;	
 	min-height:400px;
 }
-#edit-icon{
-	background-position: 0px -72px;
-}
+
 .editbutton{
 	width:100%;
 	color:white;

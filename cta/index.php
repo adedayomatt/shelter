@@ -20,7 +20,7 @@ if($status==1){
 else if($status==0){
 //close the opened connection and redirect to the checkin page
 	mysql_close($db_connection);
-	header('location: checkin.php');
+	header('location: checkin.php?_rdr=1');
 	exit();
 }
 ?>
@@ -44,8 +44,8 @@ $count = 0;
 	switch($req){
 case 'matches':
 //if there are preferences request
-if(isset($rqtype) && isset($rqpricemax) && isset($rqlocation)){
-echo "<p>You have requested for $rqtype with rent not more than N".number_format($rqpricemax)." preferably around $rqlocation  <a href=\"request.php?chgt=$rqtype&chMp=$rqpricemax&chLtn=$rqlocation\">change</a></p>";
+if($rqstatus==1 && isset($rqtype) && isset($rqpricemax) && isset($rqlocation)){
+echo "<p>You have requested for $rqtype with rent not more than N".number_format($rqpricemax)." preferably around $rqlocation  <a href=\"request.php?p=$rqstatus\">change</a></p>";
 $query =  "SELECT property_ID,directory,type,location,min_payment,bath,toilet,rent,description,uploadby,date_uploaded 
             FROM properties WHERE (type='$rqtype' AND rent<=$rqpricemax AND location LIKE '%$rqlocation%') ORDER BY date_uploaded DESC";
 $nooutput = "No Match found yet";
@@ -85,7 +85,7 @@ else{
 break;
 
 default:
-echo "<p>You have requested for $rqtype with rent not more than N".number_format($rqpricemax)." preferably around $rqlocation  <a href=\"request.php?chgt=$rqtype&chMp=$rqpricemax&chLtn=$rqlocation\">change</a></p>";
+echo "<p>You have requested for $rqtype with rent not more than N".number_format($rqpricemax)." preferably around $rqlocation  <a href=\"request.php?p=$rqatatus\">change</a></p>";
 $query =  "SELECT property_ID,directory,type,location,min_payment,bath,toilet,rent,description,uploadby,date_uploaded 
             FROM properties WHERE (type='$rqtype' AND rent<=$rqpricemax AND location LIKE '%$rqlocation%') ORDER BY date_uploaded DESC";
 $nooutput = "No Match found yet";

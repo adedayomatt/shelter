@@ -56,7 +56,6 @@ else{
 }
 	
 	$date = substr($date_uploaded[$i],0,10);
-	echo "<script>togglecontact('x','y');</script>";
 	$imageurl = checkimage($propertydir[$i],$propertyId[$i],$ref);
 	$formatrent = number_format($rent[$i]);
 	//main box divided into two >>image:info=50:50
@@ -78,71 +77,27 @@ else{
 	<a class=\"view-details\" href=\"$root/properties/$propertydir[$i]\"><i class=\"black-icon\" id=\"see\"></i>See details</a>
 	</div>
 	</div>";
-//$status = 9 is for CTA
-	if($status==9){
-	if($ref=='home_page' && isset($_GET['next'])){
-		$page .= "<div class=\"like-pane\"><strong>status:</strong> <i class=\"black-icon\" id=\"status\"></i> <span style=\"color:green\">Available</span>
-		<a class=\"love-property\" href=\"cta/c.php?p=$propertyId[$i]&cb=$ctaid&ref=home_page&next=".$_GET['next']."\"><i class=\"black-icon\" id=\"like\"></i>".clip($propertyId[$i],$ctaid)."</a>
-		<a class=\"report-property\" href=\"#\"><i class=\"black-icon\" id=\"report\"></i>Report this property</a>
-		<div class=\"agent-contacts-box\" id=\"y\">$Bname<ul><li>$officeNo</li><li>$PhoneNo</li><li>$altPhoneNo</li></ul></div>
-		<a class=\"show-contacts\" id=\"x\"><i class=\"black-icon\" id=\"contact-agent\"></i>Contact agent</a>
-		</div>
-		</div>";
-	}
-	else if ($ref=='home_page' && !isset($_GET['next'])) {
-		$page .= "<div class=\"like-pane\"><strong>status:</strong> <i class=\"black-icon\" id=\"status\"></i> <span style=\"color:green\">Available</span>
-		<a class=\"love-property\" href=\"cta/c.php?p=$propertyId[$i]&cb=$ctaid&ref=home_page\"><i class=\"black-icon\" id=\"like\"></i>".clip($propertyId[$i],$ctaid)."</a>
-		<a class=\"report-property\" href=\"#\"><i class=\"black-icon\" id=\"report\"></i>Report this property</a>
-		<div class=\"agent-contacts-box\" id=\"y\">$Bname<ul><li>$officeNo</li><li>$PhoneNo</li><li>$altPhoneNo</li></ul></div>
-		<a class=\"show-contacts\" id=\"x\"><i class=\"black-icon\" id=\"contact-agent\"></i>Contact agent</a>
-		</div>
-		</div>";
-	}
-	else if ($ref=='search_page' && isset($_GET['next'])){
-		$page .= "<div class=\"like-pane\"><strong>status:</strong> <i class=\"black-icon\" id=\"status\"></i> <span style=\"color:green\">Available</span>
-		<a class=\"love-property\" href=\"../cta/c.php?p=$propertyId[$i]&cb=$ctaid&ref=search_results&next=".$_GET['next']."\"><i class=\"black-icon\" id=\"like\"></i>".clip($propertyId[$i],$ctaid)."</a>
-		<a class=\"report-property\" href=\"#\"><i class=\"black-icon\" id=\"report\"></i>Report this property</a>
-		<div class=\"agent-contacts-box\" id=\"y\">$Bname<ul><li>$officeNo</li><li>$PhoneNo</li><li>$altPhoneNo</li></ul></div>
-		<a class=\"show-contacts\" id=\"x\"><i class=\"black-icon\" id=\"contact-agent\"></i>Contact agent</a>
-		</div>
-		</div>";
-	}
-	else if ($ref=='search_page' && !isset($_GET['next'])){
-		$page .= "<div class=\"like-pane\"><strong>status:</strong> <i class=\"black-icon\" id=\"status\"></i> <span style=\"color:green\">Available</span>
-		<a class=\"love-property\" href=\"../cta/c.php?p=$propertyId[$i]&cb=$ctaid&ref=search_page\"><i class=\"black-icon\" id=\"like\"></i>".clip($propertyId[$i],$ctaid)."</a>
-		<a class=\"report-property\" href=\"#\"><i class=\"black-icon\" id=\"report\"></i>Report this property</a>
-		<div class=\"agent-contacts-box\" id=\"y\">$Bname<ul><li>$officeNo</li><li>$PhoneNo</li><li>$altPhoneNo</li></ul></div>
-		<a class=\"show-contacts\" id=\"x\"><i class=\"black-icon\" id=\"contact-agent\"></i>Contact agent</a>
-		</div>
-		</div>";
-	}
-	else if ($ref=='match_page' && !isset($_GET['next'])){
-		$page .= "<div class=\"like-pane\"><strong>status:</strong> <i class=\"black-icon\" id=\"status\"></i> <span style=\"color:green\">Available</span>
-		<a class=\"love-property\" href=\"../cta/c.php?p=$propertyId[$i]&cb=$ctaid&ref=match_page\"><i class=\"black-icon\" id=\"like\"></i>".clip($propertyId[$i],$ctaid)."</a>
-		<a class=\"report-property\" href=\"#\"><i class=\"black-icon\" id=\"report\"></i>Report this property</a>
-		<div class=\"agent-contacts-box\" id=\"y\">$Bname<ul><li>$officeNo</li><li>$PhoneNo</li><li>$altPhoneNo</li></ul></div>
-		<a class=\"show-contacts\" id=\"x\"><i class=\"black-icon\" id=\"contact-agent\"></i>Contact agent</a>
-		</div>
-		</div>";	
-	}
-else if ($ref=='profile_page' && !isset($_GET['next'])){
-		$page .= "<div class=\"like-pane\"><strong>status:</strong> <i class=\"black-icon\" id=\"status\"></i> <span style=\"color:green\">Available</span>
-		<a class=\"love-property\" href=\"../cta/c.php?p=$propertyId[$i]&cb=$ctaid&ref=match_page\"><i class=\"black-icon\" id=\"like\"></i>".clip($propertyId[$i],$ctaid)."</a>
-		<a class=\"report-property\" href=\"#\"><i class=\"black-icon\" id=\"report\"></i>Report this property</a>
-		<div class=\"agent-contacts-box\" id=\"y\">$Bname<ul><li>$officeNo</li><li>$PhoneNo</li><li>$altPhoneNo</li></ul></div>
-		<a class=\"show-contacts\" id=\"x\"><i class=\"black-icon\" id=\"contact-agent\"></i>Contact agent</a>
-		</div>
-		</div>";	
-	}
+//the like pane
+if($status==9){
+	$clipbutton = "<a id=\"$propertyId[$i]\" onclick=\"makeclip('$propertyId[$i]','$ctaid')\"><li class=\"options\" id=\"clip-property\"><i class=\"black-icon\" id=\"like\"></i>".clip($propertyId[$i],$ctaid)."</li></a>";
+	
+	
 }
-else{
-	$page .= "<div class=\"like-pane\"><strong>status:</strong> <i class=\"black-icon\" id=\"status\"></i> <span style=\"color:green\">Available</span>
-		<a class=\"report-property\" href=\"#\"><i class=\"black-icon\" id=\"report\"></i>Report this property</a>
-		<div class=\"agent-contacts-box\" id=\"y\">$Bname<ul><li>$officeNo</li><li>$PhoneNo</li><li>$altPhoneNo</li></ul></div>
-		<a class=\"show-contacts\" id=\"x\"><i class=\"black-icon\" id=\"contact-agent\"></i>Contact agent</a>
+else {
+	$clipbutton = "<a href=\"$root/cta/checkin.php?_rdr=0\"><li class=\"options disabled\" id=\"clip-property\"><i class=\"black-icon\" id=\"like\"></i>clip</li></a>";
+	
+}
+	$page .= "<div class=\"like-pane\">
+		<span class=\"status\"><strong>status:</strong> <i class=\"black-icon\" id=\"status\"></i> <span style=\"color:green\">Available</span></span>
+		<ul class=\"option-list\">
+		$clipbutton
+		<a href=\"#\"><li class=\"options\" id=\"report-property\"><i class=\"black-icon\" id=\"report\"></i>Report this property</li></a>
+		<div class=\"agent-contacts-box\" id=\"\">$Bname<ul><li>$officeNo</li><li>$PhoneNo</li><li>$altPhoneNo</li></ul></div>
+		<a><li class=\"options\" id=\"agent-contacts\"><i class=\"black-icon\" id=\"contact-agent\"></i>Contact agent</li></a>
+		</ul>
 		</div>
 		</div>";
-}
+		
 	print $page;
 	$i++;
 	if(($i%$maxi)==0){

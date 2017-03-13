@@ -10,6 +10,18 @@
 	margin-left:15%;
 	margin-right:15%;
 }
+#prompt-container{
+	width:50%;
+	border-radius:5px;
+	color:white;
+	padding:2%;
+	margin:auto;
+	background-color:#00EEEE;
+}
+#prompt-icon{
+	background-position: 0px -120px;
+}
+
 input{
 	display:block;
 	margin: 5px;
@@ -30,16 +42,18 @@ input{
 	color:white;
 	padding:2%;
 }
+
 #error-container{
 	background-color:red;
 }
 #error-icon{
 	background-position: -312px 0px;
 }
-#correct-container{
+
+#success-container{
 	background-color:green;
 }
-#correct-icon{
+#success-icon{
 	background-position:-288px 0px;
 }
 
@@ -51,6 +65,9 @@ $getuserName = true;
 $ref = "ctaPage";
 $connect = true;
 require('../require/header.php');
+
+//if a visitor has attempted an action, and redirect to this page $_GET['_rdr'] would be set
+$checkinreminder =((isset($_GET['_rdr'])&&$_GET['_rdr']==0) ? "You need to checkin first or <a href=\"$root/login\">login</a> as an agent":'');
 
 //if attempt to checkin
 if(isset($_POST['checkin'])){
@@ -86,7 +103,7 @@ if($getCTAquery && mysql_num_rows($getCTAquery)==1){
 		exit();
 		break;
 		case '0':
-		header("location: $root/cta/request.php?placed=$requeststatus");
+		header("location: $root/cta/request.php?p=$requeststatus");
 		exit();
 		}
 		
@@ -157,6 +174,11 @@ $denialMessage = "A CTA is already checked in as <strong>$ctaname</strong><br/><
 
 <div class="all-content">
 <div id="introduction">
+<?php
+if(!empty($checkinreminder)){
+	echo "<div id=\"prompt-container\" ><p><i class=\"white-icon\" id=\"prompt-icon\"></i> $checkinreminder</p></div>";
+}
+?>
 <p>Client Temporary Account (CTA) is account for clients who wish to get notifications on the availability of their requested</p>
 </div>
 <div id="checkin-container">

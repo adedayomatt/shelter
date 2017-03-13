@@ -14,8 +14,9 @@ $getuserName = true;
 require("require/header.php");
 ?>
 <script type="text/javascript" src="js/indexscript.js"></script>
-<script type="text/javascript" src="js/togglecontacts.js"></script>
+<script type="text/javascript" src="js/propertyboxAjax.js"></script>
 <script type="text/javascript" language="javascript" src="js/toggle.js"></script>
+
 </head>
 <body class="no-pic-background" onload="activatescript()">
 <div class="maincontent">
