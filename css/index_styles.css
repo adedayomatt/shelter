@@ -613,7 +613,7 @@ background-position: 0px -24px;
 
 		
 }
-
+/* Desktop version*/
 @media screen and (min-width:1025px){
 .maincontent{
 	background-color:inherit;
@@ -629,19 +629,8 @@ div.sidebar{
 background-color:inherit;
 }
 
-#search-icon{
-	background-position: -48px 2px;
-}
-#search-btn{
-	cursor:pointer;
-	background-color:#6D0AAA;
-	border:none;
-	border-radius:5px;
-	font-weight:bold;
-	color:white;
-}
 #sidebar-inner{
-	width:90%;
+	width:100%;
 background-color:inherit;
 }
 
@@ -665,6 +654,14 @@ div.uploads-container{
 	width:80%;
 	float:left;
 }
+#front-image{
+	background: white url('../resrc/image/jamalsmall.png') center repeat-x;
+	height:80px;
+	width:95%;
+	border-radius:5px;
+	margin:auto;
+}
+
 .short-note{
 	width:90%;
 	font-size:inherit;
@@ -758,11 +755,11 @@ margin-right:20px;
 display: inline-block;
 width: 14px;
 height: 14px;
-line-height: 14px;
-margin-top:1px;
-vertical-align: text-top;
+margin-top:12px;
 background-image:url("../resrc/black-icons.png");
-
+}
+#all-arrow{
+	float:right;
 }
 .arrow-up{
 	background-position: -288px -120px;
@@ -781,8 +778,18 @@ color:#6D0AAA;
 background-color:inherit;
 cursor:pointer;
 height:30px;
+line-height:40px;
+padding-bottom:0px;
 }
-
+/* all btn-dropdown but #all-btn-dropdown*/
+.btn-dropdown:not(#all-btn-dropdown):hover{
+	border-bottom:1px solid #6D0AAA;
+	font-size:12px;
+}
+#all-btn-dropdown{
+	font-size:12px;
+	text-align:right;
+}
 div.dropdowns{
 width:90%;
 display:none;

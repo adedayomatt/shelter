@@ -7,8 +7,10 @@
 	$pagetitle = "Change Detail";
 	$ref='editproperty';
 $getuserName=true;
+$connect = true;
 	require('../require/header.php');
 	if($status==0){
+		mysql_close($db_connection);
 		redirect();
 		exit();
 	}
@@ -36,26 +38,11 @@ function checkRadiochanges($oldvalue,$newvalue){
 		return $newvalue;
 	}
 	}
-	
-	require('../require/db_connect.php');
-			if($db_connection){
-			mysql_select_db('shelter');
-			
-			if(isset($_POST['newpm'])){
-				$newpm = $_POST['newpm'];
-			}else{$newpm='No';}
-			if(isset($_POST['newbh'])){
-				$newbh = $_POST['newbh'];
-			}else{$newbh='No';}
-			if(isset($_POST['newwell'])){
-				$newwell = $_POST['newwell'];
-			}else{$newwell='No';}
-			if(isset($_POST['newtiles'])){
-				$newtiles = $_POST['newtiles'];
-			}else{$newtiles='No';}
-			if(isset($_POST['newps'])){
-				$newps = $_POST['newps'];
-			}else{$newps='No';}
+			$newpm = (isset($_POST['newpm']) ? $_POST['newpm'] : 'No');
+			$newbh = (isset($_POST['newbh']) ? $_POST['newbh'] : 'No');
+			$newwell = (isset($_POST['newwell']) ? $_POST['newwell'] : 'No');
+			$newtiles = (isset($_POST['newtiles']) ? $_POST['newtiles'] : 'No');
+			$newps = (isset($_POST['newps']) ? $_POST['newps'] : 'No');
 			
 			$update = "UPDATE properties SET "; 
 			$update .= "rent=".$_POST['rent'].",";
@@ -91,7 +78,7 @@ function checkRadiochanges($oldvalue,$newvalue){
 				$changeReport = "Changes could not be saved due to some errors";
 				$case = 4;
 			}
-			mysql_close($db_connection);}
+
 }
 
 ?>
@@ -121,14 +108,12 @@ echo "<br/><div style=\"".$generalstyle.$specialstyle."\"><i style=\"$icon\" cla
 //Here handles fetching of the records on page load
 	if(isset($_GET['action'])){
 		if(isset($_GET['id']) && !empty($_GET['id'])){
-			require('../require/db_connect.php');
-			if($db_connection){
-				mysql_select_db('shelter');
 				$getformerdetail = "SELECT * FROM properties WHERE (property_ID = '".$_GET['id']."')";
-				$getquery = mysql_query($getformerdetail,$db_connection);
+				$getquery = mysql_query($getformerdetail);
 				if($getquery){
 					if(mysql_affected_rows($db_connection)==1){
 					while($detail = mysql_fetch_array($getquery,MYSQL_ASSOC)){
+						$editdir = $detail['directory'];
 						$editid = $detail['property_ID'];
 						$edittype = $detail['type'];
 						$editlocation = $detail['location'];
@@ -149,8 +134,6 @@ echo "<br/><div style=\"".$generalstyle.$specialstyle."\"><i style=\"$icon\" cla
 					}
 					}else{ $fetchReport = "ID is invalid or the property may have been deleted";}
 				}else{$fetchReport = "Couldn't get the property details";}
-			mysql_close($db_connection);
-			}else{$fetchReport = "There was an error in connection";}
 			
 		}
 		else{
@@ -159,47 +142,46 @@ echo "<br/><div style=\"".$generalstyle.$specialstyle."\"><i style=\"$icon\" cla
 	}
 	else{
 		header('location: index.php');
+		mysql_close($db_connection);
 		exit();
 	}
 	
-	if(isset($fetchReport)){
+if(isset($fetchReport)){
 		echo "<p align=\"center\">$fetchReport</p>";
+		mysql_close($db_connection);
 		exit();
 	}
 	
-	
-	
-	function checkbox($source,$condition){
+function checkbox($source,$condition){
 		if($source==$condition){
 			return "checked=\"checked\"";
 		}else{ return null;}
 	}
-	function checkForImage($imgName){
-	$imgDir = "../images/";
-	if(file_exists($imgDir.$imgName)){
-		$image = "<img alt=\"Not Available\" class=\"property-photo\" src=\"".$imgDir.$imgName."\"/>";
+	
+function checkForImage($dir,$imgName){
+	if(file_exists("../properties/$dir/$imgName")){
+		$image = "<img alt=\"Not Available\" class=\"property-photo\" src=\"../properties/$dir/$imgName\" />";
 		
 		}else
 		{
-			$image = "<img alt=\"Not Available\" class=\"property-photo\" src=\"".$imgDir.$imgName."\"/>";
+			$image = "<img alt=\"Not Available\" class=\"property-photo\" src=\"../properties/$dir/$imgName\" />";
 		}
 		return $image;
-	
-}
+	}
 ?>
 <br/>
 <div id="images-area">
-<?php 	echo checkForImage($editid."_01.png"); 
-		echo checkForImage($editid."_02.png"); 
-		echo checkForImage($editid."_03.png"); 
-		echo checkForImage($editid."_04.png"); 
+<?php 	echo checkForImage($editdir,$editid."_01.png"); 
+		echo checkForImage($editdir,$editid."_02.png"); 
+		echo checkForImage($editdir,$editid."_03.png"); 
+		echo checkForImage($editdir,$editid."_04.png"); 
 
 ?>	
 	</div>
 
 <div id="edit-area">
 <fieldset>
-<legend style="color:#6D0AAA"><strong><?php echo "<a href=\"http://localhost/shelter/detail.php?shid=$editid\">".$editid .": ".$edittype." at ".$editlocation."</a>" ?></strong></legend>
+<legend style="color:#6D0AAA"><strong><?php echo "<a href=\"$root/properties/$editdir\">".$editid .": ".$edittype." at ".$editlocation."</a>" ?></strong></legend>
 
 <form action="delete.php" method="POST">
 <input name="deleteid" type="hidden" value="<?php echo $editid ?>"/>
@@ -318,6 +300,8 @@ Parking Space: <span><input name="oldps" type="hidden" value="<?php echo $editps
 </form>
  </div>
 <div>
-<?php require('../require/footer.html'); ?></div>
+<?php 
+mysql_close($db_connection);
+require('../require/footer.html'); ?></div>
 </body>
 </html>

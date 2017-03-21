@@ -1,6 +1,6 @@
 function follow(follower,followerid,following,type){
-	var button = document.getElementById('followbutton');
 	
+	var button = document.getElementById('followbutton');
 	try{
 		//opera 8+, firefox,safari
 		xmlhttp = new XMLHttpRequest();

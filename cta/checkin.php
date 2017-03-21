@@ -67,7 +67,7 @@ $connect = true;
 require('../require/header.php');
 
 //if a visitor has attempted an action, and redirect to this page $_GET['_rdr'] would be set
-$checkinreminder =((isset($_GET['_rdr'])&&$_GET['_rdr']==0) ? "You need to checkin first or <a href=\"$root/login\">login</a> as an agent":'');
+$checkinreminder =((isset($_GET['_rdr'])&&$_GET['_rdr']==1) ? "You need to checkin first or <a href=\"$root/login\">login</a> as an agent":'');
 
 //if attempt to checkin
 if(isset($_POST['checkin'])){
@@ -175,7 +175,7 @@ $denialMessage = "A CTA is already checked in as <strong>$ctaname</strong><br/><
 <div class="all-content">
 <div id="introduction">
 <?php
-if(!empty($checkinreminder)){
+if(!empty($checkinreminder) || $checkinreminder != ""){
 	echo "<div id=\"prompt-container\" ><p><i class=\"white-icon\" id=\"prompt-icon\"></i> $checkinreminder</p></div>";
 }
 ?>

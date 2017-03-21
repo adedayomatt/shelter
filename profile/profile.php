@@ -51,17 +51,14 @@ is outside this directory, since it'll be included, the url of followAjax has to
 parent file where this would be included
 */
 ?>
-<script src="../profile/followAjax.js" type="text/javascript"></script>
+<script src="../js/profile.js" type="text/javascript"></script>
+<script src="../js/propertybox.js" type="text/javascript"></script>
 
 </head>
 <body class="no-pic-background">
 <div class="left">
 <div class="maincontent">
 <div id="biz-logo">
-
-<input name="sample" onkeyup="sampling(this.value)"/>
-<p id="sampletext"></p>
-
 <img src="logo" alt="Business Logo" style="border:2px solid white; border-radius:30px;" height="100px" width="100px"/></div>
 <div id="about-biz"><h4 align="center"><?php echo $BizName?></h4>
 <p><?php echo $OAddress?></p>
@@ -113,8 +110,8 @@ echo $followup;
 	break;
 //for visitors
 default:
-$sendmessage = "<a href=\"$root/cta/checkin.php?_rdr=0\"><button class=\"profile-buttons\"><i class=\"white-icon\" id=\"message-icon\"></i> send message</button></a>";
-	$followup =  "<a href=\"$root/cta/checkin.php?_rdr=0\"><button class=\"profile-buttons\"><i class=\"white-icon\" id=\"follow-icon\"></i> follow</button></a>";
+$sendmessage = "<a href=\"$root/cta/checkin.php?_rdr=1\"><button class=\"profile-buttons\"><i class=\"white-icon\" id=\"message-icon\"></i> send message</button></a>";
+	$followup =  "<a href=\"$root/cta/checkin.php?_rdr=1\"><button class=\"profile-buttons\"><i class=\"white-icon\" id=\"follow-icon\"></i> follow</button></a>";
 	echo $followup;
 	echo $sendmessage;
 	break;
@@ -125,11 +122,19 @@ $sendmessage = "<a href=\"$root/cta/checkin.php?_rdr=0\"><button class=\"profile
 <div class="recent-uploads">
 <h4>Recent uploads by <?php echo $BizName?></h4>
 <?php
+$max = 4;
+if(isset($_GET['next']) && $_GET['next']>0){
+	$start = $_GET['next'];
+	$end = $_GET['next'] + $max;
+}
+ else{
+	 $start = 0;
+	 $end = $max;
+ }
 $fetchproperties = mysql_query("SELECT property_ID,directory,type,location,rent,min_payment,bath,toilet,description,uploadby,date_uploaded FROM
-                               properties WHERE (uploadby='".$Aid."')ORDER BY date_uploaded DESC");
+                               properties WHERE (uploadby='".$Aid."')ORDER BY date_uploaded DESC LIMIT $start,$end");
 //if there is any record fetched
 if($fetchproperties){
-	if(mysql_num_rows($fetchproperties)>=1){
 	$count=0;
 	while($property = mysql_fetch_array($fetchproperties,MYSQL_ASSOC)){
 	$propertyId[$count] = $property['property_ID'];
@@ -147,20 +152,21 @@ if($fetchproperties){
 //last value of count will eventually equals to the total records fetched.
 		}
 require("../require/propertyboxes.php");
-	}
-//if zero file was fetched
-	else{
-	//if it's the owner of the account that is accessing this page
-		if($status==1 && $BizName == $Business_Name){
-		echo "You have not uploaded any property yet, <a href=\"$root/upload\">upload one now</a>";
-		}
-		else{
-			echo "$BizName have not upload any property yet";
-		}
-	}
+if(!empty($propertyId)){
+echo "<a style=\"margin-left:80%\" href =".basename($_SERVER['PHP_SELF'])."?next=$end >show more<a/>";
 }
 else{
-	echo "<p align=\"center\"><b>An error occured!!</b></p>";
+if($start==0){
+	echo "<div class=\"no-property\" align=\"center\">$BizName have not uploaded any property</div>";
+}
+else if($start>0){
+	echo "<div class=\"no-property\" align=\"center\">There are no more properties by $BizName</div>";
+	}
+}
+	}
+
+else{
+	echo "<div class=\"no-property\" align=\"center\"><b>An error occured!!</b></div>";
 			}
 
 

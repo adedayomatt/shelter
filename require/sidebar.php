@@ -1,6 +1,6 @@
-
 <div class="sidebar" id="sidebar-original">
 <div id="sidebar-inner">
+
 <?php  
 if($status==1){
 //$profile_name and $Business_Name would have been initialize in the header which would have beeen required before this script
@@ -21,9 +21,9 @@ else{
 echo "<p align=\"center\" style=\"margin-bottom:0px \"><strong>Client Temporary Account (CTA)</strong></p>
 	<div class=\"account-nav-container\">
 	<a href=\"\" class=\"account-nav-link\">What is CTA?</a>
-	<a href=\"cta\" class=\"account-nav-link\">Checkin my CTA</a>
-	<a href=\"\" class=\"account-nav-link\">Clipped properties</a>
-	<a href=\"\" class=\"account-nav-link\">My agents</a>
+	<a href=\"cta/checkin.php?_rdr=0\" class=\"account-nav-link\">Checkin my CTA</a>
+	<a href=\"cta/checkin.php?_rdr=1\" class=\"account-nav-link\">Clipped properties</a>
+	<a href=\"cta/checkin.php?_rdr=1\" class=\"account-nav-link\">My agents</a>
 	</div>";
 break;
 	case 1:
@@ -42,7 +42,6 @@ echo "<div class=\"account-nav-container\">
 	<p align=\"center\" style=\"margin-bottom:0px \"><strong>Client Temporary Account (CTA)</strong><br/>$ctaname</p>
 	<a href=\"$root/messages\" class=\"account-nav-link\" id=\"msgs\">($messages) Messages</a>
 	<a href=\"$root/cta/?src=matches\" class=\"account-nav-link\">($matchcounter) Matches</a>
-	<input type=\"hidden\" value=\"$clipcounter\" id=\"clips\">
 	<a href=\"$root/cta/?src=clipped\" class=\"account-nav-link\" id=\"clipstring\">($clipcounter) Clipped properties</a>
 	<a href=\"\" class=\"account-nav-link\">($following) Following Agents</a>
 	<a href=\"\" class=\"account-nav-link\">(0) Agents Suggestions</a>
@@ -53,7 +52,7 @@ echo "<div class=\"account-nav-container\">
 break;
 default:
 echo "<div class=\"account-nav-container\">
-	Nothing to show here
+	Nothing to show here, you should <a href=\"$root/login\">logging in now to</a> to see your menu 
 	</div>";
 break;
 } 
@@ -61,8 +60,8 @@ break;
 <hr/>
 <div id="category-container">
 <h5 align="center" id="categories"><i class="black-icon" id="category-icon"></i>Categories</h5>
-<!--<p id="expand-all" ></i>Expands all<i id="all-arrow" class="arrow-down"></i></p>-->
-<div id="flats" class = "btn-dropdown" style="font: Arial">Flats<i title="Expand" id="flat-arrow" class="arrow-down"></i></div>
+<div class = "btn-dropdown" id="all-btn-dropdown" onclick="toggleall()">Expands all<i id="all-arrow" class="arrow-down" title="Expand all"></i></div>
+<div id="flats" class = "btn-dropdown" style="font: Arial" onclick="toggleSidebar('flats','flat-dropdown','flat-arrow')">Flats<i title="Expand" id="flat-arrow" class="arrow-down"></i></div>
 <div id="flat-dropdown" class="dropdowns">
 <div  class="category-dropdown-content">
 <a href="#" class="dropdown-menu">4 Bedroom</a>
@@ -72,7 +71,7 @@ break;
 </div>
 
 
-<div id="sc" class = "btn-dropdown">Self Contain<i title="Expand" id="sc-arrow" class="arrow-down"></i></div>
+<div id="sc" class = "btn-dropdown" onclick="toggleSidebar('sc','sc-dropdown','sc-arrow')" >Self Contain<i title="Expand" id="sc-arrow" class="arrow-down"></i></div>
 <div  id="sc-dropdown" class="dropdowns">
 <div  class="category-dropdown-content">
 <a href="#" class="dropdown-menu">3 Rooms</a>
@@ -81,7 +80,7 @@ break;
 </div>
 
 
-<div id="wings" class = "btn-dropdown">Wings<i title="Expand" id="wings-arrow" class="arrow-down"></i></div>
+<div id="wings" class = "btn-dropdown" onclick="toggleSidebar('wings','wings-dropdown','wings-arrow')" >Wings<i title="Expand" id="wings-arrow" class="arrow-down"></i></div>
 <div  id="wings-dropdown"class="dropdowns">
 <div  class="category-dropdown-content">
 <a href="#" class="dropdown-menu">3 Rooms</a>
@@ -89,16 +88,16 @@ break;
 </div></div>
 
 
-<div id="others" class = "btn-dropdown">Others<i  title="Expand"id="others-arrow" class="arrow-down"></i></div>
+<div id="others" class = "btn-dropdown" onclick="toggleSidebar('others','others-dropdown','others-arrow')" >Others<i  title="Expand"id="others-arrow" class="arrow-down"></i></div>
 <div  id="others-dropdown" class="dropdowns">
 <div  class="category-dropdown-content">
 <a href="#" class="dropdown-menu">Single Room</a>
-<a href="#" class="dropdown-menu">Single Room and Parlour</li></a>
+<a href="#" class="dropdown-menu">Room & Parlour</li></a>
 </div>
 </div>
 
 
-<div id="sale" class = "btn-dropdown">FOR SALE<i title="Expand" id="sale-arrow" class="arrow-down"></i></div>
+<div id="sale" class = "btn-dropdown" onclick="toggleSidebar('sale','sale-dropdown','sale-arrow')" >FOR SALE<i title="Expand" id="sale-arrow" class="arrow-down"></i></div>
 <div  id="sale-dropdown" class="dropdowns">
 <div  class="category-dropdown-content">
 <a href="#" class="dropdown-menu">House</a>

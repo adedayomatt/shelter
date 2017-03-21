@@ -1,17 +1,24 @@
 <?php
-if(isset($_GET['p']) && isset($_GET['cb'])){
+if(isset($_GET['p']) && isset($_GET['cb']) && isset($_GET['ref'])){
 	$property = $_GET['p'];
 	$by = $_GET['cb'];
-	//$ref = $_GET['ref'];
+	$ref = $_GET['ref'];
 	$connect = true;
 //since this scripts does not require header, then the connexion is required directly
 	require('../require/connexion.php');
+	$RemainingClips = "SELECT * FROM clipped where (clippedby='$by')" ;
 	$getclipped = mysql_query("SELECT * FROM clipped where (propertyId='$property' AND clippedby='$by')");
 //if clipped already
 	if(mysql_num_rows($getclipped)==1){
 		$unclip = mysql_query("DELETE FROM clipped WHERE (clipped.propertyId='$property' AND clipped.clippedby='$by')");
 		if($unclip){
-			echo "clip";
+	$remains = mysql_num_rows(mysql_query($RemainingClips));
+			if($ref=='ctaPage'){
+				echo "removed/".$remains;
+			}
+			else{
+				echo "clip/".$remains;
+			}
 		}
 		//if unclipping is unsuccessfull
 		else{echo "failed!";}
@@ -20,7 +27,8 @@ if(isset($_GET['p']) && isset($_GET['cb'])){
 	else{
 		$clip = mysql_query("INSERT INTO clipped (propertyId,clippedby) VALUE ('$property','$by')");
 		if($clip){
-			echo "unclip";
+			$remains = mysql_num_rows(mysql_query($RemainingClips));
+			echo "unclip/".$remains;
 			}
 			else{
 				echo "failed!";

@@ -7,8 +7,10 @@
 	$pagetitle = "Account";
 	$ref='editaccount';
 $getuserName=true;
+$connect =true;
 require('../require/header.php');
 if($status==0 || $status==9){
+	mysql_close($db_connection);
 	redirect();
 }
 ?>
@@ -18,9 +20,7 @@ if($status==0 || $status==9){
 <?php
 // Here handles editing of record
 if(isset($_POST['edit'])){
-	require('../require/db_connect.php');
-			if($db_connection){
-			mysql_select_db('shelter');
+
 			$update = "UPDATE profiles SET "; 
 			$update .= "Office_Address='".mysql_real_escape_string($_POST['OfficeAddress'])."',";
 			$update .= "Office_Tel_No=".$_POST['OfficeTelNo'].",";
@@ -31,7 +31,7 @@ if(isset($_POST['edit'])){
 			$update .= "email='".mysql_real_escape_string($_POST['email'])."' ";
 			$update .= "WHERE (ID=".$_POST['id'].")";
 			
-			$updateQuery = mysql_query($update,$db_connection);
+			$updateQuery = mysql_query($update);
 			if($updateQuery){ 
 				if(mysql_affected_rows($db_connection)==1){
 					$editresult = "Changes saved successfully";
@@ -50,8 +50,8 @@ if(isset($_POST['edit'])){
 				$editresult = "Changes could not be saved due to some errors";
 				$case = 4;
 			}
-			mysql_close($db_connection);}
-}
+			
+			}
 ?>
 <?php 
 //Here gives the repoort of the editing. successful or fail
@@ -76,11 +76,9 @@ echo "<div style=\"".$generalstyle.$specialstyle."\"><i style=\"$icon\" class=\"
 	?>
 	<?php
 	//Here fetches the account detail on page load
-	require('../require/db_connect.php');
-			if($db_connection){
-				mysql_select_db('shelter');
-				$getformerdetail = "SELECT * FROM profiles WHERE (User_ID = '".$_COOKIE['name']."')";
-				$getquery = mysql_query($getformerdetail,$db_connection);
+		
+				$getformerdetail = "SELECT * FROM profiles WHERE (User_ID = '".$profile_name."')";
+				$getquery = mysql_query($getformerdetail);
 				if($getquery){
 					if(mysql_affected_rows($db_connection)==1){
 					while($account = mysql_fetch_array($getquery,MYSQL_ASSOC)){
@@ -97,8 +95,8 @@ echo "<div style=\"".$generalstyle.$specialstyle."\"><i style=\"$icon\" class=\"
 					}
 					}else{echo $accountreport = "Account is invalid or might have been blocked or deactivated"; }
 				}else{$accountreport="Invalid Account";}
-			mysql_close($db_connection);
-			}else{echo $accountreport = "There was an error in connection to the server";}
+		
+	
 if(isset($accountreport) && !empty($accountreport)){
 	echo "<p style=\"color:red\" align=\"center\">  $accountreport</p>";
 	echo "<p align=\"center\"><a href=\"#\">Report this</a> or <a href=\"#\">Sign up</a> a new account</p>";
@@ -107,7 +105,7 @@ if(isset($accountreport) && !empty($accountreport)){
 	?>
 <div id="edit-area">
 <fieldset>
-<legend style="color:#6D0AAA"><strong><?php echo "<a href=\"http://localhost/shelter/$editUsername\">".$editBN."</a>" ?></strong></legend>
+<legend style="color:#6D0AAA"><strong><?php echo "<a href=\"$root/$editUsername\">".$editBN."</a>" ?></strong></legend>
 <form action="delete.php" method="POST">
 <input name="deleteid" type="hidden" value="<?php echo $editid ?>"/>
  <button name="submitdelete" id="deactivatebtn"type="submit" value="delete"><i class="icon" id="delete-icon"></i> Deactivate account</button>
@@ -140,6 +138,8 @@ email:
 </fieldset>
  </div>
  <br/><br/><br/>
-<?php require('../require/footer.html'); ?>
+<?php 
+mysql_close($db_connection);
+require('../require/footer.html'); ?>
 </body>
 </html>

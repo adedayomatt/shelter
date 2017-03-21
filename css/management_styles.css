@@ -4,22 +4,21 @@ width:100%;
 min-height:600px;
 }
 #manage{
-	float:left;
 	width:70%;	
-
+	margin:auto;
 }
 #manage-acct{
 	float:left;
-	width:50%
+	width:50%;
+	min-height:300px;
 }
 #manage-prop{
 	float:left;
-	width:50%
+	width:50%;
+	min-height:300px;
 }
-#misc{
-	float:left;
-	width:30%;
-}
+
+
 ul{
 	list-style-type:none;
 }

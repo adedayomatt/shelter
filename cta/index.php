@@ -4,13 +4,12 @@
 <link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
 <link href="../css/index_styles.css" type="text/css" rel="stylesheet" />
 <link href="../css/propertybox_styles.css" type="text/css" rel="stylesheet" />
-
+<script type="text/javascript" src="../js/propertybox.js"></script>
 <header>
 <?php
 $pagetitle = "CTA";
 $connect = true;
 $getuserName = true;
-$ref = "ctaPage";
 require('../require/header.php');
 //if user is logged in as an agent
 if($status==1){
@@ -41,23 +40,71 @@ else{
 <?php 
 $req = (isset($_GET['src']) ? $_GET['src'] : 'matches');
 $count = 0;
-	switch($req){
-case 'matches':
+
+$max = 4;
+if(isset($_GET['next']) && $_GET['next']>0){
+	$start = $_GET['next'];
+	$end = $_GET['next'] + $max;
+}
+ else{
+	 $start = 0;
+	 $end = $max;
+ }
+
+if($req=='matches' || $req==""){
 //if there are preferences request
 if($rqstatus==1 && isset($rqtype) && isset($rqpricemax) && isset($rqlocation)){
 echo "<p>You have requested for $rqtype with rent not more than N".number_format($rqpricemax)." preferably around $rqlocation  <a href=\"request.php?p=$rqstatus\">change</a></p>";
 $query =  "SELECT property_ID,directory,type,location,min_payment,bath,toilet,rent,description,uploadby,date_uploaded 
-            FROM properties WHERE (type='$rqtype' AND rent<=$rqpricemax AND location LIKE '%$rqlocation%') ORDER BY date_uploaded DESC";
-$nooutput = "No Match found yet";
+            FROM properties WHERE (type='$rqtype' AND rent<=$rqpricemax AND location LIKE '%$rqlocation%') ORDER BY date_uploaded DESC LIMIT $start,$end";
+$executequery = mysql_query($query);
+if($executequery){
+	
+	while($property = mysql_fetch_array($executequery,MYSQL_ASSOC)){
+	$propertyId[$count] = $property['property_ID'];
+	$propertydir[$count] = $property['directory'];
+	$type[$count] = $property['type'];
+	$location[$count] = $property['location'];
+	$rent[$count] = $property['rent'];
+	$min_payment[$count] = $property['min_payment'];
+	$bath[$count] = $property['bath'];
+	$toilet[$count] = $property['toilet'];
+	$description[$count] = $property['description'];
+	$date_uploaded[$count] = $property['date_uploaded'];
+	$uploadby[$count] = $property['uploadby'];
+	$count++;
+//last value of count will eventually equals to the total records fetched.
+		}
+$ref = "ctaPage";	
+	require('../require/propertyboxes.php');
+if(!empty($propertyId)){
+	echo "<a style=\"margin-left:80%\" href =\"".basename($_SERVER['PHP_SELF'])."?src=matches&next=$end\" >show more<a/>";	
 }
 else{
-	$nooutput = "You have not specified your preferences";
+if($start==0){
+	echo "<div class=\"no-property\" align=\"center\">There is no property that match your preference for now</div>";
 }
-break;
+else if($start>0){
+	echo "<div class=\"no-property\" align=\"center\">No more matches</div>";
+	}
+}
+		
+	}
+	
+else{
+	echo "<div class=\"no-property\"><b>An error occured!!</b></div>";
+	mysql_close($db_connection);
+	exit();
+			}			
+}
+else{
+	echo "<div class=\"no-property\">You have not specified your preferences</div>";
+}
+mysql_close($db_connection);
+}
 
-case 'clipped':
+else if($req=='clipped'){
 echo "<p>You have clipped the following properties</p>";
-$nooutput = "No clipped property";
 while($count<$clipcounter){
 $getclipped = mysql_query("SELECT property_ID,directory,type,location,min_payment,bath,toilet,rent,description,uploadby,date_uploaded 
          FROM properties WHERE (property_ID='".$clippedproperty[$count]."') ORDER BY date_uploaded DESC");
@@ -77,55 +124,22 @@ if($getclipped){
 		 $count++;
 }
 else{
-	echo "<p align=\"center\"><b>An error occured!!</b></p>";
+	break;
+	echo "<div class=\"no-property\"><b>An error occured!!</b></div>";
 	mysql_close($db_connection);
 	exit();
 			}	
 }
-break;
-
-default:
-echo "<p>You have requested for $rqtype with rent not more than N".number_format($rqpricemax)." preferably around $rqlocation  <a href=\"request.php?p=$rqatatus\">change</a></p>";
-$query =  "SELECT property_ID,directory,type,location,min_payment,bath,toilet,rent,description,uploadby,date_uploaded 
-            FROM properties WHERE (type='$rqtype' AND rent<=$rqpricemax AND location LIKE '%$rqlocation%') ORDER BY date_uploaded DESC";
-$nooutput = "No Match found yet";
-
-break;
-	}
-//This instance would be for case 'matches' and default
-	if(isset($query)){
-	$executequery = mysql_query($query);
-if($executequery){
-	while($property = mysql_fetch_array($executequery,MYSQL_ASSOC)){
-	$propertyId[$count] = $property['property_ID'];
-	$propertydir[$count] = $property['directory'];
-	$type[$count] = $property['type'];
-	$location[$count] = $property['location'];
-	$rent[$count] = $property['rent'];
-	$min_payment[$count] = $property['min_payment'];
-	$bath[$count] = $property['bath'];
-	$toilet[$count] = $property['toilet'];
-	$description[$count] = $property['description'];
-	$date_uploaded[$count] = $property['date_uploaded'];
-	$uploadby[$count] = $property['uploadby'];
-	$count++;
-//last value of count will eventually equals to the total records fetched.
-		}
-	}
-else{
-	echo "<p align=\"center\"><b>An error occured!!</b></p>";
-	mysql_close($db_connection);
-	exit();
-			}
-	}
-//if no match or no clipped
 if(empty($propertyId)){
-	echo "<p align=\"center\">$nooutput</p>";
-	}
-	
+	echo "<div class=\"no-property\">No clipped property</div>";
+}
 else{
-$ref = "match_page";
+	$ref = "ctaPage";
 require('../require/propertyboxes.php');
+
+
+	
+}
 mysql_close($db_connection);
 }
 ?>

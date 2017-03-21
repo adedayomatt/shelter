@@ -18,6 +18,36 @@ if($status == 0){
 ?>
 </head>
 <style>
+#deletionReport-container{
+	background-color:#FD577A;
+	text-align:center;
+	color:white;
+	width:40%;
+	margin:auto;
+	margin-top:20px;
+}
+#notification-top-bar{
+	margin:auto;
+	margin-top:20px;
+}
+#notification-top-bar-links{
+	display:inline-block;
+	margin-left:20%;
+}
+#top-bar-table-link-clearall,#top-bar-table-link-clearold{
+	display:inline-block;
+	width:200px;
+	height:30px;
+	text-align:center;
+	background-color:#6D0AAA;
+	color:white;
+}
+#top-bar-table-link-clearall:hover,#top-bar-table-link-clearold:hover{
+	text-decoration:none;
+}
+#top-bar-table-link-clearall{
+	color:red;
+}
 #notifications-content{
 	background-color:white;
 	width:70%;
@@ -56,9 +86,72 @@ border-radius:10px;
 	color:;
 }
 </style>
-<body class="pic-background">
-<div id="notifications-content">
+<body class="no-pic-background">
+<?php
+//Notifications clearing
+if(isset($_GET['token']) && isset($_GET['target']) && isset($_GET['action'])){
+	if($status==1){
+		if($_GET['token']==$myid && $_GET['target']==$Business_Name){
+			if($_GET['action']=='clearall'){
+			if(mysql_query("DELETE FROM notifications WHERE receiver='$Business_Name'")){
+				$deletionReport = "You have successfully cleared your notifications";
+			}else{ $deletionReport="Deletion of your notifications failed"; }
+			}
+else if($_GET['action']=='clearold'){
+	//48hours ago
+	$old = time() - 172800;
+	if(mysql_query("DELETE FROM notifications WHERE receiver='$Business_Name' AND time<=$old")){
+				$deletionReport = "You have successfully cleared your old notifications";
+			}else{ $deletionReport="Deletion of your old notifications failed"; }
+}
+		}
+	else{
+			echo "You are not authorized to clear this notifications";
+			mysql_close($db_connection);
+			exit();
+		}
 
+	}
+else if($status==9)	{
+	if($_GET['token']==$myid && $_GET['target']==$ctaname){
+					if($_GET['action']=='clearall'){
+			if(mysql_query("DELETE FROM notifications WHERE receiver='$ctaname'")){
+				$deletionReport = "You have successfully cleared your notifications";
+			}else{ $deletionReport="Deletion of your notifications failed"; }
+			}
+else if($_GET['action']=='clearold'){
+	//48hours ago
+	$old = time() - 172800;
+	if(mysql_query("DELETE FROM notifications WHERE receiver='$ctaname' AND time<=$old")){
+				$deletionReport = "You have successfully cleared your old notifications";
+			}else{ $deletionReport="Deletion of your old notifications failed"; }
+}
+		}
+		else{
+			echo "<div id=\"deletionReport-container\">
+					<hr/>
+				You are not authorized to clear this notifications
+					<hr/>
+					</div>";
+			mysql_close($db_connection);
+			exit();
+		}
+}
+else{
+	redirect();
+}
+}
+?>
+<?php
+if(isset($deletionReport) && $deletionReport != ''){
+	echo "<div id=\"deletionReport-container\">
+	<hr/>
+	$deletionReport
+	<hr/>
+	</div>";
+}
+?>
+<div id="notifications-content">
 <?php
 function notify($subject,$subjecttrace,$action,$timestamp,$howold){
 	$time = time() - $timestamp;
@@ -129,12 +222,23 @@ else{
 
 if($status==1){
 	$getnotifications = mysql_query("SELECT * FROM notifications WHERE (receiver='$Business_Name' OR receiver='allAgents') ORDER BY time DESC");
+	$clearAllNotification = "<a href=\"?token=$myid&target=$Business_Name&action=clearall\">clear all notifications</a>";
+	$clearOldNotification = "<a href=\"?token=$myid&target=$Business_Name&action=clearold\">clear old notifications</a>";
 }
 else if($status==9){
 	$getnotifications = mysql_query("SELECT * FROM notifications WHERE (receiver='$ctaname' OR receiver='allClients') ORDER BY time DESC");
+	$clearAllNotification = "<a id=\"top-bar-table-link-clearall\" href=\"?token=$myid&target=$ctaname&action=clearall\">clear all notifications</a>";
+	$clearOldNotification = "<a id=\"top-bar-table-link-clearold\" href=\"?token=$myid&target=$ctaname&action=clearold\">clear old notifications</a>";
 }
 $totalnotifications = mysql_num_rows($getnotifications);
-echo "<p>$totalnotifications Total notifications</p>";
+$topbar = "<div id=\"notification-top-bar\">
+	$totalnotifications Total notifications
+	<div id=\"notification-top-bar-links\">
+	$clearOldNotification
+		$clearAllNotification
+		</div>
+		</div>";
+		echo $topbar;
 if(($totalnotifications)==0){
 	echo "<ul><li class=\"notice\">No notifications for now</li></ul>";
 }

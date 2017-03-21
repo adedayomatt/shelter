@@ -8,6 +8,7 @@
 	$pagetitle = "Manage";
 	$ref='manage';
 $getuserName=true;
+$connect = true;
 	require('../require/header.php');
 	if($status==0){
 		redirect();
@@ -53,7 +54,6 @@ $(document).ready(function(){
 </fieldset>
 </div>
 </div>
-<div id="misc"></div>
 </div>
 </body>
 <?php require('../require/footer.html'); ?>
