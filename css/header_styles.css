@@ -86,24 +86,3 @@ background-color:white;
 margin-top:0;
 padding:5px;
 }
-
-li.acct-dropdown-content{
-	padding-left:10px;
-	display:block;
-	height:30px;
-	border-radius:inherit;
-}
-.acct-dropdown-content:hover{
-	background-color:#6D0CCC;
-	color:white;
-	
-}
-
-#user-icon{
-	margin-right:10px;
-	background-position: -168px 0px;
-}
-#arrow{
-	margin-left:5px;
-	background-position:0px -56px;
-}

@@ -10,9 +10,10 @@ echo "<div class=\"account-nav-container\">
 		<a href=\"signup\" class=\"account-nav-link\">Sign up</a>
 		<hr/>
 	<h4 align=\"center\" style=\"margin-bottom:0px; color:grey; \">Client Temporary Account (CTA)</h4>
+		<a href=\"cta/checkin.php?_rdr=0#checkin\" class=\"account-nav-link\">Checkin my CTA</a>
+		<a href=\"cta/checkin.php?_rdr=0#createnew\" class=\"account-nav-link\">Create new CTA</a>
 		<a href=\"\" class=\"account-nav-link\">What is CTA?</a>
-		<a href=\"cta/checkin.php?_rdr=0\" class=\"account-nav-link\">Checkin my CTA</a>
-		<a href=\"cta/checkin.php?_rdr=1\" class=\"account-nav-link\">Clipped properties</a>
+		<a href=\"cta/checkin.php?_rdr=1\" class=\"account-nav-link\">My Clipped properties</a>
 		<a href=\"cta/checkin.php?_rdr=1\" class=\"account-nav-link\">My agents</a>
 	</div>";
 break;
@@ -102,15 +103,15 @@ switch($status){
 	case 1:
 	echo "<hr/>
 	<div class=\"account-nav-cotainer\">
-	<a href=\"logout\" class=\"account-nav-link\">Logout</a>
+	<a href=\"$root/logout\" class=\"account-nav-link\">Logout</a>
 	</div>
 	<hr/>";
 	break;
 	case 9:
 	echo "<hr/>
 	<div class=\"account-nav-container\">
-	<a href=\"login\" class=\"account-nav-link bottom-nav-cotainer\">Login as agent</a>
-	<a href=\"signup\" class=\"account-nav-link\">Sign up as agent</a>
+	<a href=\"$root/login\" class=\"account-nav-link bottom-nav-cotainer\">Login as agent</a>
+	<a href=\"$root/signup\" class=\"account-nav-link\">Sign up as agent</a>
 	</div>
 	<hr/>";
 	break;

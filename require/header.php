@@ -145,6 +145,7 @@ else{
 	color:white;
 	font-size:10px;
 	font-weight:bold;
+	margin-left:20px;
 }
 #notifications-icon{
 	background-position:-48px -144px;
@@ -154,7 +155,6 @@ else{
 if($status==1 || $status==9){
 	echo "<a href=\"$root/notifications\"><li id=\"notification\">$notifications<i class=\"white-icon\" id=\"notifications-icon\"></i></li></a>";
 }
-
  ?>
 </ul>
 </div>

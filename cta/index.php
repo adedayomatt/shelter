@@ -13,7 +13,7 @@ $getuserName = true;
 require('../require/header.php');
 //if user is logged in as an agent
 if($status==1){
-	$denialMessage = "You cannot use Client Temporary Account because you are currently logged in as <a href=\"$root/$profile_name\">$Business_Name</a> <br/><a href=\"../logout\">Logout</a> first";
+	$denialMessage = "You cannot use Client Temporary Account because you are currently logged in as <br/><a href=\"$root/$profile_name\">$Business_Name</a> <br/><a href=\"../logout\">Logout</a> first";
 }
 //if user is a visitor
 else if($status==0){
@@ -24,9 +24,15 @@ else if($status==0){
 }
 ?>
 </header>
+<style>
+#denial{
+	width:50%;
+	text-align:center;
+}
+</style>
 <body class="no-pic-background">
 <?php
-if(isset($denialMessage)){ echo "<p>$denialMessage</p></body></html>";
+if(isset($denialMessage)){ echo "<br/></br/><div class=\"operation-report-container\" id=\"denial\" >$denialMessage</div></body></html>";
 mysql_close($db_connection);
 exit();
 }
@@ -35,7 +41,7 @@ else{
 }
 ?>
 
-<div id="cta-content" style="width:60%;float:left;">
+<div id="cta-content" style="width:40%;float:left;">
 
 <?php 
 $req = (isset($_GET['src']) ? $_GET['src'] : 'matches');
