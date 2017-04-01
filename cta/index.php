@@ -55,7 +55,7 @@ if($req=='matches' || $req==""){
 //if there are preferences request
 if($rqstatus==1 && isset($rqtype) && isset($rqpricemax) && isset($rqlocation)){
 echo "<p>You have requested for $rqtype with rent not more than N".number_format($rqpricemax)." preferably around $rqlocation  <a href=\"request.php?p=$rqstatus\">change</a></p>";
-$query =  "SELECT property_ID,directory,type,location,min_payment,bath,toilet,rent,description,uploadby,date_uploaded 
+$query =  "SELECT property_ID,directory,type,location,min_payment,bath,toilet,rent,description,uploadby,date_uploaded,timestamp 
             FROM properties WHERE (type='$rqtype' AND rent<=$rqpricemax AND location LIKE '%$rqlocation%') ORDER BY date_uploaded DESC LIMIT $start,$end";
 $executequery = mysql_query($query);
 if($executequery){
@@ -72,13 +72,14 @@ if($executequery){
 	$description[$count] = $property['description'];
 	$date_uploaded[$count] = $property['date_uploaded'];
 	$uploadby[$count] = $property['uploadby'];
+	$howlong[$count] = $property['timestamp'];
 	$count++;
 //last value of count will eventually equals to the total records fetched.
 		}
 $ref = "ctaPage";	
 	require('../require/propertyboxes.php');
 if(!empty($propertyId)){
-	echo "<a style=\"margin-left:80%\" href =\"".basename($_SERVER['PHP_SELF'])."?src=matches&next=$end\" >show more<a/>";	
+	echo "<a style=\"margin-left:80%\" href =\"?src=matches&next=$end\">show more<a/>";	
 }
 else{
 if($start==0){
@@ -106,7 +107,7 @@ mysql_close($db_connection);
 else if($req=='clipped'){
 echo "<p>You have clipped the following properties</p>";
 while($count<$clipcounter){
-$getclipped = mysql_query("SELECT property_ID,directory,type,location,min_payment,bath,toilet,rent,description,uploadby,date_uploaded 
+$getclipped = mysql_query("SELECT property_ID,directory,type,location,min_payment,bath,toilet,rent,description,uploadby,date_uploaded,timestamp
          FROM properties WHERE (property_ID='".$clippedproperty[$count]."') ORDER BY date_uploaded DESC");
 if($getclipped){
 	$property = mysql_fetch_array($getclipped,MYSQL_ASSOC);
@@ -121,6 +122,7 @@ if($getclipped){
 	$description[$count] = $property['description'];
 	$date_uploaded[$count] = $property['date_uploaded'];
 	$uploadby[$count] = $property['uploadby'];
+	$howlong[$count] = $property['timestamp'];
 		 $count++;
 }
 else{

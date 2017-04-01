@@ -4,10 +4,10 @@ function checkfollow($follower,$following){
 	require('../require/connexion.php');
 $getfollows = mysql_query("SELECT * FROM follow WHERE (follower='$follower' AND following='$following')");
 	if(mysql_num_rows($getfollows)>=1){
-		return 'unfollow';
+		return 'positive';
 	}
 	else{
-	return 'follow';	
+	return 'negative';	
 	}
 mysql_close($db_connection);
 }
@@ -54,18 +54,12 @@ parent file where this would be included
 <script src="../js/profile.js" type="text/javascript"></script>
 <script src="../js/propertybox.js" type="text/javascript"></script>
 
-</head>
-<body class="no-pic-background">
-<div class="left">
-<div class="maincontent">
-<div id="biz-logo">
-<img src="logo" alt="Business Logo" style="border:2px solid white; border-radius:30px;" height="100px" width="100px"/></div>
-<div id="about-biz"><h4 align="center"><?php echo $BizName?></h4>
-<p><?php echo $OAddress?></p>
-<p><?php echo $OTel?></p>
-<p> <?php echo $email?></p>
 <?php
 //if current user is logged in as an agen or a client
+$followup = '';
+$sendmessage ='';
+$editprofile='';
+$followStatus = '';
 if($status==1 || $status==9){
 	//check if conversation has existed between the users 
 $possible1 = $myid.$key;
@@ -87,12 +81,20 @@ case 1:
 	$sendmessage = "<a href=\"$root/messages/compose.php?cv=".$token."&i=$Business_Name&rcpt=$key\"><button class=\"profile-buttons\"><i class=\"white-icon\" id=\"message-icon\"></i>send message</button></a>";
 	if($BizName != $Business_Name)
 	{
-		$followornot = checkfollow($Business_Name,$BizName);
-		$followicon = ($followornot=='follow' ? 'follow-icon' : 'unfollow-icon');
+		if (checkfollow($Business_Name,$BizName)=='positive'){
+			$followStatus = 'yes';
+			$text = 'unfollow';
+			$f = 'unfollow-button';
+			$ficon = 'white-icon unfollow-icon';
+		}
+	else if (checkfollow($Business_Name,$BizName)=='negative'){
+		$followStatus = 'no';
+		$text = 'follow';
+	$f = 'follow-button';
+	$ficon = 'black-icon follow-icon';	
+		}
 	
-	$followup = "<button class=\"profile-buttons\" id=\"followbutton\" onclick=\"follow('$Business_Name','$profile_name','$BizName','A4A')\"><i class=\"white-icon\" id=\"$followicon\"></i> $followornot</button>";
-	echo $followup;
-	echo $sendmessage;
+	$followup = "<button class=\"$f\" id=\"follow-button\" onclick=\"follow('follow-button',$Business_Name','$profile_name','$BizName','A4A')\"><i class=\"$ficon\"></i>  $text</button>";
 	}
 	else{
 	$editprofile = "<a href=\"$root/manage/account.php\"><button class=\"profile-buttons\"><i class=\"white-icon\" id=\"edit-icon\"></i> Edit profile</button></a>";
@@ -101,22 +103,51 @@ case 1:
 break;
 //if a client is logged in
 	case 9:
-	$followornot = checkfollow($ctaname,$BizName);
-		$followicon = ($followornot=='follow' ? 'follow-icon' : 'unfollow-icon');
-	$sendmessage = "<a href=\"$root/messages/compose.php?cv=".$token."&i=$ctaname&rcpt=$key\"><button class=\"profile-buttons\"><i class=\"white-icon\" id=\"message-icon\"></i> send message</button></a>";
-	$followup = "<button class=\"profile-buttons\" id=\"followbutton\" onclick=\"follow('$ctaname','$ctaid','$BizName','C4A')\"><i class=\"white-icon\" id=\"$followicon\"></i> $followornot</button>";
-echo $followup;
-	echo $sendmessage;
+if (checkfollow($ctaname,$BizName)=='positive'){
+			$followStatus = 'yes';
+			$text = 'unfollow';
+			$f = 'unfollow-button';
+			$ficon = 'white-icon unfollow-icon';
+		}
+	else if (checkfollow($ctaname,$BizName)=='negative'){
+		$followStatus = 'no';
+		$text = 'follow';
+	$f = 'follow-button';
+	$ficon = 'black-icon follow-icon';	
+		}
+		
+$sendmessage = "<a href=\"$root/messages/compose.php?cv=".$token."&i=$ctaname&rcpt=$key\"><button class=\"profile-buttons\"><i class=\"white-icon\" id=\"message-icon\"></i> send message</button></a>";
+	$followup = "<button class=\"$f\" id=\"follow-button\" onclick=\"follow('follow-button','$ctaname','$ctaid','$BizName','C4A')\"><i class=\"$ficon\"></i>  $text</button>";
 	break;
 //for visitors
 default:
 $sendmessage = "<a href=\"$root/cta/checkin.php?_rdr=1\"><button class=\"profile-buttons\"><i class=\"white-icon\" id=\"message-icon\"></i> send message</button></a>";
-	$followup =  "<a href=\"$root/cta/checkin.php?_rdr=1\"><button class=\"profile-buttons\"><i class=\"white-icon\" id=\"follow-icon\"></i> follow</button></a>";
-	echo $followup;
-	echo $sendmessage;
+	$followup =  "<a href=\"$root/cta/checkin.php?_rdr=1\"><button class=\"follow-button\" id=\"follow-button\"><i class=\"black-icon follow-icon\"></i> follow</button></a>";
 	break;
 }
 ?>
+
+</head>
+<body class="no-pic-background">
+<div class="left">
+<div class="maincontent">
+<div id="biz-logo">
+<img src="logo" alt="Business Logo" style="border:2px solid white; border-radius:30px;" height="100px" width="100px"/></div>
+<div id="about-biz"><h4 align="center"><?php echo $BizName."<br/>";
+if($followStatus=='yes'){
+	echo "<span id=\"following-status\" style=\"font-weight:normal; font-size:80%;color:grey;\">you are currently following $BizName</span> <br/>".$followup;
+}
+else if ($followStatus=='no'){
+	echo "<span id=\"following-status\" style=\"font-weight:normal; font-size:80%;color:grey;\">you are currently <i>NOT</i> following $BizName </span> <br/>"  .$followup;
+}
+else{
+	echo "<span id=\"following-status\" style=\"font-weight:normal; font-size:80%;color:grey;\"><a href=\"login\">login</a> to follow $BizName </span>  <br/>"  .$followup;
+}
+ ?></h4>
+<p><?php echo $OAddress?></p>
+<p><?php echo $OTel?></p>
+<p> <?php echo $email?></p>
+
 </div>
 </div><hr style="width:100%; "/>
 <div class="recent-uploads">
@@ -131,7 +162,7 @@ if(isset($_GET['next']) && $_GET['next']>0){
 	 $start = 0;
 	 $end = $max;
  }
-$fetchproperties = mysql_query("SELECT property_ID,directory,type,location,rent,min_payment,bath,toilet,description,uploadby,date_uploaded FROM
+$fetchproperties = mysql_query("SELECT property_ID,directory,type,location,rent,min_payment,bath,toilet,description,uploadby,date_uploaded,timestamp FROM
                                properties WHERE (uploadby='".$Aid."')ORDER BY date_uploaded DESC LIMIT $start,$end");
 //if there is any record fetched
 if($fetchproperties){
@@ -148,6 +179,7 @@ if($fetchproperties){
 	$description[$count] = $property['description'];
 	$date_uploaded[$count] = $property['date_uploaded'];
 	$uploadby[$count] = $property['uploadby'];
+	$howlong[$count] = $property['timestamp'];
 	$count++;
 //last value of count will eventually equals to the total records fetched.
 		}

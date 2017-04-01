@@ -16,9 +16,11 @@ $('#menuicon').click(function(){
 </script>
 <?php
 function redirect(){
-	header("location: $root/login");
+	header("location: http://192.168.173.1/shelter/login");
+	//header("location: http://localhost/shelter/login");
 	exit();
 }
+
 //since this headeer scripts will always be required by scripts other than the homepage
 if(!isset($ref)){
 	 require('connexion.php');
@@ -109,7 +111,7 @@ $following = mysql_num_rows(mysql_query("SELECT * FROM follow WHERE follower='$c
 
 }
 else{
-	//if the cta info cannot be get
+	//if the cta info cannot be get, clear cookie and redirect to checkin
 	setcookie('CTA',"",time()-60,"/","",0);
 		header("location: $root/cta/checkin.php");
 	mysql_close($db_connection);

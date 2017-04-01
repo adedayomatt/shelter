@@ -1,24 +1,53 @@
-.main{
-	width:100%;
-	min-height:550px;
+#shelter{
+	color:white;
+	font-size:150%;
+	text-align:left;
 }
-.sub_main{
-	width:70%;
-	height:100%;
-	margin-left:15%;
-	margin-right:15%;
 
+.main-login{
+	color:#6D0AAA;
+	min-height:400px;
+	width:60%;
+	margin:auto;
 }
-.other{
-	width:100%;
-	background-color:black;
-	height:200px;
+.login-form{
+	padding:5%;
+	background-color:white;
+	width: 50%;
+	margin:auto;
+	border:none;
+	border-radius:5px;
+	box-shadow:2px #333;
 }
-.loginbutton{
-	float:right;
+
+#login-input-area{
+	padding:20px;
+	width:50%;
+	margin:auto;
+	text-align:center;
+	border:2px solid grey;
 }
-.form{
-	width: 100%;
+input.input,#login-button{
+	width:80%;
+	margin:auto;
+	padding:5%;
+	display:block;
+	margin-top:5px;
+}
+
+#login-button{
+cursor:pointer;
+background-color:#6D0AAA;
+color:white;
+border:none;
+font-size:120%;
+border:none;
+border-radius:3px;
+letter-spacing:0.5em;
+}
+#login-button:hover{
+	background-color:grey;
+
 }
 #foot{
 	color:white;

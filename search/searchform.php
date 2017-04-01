@@ -1,6 +1,13 @@
 <style>
+form,select{
+	color:grey;
+}
+#location-input{
+	width:50%;
+	padding:10px;
+}
 #search-icon{
-	background-position: -48px 2px;
+	background-position: -48px 0px;
 }
 #search-btn{
 	cursor:pointer;
@@ -9,9 +16,14 @@
 	border-radius:5px;
 	font-weight:bold;
 	color:white;
+	padding:3%;
+	box-shadow: 2px 2px 2px 2px grey;
+}
+#search-btn:hover{
+	box-shadow: 2px 2px 2px 2px #333;
 }
 </style>
-<form action="http://localhost/shelter/search" method="GET">
+<form action="<?php echo "$root/search" ?>" method="GET">
 
 <label>
 <select class="search-field" name="type">
@@ -41,8 +53,8 @@
 <option value="5000000">5 million</option>
 </select>
 </label>
-
-<label>select location<input name="location" size="15" type="text" value="<?php if(isset($_GET['location'])){echo $_GET['location'];}?>"/></label>
+<br/>
+<input id="location-input" placeholder="Input location" name="location" size="15" type="text" value="<?php if(isset($_GET['location'])){echo $_GET['location'];}?>"/></label>
 <button type="submit" id="search-btn"><i class="white-icon" id="search-icon"></i>search</button>
 
 </form>

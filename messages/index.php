@@ -57,8 +57,8 @@ border-radius:10px;
 	display:inline;
 	float:right;
 	padding-right:10px;
+	color:grey;
 	font-size:12px;
-	color:;
 }
 a:hover{
 	text-decoration:none;
@@ -112,7 +112,7 @@ else{
 }
 	return "<li class=\"message\">
 					<div><i class=\"black-icon\" id=\"$messageclass\"></i>
-					 <a class=\"message-heading\" href=\"\">".$head." [$subject]</a></div>
+					 <a href=\"readmessage/?cv=$id\" class=\"message-heading\" href=\"\">".$head." [$subject]</a></div>
 					 <p class=\"lastmessage\">".substr($lastmessage,0,100)."</p>
 					 <i class=\"since\">$since</i>
 					 

@@ -37,13 +37,13 @@ $road = $_POST['road'];
 $social = $_POST['social'];
 $security = $_POST['security'];
 $description = mysql_real_escape_string($_POST['description']);
-
+$timestamp = time();
 $dirName = $propertyId." ".$type." ".$location;
 //replace ( ,.) with -
 $dirName = str_replace(array(" ",",","."),"-",$dirName);
 $upload = "INSERT INTO properties"; 
-$upload .= "(property_ID,directory,type,location,rent,min_payment,bath,toilet,pumping_machine,borehole,well,tiles,parking_space,electricity,road,socialization,security,description,uploadby,date_uploaded)";
-$upload .="VALUES('$propertyId',trim('$dirName'),'$type','$location',$rent,'$min_payment',$bath,$loo,'$pmachine','$borehole','$well','$tiles','$pspace',$electricity,$road,$social,$security,'$description','$profile_name',NOW())";
+$upload .= "(property_ID,directory,type,location,rent,min_payment,bath,toilet,pumping_machine,borehole,well,tiles,parking_space,electricity,road,socialization,security,description,uploadby,date_uploaded,timestamp)";
+$upload .="VALUES('$propertyId',trim('$dirName'),'$type','$location',$rent,'$min_payment',$bath,$loo,'$pmachine','$borehole','$well','$tiles','$pspace',$electricity,$road,$social,$security,'$description','$profile_name',NOW(),$timestamp)";
 //echo $upload;
 $uploadQuery = mysql_query($upload);
 //if recorded addedd successfully
@@ -79,7 +79,7 @@ require('../detail.php');
 			$write = fwrite($open,$prepared);
 			fclose($open);
 			}	
-	header("Location: http://localhost/shelter/upload/addphoto.php");
+	header("Location: $root/upload/addphoto.php");
 }
 else{
 	echo"<script>alert(\"There was an error\"); \"</script>";

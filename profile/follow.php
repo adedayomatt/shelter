@@ -15,9 +15,8 @@ mysql_select_db('shelter');
 	if(mysql_num_rows(mysql_query("SELECT * FROM follow WHERE (follower='$follower' AND following='$following')"))>=1){
 //...then unfollow
 		if(mysql_query("DELETE FROM follow WHERE(follower='$follower' AND following ='$following')")){
-			echo "<i class=\"white-icon\" id=\"follow-icon\"></i> follow";
-			
-	}
+			echo "negative";		
+		}
 	}
 //if not following before, start following
 	else{
@@ -28,7 +27,7 @@ mysql_select_db('shelter');
 //the subjecttrace is to create link to the subject of the notification when rendering it to the target
 $action=$type.'follow';
 mysql_query("INSERT INTO notifications (notificationid,subject,subjecttrace,receiver,action,status,time) VALUE ('$id','$follower','$followerid','$following','$action','unseen',$time)");
-		echo "<i class=\"white-icon\" id=\"unfollow-icon\"></i> unfollow";
+		echo "positive";
 		
 	}
 	}

@@ -1,21 +1,86 @@
+#shelter{
+	color:white;
+	font-size:150%;
+	text-align:left;
+}
+#shelter:hover{
+	text-decoration:none;
+}
 .mainsignup{
-	margin-left:15%;
-	margin-right:15%;
 	width:70%;
+	margin:auto;
 	height:100%;}
-form{
+#registration-successful,#registration-not-successful{
+	margin:auto;
+	background-color:white;
+	color: grey;
+	width:90%;
+	padding:20px;
+	box-shadow:1px 3px 2px 2px grey;
+	margin-bottom:10px;
+}
+#registration-not-successful{
 	
 }
-.Business, .personal{
-	width:80%;
-}
-.signupbutton{
-	cursor:pointer;
-	margin-left:80%;
-	background-color:#6D0AAA;
-	color:white;
-	font-size:20px;
-	width:120px;
-	height:40px;
+	
+	
+	
+fieldset{
+	padding:20px;	
+	border:none;
 	border-radius:5px;
 }
+input{
+	height:20px;
+	border:1px solid grey;
+	max-width:300px;
+
+}
+.legend{
+	font-size:120%;
+	color:grey;
+}
+.instruction{
+	color:grey;
+	font-size:80%;
+}
+#agreement{
+	color:grey;
+	float:right;
+}
+.Business,.personal{
+	width:90%;
+	margin:auto;
+	background-color:white;
+	color:#6D0AAA;
+	margin-bottom:10px;
+}
+#signupbutton{
+	cursor:pointer;
+	margin-left:80%;
+	background-color:white;
+	color:#6D0AAA;
+	font-size:120%;
+	width:120px;
+	height:40px;
+	border:2px solid grey;
+	border-radius:5px;
+	font-weight:bold;
+}
+#signupbutton:hover{
+	background-color:#6D0AAA;
+	color:white;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,5 +1,6 @@
 <?php
-$root = "http://localhost/shelter";
+//$root = "http://localhost/shelter";
+$root = "http://192.168.173.1/shelter";
 if(isset($connect) and $connect==true){
 $dbhost = '127.0.0.1';
 $dbuser = 'adedayo';

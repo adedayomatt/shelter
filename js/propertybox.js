@@ -77,7 +77,7 @@ else if(xmlhttp.responseText.substring(0,2) == 're'){
 		alert("things did not go well:404!");
 	}
 }
-var url = "http://localhost/shelter/cta/c.php?p="+propertyid+"&cb="+clipper+"&ref="+ref;
+var url = "http://192.168.173.1/shelter/cta/c.php?p="+propertyid+"&cb="+clipper+"&ref="+ref;
 xmlhttp.open("GET",url, true);
 xmlhttp.send();
   
