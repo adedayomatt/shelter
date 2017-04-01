@@ -158,43 +158,6 @@ if($status==1 || $status==9){
  ?>
 </ul>
 </div>
-<?php
-switch($status){
-	case 1:
-
-	$dropdown = "<div id=\"dropdown-container\">
-	 <button id=\"acct-dropdown\"><i class=\"black-icon\" id=\"user-icon\"></i>$profile_name<i class=\"black-icon\" id=\"arrow\"></i></button>
-	 <div id=\"acct-dropdown-box\">
-	<ul id=\"ul\">
-	<a  href=\"$root/manage\" title=\"Manage\"><li class=\"acct-dropdown-content\">Manage Account</li></a>
-	 <a  href=\"$root/manage\" title=\"Manage property\"><li class=\"acct-dropdown-content\">Manage Property</li></a>
-	 <a  href=\"$root/logout\" title=\"Logout\"><li class=\"acct-dropdown-content\">Logout</li></a>
-	 </ul></div>
-	</div>";
-	break;
-	case 0:
-	$dropdown = "<div id=\"dropdown-container\">
-	<button id=\"acct-dropdown\"><i class=\"black-icon\" id=\"user-icon\"></i>Account<i class=\"black-icon\" id=\"arrow\"></i></button>
-	<div id=\"acct-dropdown-box\">
-	<ul id=\"ul\">
-	<a  href=\"$root/login\" title=\"Login\"><li class=\"acct-dropdown-content\">Login</li></a>
-	<a  href=\"$root/signup\" title=\"Sign up\"><li class=\"acct-dropdown-content\">Sign up</li></a>
-	</ul></div>
-	</div>";
-	break;
-	default:
-	$dropdown = "<div id=\"dropdown-container\">
-	<button id=\"acct-dropdown\"><i class=\"black-icon\" id=\"user-icon\"></i>Agent<i class=\"black-icon\" id=\"arrow\"></i></button>
-	<div id=\"acct-dropdown-box\">
-	<ul id=\"ul\">
-	<a  href=\"$root/login\" title=\"Login\"><li class=\"acct-dropdown-content\">Login</li></a>
-	<a  href=\"$root/signup\" title=\"Sign up\"><li class=\"acct-dropdown-content\">Sign up</li></a>
-	</ul></div>
-	</div>";
-	break;
-}
-echo $dropdown;
-?>
 </div>
 <div class="top-nav-bar" id="top-nav-bar-under" ></div>
 <?php
