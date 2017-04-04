@@ -164,10 +164,11 @@ switch ($case){
 	<h1>Failed!</h1>
 	$registerationReport<br/>";
 //List the invalid data
+echo "<ul>";
 foreach($error as $e){
-	echo "-". $e."<br/>";
+	echo "<li >". $e."</li>";
 	}
-	echo "check your input and try again</div>";
+echo "</ul>check your input and try again</div>";
 	break;
 	default:
 	$icon = "background-position:-312px 0px";
@@ -183,29 +184,29 @@ foreach($error as $e){
 			<fieldset class="Business">
 			<h3 class="legend">Business Information</h3>
 			<p class="instruction"><b>Fields asterisks (<span style="color: red">*</span>) are necessary</b></p>
-			<label><span style="color: red">*</span>Business Registered Name: <input name="Business_name" size="60" maxlength="50" type="text" required="required" value="<?php if(isset($_POST['Business_name'])){echo $_POST['Business_name']; }?>"/></label><br><br>
-			<label><span style="color: red">*</span>Office Address: <input name="Office_Address" size="100" maxlength="150" type="text" required="required" value="<?php if(isset($_POST['Office_Address'])){echo $_POST['Office_Address']; }?>"></label><br><br>
-			<label><span style="color: red">*</span>Office Tel No: <input name="Office_No" size="30" maxlength="11" type="text" required="required" value="<?php if(isset($_POST['Office_No'])){echo $_POST['Office_No']; }?>"></label><br><br>
-			<label>Business's e-mail: <input name="Office_mail" size="30" maxlength="30" type="email" required="required" value="<?php if(isset($_POST['Office_mail'])){echo $_POST['Office_mail']; }?>"></label><br><br>
+			<label><span style="color: red">*</span>Business Registered Name: <input name="Business_name" size="60" maxlength="50" type="text" required="required" value="<?php if(isset($_POST['Business_name'])){echo $_POST['Business_name']; }?>"/></label>
+			<label><span style="color: red">*</span>Office Address: <input name="Office_Address" size="100" maxlength="150" type="text" required="required" value="<?php if(isset($_POST['Office_Address'])){echo $_POST['Office_Address']; }?>"></label>
+			<label><span style="color: red">*</span>Office Tel No: <input name="Office_No" size="30" maxlength="11" type="text" required="required" value="<?php if(isset($_POST['Office_No'])){echo $_POST['Office_No']; }?>"></label>
+			<label>Business's e-mail: <input name="Office_mail" size="30" maxlength="30" type="email" required="required" value="<?php if(isset($_POST['Office_mail'])){echo $_POST['Office_mail']; }?>"></label>
 			</fieldset>
 			<fieldset class="personal">
 			<h3 class="legend">Personal Information</h3>
 			<p class="instruction"><b>Fields asterisks (<span style="color: red">*</span>) are necessary</b> </p>
-			<label><span style="color: red">*</span>CEO Name: <input name="personal_name" size="60" maxlength="50" type="text" required="required" value="<?php if(isset($_POST['personal_name'])){echo $_POST['personal_name']; }?>"></label><br><br>
-			<label><span style="color: red">*</span>Phone No: <input name="personal_No" size="40" maxlength="11" type="text" required="required" value="<?php if(isset($_POST['personal_No'])){echo $_POST['personal_No']; }?>"></label><br><br>
-			<label>Alternative Phone No: <input name="personal_No2" size="40" maxlength="11" type="text" value="<?php if(isset($_POST['personal_No2'])){echo $_POST['personal_No2']; }?>"/></label><br><br>
-			<label><span style="color: red">*</span>e-mail: <input name="personal_mail" size="30" maxlength="30" type="email" required="required" value="<?php if(isset($_POST['personal_mail'])){echo $_POST['personal_mail']; }?>"></label><br><br>
+			<label><span style="color: red">*</span>CEO Name: <input name="personal_name" size="60" maxlength="50" type="text" required="required" value="<?php if(isset($_POST['personal_name'])){echo $_POST['personal_name']; }?>"></label>
+			<label><span style="color: red">*</span>Phone No: <input name="personal_No" size="40" maxlength="11" type="text" required="required" value="<?php if(isset($_POST['personal_No'])){echo $_POST['personal_No']; }?>"></label>
+			<label>Alternative Phone No: <input name="personal_No2" size="40" maxlength="11" type="text" value="<?php if(isset($_POST['personal_No2'])){echo $_POST['personal_No2']; }?>"/></label>
+			<label><span style="color: red">*</span>e-mail: <input name="personal_mail" size="30" maxlength="30" type="email" required="required" value="<?php if(isset($_POST['personal_mail'])){echo $_POST['personal_mail']; }?>"></label>
 			</fieldset>
 			<fieldset class="personal">
 			<h3 class="legend">Login Details</h3>
 			<p class="instruction"><b>Fields asterisks (<span style="color: red">*</span>) are necessary</b></p>
 			<p class="instruction"><b>please choose a user ID, this will be for used to login subsequently</b></p>
-			<label><span style="color: red">*</span>User ID: <input name="userID" size="30" maxlength="20" type="text" required="required" value="<?php if(isset($_POST['userID'])){echo $_POST['userID']; }?>"/></label><br><br>
+			<label><span style="color: red">*</span>User ID: <input name="userID" size="30" maxlength="20" type="text" required="required" value="<?php if(isset($_POST['userID'])){echo $_POST['userID']; }?>"/></label>
 			<p class="instruction"><b>create password, make sure this password is secured</b></p>
-			<label><span style="color: red">*</span>Password: <input name="pass1" size="30" maxlength="25" type="password" required="required"/></label><br><br>
-			<label><span style="color: red">*</span>Repeat Password: <input name="pass2" size="30" maxlength="25" type="password" required="required"/></label><br><br>
+			<label><span style="color: red">*</span>Password: <input name="pass1" size="30" maxlength="25" type="password" required="required"/></label>
+			<label><span style="color: red">*</span>Repeat Password: <input name="pass2" size="30" maxlength="25" type="password" required="required"/></label>
 			
-			<span id="agreement"> <input name="agreement" value="<?php if(isset($_POST['agreement'])) echo 'yes'; else echo 'no';?>"  type="checkbox" checked="checked"> <b>I agree with the <a href="#">terms and conditions</a> of shelter.com</b></span><br/>
+			<span id="agreement"> <input id="agreement-box" name="agreement" value="<?php if(isset($_POST['agreement'])) echo 'yes'; else echo 'no';?>"  type="checkbox" checked="checked"> <b>I agree with the <a href="#">terms and conditions</a> of shelter.com</b></span>
 			<input name="register" value="sign up"  type="submit" id="signupbutton" align="right"/>
 			</fieldset>
 			

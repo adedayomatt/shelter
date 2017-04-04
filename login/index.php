@@ -63,12 +63,14 @@ else{
 		mysql_close($db_connection);
 		exit();
 	} ?>
+
+	<?php if(isset($loginReport) && $case!=1){
+	echo "<div class=\"operation-report-container\" id=\"login-error\">$loginReport</div>";
+	} ?>
 			<fieldset class="login-form">
 			<div id="login-input-area">
-			<?php if(isset($loginReport) && $case!=1){
-	echo "<div class=\"operation-report-container\">$loginReport</div>";
-	} ?>
-			<input placeholder="Agents ID" class="input" name="username" size="40" maxlength="30" type="text" required="required" value="<?php if(isset($_POST['username'])) echo $_POST['username'];?>">
+			Provide your login details<br/><br/>
+		<input placeholder="Agents ID" class="input" name="username" size="40" maxlength="30" type="text" required="required" value="<?php if(isset($_POST['username'])) echo $_POST['username'];?>">
 			<input placeholder="Password" class="input" name="passw" size="30" maxlength="30" type="password" required="required" ></label>
 			<label><input name="cookietime" type="checkbox" value="keepme">keep me logged in</label><br/><br/>
 			<input id="login-button" name="login"  type="submit" value="Login">

@@ -3,7 +3,6 @@
 	font-size:150%;
 	text-align:left;
 }
-
 .main-login{
 	color:#6D0AAA;
 	min-height:400px;
@@ -19,7 +18,52 @@
 	border-radius:5px;
 	box-shadow:2px #333;
 }
-
+input{
+	border:2px solid grey;
+}
+@media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
+.special-background{
+		background-color:#eeeeee;
+	}
+	.main-login{
+	color:#6D0AAA;
+	min-height:600px;
+	width:100%;
+	margin:auto;
+}
+.login-form{
+	padding:2%;
+	background-color:white;
+	width: 90%;
+	margin:auto;
+	border:none;
+	border-radius:5px;
+	box-shadow:2px #333;
+}
+#login-input-area{
+	padding:20px;
+	width:80%;
+	margin:auto;
+	text-align:center;
+	border:2px solid grey;
+}
+}
+@media only screen and (min-device-width: 1000px){
+	.main-login{
+	color:#6D0AAA;
+	min-height:400px;
+	width:60%;
+	margin:auto;
+}
+.login-form{
+	padding:5%;
+	background-color:white;
+	width: 50%;
+	margin:auto;
+	border:none;
+	border-radius:5px;
+	box-shadow:2px #333;
+}
 #login-input-area{
 	padding:20px;
 	width:50%;
@@ -27,6 +71,10 @@
 	text-align:center;
 	border:2px solid grey;
 }
+}
+
+
+
 input.input,#login-button{
 	width:80%;
 	margin:auto;
@@ -52,14 +100,6 @@ letter-spacing:0.5em;
 #foot{
 	color:white;
 }
-#error-container{
-	background-color:red;
-	color:white;
-	width:100%;
-	padding:10px;
-	border-radius:5px;
-	opacity:0.5;
-}
-#error-icon{
-	background-position:-312px 0px
+#login-error{
+	color:red;	
 }

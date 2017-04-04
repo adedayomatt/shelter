@@ -1,103 +1,113 @@
 /* Desktop version
 @media screen and (min-width:1025px)*/
 .maincontent{
-	width:100%;
+	background-color:inherit;
+	width:100%;	
+	font-size:inherit;
 }
-
-@media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
-	div.sidebar{
-		display:none;
-	}
-	div.recent-uploads-container{
-	width:100%;
-}
-div.agents-snipet{
-	display:none;
-}
-}
-@media only screen and (min-device-width: 1000px){
-	div.recent-uploads-container{
-	width:39.5%;
-	margin-left:0.5%;
-	float:left;
-}
-#hiddenTopMenu{
-	display:none;
-}
-}
-
-li{
-	width:inherit;
-}
-/*section 1*/
 div.sidebar{
-	height:90%;
+	height:600px;
 	min-height:550px;
 	min-width:200px;
-	width:20%;
+	width:18%;
 	float:left;
-	background-color:#eeeeee;
+
 }
+
+#sidebar-inner{
+	width:100%;
+background-color:inherit;
+}
+
 #sidebar-original{
 	overflow:hidden;
 	position:fixed;
-	}
+	margin-top:10px;
+	margin-left:7px;
+	background-color:white;
+	box-shadow:1px 3px 2px 2px grey;
+}
 #sidebar-original:hover{
 	overflow-y:scroll;
 	overflow-x:hidden;
 }
-/*section 2*/
 
+/*Left hand Side*/
+
+li{
+	width:inherit;
+}
+/*Midle*/
+div.uploads-container{
+	background-color:inherit;
+	width:80%;
+	float:left;
+}
 #front-image{
 	background: white url('../resrc/image/jamalsmall.pn') center repeat-x;
 	height:80px;
-	width:90%;
+	width:100%;
 	border-radius:5px;
-	margin:auto;
+	margin:10px;
 	color:#6D0AAA;
 	text-align:center;
 }
 
-#search-box{
-	background: white url('../resrc/ground.png') center;
-	width:92%;
-	padding:2%;
-	font-size:90%;
-	background-color:white;
-	border-left:5px solid #6D0AAA;
-	border-right:5px solid #6D0AAA;
-	border-radius:5px;
-	margin:auto;
-	margin-bottom:5px;
-	margin-top:5px;
+.short-note{
+	width:90%;
 }
- /*section 3*/
+.search_area{
+	font-family: Arial;
+	margin-left: 10px;
+}
+#search-box{
+	background-color:white;
+	width:90%;
+	margin:auto;
+	box-shadow:1px 2px 2px 2px grey;
+	padding:5px;
+	margin-bottom:5px;
+}
+div.recent-uploads-container{
+	float:left;
+	width:50%
+}
 div.agents-snipet{
 	float:left;
-	width:39.5%;
-	margin-left:0.5%;
-	min-height:500px;
-	background-color:white;
-	margin:auto;
-	margin-top:70px;
-	box-shadow:1px 3px 2px 2px grey;
+	width:30%;
+	min-height:300px;
 }
 
+div#agents-snipet-top{
+	background-color:white;
+	width:300px;
+	margin:auto;
+	box-shadow:1px 3px 2px 2px grey;
+	padding-right:5px;
+}
 div#agents-list-container{
 	overflow:hidden;
 }
 div#agents-list-container:hover{
-	
+	overflow-y:scroll;
+	overflow-x:hidden;
 }
-
+/*Rigt hand side*/
+div.adverts-container{
+	padding:1%;
+	float:left;
+	width:18%;
+	background-color:inherit;
+}
 ul#agents-list-container{
 	padding-left:2px;
 	margin-right:5px;
 }
 li.agents-list{
 display:inline-block;
-width:100%;
-padding:5px;
+width:98%;
+height:30px;
+padding-left:0px;
 list-style-type:none;	
 }
 li.agents-list:hover{
@@ -106,31 +116,48 @@ background-color:#DDD;
 a.agents-list:hover{
 	text-decoration:none;
 }
+.follow-button,.unfollow-button{
+	cursor:pointer;
+	margin-top:5px;
+	text-align:center;
+	float:right;
+	margin-right:5px;
+	width:80px;
+	border:1px solid grey;
+}
+.follow-button:hover,.unfollow-button:hover{
+	width:90px;
+}
 
-/*
+.advertlink{
+	background-color:blue;
+	border-radius: 12px;
+	text-align:center;
+	color:white;
+	width:250px;
+	font-family:Arial;
+}
 .advertlink:hover {
     box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
-*/
-
 /*Side bar styles*/
-.username{
-	display:block;
-	text-transform:uppercase;
-	text-align:center;
+#user-name{
+	margin-bottom:0px;
 	font-weight:normal;
 }
 #upload-btn{
-width:70%;
-margin:auto;
-padding:5%;
-text-align:center;
+width:80%;
+height:30px;
 cursor:pointer;
 background-color:#6D0AAA;
 color:white;
 border:none;
-border-radius: 20px;
+border-radius: 5px;
 font-weight:bold;
+font-size:12px;
+margin:auto;
+padding-top:10px;
+padding-left:20px;
 }
 .account-nav-container{
 	background-color:inherit;
@@ -139,10 +166,9 @@ font-weight:bold;
 	border-radius: 5px;
 	opacity:0.8;
 }
-
 .account-nav-link{
 	display:block;
-	width:85%;
+	width:100%;
 	padding: 5px 0px 5px 10%;
 }
 .account-nav-link:hover{
@@ -150,15 +176,19 @@ font-weight:bold;
 	background-color:#DDD;
 }
 #category-container{
-	width:92%;
+	width:90%;
+	background-color:inherit;
+	padding:1%;
 	overflow-y:hidden;
-	padding-left: 2%;
 }
 #categories{
-padding:3%;
+height:35px;
 cursor:default;
-color:grey;
+background-color:inherit;
+color:#6D0AAA;
 display:block;
+margin-top:0px;
+margin-bottom:0px;
 font-weight:bold;
 }
 
@@ -168,14 +198,11 @@ margin-right:20px;
 display: inline-block;
 width: 14px;
 height: 14px;
-margin-top:0px;
+margin-top:12px;
 background-image:url("../resrc/black-icons.png");
 }
 #all-arrow{
 	float:right;
-}
-.arrow-down,.arrow-up{
-	vertical-align:text-bottom;
 }
 .arrow-up{
 	background-position: -288px -120px;
@@ -183,46 +210,60 @@ background-image:url("../resrc/black-icons.png");
 .arrow-down{
 	background-position: -312px -120px;
 }
-
+.btn-dropdown,#categories{
+width:90%;
+border:0;
+}
 .btn-dropdown{
-width:92%;
-margin-top:5px;
 text-align:left;
-color:#eeeeee;
+color:#6D0AAA;
+background-color:inherit;
 cursor:pointer;
-padding:4%;
-margin-bottom:2px;
-border-radius:3px;
+height:30px;
+line-height:40px;
+padding-bottom:0px;
 }
 /* all btn-dropdown but #all-btn-dropdown*/
-.btn-dropdown:not(#all-btn-dropdown){
-	background-color:grey;
+.btn-dropdown:not(#all-btn-dropdown):hover{
+	border:1px solid grey;
 }
 #all-btn-dropdown{
 	font-size:80%;
 	text-align:right;
-	color:grey;
 }
-
 div.dropdowns{
-width:100%;
+width:90%;
 display:none;
+}
+#upload-dropdown{
+	margin-left:80%;
+}
+hr{
+padding-left:0px;
+margin-left:0px;
 }
 
 a.dropdown-menu{
+background-color:inherit;
 text-align:left;
-width:91%;
+font-size:inherit;
+width:90%;
 display:block;
-background-color:#eeeeee;
 color:#6D0AAA;
-margin-bottom:1px;
-padding:3%;
-border-bottom:1px solid white;
-
+height:25px;
+padding-left:10%;
+margin-left:0px;
 }
 a.dropdown-menu:hover{
 text-decoration:none;
 background-color:#DDD;
+opacity:0.6;
+}
+
+.arrow{
+float:right;
+margin-right:10px;
+font-size:20px;
 }
 
 #upload-icon{

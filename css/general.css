@@ -1,22 +1,48 @@
 /*
 @media screen and (min-width:1025px)*/
-html,form{
+html{
 		font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-		font-size: 90%;
+		font-size: 16px;
 		font-weight:normal;
+		line-height:1.2em;
+	}
+@media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
+		body{
+		min-width:1000px;
+		min-width:300px;
 	}
 	body{
+		font-size:250%;
+		}	
+}
+@media only screen and (min-device-width: 1000px){
+	body{
+		width:100%;
+		min-width:1000px;	
+	}
+	body,input,button{
+		font-size:90%;	
+	}
+	
+}
+
+body{
 margin: 0px;
 	}
+button,input,select{
+		font-size:100%;
+	}
+	
+div.top-nav-bar,body{
+	width:100%;
+}
 .site-color-background{
 	background-color:#6D0AAA;
 }
 .site-color-foreground{
 	color:#6D0AAA
 }
-div.top-nav-bar,body{
-	width:100%;
-}
+
 
 p,a,li,label {
 line-height:1.4em;
@@ -39,7 +65,7 @@ a:hover{
 }
 .white-icon{
 	display: inline-block;
-width: 14px;
+width: 24px;
 height: 14px;
 line-height: 14px;
 margin-top:1px;
@@ -48,12 +74,21 @@ vertical-align: text-top;
 }
 .black-icon{
 display: inline-block;
-width: 14px;
+width: 24px;
 height: 14px;
 line-height: 14px;
 margin-top:1px;
 vertical-align: text-top;
 	background-image:url("../resrc/black-icons.png");
+}
+.follow-button,.unfollow-button{
+	cursor:pointer;
+	margin-top:5px;
+	text-align:center;
+	float:right;
+	margin-right:5px;
+	width:100px;
+	border:1px solid grey;
 }
 .follow-button{
 	background-color:white;
@@ -63,6 +98,11 @@ vertical-align: text-top;
 	background-color:#6D0AAA;
 	color:white;
 }
+.follow-button:hover,.unfollow-button:hover{
+	width:120px;
+}
+
+
 .follow-icon{
 	background-position: 0px -96px;
 }
@@ -79,5 +119,6 @@ vertical-align: text-top;
 	color:grey;
 	background-color:white;
 	box-shadow: 1px 2px 2px 2px grey;
+	line-height:100%;
 }
 

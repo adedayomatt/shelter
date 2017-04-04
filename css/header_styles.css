@@ -1,28 +1,47 @@
 /*
 @media screen and (min-width:1025px)*/
+
+@media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
+	#top-nav-bar-content{
+	position:relative;
+	background-color:#6D0AAA;
+}
+#menuicon{
+	margin-right:20%;
+	color:white;
+	font-weight:bold;
+	}
+#templogo{
+	font-size:120%;
+	letter-spacing:5px;
+}
+#top-nav-bar-under{
+	display:none;
+}
+	.top-nav-bar{
+		width:100%;
+		height:100px;
+	}
+
+div#menus{
+	display:none;
+}
+}
+@media only screen and (min-device-width: 1000px){
+	#top-nav-bar-content{
+	position:fixed;
+	background-color:#6D0AAA;
+}
+#templogo{
+	float:left;
+}
 	.top-nav-bar{
 		width:100%;
 		height:50px;
 	}
-#top-nav-bar-content{
-	position:fixed;
-	background-color:#6D0AAA;
-}
 #menuicon{
 	display:none;
-	background-position: -336px -48px;
-	
-}
-#templogo{
-display:inline-block;
-height:90%;
-width:20%;
-float:left;
-background-color:inherit;
-border-radius:10px 10px 0px 0px;
-padding-top:5px;
-margin-left:10px;
-}
+	}
 div#menus{
 	width:50%;
 	height:inherit;
@@ -31,6 +50,26 @@ div#menus{
 	padding-left:50px;
 	padding-right:50px;
 }
+}
+#menuicon{
+	background-color:inherit;
+	border:none;
+	font-size:120%;
+}
+#top-nav-bar-content{
+	background-color:#6D0AAA;
+}
+
+#templogo{
+display:inline-block;
+height:90%;
+width:20%;
+background-color:inherit;
+border-radius:10px 10px 0px 0px;
+padding-top:5px;
+margin-left:10px;
+}
+
 ul#nav-bar{
 	width:100%;
 	height:inherit;
@@ -54,35 +93,4 @@ li.nav-menu{
 .nav-menu:hover{
 		background-color:#6D0ACC;
 		}
-#dropdown-container{
-display:inline-block;
-height:100%;
-width:10%;
-float:right;
-margin-right:20px;
-background-color:inherit;
-}
-#acct-dropdown{
-	box-shadow:10px 0px 10px 0px #eeeeee;
-	cursor:pointer;
-	width:120px;
-	height:40px;
-	margin-top:10px;
-}
-div#acct-dropdown-box{
-	margin-left:0px;
-	position:absolute;
-	display:none;
-	width:150px;
-	border-radius:20px;
-	box-shadow:10px 0px 10px 0px #eeeeee;
-}
 
-ul#ul{
-	list-style-type:none;
-	border-radius:5px;
-list-style-type:none;
-background-color:white;
-margin-top:0;
-padding:5px;
-}

@@ -24,12 +24,21 @@ require("require/header.php");
 <?php require('require/sidebar.php'); ?>
 <!--Leftmost side ends-->
 
+<!--centre side begins-->
+<div  class="uploads-container">
 <!--<div class= "search_area">
 <div class="short-note"><p><b>Shelter.com is a platform that takes advantage of technology to ease your troubles in finding properties to rent or buy anywhere in Nigeria...</b><a href="about">learn more</a></p></div>
 <p>You can search for property using the search preference</p>
 </div>-->
-<div class="recent-uploads-container" id="linear-layout-content">
+<div id="front-image">
+<h1>ADVERTISEMENT!!!</h1>
+<h3>This space would be for advert image, most likely for the site</h3>
+</div>
+<div class="recent-uploads-container">
+
 <div id="search-box">
+<br/>
+Search for properties...
 <?php require("search/searchform.php")?>
 </div>
 <?php
@@ -48,7 +57,7 @@ require("require/header.php");
 </select>
 <input type="submit" value="Filter" style="background-color:#6D0AAA; color:white; cursor:pointer; border:none"/>
 </form>
-<div>
+<div style="min-height:400px">
 <?php
 //get some properties from the database
 $max = 4;
@@ -118,12 +127,10 @@ else{
  ?>
 </div>
 </div>
+<div class="agents-snipet" id="agents-snipet-under">
 
 <div class="agents-snipet" id="agents-snipet-top">
-<div id="front-image">
-<h1>ADVERTISEMENT!!!</h1>
-<h3>This space would be for advert image, most likely for the site</h3>
-</div>
+
 <hr/>
 <div style="width:90%;margin:auto;">
 <input id="agents-snipet-search" style="width:95%;padding:5px;height:30px;" type="text" placeholder="search for an agent"/>
@@ -132,10 +139,10 @@ else{
 <div id="agents-list-container">
 <ul id="agents-list-container">
 <?php
-$getAgents = mysql_query("SELECT Business_Name,User_ID FROM profiles LIMIT 10");
+$getAgents = mysql_query("SELECT Business_Name,User_ID FROM profiles");
 if($getAgents){
 	while($agent = mysql_fetch_array($getAgents,MYSQL_ASSOC)){
-	echo "<li class=\"agents-list\"><a class=\"agents-list\" href=\"".$agent['User_ID']."\">".$agent['Business_Name']."</a>";
+	echo "<li class=\"agents-list\"><a class=\"agents-list\" href=\"".$agent['User_ID']."\">".substr($agent['Business_Name'],0,15)."...</a>";
 	
 if($status==1 || $status==9){
 //check for follow
@@ -188,7 +195,21 @@ mysql_close($db_connection);
 
 <a style="float:right;" href="agents">see all agents>></a>
 </div>
+</div>
+<!--Right hand side begins-->
+<div class="adverts-container">
+<h3>Ads</h3><p size="10px"><a href="advert.html">Place your advert here</a></p>
+<a href="adone.html"><img  id="pic" style="" src="resrc/image/images5.jpeg" height="150px" width="100%" ></img></a>
+<a href="adtwo.html"><img id="pic2" src="resrc/image/images6.jpeg" height="150px" width="100%"></img></a>
+<a href="adthree.html"><img id="pic3" src="resrc/image/images7.jpeg" height="150px" width="100%"></img></a>
+</div>
+</div>
+<!--centre side ends-->
 
+<!--Right hand side ends-->
+
+</style>
+<!--maincontent ends here-->
 </div>
 </body>
 </html>

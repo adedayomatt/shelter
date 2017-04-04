@@ -5,10 +5,33 @@
 <link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
 <head>
 <style>
-.all-content{
+@media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
+	.all-content{
+	width:98%;
+	margin:auto;
+}
+fieldset{
+	width:80%;
+	margin:auto;
+	padding:5%;
+	border-radius:5px;
+	margin-top:50px;
+}
+}
+@media only screen and (min-device-width: 1000px){
+	.all-content{
 	width:50%;
 	margin:auto;
 }
+fieldset{
+	width:50%;
+	margin:auto;
+	padding:5%;
+	border-radius:5px;
+}
+}
+
+
 #denial{
 	width:50%;
 	text-align:center;
@@ -26,12 +49,7 @@
 	box-shadow: 1px 1px 1px 1px grey;
 	border-radius:5px;
 }
-fieldset{
-	width:50%;
-	margin:auto;
-	padding:5%;
-	border-radius:5px;
-}
+
 legend{
 	font-size:120%;
 	color:grey;	
@@ -42,9 +60,8 @@ legend{
 	padding:3%;
 }
 #checkin-button,#create-button{
+	padding:5%;
 	cursor:pointer;
-	width:100px;
-	padding:10px;
 	background-color:#6D0AAA;
 	color:white;
 	letter-spacing:2px;

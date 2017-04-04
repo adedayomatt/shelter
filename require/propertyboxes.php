@@ -121,7 +121,7 @@ else {
 		$clipbutton
 		<a  class=\"options\" id=\"report-property\" href=\"$root/properties/$propertydir[$i]\"><i class=\"black-icon\" id=\"see-more\"></i>see details</a>
 		<div class=\"agent-contacts-box\" id=\"\">$Bname<ul><li>$officeNo</li><li>$PhoneNo</li><li>$altPhoneNo</li></ul></div>
-		<a  class=\"options\" id=\"agent-contacts\"><i class=\"black-icon\" id=\"contact-agent\"></i>Contact agent</a>
+		<a  class=\"options\" id=\"agent-contacts\"><i class=\"black-icon\" id=\"contact-agent\"></i>Agent</a>
 		<a  class=\"options\" id=\"report-property\" href=\"#\"><i class=\"black-icon\" id=\"eye\"></i>(0)views</a>
 		</div>
 		</div>";

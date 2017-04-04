@@ -1,9 +1,15 @@
 <div class="sidebar" id="sidebar-original">
 <div id="sidebar-inner">
 <!--user navigation sidebar begins here-->
-<?php switch($status){
+<?php 
+$hiddenTopMenu = "<div class=\"account-nav-container\" id=\"hiddenTopMenu\">
+<a href=\"$root\" class=\"account-nav-link\">Home</a>
+<a href=\"$root\" class=\"account-nav-link\">Agents</a>
+<hr/></div>";
+switch($status){
 //All the variables like $messages,$following,$clientfollower are already set in the header
 	case 0:
+echo $hiddenTopMenu;
 echo "<div class=\"account-nav-container\">
 	<h4 align=\"center\" style=\"margin-bottom:0px; color:grey; \">Agents</h4>
 		<a href=\"login\" class=\"account-nav-link\">Login</a>
@@ -15,12 +21,14 @@ echo "<div class=\"account-nav-container\">
 		<a href=\"\" class=\"account-nav-link\">What is CTA?</a>
 		<a href=\"cta/checkin.php?_rdr=1\" class=\"account-nav-link\">My Clipped properties</a>
 		<a href=\"cta/checkin.php?_rdr=1\" class=\"account-nav-link\">My agents</a>
+		<hr/>
 	</div>";
 break;
 	case 1:
-echo "<h4 align=\"center\" style=\"margin-bottom:0px; color:grey; text-transform:uppercase;\">$Business_Name</h4>
-	<a href=\"$root/upload\"><div id=\"upload-btn\"><i class=\"white-icon\" id=\"upload-icon\"></i>Upload property</div></a>
-	<div class=\"account-nav-container\">
+echo "<h4 class=\"username\">$Business_Name</h4>";
+echo"<a href=\"$root/upload\"><div id=\"upload-btn\"><i class=\"white-icon\" id=\"upload-icon\"></i>Upload property</div></a>";
+echo $hiddenTopMenu;
+echo "<div class=\"account-nav-container\">
 	<a href=\"$root/messages\" class=\"account-nav-link\">($messages) Messages</a>
 	<a href=\"\" class=\"account-nav-link\">($following) Following agents</a>
 	<a href=\"\" class=\"account-nav-link\">($clientfollower) Follower[client]</a>
@@ -31,8 +39,9 @@ echo "<h4 align=\"center\" style=\"margin-bottom:0px; color:grey; text-transform
 break;
 case 9:
 echo "<div class=\"account-nav-container\">
-	<h4 align=\"center\" style=\"margin-bottom:0px; color:grey; text-transform:uppercase\">$ctaname</h4>
-	<a href=\"$root/messages\" class=\"account-nav-link\" id=\"msgs\">($messages) Messages</a>
+	<h4 class=\"username\">$ctaname</h4>";
+echo $hiddenTopMenu;
+echo "<a href=\"$root/messages\" class=\"account-nav-link\" id=\"msgs\">($messages) Messages</a>
 	<a href=\"$root/cta/?src=matches\" class=\"account-nav-link\">($matchcounter) Matches</a>
 	<a href=\"$root/cta/?src=clipped\" class=\"account-nav-link\" id=\"clipstring\">($clipcounter) Clipped properties</a>
 	<a href=\"\" class=\"account-nav-link\">($following) Following Agents</a>

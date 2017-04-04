@@ -1,7 +1,52 @@
 /*
 @media screen and (min-width:1025px)*/
 
+@media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
+.imagebox{ 
+	height: 600px; 
+}
+.infobox{
+	line-height:200%;
+}	
+a.options{
+	height:50px;
+	width:220px;
+}
+.bath-toilet{
+	height:40px;
+	margin:0px;
+	margin-bottom:20px;
+}
+#agent-contacts{
+	display:none;
+}
+}
+@media only screen and (min-device-width: 1000px){
+
+.infobox{
+	line-height:200%;
+}
+.imagebox{ 
+	height: 300px; 
+}
+a.options{
+	height:25px;
+	width:100px;
+}
+.bath-toilet{
+	height:20px;
+	margin:0px;
+	margin-bottom:10px;
+}
+
+}
+@media only screen and (max-width:1250px){
+	#agent-contacts{
+	display:none;
+}
+}
 	.propertybox{
+	font-size:100%;
 	background-color:white;
 	padding: 2%;
 	padding-bottom:0px;
@@ -10,6 +55,7 @@
 	margin:auto;
 	margin-bottom:10px;
 	font-weight:normal;
+	
 }
 .propertybox:hover{
 	box-shadow:1px 5px 5px 0px grey;
@@ -26,28 +72,18 @@
 .status{
 	float:right; 
 	}
-.imagebox{ 
-	height: 300px; 
-}
-.bath-toilet{
-	height:20px;
-	margin:0px;
-	margin-bottom:10px;
-}
+
 .bath-toilet-btn{
-	height:100%;
 	width:47%;
 	border:0px;
 	border-left: 2px solid #6D0AAA;
 	margin-left:5px;
 }
 .infobox{
-	height: 30%;
-	font-size:80%;
+	font-size:95%;
 }
 span.detail{
 	display:block;
-	height:30px;
 }
 .comment{
 	color: blue;
@@ -55,13 +91,12 @@ span.detail{
 	margin-right:30px;
 	text-decoration:blink;
 }
-.view-details{
-	margin-left:50%;
-}
 .like-pane{
 background-color:white;
 	font-size:80%;
 	min-height:45px;
+	width:99%;
+	margin:auto;
 }
 
 #price{
@@ -75,7 +110,7 @@ background-color:white;
 }
 .time{
 	color:grey;
-	font-size:12px;
+	font-size:80%;
 }
 #date{
 	background-position: -48px -24px;
@@ -100,13 +135,10 @@ background-color:white;
 	display:inline-block;	
 }
 a.options{
-	float:left;
 	cursor:pointer;
 	background-color:white;
 	color:grey;
 	border:1px solid grey;
-	height:25px;
-	width:100px;
 	text-align:center;
 	padding:2px;
 	margin-bottom:3px;

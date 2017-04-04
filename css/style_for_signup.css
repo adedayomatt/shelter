@@ -6,23 +6,56 @@
 #shelter:hover{
 	text-decoration:none;
 }
-.mainsignup{
-	width:70%;
+input{
+		display:block;
+		margin-bottom:10px;
+	}
+@media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
+	.mainsignup{
+	width:100%;
+	}
+input{
+	padding:4%;
+	border:1px solid grey;
+	width:90%;
+	border:2px solid grey;
+}
+#signupbutton{	
+	width:250px;
+	height:100px;
+}
+}
+@media only screen and (min-device-width: 1000px){
+	.mainsignup{
+	width:50%;
 	margin:auto;
 	height:100%;}
+input{
+	padding:1%;
+	border:1px solid grey;
+	max-width:300px;
+}
+#signupbutton{	
+	width:120px;
+	height:40px;
+}
+}
+
+
 #registration-successful,#registration-not-successful{
 	margin:auto;
 	background-color:white;
-	color: grey;
 	width:90%;
 	padding:20px;
 	box-shadow:1px 3px 2px 2px grey;
 	margin-bottom:10px;
 }
 #registration-not-successful{
-	
+	color: red;
 }
-	
+#registration-successful{
+	color: green;
+}	
 	
 	
 fieldset{
@@ -30,12 +63,7 @@ fieldset{
 	border:none;
 	border-radius:5px;
 }
-input{
-	height:20px;
-	border:1px solid grey;
-	max-width:300px;
 
-}
 .legend{
 	font-size:120%;
 	color:grey;
@@ -46,7 +74,10 @@ input{
 }
 #agreement{
 	color:grey;
-	float:right;
+}
+#agreement-box{
+	
+	display:inline;
 }
 .Business,.personal{
 	width:90%;
@@ -57,12 +88,9 @@ input{
 }
 #signupbutton{
 	cursor:pointer;
-	margin-left:80%;
 	background-color:white;
 	color:#6D0AAA;
 	font-size:120%;
-	width:120px;
-	height:40px;
 	border:2px solid grey;
 	border-radius:5px;
 	font-weight:bold;

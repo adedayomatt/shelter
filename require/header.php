@@ -1,18 +1,31 @@
 
 <script type="text/javascript" language="javascript" src="http://localhost/shelter/js/jquery-3.1.1.min.js"></script>
-<script>
-$(document).ready(function(){
-$('#acct-dropdown').click(function(){
-	$('#acct-dropdown-box').toggle();
-	});
-	/*	
-$('#menuicon').click(function(){
-	$('#sidebar-original').css({'position':'absolute'});
-	$('#top-nav-bar-content').css({'position':'relative'});
-	$('#sidebar-original').toggle();
-		});	*/
-});
+<script  type="text/javascript" language="javascript">
+function togglemenu(){
+var sidebar = document.getElementById('sidebar-original');
+var menu = document.getElementById('menuicon');
+var headerunder = document.getElementById('top-nav-bar-under');
+var headertop = document.getElementById('top-nav-bar-content');
+var body = document.getElementById('linear-layout-content');
 
+if(sidebar.style.display != 'block'){
+	headerunder.style.display = 'block';
+	headertop.style.position = 'fixed';
+	sidebar.style.display = 'block';
+	sidebar.style.width = '60%';
+	sidebar.style.marginTop = '0px';
+	sidebar.style.overflow = 'scroll';
+//	body.style.opacity = '';
+	menu.innerHTML = '&times close';
+	sidebar.focus();
+		}
+else{
+	sidebar.style.display = 'none';
+	headerunder.style.display = 'none';
+	headertop.style.position = 'relative';
+	menu.innerHTML = 'MENU';
+		}
+	}
 </script>
 <?php
 function redirect(){
@@ -124,10 +137,10 @@ else{
 	$status = 0;
 }
 ?>
+
 <title>Shelter | <?php echo $pagetitle; ?></title>
 <div class="top-nav-bar" id="top-nav-bar-content">
-
-<i class="white-icon" id="menuicon"></i><div id="templogo"><a href="<?php echo $root ?>"><i><h1 style="display:inline; color:white;">Shelter</h1><h6 style="display:inline; color:white;" >.com</h6></i></a></div>
+<button id="menuicon" onclick="javascript:togglemenu()">MENU</button><span id="templogo"><a href="<?php echo $root ?>"><h1 style="display:inline; color:white;">Shelter</h1><h6 style="display:inline; color:white;" >.com</h6></a></span>
 <div id="menus">
 <ul id="nav-bar">
 <a  href="<?php echo $root ?>" title="Home"><li class="nav-menu">Home</li></a>
