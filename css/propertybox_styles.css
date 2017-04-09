@@ -2,6 +2,10 @@
 @media screen and (min-width:1025px)*/
 
 @media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
+	.propertybox{
+		margin:auto;
+		margin-bottom:15px;
+	}
 .imagebox{ 
 	height: 600px; 
 }
@@ -9,8 +13,11 @@
 	line-height:200%;
 }	
 a.options{
-	height:50px;
+	height:70px;
+	padding-top:10px;
 	width:220px;
+	margin-left:5px;
+	background-color:#DDD;
 }
 .bath-toilet{
 	height:40px;
@@ -20,9 +27,39 @@ a.options{
 #agent-contacts{
 	display:none;
 }
+
+.mini-propertybox{
+	margin-left:10px;
+	width:95%;
+	height:300px;
+	margin:auto;
+	box-shadow:2px 2px 2px 2px grey;
+	background-color:white;
+	margin-bottom:10px;
+}
+.mini-image{
+	width:30%;
+	height:100%;
+	float:left;
+}
+.mini-info{
+	width:65%;
+	float:left;
+	margin-left:5%;
+}
+.mini-detail{
+	display:block;
+	padding:10px;
+}
 }
 @media only screen and (min-device-width: 1000px){
-
+.propertybox{
+	margin:auto;
+		margin-bottom:10px;
+	}
+	.propertybox:hover{
+	box-shadow:1px 5px 5px 0px grey;
+}
 .infobox{
 	line-height:200%;
 }
@@ -38,28 +75,38 @@ a.options{
 	margin:0px;
 	margin-bottom:10px;
 }
-
+.mini-propertybox{
+	margin-left:10px;
+	width:95%;
+	height:120px;
+	box-shadow:1px 1px 1px 1px grey;
+	background-color:white;
+	margin-bottom:10px;
 }
-@media only screen and (max-width:1250px){
-	#agent-contacts{
-	display:none;
+.mini-image{
+	width:30%;
+	height:100%;
+	float:left;
+}
+.mini-info{
+	width:65%;
+	float:left;
+	margin-left:5%;
+}
+.mini-detail{
+	display:block;
 }
 }
 	.propertybox{
 	font-size:100%;
 	background-color:white;
-	padding: 2%;
-	padding-bottom:0px;
-	min-height:400px;
+	padding-bottom:5px;
 	width:90%;
-	margin:auto;
-	margin-bottom:10px;
+	padding: 2%;
 	font-weight:normal;
 	
 }
-.propertybox:hover{
-	box-shadow:1px 5px 5px 0px grey;
-}
+
 .image-info{
 	height:100%;
 	width:90%;
@@ -145,7 +192,7 @@ a.options{
 	font-weight:bold;
 }
 a.disabled{
-	opacity:0.5;
+	
 }
 a.options:hover{
 	background-color:#EEEEEE;
@@ -169,9 +216,10 @@ div.no-property{
 	margin-top:30px;
 	width:70%;
 	margin:auto;
-	padding:10px;
+	padding:10%;
+	line-height:100%;
 	background-color:white;
 	border-radius:5px;
-	color:#6D0AAA;
+	color:grey;
 	text-align:center;
 }

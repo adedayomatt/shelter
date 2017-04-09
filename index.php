@@ -28,7 +28,7 @@ require("require/header.php");
 <div class="short-note"><p><b>Shelter.com is a platform that takes advantage of technology to ease your troubles in finding properties to rent or buy anywhere in Nigeria...</b><a href="about">learn more</a></p></div>
 <p>You can search for property using the search preference</p>
 </div>-->
-<div class="recent-uploads-container" id="linear-layout-content">
+<div class="recent-uploads-container main-content" id="linear-layout-content">
 <div id="search-box">
 <?php require("search/searchform.php")?>
 </div>
@@ -121,8 +121,7 @@ else{
 
 <div class="agents-snipet" id="agents-snipet-top">
 <div id="front-image">
-<h1>ADVERTISEMENT!!!</h1>
-<h3>This space would be for advert image, most likely for the site</h3>
+
 </div>
 <hr/>
 <div style="width:90%;margin:auto;">
@@ -130,12 +129,28 @@ else{
 </div>
 <hr/>
 <div id="agents-list-container">
+<style>
+.agent-avatar{
+	display:inline-block;
+	width:10px;
+	height:10px;
+	border:1px solid grey;
+	border-radius: 10px;
+	text-align:center;
+	font-size: 100%;
+	font-weight:bold;
+	
+	margin-right:5px;
+	color:white;
+	font-family:san-serif;
+}
+</style>
 <ul id="agents-list-container">
 <?php
 $getAgents = mysql_query("SELECT Business_Name,User_ID FROM profiles LIMIT 10");
 if($getAgents){
 	while($agent = mysql_fetch_array($getAgents,MYSQL_ASSOC)){
-	echo "<li class=\"agents-list\"><a class=\"agents-list\" href=\"".$agent['User_ID']."\">".$agent['Business_Name']."</a>";
+	echo "<li class=\"agents-list\"><a class=\"agents-list\" href=\"".$agent['User_ID']."\"><div style=\"background-color:rgb(".rand(0,250).",".rand(0,250).",".rand(0,250).")\" class=\"agent-avatar\"></div>".$agent['Business_Name']."</a>";
 	
 if($status==1 || $status==9){
 //check for follow

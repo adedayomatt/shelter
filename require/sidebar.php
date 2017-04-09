@@ -3,45 +3,47 @@
 <!--user navigation sidebar begins here-->
 <?php 
 $hiddenTopMenu = "<div class=\"account-nav-container\" id=\"hiddenTopMenu\">
-<a href=\"$root\" class=\"account-nav-link\">Home</a>
-<a href=\"$root\" class=\"account-nav-link\">Agents</a>
-<hr/></div>";
+					<a href=\"$root\" class=\"account-nav-link\">Home</a>
+					<a href=\"$root/agents\" class=\"account-nav-link\">Agents</a>
+					<a href=\"$root/search\" class=\"account-nav-link\">Search</a>
+						<hr/></div>";
 switch($status){
 //All the variables like $messages,$following,$clientfollower are already set in the header
 	case 0:
 echo $hiddenTopMenu;
 echo "<div class=\"account-nav-container\">
 	<h4 align=\"center\" style=\"margin-bottom:0px; color:grey; \">Agents</h4>
-		<a href=\"login\" class=\"account-nav-link\">Login</a>
-		<a href=\"signup\" class=\"account-nav-link\">Sign up</a>
+		<a href=\"$root/login\" class=\"account-nav-link\">Login</a>
+		<a href=\"$root/signup\" class=\"account-nav-link\">Sign up</a>
 		<hr/>
-	<h4 align=\"center\" style=\"margin-bottom:0px; color:grey; \">Client Temporary Account (CTA)</h4>
-		<a href=\"cta/checkin.php?_rdr=0#checkin\" class=\"account-nav-link\">Checkin my CTA</a>
-		<a href=\"cta/checkin.php?_rdr=0#createnew\" class=\"account-nav-link\">Create new CTA</a>
+	<h4 align=\"center\" style=\"display:block; color:grey; \">Client Temporary Account (CTA)</h4>
+		<a href=\"$root/cta/checkin.php?_rdr=0#checkin\" class=\"account-nav-link\">Checkin my CTA</a>
+		<a href=\"$root/cta/checkin.php?_rdr=0#createnew\" class=\"account-nav-link\">Create new CTA</a>
 		<a href=\"\" class=\"account-nav-link\">What is CTA?</a>
-		<a href=\"cta/checkin.php?_rdr=1\" class=\"account-nav-link\">My Clipped properties</a>
-		<a href=\"cta/checkin.php?_rdr=1\" class=\"account-nav-link\">My agents</a>
+		<a href=\"$root/cta/checkin.php?_rdr=1\" class=\"account-nav-link\">My Clipped properties</a>
+		<a href=\"$root/cta/checkin.php?_rdr=1\" class=\"account-nav-link\">My agents</a>
 		<hr/>
 	</div>";
 break;
 	case 1:
-echo "<h4 class=\"username\">$Business_Name</h4>";
-echo"<a href=\"$root/upload\"><div id=\"upload-btn\"><i class=\"white-icon\" id=\"upload-icon\"></i>Upload property</div></a>";
 echo $hiddenTopMenu;
 echo "<div class=\"account-nav-container\">
+	<h4 class=\"username\">$Business_Name</h4>
+	<a href=\"$root/upload\"><div id=\"upload-btn\"><i class=\"white-icon\" id=\"upload-icon\"></i>Upload property</div></a>
 	<a href=\"$root/messages\" class=\"account-nav-link\">($messages) Messages</a>
 	<a href=\"\" class=\"account-nav-link\">($following) Following agents</a>
 	<a href=\"\" class=\"account-nav-link\">($clientfollower) Follower[client]</a>
 	<a href=\"\" class=\"account-nav-link\">($agentfollower) Follower[agent]</a>
-	<a href=\"manage/account.php\" class=\"account-nav-link\">Edit profile</a>
-	<a href=\"manage\" class=\"account-nav-link\">Manage Property</a>
+	<a href=\"$root/manage/account.php\" class=\"account-nav-link\">Edit profile</a>
+	<a href=\"$root/manage\" class=\"account-nav-link\">Manage Property</a>
+	<hr/>
 	</div>";
 break;
 case 9:
-echo "<div class=\"account-nav-container\">
-	<h4 class=\"username\">$ctaname</h4>";
 echo $hiddenTopMenu;
-echo "<a href=\"$root/messages\" class=\"account-nav-link\" id=\"msgs\">($messages) Messages</a>
+echo "<div class=\"account-nav-container\">
+	<h4 class=\"username\">$ctaname</h4>
+	<a href=\"$root/messages\" class=\"account-nav-link\" id=\"msgs\">($messages) Messages</a>
 	<a href=\"$root/cta/?src=matches\" class=\"account-nav-link\">($matchcounter) Matches</a>
 	<a href=\"$root/cta/?src=clipped\" class=\"account-nav-link\" id=\"clipstring\">($clipcounter) Clipped properties</a>
 	<a href=\"\" class=\"account-nav-link\">($following) Following Agents</a>
@@ -50,6 +52,7 @@ echo "<a href=\"$root/messages\" class=\"account-nav-link\" id=\"msgs\">($messag
 	<a href=\"\" class=\"account-nav-link\">Change CTA details</a>
 	<a href=\"\" class=\"account-nav-link\">Check out</a>
 	<a href=\"\" class=\"account-nav-link\">Deactivate this CTA</a>	
+	<hr/>
 	</div>";
 break;
 default:
@@ -59,7 +62,7 @@ echo "<div class=\"account-nav-container\">
 break;
 } 
 ?>
-<hr/>
+
 <span align="center" id="categories"><i class="black-icon" id="category-icon"></i>Categories</span>
 <div id="category-container">
 <div class = "btn-dropdown" id="all-btn-dropdown" onclick="toggleall()">Expand all <i id="all-arrow" class="arrow-down" title="Expand all"></i></div>
@@ -110,19 +113,18 @@ break;
 <?php
 switch($status){
 	case 1:
-	echo "<hr/>
-	<div class=\"account-nav-cotainer\">
+	echo "<div class=\"account-nav-cotainer\">
 	<a href=\"$root/logout\" class=\"account-nav-link\">Logout</a>
-	</div>
-	<hr/>";
+	<hr/>
+	</div>";
 	break;
 	case 9:
 	echo "<hr/>
 	<div class=\"account-nav-container\">
 	<a href=\"$root/login\" class=\"account-nav-link bottom-nav-cotainer\">Login as agent</a>
 	<a href=\"$root/signup\" class=\"account-nav-link\">Sign up as agent</a>
-	</div>
-	<hr/>";
+	<hr/>
+	</div>";
 	break;
 }
 ?>

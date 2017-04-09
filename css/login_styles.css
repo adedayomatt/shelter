@@ -8,6 +8,7 @@
 	min-height:400px;
 	width:60%;
 	margin:auto;
+	
 }
 .login-form{
 	padding:5%;
@@ -18,16 +19,12 @@
 	border-radius:5px;
 	box-shadow:2px #333;
 }
-input{
-	border:2px solid grey;
-}
 @media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
-.special-background{
+body{
 		background-color:#eeeeee;
 	}
 	.main-login{
 	color:#6D0AAA;
-	min-height:600px;
 	width:100%;
 	margin:auto;
 }
@@ -35,10 +32,12 @@ input{
 	padding:2%;
 	background-color:white;
 	width: 90%;
+	height:800px;
+	padding-top:200px;
 	margin:auto;
 	border:none;
 	border-radius:5px;
-	box-shadow:2px #333;
+	box-shadow:5px #333;
 }
 #login-input-area{
 	padding:20px;
@@ -48,7 +47,11 @@ input{
 	border:2px solid grey;
 }
 }
+
 @media only screen and (min-device-width: 1000px){
+	body{
+		background-color:#6D0AAA;
+	}
 	.main-login{
 	color:#6D0AAA;
 	min-height:400px;
@@ -66,10 +69,10 @@ input{
 }
 #login-input-area{
 	padding:20px;
-	width:50%;
+	width:80%;
 	margin:auto;
 	text-align:center;
-	border:2px solid grey;
+	border:1px solid grey;
 }
 }
 

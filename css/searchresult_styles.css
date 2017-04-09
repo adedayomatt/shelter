@@ -1,10 +1,43 @@
-div.results{
-	width:70%;
-	float:left;
-}
 
 /*Rigt hand side*/
-div.ads{
-	width: 25%;
+@media only screen and (min-device-width: 1000px){
+
+
+div.related-results{
 	float:left;
+	box-shadow: 2px 2px 2px 2px grey;
 }
+li.related-results-list{
+	display: block;
+	padding:2%;
+}
+li.related-results-list:hover{
+	background-color:#DDD;
+	
+}
+}
+
+@media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
+
+div.related-results{
+	padding:2%;
+	margin-left:5%;
+	height:80%;
+}
+li.related-results-list{
+	list-style-type:circle;
+	padding:1%;
+}
+}
+
+ul#related-results-list{
+width:100%;	
+padding:0px;
+}
+a.related-results{
+	color:grey;
+}
+a.related-results:hover{
+	text-decoration:none;
+}
+

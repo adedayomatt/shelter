@@ -1,38 +1,67 @@
 hr{
 	background-color:purple;
 }
-.left{
-	width:85%;
-	float:left;
+@media only screen and (min-device-width: 1000px){
+.sidebar{
+	display:none;
 }
-.right{
-	width:15%;
+.main-content{
+	margin-left:10%;
+}
+#biz-logo-container{
 	float:left;
+	margin-top:3%;
+	height:70px;
+	width:80px;
+	color:white;
+	font-size:100%;
+	text-align:center;
+	padding-top:10px;
+	border-radius:10px;
+	background:purple;
+}	
+.right-side{
+	width:30%;
+	float:left;
+	box-shadow:2px 2px 2px 2px #DDD;
+}
+}
+@media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
+.right-side{
+	display:none;
+}	
+#biz-logo-container{
+	float:left;
+	margin-top:3%;
+	margin-left:20px;
+	height:130px;
+	width:150px;
+	color:white;
+	font-size:100%;
+	text-align:center;
+	padding-top:20px;
+	border-radius:20px;
+	background:purple;
+}
+}
 
-}
-.maincontent{
-	float:left;
-	margin:20px;
-	width:85%;
-}
-#biz-logo{
-	float:left;
-}
+
+
 #about-biz{
 	float:left;
 	padding-left:20px;
 }
-.profile-buttons,#follow-button{
+.following-status{
+	width:100%;
+	
+}
+.profile-buttons{
 	cursor:pointer;	
 }
 .profile-buttons{
 	padding:5px;
 	background-color:#6D0AAA;
 	color:white;	
-}
-#follow-button{
-	width:100px;
-	border:1px solid grey;
 }
 
 #edit-icon{
@@ -42,10 +71,7 @@ hr{
 	background-position: -72px 0px ;
 }
 .recent-uploads{
-	width:80%;
-	margin:auto;
-	padding:10px;	
-	min-height:400px;
+	width:100%;
 }
 
 .editbutton{

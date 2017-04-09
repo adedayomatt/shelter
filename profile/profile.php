@@ -129,27 +129,29 @@ $sendmessage = "<a href=\"$root/cta/checkin.php?_rdr=1\"><button class=\"profile
 
 </head>
 <body class="no-pic-background">
-<div class="left">
-<div class="maincontent">
-<div id="biz-logo">
-<img src="logo" alt="Business Logo" style="border:2px solid white; border-radius:30px;" height="100px" width="100px"/></div>
-<div id="about-biz"><h4 align="center"><?php echo $BizName."<br/>";
+<?php require('../require/sidebar.php') ?>
+<div class="main-content">
+<div id="biz-logo-container">
+<?php echo "<h1>".substr($BizName,0,1)."</h1>"?>
+</div>
+<div id="about-biz"><h4 align="center"><?php echo $BizName."</h4>";
 if($followStatus=='yes'){
-	echo "<span id=\"following-status\" style=\"font-weight:normal; font-size:80%;color:grey;\">you are currently following $BizName</span> <br/>".$followup;
+	echo "<div class=\"following-status\" id=\"following-status\" style=\"font-weight:normal; font-size:80%;color:grey;\">you are currently following $BizName</div><div class=\"following-status\">".$followup."</div>";
 }
 else if ($followStatus=='no'){
-	echo "<span id=\"following-status\" style=\"font-weight:normal; font-size:80%;color:grey;\">you are currently <i>NOT</i> following $BizName </span> <br/>"  .$followup;
+	echo "<div class=\"following-status\" id=\"following-status\"  style=\"font-weight:normal; font-size:80%;color:grey;\">you are currently <i>NOT</i> following $BizName </div><div class=\"following-status\">"  .$followup."</div>";
 }
 else{
-	echo "<span id=\"following-status\" style=\"font-weight:normal; font-size:80%;color:grey;\"><a href=\"login\">login</a> to follow $BizName </span>  <br/>"  .$followup;
+	echo "<div class=\"following-status\" id=\"following-status\" style=\"font-weight:normal; font-size:80%;color:grey;\"><a href=\"login\">login</a> to follow $BizName </div><div class=\"following-status\">"  .$followup."</div>";
 }
- ?></h4>
+ ?>
+ <br/>
 <p><?php echo $OAddress?></p>
 <p><?php echo $OTel?></p>
 <p> <?php echo $email?></p>
-
+<?php echo $sendmessage?>
 </div>
-</div><hr style="width:100%; "/>
+<hr style="width:100%; "/>
 <div class="recent-uploads">
 <h4>Recent uploads by <?php echo $BizName?></h4>
 <?php
@@ -183,9 +185,10 @@ if($fetchproperties){
 	$count++;
 //last value of count will eventually equals to the total records fetched.
 		}
+	$ref ='profile_page';
 require("../require/propertyboxes.php");
 if(!empty($propertyId)){
-echo "<a style=\"margin-left:80%\" href =".basename($_SERVER['PHP_SELF'])."?next=$end >show more<a/>";
+echo "<a style=\"margin-left:50%\" href =".basename($_SERVER['PHP_SELF'])."?next=$end >show more<a/>";
 }
 else{
 if($start==0){
@@ -206,10 +209,10 @@ else{
 </div>
 <?php
 mysql_close($db_connection);
-require("../require/footer.html");
+//require("../require/footer.html");
 ?>
 </div>
-<div class="right">
+<div class="right-side">
 <h4 align="center">options</h4>
 <?php
 switch($status){

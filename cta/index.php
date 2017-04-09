@@ -2,7 +2,6 @@
 <html>
 <link href="../css/general.css" type="text/css" rel="stylesheet" />
 <link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
-<link href="../css/index_styles.css" type="text/css" rel="stylesheet" />
 <link href="../css/propertybox_styles.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript" src="../js/propertybox.js"></script>
 <header>
@@ -25,10 +24,20 @@ else if($status==0){
 ?>
 </header>
 <style>
+@media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
 #denial{
-	width:50%;
+	width:100%;
+	text-align:center;
+}	
+}
+@media only screen and (min-device-width: 1000px){
+	#denial{
+	width:60%;
 	text-align:center;
 }
+
+}
+
 </style>
 <body class="no-pic-background">
 <?php
@@ -41,7 +50,7 @@ else{
 }
 ?>
 
-<div id="cta-content" style="width:40%;float:left;">
+<div class="main-content cta-content">
 
 <?php 
 $req = (isset($_GET['src']) ? $_GET['src'] : 'matches');

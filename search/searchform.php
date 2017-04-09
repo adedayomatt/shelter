@@ -6,7 +6,6 @@
 	margin-right:10%;
 	margin-bottom:4px;
 	background-color:white;
-	color:#6D0AAA;
 }
 #location-input{
 	width:75%;

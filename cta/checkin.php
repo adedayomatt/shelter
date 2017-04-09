@@ -187,7 +187,7 @@ if(mysql_num_rows(mysql_query("SELECT * FROM cta WHERE name='$ctaname'"))==0){
 //if query is correct
 if($createnewCTA){
 	mysql_query("INSERT INTO notifications (notificationid,subject,subjecttrace,receiver,action,status,time) VALUE ('".uniqid('CTAcreate')."','$ctaname','$ctaid','$ctaname','CTA created','unseen',".time().")");
-			$createCTAReport = "CTA created successfully<br/>You can now request your property with preferences and get notifications when they are available<br/>
+			$createCTAReport = "<h3>CTA created successfully</h3>You can now request your property with preferences and get notifications when they are available<br/>
 			<a href=\"#checkin\">checkin now</a> to explore!";
 		$success = 1;
 }

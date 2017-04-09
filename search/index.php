@@ -20,16 +20,16 @@ function ifset($variable){
 }
 ?>
 <body class="no-pic-background">
-<div class="results">
+<?php require('../require/sidebar.php')?>
+
+<div class="main-content results">
 <?php
 //If nothing has been searched for , display the search form
 if(!isset($_GET['type']) || !isset($_GET['max']) || !isset($_GET['location'])){
 	echo "<br/><br/>";
 	echo "<p align=\"center\"><b>Please select your preference</b></p>";
 require("searchform.php");	
-echo "<p align=\"right\" style=\"padding-right:10px;\"><b>Have any problem searching?<br/>contact <a href=\"\">our help center</a></b></p>";
-	
-}
+	}
 //...else use the information in the search field to filter results
 else{
 	//if all the three param are set
@@ -42,13 +42,8 @@ $ref="search_page";
 require("../require/propertyboxes.php");
 
 if(!empty($propertyId)){
-echo "<a style=\"margin-left:80%\" href =\"?type=$propertytype&max=$maxprice&location=$loc&next=$end\" >show more results</a>";
+echo "<a style=\"margin-left:50%\" href =\"?type=$propertytype&max=$maxprice&location=$loc&next=$end\" >show more results</a>";
 }
-
-
-
-
-
 
 //if no match is found for the search, get related results
 else{
@@ -58,45 +53,6 @@ if($start==0){
 else if($start>0){
 	echo "<div class=\"no-property\" align=\"center\">There are no more result for your search</div>";
 	}
-
-
-	
-	$IDsuggest = array();
-	$typesuggest = array();
-	$locationsuggest = array();
-	$pricesuggest = array();
-	$s = 0;
-	
-	echo "<h4>Related results</h3>";
-	if($propertytype != "All types"){
-	$getsuggestions = "SELECT property_ID,directory,type,location,rent FROM properties WHERE (type = '$propertytype') AND ((location LIKE '%$loc%') OR (rent <= $maxprice)) ORDER BY date_uploaded DESC";	
-	}
-	else{
-	$getsuggestions = "SELECT property_ID,directory,type,location,rent FROM properties WHERE (location LIKE '%$loc%') OR (rent <= $maxprice) ORDER BY date_uploaded DESC";		
-	}
-	$getsuggestions_query = mysql_query($getsuggestions);
-	if($getsuggestions_query){
-//if number of fetch is one or more
-		if(mysql_num_rows($getsuggestions_query) >= 1){
-		echo "<ul>";
-		while($suggest = mysql_fetch_array($getsuggestions_query,MYSQL_ASSOC)){
-		$dir[$s] = $suggest['directory'];
-		echo "<li><a href=\"$root/properties/".$suggest['directory']."\">".$suggest['type']." at ".$suggest['location']." for N ".number_format($suggest['rent'])."</a></li>";
-		$s++;
-//display max of 12 related results
-		if($s==12){
-			break;
-		}
-		}
-		echo "</ul>";
-	}
-//if no related result is selected from db = 0
-	else
-	{
-		echo "<div class=\"no-property\">No related result</div>"; }
-}
-//if getsuggestions query return false
-	else { echo "<p>could not get related results</p>"; }
 
 	
 echo "<h4>Show other results on</h4> <ul>";
@@ -113,24 +69,67 @@ echo "<h4>Show other results on</h4> <ul>";
 	}
 		
 }
+?>
+</div>
 
+
+
+
+<div class="related-results">
+
+<?php
+if(isset($_GET['type']) || isset($_GET['max']) || isset($_GET['location'])){
+	echo "<h3 align=\"center\">Related Results</h3>";
+	$IDsuggest = array();
+	$typesuggest = array();
+	$locationsuggest = array();
+	$pricesuggest = array();
+	$s = 0;
+	if($propertytype != "All types"){
+	$getsuggestions = "SELECT property_ID,directory,type,location,rent FROM properties WHERE (type = '$propertytype') AND ((location LIKE '%$loc%') OR (rent <= $maxprice)) ORDER BY date_uploaded DESC";	
+	}
+	else{
+	$getsuggestions = "SELECT property_ID,directory,type,location,rent FROM properties WHERE (location LIKE '%$loc%') OR (rent <= $maxprice) ORDER BY date_uploaded DESC";		
+	}
+	$getsuggestions_query = mysql_query($getsuggestions);
+	if($getsuggestions_query){
+//if number of fetch is one or more
+		if(mysql_num_rows($getsuggestions_query) >= 1){
+		echo "<ul id=\"related-results-list\">";
+		while($suggest = mysql_fetch_array($getsuggestions_query,MYSQL_ASSOC)){
+		$dir[$s] = $suggest['directory'];
+		echo "<li class=\"related-results-list\"><a class=\"related-results\" href=\"$root/properties/".$suggest['directory']."\">".$suggest['type']." at ".$suggest['location']." for N ".number_format($suggest['rent'])."</a></li>";
+		$s++;
+//display max of 12 related results
+		if($s==12){
+			break;
+		}
+		}
+		echo "</ul>";
+	}
+//if no related result is selected from db = 0
+	else
+	{
+		echo "<div class=\"no-property\">No related result</div>"; }
+}
+//if getsuggestions query return false
+	else { echo "<p>could not get related results</p>"; }
+}
+	
 if($status == 0 || $status==9)	{
-echo "<br/><br/><hr/><p align=\"left\" style=\"padding-left:10px;\">Can't find what you are looking for?, Try a new search</p>";
-	require("searchform.php");
+echo "<br/><br/><p align=\"left\" style=\"padding-left:10px;\">Can't find what you are looking for?, Try a new search</p>";
+	//require("searchform.php");
 	echo "<p align=\"left\" style=\"padding-left:10px;\"><a href=\"../cta/request.php?p=1\">make a special request</a></p>";
 echo "<p align=\"right\" style=\"padding-right:10px;\"><b>Have any problem searching?<br/>contact <a href=\"\">our help center</a></b></p>";
 }
-
-require("../require/footer.html");
-mysql_close($db_connection);?>
-
+	
+	mysql_close($db_connection);
+?>
 </div>
 
-<div align="center" class="ads">
-<h3>Ads</h3><p size="10px"><a href="advert.html">Place your advert here</a></p>
-<a href="adone.html"><img id="pic" src="" height="25%" width="100%" ></img></a>
-<a href="adtwo.html"><img id="pic2" src="image/images6.jpeg" height="25%" width="100%"></img></a>
-<a href="adthree.html"><img id="pic3" src="image/images7.jpeg" height="25%" width="100%"></img></a>
-</div>
+
+
+
+
 </body>
 </html>

@@ -12,11 +12,11 @@ if(sidebar.style.display != 'block'){
 	headerunder.style.display = 'block';
 	headertop.style.position = 'fixed';
 	sidebar.style.display = 'block';
-	sidebar.style.width = '60%';
+	sidebar.style.width = '75%';
 	sidebar.style.marginTop = '0px';
 	sidebar.style.overflow = 'scroll';
 //	body.style.opacity = '';
-	menu.innerHTML = '&times close';
+	menu.innerHTML = '&times hide';
 	sidebar.focus();
 		}
 else{
@@ -35,11 +35,7 @@ function redirect(){
 }
 
 //since this headeer scripts will always be required by scripts other than the homepage
-if(!isset($ref)){
-	 require('connexion.php');
-}else{
-	require('connexion.php');
-}
+require('connexion.php');
 
 //if user is logged in as an agent
 if(isset($_COOKIE['name']) ){

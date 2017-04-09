@@ -24,10 +24,10 @@ function timeuploaded($timestamp){
 		$since = (int)($time/3600).' hours, '.(($time/60)%60).' minutes ago';
 	}
 	else if($time>=86400 && $time<604800){
-		$since = date('l, d M, Y  ',$timestamp).'('.(int)($time/86400).' days ago)';
+		$since = date('l, M d ',$timestamp).'('.(int)($time/86400).' days ago)';
 	}
 	else if($time>=604800 && $time<18144000){
-		$since = date('l, d M, Y  ',$timestamp).'('.(int)($time/604800).' weeks ago)';
+		$since = date('M d  ',$timestamp).'('.(int)($time/604800).' weeks ago)';
 	}
 	else{
 		$since = "sometime ago";
@@ -87,6 +87,46 @@ else{
 	<input id=\"$propertyId[$i]hidden04\" type=\"text\" value=\"".checkimage($imageurl,$propertyId[$i]."_04.png")."\"    />
 	*/
 	//main box divided into two >>image:info=50:50
+	
+	if($status==9){
+	$clipbutton = "<a  class=\"options\"  href=\"$root/cta/c.php?p=$propertyId[$i]&cb=$ctaid&ref=$ref\" id=\"$propertyId[$i]clipbutton\" onclick=\"makeclip('$propertyId[$i]clipbutton','$ctaid','$ref')\"><i class=\"black-icon\" id=\"like\"></i>".clip($propertyId[$i],$ctaid)."</a>";
+	}
+else {
+	$clipbutton = "<a class=\"options disabled\"  href=\"$root/cta/checkin.php?_rdr=1\"><i class=\"black-icon\" id=\"like\"></i>clip</a>";
+	
+}
+	
+if($ref=='search_page'){
+	$page = "
+	<div class=\"mini-propertybox\">
+	<div class=\"mini-image\">
+	<img id=\"$propertyId[$i]image\" height=\"100%\" width=\"100%\" src=\"$image\"/>
+	</div>
+	<div class=\"mini-info\">
+	<span class=\"mini-detail\"><a href=\"$root/properties/$propertydir[$i]\">$type[$i] at $location[$i]</a>$m</span>
+	<span class=\"mini-detail\"><i class=\"black-icon\" id=\"price\"></i> price: N $formatrent</span>
+	<span class=\"mini-detail\"><i class=\"black-icon\" id=\"min\"></i> Min Payment: $min_payment[$i]</span>
+	<span class = \"mini-detail time\" align=\"left\"><i class=\"black-icon\" id=\"date\"></i>".timeuploaded($howlong[$i])."</span>
+	</div>
+	</div>";	
+}
+else if($ref=='profile_page'){
+	$page = "
+	<div class=\"mini-propertybox\">
+	<div class=\"mini-image\">
+	<img id=\"$propertyId[$i]image\" height=\"100%\" width=\"100%\" src=\"$image\"/>
+	</div>
+	<div class=\"mini-info\">
+	<span class=\"mini-detail\"><a href=\"$root/properties/$propertydir[$i]\">$type[$i] at $location[$i]</a>$m</span>
+	<span class=\"mini-detail\"><i class=\"black-icon\" id=\"price\"></i> price: N $formatrent</span>
+	<span class=\"mini-detail\"><i class=\"black-icon\" id=\"min\"></i> Min Payment: $min_payment[$i]</span>
+	<span class = \"mini-detail time\" align=\"left\"><i class=\"black-icon\" id=\"date\"></i>".timeuploaded($howlong[$i])."</span>
+	$clipbutton
+	<a  class=\"options\" id=\"report-property\" href=\"#\"><i class=\"black-icon\" id=\"eye\"></i>(0)views</a>
+	</div>
+	</div>";	
+}
+else{
 	$page = "<div id=\"$propertyId[$i]\"class=\"propertybox\">
 	<div class=\"property-heading\">
 	<span><a href=\"$root/properties/$propertydir[$i]\">$type[$i] at $location[$i]</a>$m</span>
@@ -104,17 +144,9 @@ else{
 	<span class =\"description detail\"><i class=\"black-icon\" id=\"com\"></i> Description: </span><div class=\"comment\"><i>$description[$i]</i></div>
 	<span class=\"detail\">Managed by <a class=\"agent-link\" href=\"$root/$uploadby[$i]\">$Bname</a></span>
 	</div>
-	<span class = \"time\" align=\"left\"><i class=\"black-icon\" id=\"date\"></i>".timeuploaded($howlong[$i])."</span>
+	<span class = \"detail time\" align=\"left\"><i class=\"black-icon\" id=\"date\"></i>".timeuploaded($howlong[$i])."</span>
 	</div>";
 
-
-if($status==9){
-	$clipbutton = "<a  class=\"options\"  href=\"$root/cta/c.php?p=$propertyId[$i]&cb=$ctaid&ref=$ref\" id=\"$propertyId[$i]clipbutton\" onclick=\"makeclip('$propertyId[$i]clipbutton','$ctaid','$ref')\"><i class=\"black-icon\" id=\"like\"></i>".clip($propertyId[$i],$ctaid)."</a>";
-	}
-else {
-	$clipbutton = "<a class=\"options disabled\"  href=\"$root/cta/checkin.php?_rdr=1\"><i class=\"black-icon\" id=\"like\"></i>clip</a>";
-	
-}
 //the like pane
 	$page .= "<div class=\"like-pane\">
 	<hr/>
@@ -125,7 +157,7 @@ else {
 		<a  class=\"options\" id=\"report-property\" href=\"#\"><i class=\"black-icon\" id=\"eye\"></i>(0)views</a>
 		</div>
 		</div>";
-		
+}
 	print $page;
 	$i++;
 }
@@ -180,7 +212,7 @@ function checkimage($url,$imagename){
 		return "";
 	}
 }
-
+/*
 function pagereferertag($value,$start,$end){
 		if($value==$start){
 			return 'jump to|> start';
@@ -192,6 +224,6 @@ function pagereferertag($value,$start,$end){
 			return $value;
 		}
 	}
-
+*/
 
 	?>
