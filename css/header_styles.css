@@ -2,8 +2,11 @@
 @media screen and (min-width:1025px)*/
 
 @media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
+	#top-nav-bar-container{
+		display:block;
+	}
 	#top-nav-bar-content{
-	position:relative;
+	position:fixed;
 	background-color:#6D0AAA;
 }
 #menuicon{
@@ -16,7 +19,7 @@
 	letter-spacing:5px;
 }
 #top-nav-bar-under{
-	display:none;
+	display:block;
 }
 	.top-nav-bar{
 		width:100%;
@@ -26,8 +29,17 @@
 div#menus{
 	display:none;
 }
+#top-nav-bar-content-on-scroll-content{
+	display:block;
+}
+#mobile-head-search-container{
+	display:none;
+}
 }
 @media only screen and (min-device-width: 1000px){
+	#top-nav-bar-container{
+		display:block;
+	}
 	#top-nav-bar-content{
 	position:fixed;
 	background-color:#6D0AAA;
@@ -49,6 +61,9 @@ div#menus{
 	float:left;
 	padding-left:50px;
 	padding-right:50px;
+}
+#top-nav-bar-content-on-scroll-content{
+display:none;
 }
 }
 #menuicon{
@@ -93,4 +108,17 @@ li.nav-menu{
 .nav-menu:hover{
 		background-color:#6D0ACC;
 		}
+#top-nav-bar-content-on-scroll{	
+			display:none;
+	    	width:100%;
+			margin:0px;
+		}
+
+#top-nav-bar-content-on-scroll-content{
+	background-color:white;
+	color:#6D0AAA;
+	box-shadow:3px 3px 3px 3px grey;
+	padding:5px;
+margin:0px;	
+}
 

@@ -1,12 +1,35 @@
 /* Desktop version
 @media screen and (min-width:1025px)*/
-.maincontent{
-	width:100%;
-}
 
 @media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
 div.agents-snipet{
 	display:none;
+}
+#agents-snipet-search-input-mobile{
+	width:95%;
+	margin:auto;
+	padding:5%;
+	border:2px solid #6D0AAA;
+}
+button.on-scrolltop-button{
+	padding:2%;
+	background-color:grey;
+	color:white;
+	border:none;
+	border-radius:5px;
+	width:32%;
+	margin:auto;
+	font-size:80%;
+}
+#suggested-agents-search-container-mobile{
+	width:80%;
+	max-height:500px;
+	padding:5%;
+	border-bottom: 2px solid #6D0AAA;
+	margin-top:5px;
+}
+li.agents-list{
+	padding:15px;
 }
 }
 @media only screen and (min-device-width: 1000px){
@@ -15,7 +38,18 @@ div.agents-snipet{
 	margin-left:0.5%;
 	float:left;
 }
-
+#agents-snipet-search-input-desktop{
+	width:95%;
+	margin:auto;
+	padding:3%;
+}
+#suggested-agents-search-container-desktop{
+	width:400px;
+	max-height:250px;
+}
+li.agents-list{
+	padding:5px;
+}
 }
 
 li{
@@ -66,22 +100,38 @@ div#agents-list-container:hover{
 ul#agents-list-container{
 	padding-left:2px;
 	margin-right:5px;
+	background-color:#DDDEEE;
 }
 li.agents-list{
+background-color:white;
 display:inline-block;
-width:95%;
-padding:5px;
+width:97%;
 list-style-type:none;	
-
+margin-bottom:1px;
 }
 a.agents-list{
 	color:grey;
+	
 }
 li.agents-list:hover{
 background-color:#DDD;
 }
 a.agents-list:hover{
 	text-decoration:none;
+}
+.agent-avatar{
+	background-position:-432px 0px;
+}
+.suggested-agents-search-container{
+	margin-left:10%;
+	margin:auto;
+	display:none;
+}
+.search-whatsup{
+	text-align:center;
+}
+.search-result-icon{
+	background-position:-360px -96px;
 }
 
 /*

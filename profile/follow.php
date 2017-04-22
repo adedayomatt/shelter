@@ -1,7 +1,7 @@
 <?php
 $dbhost = '127.0.0.1';
 $dbuser = 'adedayo';
-$dbpass = 'matthews';
+$dbpass = 'matthew';
 $db_connection = @mysql_connect($dbhost, $dbuser, $dbpass);
 if($db_connection){
 	if(isset($_GET['flwer']) && isset($_GET['flwing'])){

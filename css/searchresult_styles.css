@@ -1,11 +1,13 @@
 
 /*Rigt hand side*/
 @media only screen and (min-device-width: 1000px){
-
-
-div.related-results{
+div.other-search-info{
 	float:left;
+}
+
+div.related-results,div.contact-search-help-container{
 	box-shadow: 2px 2px 2px 2px grey;
+	margin-bottom:10px;
 }
 li.related-results-list{
 	display: block;
@@ -18,16 +20,23 @@ li.related-results-list:hover{
 }
 
 @media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
-
-div.related-results{
+div.other-search-info{
+	width:100%;
+}
+div.related-results,div.contact-search-help-container{
 	padding:2%;
-	margin-left:5%;
-	height:80%;
+	width:80%;
+	margin:auto;
+	margin-bottom:50px;
+	box-shadow: 3px 3px 3px 3px grey;
 }
 li.related-results-list{
-	list-style-type:circle;
-	padding:1%;
+	display: block;
+	list-style-type:none;
+	padding:2%;
 }
+
+
 }
 
 ul#related-results-list{

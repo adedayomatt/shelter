@@ -42,7 +42,7 @@ $ref="search_page";
 require("../require/propertyboxes.php");
 
 if(!empty($propertyId)){
-echo "<a style=\"margin-left:50%\" href =\"?type=$propertytype&max=$maxprice&location=$loc&next=$end\" >show more results</a>";
+echo "<a class=\"show-more-link\" href =\"?type=$propertytype&max=$maxprice&location=$loc&next=$end\" >show more results >></a>";
 }
 
 //if no match is found for the search, get related results
@@ -75,8 +75,8 @@ echo "<h4>Show other results on</h4> <ul>";
 
 
 
+<div class="other-search-info">
 <div class="related-results">
-
 <?php
 if(isset($_GET['type']) || isset($_GET['max']) || isset($_GET['location'])){
 	echo "<h3 align=\"center\">Related Results</h3>";
@@ -116,15 +116,19 @@ if(isset($_GET['type']) || isset($_GET['max']) || isset($_GET['location'])){
 	else { echo "<p>could not get related results</p>"; }
 }
 	
-if($status == 0 || $status==9)	{
-echo "<br/><br/><p align=\"left\" style=\"padding-left:10px;\">Can't find what you are looking for?, Try a new search</p>";
-	//require("searchform.php");
-	echo "<p align=\"left\" style=\"padding-left:10px;\"><a href=\"../cta/request.php?p=1\">make a special request</a></p>";
-echo "<p align=\"right\" style=\"padding-right:10px;\"><b>Have any problem searching?<br/>contact <a href=\"\">our help center</a></b></p>";
-}
-	
 	mysql_close($db_connection);
 ?>
+</div>
+
+<div class="contact-search-help-container">
+<?php
+if($status == 0 || $status==9)	{
+echo "<br/><br/><p align=\"left\" style=\"padding-left:10px;\">Can't find what you are looking for?, Try a new search</p>
+	 <p align=\"left\" style=\"padding-left:10px;\"><a href=\"../cta/request.php?p=1\">make a special request</a></p>
+     <p align=\"right\" style=\"padding-right:10px;\"><b>Have any problem searching?<br/>contact <a href=\"\">our help center</a></b></p>";
+}
+?>
+</div>
 </div>
 
 

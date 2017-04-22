@@ -78,7 +78,6 @@ else{
 //if an agent is logged in
 switch($status){
 case 1:
-	$sendmessage = "<a href=\"$root/messages/compose.php?cv=".$token."&i=$Business_Name&rcpt=$key\"><button class=\"profile-buttons\"><i class=\"white-icon\" id=\"message-icon\"></i>send message</button></a>";
 	if($BizName != $Business_Name)
 	{
 		if (checkfollow($Business_Name,$BizName)=='positive'){
@@ -90,15 +89,15 @@ case 1:
 	else if (checkfollow($Business_Name,$BizName)=='negative'){
 		$followStatus = 'no';
 		$text = 'follow';
-	$f = 'follow-button';
-	$ficon = 'black-icon follow-icon';	
+	   $f = 'follow-button';
+	   $ficon = 'black-icon follow-icon';	
 		}
-	
+	$sendmessage = "<a href=\"$root/messages/compose.php?cv=".$token."&i=$Business_Name&rcpt=$key\"><button class=\"profile-buttons\"><i class=\"white-icon\" id=\"message-icon\"></i>send message</button></a>";
 	$followup = "<button class=\"$f\" id=\"follow-button\" onclick=\"follow('follow-button',$Business_Name','$profile_name','$BizName','A4A')\"><i class=\"$ficon\"></i>  $text</button>";
 	}
 	else{
+
 	$editprofile = "<a href=\"$root/manage/account.php\"><button class=\"profile-buttons\"><i class=\"white-icon\" id=\"edit-icon\"></i> Edit profile</button></a>";
-	echo $editprofile;
 	}
 break;
 //if a client is logged in
@@ -149,7 +148,10 @@ else{
 <p><?php echo $OAddress?></p>
 <p><?php echo $OTel?></p>
 <p> <?php echo $email?></p>
-<?php echo $sendmessage?>
+<?php
+ echo $sendmessage;
+ //echo $editprofile;
+ ?>
 </div>
 <hr style="width:100%; "/>
 <div class="recent-uploads">

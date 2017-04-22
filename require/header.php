@@ -1,12 +1,14 @@
 
 <script type="text/javascript" language="javascript" src="http://localhost/shelter/js/jquery-3.1.1.min.js"></script>
 <script  type="text/javascript" language="javascript">
+
 function togglemenu(){
 var sidebar = document.getElementById('sidebar-original');
 var menu = document.getElementById('menuicon');
 var headerunder = document.getElementById('top-nav-bar-under');
 var headertop = document.getElementById('top-nav-bar-content');
 var body = document.getElementById('linear-layout-content');
+var hangingHead = document.getElementById('top-nav-bar-content-on-scroll');
 
 if(sidebar.style.display != 'block'){
 	headerunder.style.display = 'block';
@@ -18,11 +20,11 @@ if(sidebar.style.display != 'block'){
 //	body.style.opacity = '';
 	menu.innerHTML = '&times hide';
 	sidebar.focus();
+	hangingHead.style.display = 'none';
+	document.getElementById('suggested-agents-search-list-mobile').style.display ='none';
 		}
 else{
 	sidebar.style.display = 'none';
-	headerunder.style.display = 'none';
-	headertop.style.position = 'relative';
 	menu.innerHTML = 'MENU';
 		}
 	}
@@ -135,8 +137,12 @@ else{
 ?>
 
 <title>Shelter | <?php echo $pagetitle; ?></title>
+<div id="top-nav-bar-container">
 <div class="top-nav-bar" id="top-nav-bar-content">
+<span id="top"></span>
+<span id="basic-head">
 <button id="menuicon" onclick="javascript:togglemenu()">MENU</button><span id="templogo"><a href="<?php echo $root ?>"><h1 style="display:inline; color:white;">Shelter</h1><h6 style="display:inline; color:white;" >.com</h6></a></span>
+</span>
 <div id="menus">
 <ul id="nav-bar">
 <a  href="<?php echo $root ?>" title="Home"><li class="nav-menu">Home</li></a>
@@ -168,7 +174,10 @@ if($status==1 || $status==9){
 </ul>
 </div>
 </div>
+</div>
 <div class="top-nav-bar" id="top-nav-bar-under" ></div>
+
+
 <?php
 if($status == 0){
  //echo "<div style=\"width:20%;margin:0\"><marquee style=\"font-size:12px; color:red\"><i><b>*NOTICE: you are currently not logged in as agent</b></i></marquee></div>";

@@ -76,6 +76,9 @@ ul{
 #warning-icon{
 	background-position: -144px -120px;
 }
+.user-icon{
+		background-position: -168px 0px;
+}
 </style>
 <body class="no-pic-background">
 <?php
@@ -198,17 +201,18 @@ else{
 					
 		}
 		else{
-			$xtra='This client has no specific preference <a href=\"\">Suggest a property for this client</a></i>';
+			$xtra="<br/>
+			This client has no specific preference <a href=\"\">Suggest a property for this client</a></i>";
 		}
 		return "<li class=\"client-follow-notice\">
-					+<i class=\"black-icon\" id=\"user-icon\"></i>A client <a href=\"../cta/ctarequests/?target=$subjecttrace\">(".$subject.")</a> started following you
+					+<i class=\"black-icon user-icon\"></i>A client <a href=\"../cta/ctarequests/?target=$subjecttrace\">(".$subject.")</a> started following you
 					 <i class=\"since\">$since</i>
 					 $xtra</li>";
 		break;
 		
 		case 'A4Afollow':
 		return "<li class=\"notice\">
-					+<i class=\"black-icon\" id=\"user-icon\"></i>An agent <a href=\"../$subjecttrace\">(".$subject.")</a> started following you
+					+<i class=\"black-icon user-icon\" ></i>An agent <a href=\"../$subjecttrace\">(".$subject.")</a> started following you
 					 <i class=\"since\">$since</i>
 					 
 						</li>";

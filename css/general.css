@@ -6,14 +6,51 @@ html{
 		font-weight:normal;
 		line-height:1.2em;
 	}
+.suggestion-box{
+		background-color:black;
+		opacity:0.7;
+		position:absolute;
+		overflow-y:scroll;
+		box-shadow: 2px 2px 2px 2px #DDD;
+	}
+.suggestion-box-list{
+	color:white;
+	display:block;
+	padding:2%;
+	border-bottom:1px solid white;
+}
+
+.suggestion-box-link:hover{
+	text-decoration:none;
+}
+.suggestion-box-list:hover{
+	background-color:grey;
+}
+.show-more-link{
+	display:inline-block;
+	padding:2%;
+	margin:4%;
+	border-radius:8px;
+	font-family:arial;
+	background-color: #6D0AAA;
+	color:white;
+}
+.show-more-link:hover{
+	background-color:grey;
+text-decoration:none;
+}
 @media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
 		body{
 		max-width:1000px;
 		min-width:300px;
 	}
 	body{
-		font-size:200%;
-		}	
+	font-size:250%;
+		
+		}		
+		input:focus{
+			font-size:180%;
+		}
 	div.sidebar{
 		display:none;
 	font-size:90%;		
@@ -23,6 +60,9 @@ html{
 	}
 	div.main-content{
 	width:100%;
+}
+div.content-before-footer{
+	min-height:1200px;
 }
 .follow-button,.unfollow-button{
 	width:300px;
@@ -50,6 +90,9 @@ html{
 div.main-content{
 	width:40%;
 	float:left;
+}
+div.content-before-footer{
+	min-height:500px;
 }
 .follow-button,.unfollow-button{
 	width:100px;

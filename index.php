@@ -18,8 +18,9 @@ require("require/header.php");
 <script type="text/javascript" src="js/propertybox.js"></script>
 <script type="text/javascript" src="js/profile.js" type="text/javascript"></script>
 </header>
-<body class="no-pic-background" onload="activateslide()">
-<div class="maincontent">
+
+<body class="no-pic-background">
+<div class="">
 <!--Leftmost side begins-->
 <?php require('require/sidebar.php'); ?>
 <!--Leftmost side ends-->
@@ -29,6 +30,29 @@ require("require/header.php");
 <p>You can search for property using the search preference</p>
 </div>-->
 <div class="recent-uploads-container main-content" id="linear-layout-content">
+
+<div id="top-nav-bar-content-on-scroll">
+
+<div id="top-nav-bar-content-on-scroll-content">
+
+<button class="on-scrolltop-button" id="toggle-search-agent-container-button" onclick="showSearchAgent()">search agent</button>
+<a href="search"><button class="on-scrolltop-button">search property</button></a>
+<?php echo ($status==9 ? "<a href=\"cta\"><button class=\"on-scrolltop-button\">$ctaname</button> </a>" :
+			($status==1 ? "<a href=\"$profile_name\"><button class=\"on-scrolltop-button\">".substr($Business_Name,0,12)."...</button> </a>": "<a style=\"color:white\" href=\"cta/checkin.php#create\"><button class=\"on-scrolltop-button\">create CTA</button></a>" ) )?>
+
+<div id="mobile-head-search-container">
+<input onkeyup="getAgents(this.value,'agents-snipet-search-input-mobile','suggested-agents-search-container-mobile','suggested-agents-search-list-mobile')" class="agents-snipet-search-input" id="agents-snipet-search-input-mobile" type="text" placeholder="search for an agent" maxlength="50"/>
+<a href="agents" style="margin-left:60%;">view all agents</a>
+<div class="suggested-agents-search-container suggestion-box" id="suggested-agents-search-container-mobile">
+<div class="suggested-agents-search-list" id="suggested-agents-search-list-mobile" style="padding:0px; ">
+</div>
+</div>
+</div>
+
+</div>
+
+</div>
+
 <div id="search-box">
 <?php require("search/searchform.php")?>
 </div>
@@ -48,7 +72,7 @@ require("require/header.php");
 </select>
 <input type="submit" value="Filter" style="background-color:#6D0AAA; color:white; cursor:pointer; border:none"/>
 </form>
-<div>
+<div class="content-before-footer">
 <?php
 //get some properties from the database
 $max = 4;
@@ -89,15 +113,14 @@ if(isset($_GET['next']) && $_GET['next']>0){
 $ref="home_page";
 require("require/propertyboxes.php");	
 if(!empty($propertyId)){
-	echo "<p>showing $x - $y of $totalproperties</p>";
-echo "<a style=\"margin-left:80%\" href =\"?next=$end\" >show more<a/>";
+	echo "<p>showing $x - $y of $totalproperties <a class=\"show-more-link\" href=\"?next=$end\" >show more >></a></p>";
 }
 else{
 if($start==0){
-	echo "<div class=\"no-property\" align=\"center\">There are no propertties for now</div>";
+	echo "<div class=\"no-property\">There are no properties for now</div>";
 }
 else if($start>0){
-	echo "<div class=\"no-property\" align=\"center\">There are no more recent properties</div>";
+	echo "<div class=\"no-property\">There are no more recent properties</div>";
 	}
 }
 	
@@ -105,7 +128,7 @@ else if($start>0){
 	}
 	
 else{
-	echo "<div class=\"no-property\" align=\"center\">An error occured!!<br/>Recents upload records could not be get fromn the server at this time, we'll resolve this ASAP,
+	echo "<div class=\"no-property\">An error occured!!<br/><br/>Recents upload records could not be get fromn the server at this time, we'll resolve this ASAP,
 	we regret any inconvience this might bring you </div>";
 			}
 
@@ -125,32 +148,22 @@ else{
 </div>
 <hr/>
 <div style="width:90%;margin:auto;">
-<input id="agents-snipet-search" style="width:95%;padding:5px;height:30px;" type="text" placeholder="search for an agent"/>
+<input onkeyup="getAgents(this.value,'agents-snipet-search-input-desktop','suggested-agents-search-container-desktop','suggested-agents-search-list-desktop')" class="agents-snipet-search-input" id="agents-snipet-search-input-desktop" type="text" placeholder="search for an agent" maxlength="50"/>
 </div>
 <hr/>
 <div id="agents-list-container">
-<style>
-.agent-avatar{
-	display:inline-block;
-	width:10px;
-	height:10px;
-	border:1px solid grey;
-	border-radius: 10px;
-	text-align:center;
-	font-size: 100%;
-	font-weight:bold;
-	
-	margin-right:5px;
-	color:white;
-	font-family:san-serif;
-}
-</style>
+
+<div class="suggested-agents-search-container suggestion-box" id="suggested-agents-search-container-desktop">
+<div class="suggested-agents-search-list" id="suggested-agents-search-list-desktop" style="padding:0px; ">
+</div>
+</div>
+
 <ul id="agents-list-container">
 <?php
 $getAgents = mysql_query("SELECT Business_Name,User_ID FROM profiles LIMIT 10");
 if($getAgents){
 	while($agent = mysql_fetch_array($getAgents,MYSQL_ASSOC)){
-	echo "<li class=\"agents-list\"><a class=\"agents-list\" href=\"".$agent['User_ID']."\"><div style=\"background-color:rgb(".rand(0,250).",".rand(0,250).",".rand(0,250).")\" class=\"agent-avatar\"></div>".$agent['Business_Name']."</a>";
+	echo "<li class=\"agents-list\"><a class=\"agents-list\" href=\"".$agent['User_ID']."\"><span class=\"black-icon agent-avatar\"></span>".$agent['Business_Name']."</a>";
 	
 if($status==1 || $status==9){
 //check for follow
@@ -188,7 +201,6 @@ else{
 echo "<a href=\"$root/cta/checkin.php?_rdr=1\"><button class=\"$f\" ><i class=\"$ficon\"></i>  $text</button></li>";
 	
 }
-
 	}
 	
 }

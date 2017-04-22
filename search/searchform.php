@@ -1,20 +1,78 @@
+<script>
+
+window.onclick = function(event){
+	var theLocationList = document.getElementById('suggested-location-container');
+		if(event.target != 'theLocationList'){
+			theLocationList.style.display = 'none';
+		}
+		
+	}
+	
+function getLocations(key){
+	var theLocationList = document.getElementById('suggested-location-container');
+var locationSearchField = document.getElementById('location-input');
+	if(locationSearchField.value != ''){
+		theLocationList.style.display = 'block';
+try{
+		//opera 8+, firefox,safari
+		xmlhttp = new XMLHttpRequest();
+	}
+	catch(e){
+		//Internet Explorer
+		try{
+			xmlhttp = new ActiveXObject('Msxml2.XMLHTTP');
+		}
+	catch(e){
+		try{
+		xmlhttp = new ActiveXObject('Microsoft.XMLHTTP');
+		}
+		catch(e){
+			alert('This browser is crazy!');
+		}
+	}	
+	}
+	xmlhttp.onreadystatechange = function(){
+	if(xmlhttp.status==200){
+if(xmlhttp.readyState == 4){
+//first clear the list
+	theLocationList.innerHTML = "";
+theLocationList.innerHTML += xmlhttp.responseText;
+		}
+	}
+	else if(xmlhttp.status==404){
+		alert("things did not go well:404!");
+	}
+}
+var url = "http://192.168.173.1/shelter/resrc/getLocations.php?key="+key;
+xmlhttp.open("GET",url, true);
+xmlhttp.send();	
+	
+	}
+	else{
+		theLocationList.style.display = 'none';
+	}
+}
+function setLocation(location){
+	var locField = document.getElementById('location-input');
+	locField.value = location;
+	document.getElementById('suggested-location-container').style.display = 'none';
+}
+</script>
 <style>
 .search-field{
 	padding:2%;
-	width:80%;
-	margin-left:10%;
-	margin-right:10%;
+	width:46%;
+	margin-right:2%;
 	margin-bottom:4px;
 	background-color:white;
 }
 #location-input{
-	width:75%;
+	width:50%;
 }
 #search-icon{
 	background-position: -48px 0px;
 }
 #search-btn{
-	margin-left:70%;
 	cursor:pointer;
 	background-color:#6D0AAA;
 	border:none;
@@ -26,6 +84,51 @@
 }
 #search-btn:hover{
 	box-shadow: 2px 2px 2px 2px #333;
+}
+@media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
+#suggested-location-container{
+	position:absolute;
+	width:70%;
+	max-height:600px;
+	background-color:#DDD;
+	display:none;
+	overflow-y:scroll;
+	margin-top:0px;
+	padding:0px;
+	margin-left:10px;
+	box-shadow:2px 2px 2px 2px #DDD;
+	font-size:170%;
+	
+}	
+}
+@media only screen and (min-device-width: 1000px){
+	#suggested-location-container{
+	position:absolute;
+	width:300px;
+	max-height:300px;
+	background-color:#DDD;
+	display:none;
+	overflow-y:scroll;
+	margin-top:0px;
+	padding:0px;
+	margin-left:10px;
+	box-shadow:2px 2px 2px 2px #DDD;
+	font-size:100%;
+	
+}
+}
+
+
+li.suggested-location-list{
+	width:100%;
+	list-style-type:none;
+	background-color:white;
+	margin-bottom:1px;	
+	padding-top:2%;
+	padding-bottom:2%;
+}
+li.suggested-location-list:hover{
+	background-color:#DDDEEE;
 }
 </style>
 <form action="<?php echo "$root/search" ?>" method="GET">
@@ -59,7 +162,8 @@
 <option value="5000000">5 million</option>
 </select>
 <br/>
-<input class="search-field" id="location-input" placeholder="Input location" name="location" size="15" type="text" value="<?php if(isset($_GET['location'])){echo $_GET['location'];}?>"/></label>
+<input onkeyup="getLocations(this.value)" class="search-field" id="location-input" placeholder="Input location" name="location" size="15" type="text" value="<?php if(isset($_GET['location'])){echo $_GET['location'];}?>"/></label>
 <button type="submit" id="search-btn"><i class="white-icon" id="search-icon"></i>search</button>
-
+<div id="suggested-location-container"></div>
 </form>
+

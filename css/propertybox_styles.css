@@ -1,13 +1,16 @@
 /*
 @media screen and (min-width:1025px)*/
-
+.propertybox{
+	box-shadow:1px 5px 5px 0px grey;
+}
 @media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
 	.propertybox{
 		margin:auto;
 		margin-bottom:15px;
+		font-size:100%;
 	}
 .imagebox{ 
-	height: 600px; 
+	height: 700px; 
 }
 .infobox{
 	line-height:200%;
@@ -27,11 +30,17 @@ a.options{
 #agent-contacts{
 	display:none;
 }
-
+span.detail{
+	margin-bottom:10px;
+}
+div.detail{
+	padding:2%;
+}
 .mini-propertybox{
 	margin-left:10px;
 	width:95%;
-	height:300px;
+	height:450px;
+	min-height:350px;
 	margin:auto;
 	box-shadow:2px 2px 2px 2px grey;
 	background-color:white;
@@ -39,17 +48,18 @@ a.options{
 }
 .mini-image{
 	width:30%;
-	height:100%;
+	height:80%;
+	margin:15px;
 	float:left;
 }
 .mini-info{
-	width:65%;
+	width:60%;
 	float:left;
 	margin-left:5%;
 }
 .mini-detail{
 	display:block;
-	padding:10px;
+	line-height:180%;
 }
 }
 @media only screen and (min-device-width: 1000px){
@@ -57,9 +67,7 @@ a.options{
 	margin:auto;
 		margin-bottom:10px;
 	}
-	.propertybox:hover{
-	box-shadow:1px 5px 5px 0px grey;
-}
+	
 .infobox{
 	line-height:200%;
 }
@@ -75,30 +83,33 @@ a.options{
 	margin:0px;
 	margin-bottom:10px;
 }
+
 .mini-propertybox{
 	margin-left:10px;
 	width:95%;
-	height:120px;
+	height:150px;
+	min-height:150px;
 	box-shadow:1px 1px 1px 1px grey;
 	background-color:white;
 	margin-bottom:10px;
 }
 .mini-image{
 	width:30%;
-	height:100%;
+	margin:5px;
+	height:95%;
 	float:left;
 }
 .mini-info{
-	width:65%;
+	width:60%;
 	float:left;
 	margin-left:5%;
 }
 .mini-detail{
 	display:block;
+	line-height:200%;
 }
 }
 	.propertybox{
-	font-size:100%;
 	background-color:white;
 	padding-bottom:5px;
 	width:90%;
@@ -213,6 +224,7 @@ a.options:hover{
 	font-weight:bold;
 }
 div.no-property{
+	line-height:200%;
 	margin-top:30px;
 	width:70%;
 	margin:auto;

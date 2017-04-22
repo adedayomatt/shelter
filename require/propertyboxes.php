@@ -78,7 +78,11 @@ else{
 	$imageurl = checkurl($propertydir[$i],$ref);
 //this takes the complete url of the image. remember, the name of the images are the proprerty id too with either _01,_02...
 	$image = showOneImage($imageurl,$propertyId[$i]);
-	$formatrent = number_format($rent[$i]);
+	
+	$rentperannum = $rent[$i];
+	$OneAndHalf =  $rentperannum + ($rentperannum/2);
+	$TwoYears = $rentperannum*2;
+	$firstpayment = ($min_payment[$i] == '1 year' ? number_format($rentperannum) : ($min_payment[$i] == '1 year, 6 Months' ? number_format($OneAndHalf) : ($min_payment[$i] == '2 years' ? number_format($TwoYears) : '')));
 	
 	/* I'll need when i want make my image animation in js
 	<input id=\"$propertyId[$i]hidden01\" type=\"text\" value=\"".checkimage($imageurl,$propertyId[$i]."_01.png")."\"  />
@@ -104,8 +108,8 @@ if($ref=='search_page'){
 	</div>
 	<div class=\"mini-info\">
 	<span class=\"mini-detail\"><a href=\"$root/properties/$propertydir[$i]\">$type[$i] at $location[$i]</a>$m</span>
-	<span class=\"mini-detail\"><i class=\"black-icon\" id=\"price\"></i> price: N $formatrent</span>
-	<span class=\"mini-detail\"><i class=\"black-icon\" id=\"min\"></i> Min Payment: $min_payment[$i]</span>
+	<span class=\"mini-detail\"><i class=\"black-icon\" id=\"price\"></i> Rent: N ".number_format($rentperannum)."/year</span>
+	<span class=\"mini-detail\"><i class=\"black-icon\" id=\"min\"></i><strong>$min_payment[$i]</strong> payment required (N $firstpayment)</span>
 	<span class = \"mini-detail time\" align=\"left\"><i class=\"black-icon\" id=\"date\"></i>".timeuploaded($howlong[$i])."</span>
 	</div>
 	</div>";	
@@ -118,8 +122,8 @@ else if($ref=='profile_page'){
 	</div>
 	<div class=\"mini-info\">
 	<span class=\"mini-detail\"><a href=\"$root/properties/$propertydir[$i]\">$type[$i] at $location[$i]</a>$m</span>
-	<span class=\"mini-detail\"><i class=\"black-icon\" id=\"price\"></i> price: N $formatrent</span>
-	<span class=\"mini-detail\"><i class=\"black-icon\" id=\"min\"></i> Min Payment: $min_payment[$i]</span>
+	<span class=\"mini-detail\"><i class=\"black-icon\" id=\"price\"></i> Rent: N ".number_format($rentperannum)."/year</span>
+	<span class=\"mini-detail\"><i class=\"black-icon\" id=\"min\"></i> <strong>$min_payment[$i]</strong> payment required (N $firstpayment)</span>
 	<span class = \"mini-detail time\" align=\"left\"><i class=\"black-icon\" id=\"date\"></i>".timeuploaded($howlong[$i])."</span>
 	$clipbutton
 	<a  class=\"options\" id=\"report-property\" href=\"#\"><i class=\"black-icon\" id=\"eye\"></i>(0)views</a>
@@ -127,10 +131,12 @@ else if($ref=='profile_page'){
 	</div>";	
 }
 else{
-	$page = "<div id=\"$propertyId[$i]\"class=\"propertybox\">
+	$page = "<div id=\"$propertyId[$i]\" class=\"propertybox\">
 	<div class=\"property-heading\">
-	<span><a href=\"$root/properties/$propertydir[$i]\">$type[$i] at $location[$i]</a>$m</span>
+	<div class=\"detail\" >
+	<a href=\"$root/properties/$propertydir[$i]\">$type[$i] at $location[$i]</a>$m
 	<span class=\"status\"><i class=\"black-icon\" id=\"status\"></i> <span style=\"color:green\">Available</span></span>
+	</div>
 	</div>
 	<div class=\"image-info\">
 	<div id = \"$propertyId[$i]container\" class=\"imagebox\">
@@ -139,8 +145,8 @@ else{
 	</div>
 	
 	<div class=\"infobox\">
-	<span class=\"detail\"><i class=\"black-icon\" id=\"price\"></i> price: N $formatrent</span>
-	<span class=\"detail\"><i class=\"black-icon\" id=\"min\"></i> Minimum payment required: $min_payment[$i]</span>
+	<span class=\"detail\"><i class=\"black-icon\" id=\"price\"></i> Rent: N ".number_format($rentperannum)."/year</span>
+	<span class=\"detail\"><i class=\"black-icon\" id=\"min\"></i><strong>$min_payment[$i]</strong> payment required (N $firstpayment)</span>
 	<span class =\"description detail\"><i class=\"black-icon\" id=\"com\"></i> Description: </span><div class=\"comment\"><i>$description[$i]</i></div>
 	<span class=\"detail\">Managed by <a class=\"agent-link\" href=\"$root/$uploadby[$i]\">$Bname</a></span>
 	</div>

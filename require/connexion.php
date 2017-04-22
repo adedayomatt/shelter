@@ -4,7 +4,7 @@ $root = "http://192.168.173.1/shelter";
 if(isset($connect) and $connect==true){
 $dbhost = '127.0.0.1';
 $dbuser = 'adedayo';
-$dbpass = 'matthews';
+$dbpass = 'matthew';
 $db_connection = @mysql_connect($dbhost, $dbuser, $dbpass);
 if($db_connection) {
 mysql_select_db('shelter');
