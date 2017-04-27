@@ -8,49 +8,166 @@ hr{
 .main-content{
 	margin-left:10%;
 }
-#biz-logo-container{
-	float:left;
+#logo-and-name{
+	width:90%;
+	margin:auto;
 	margin-top:3%;
-	height:70px;
+	padding:2%;
+	height:175px;
+	box-shadow:2px 2px 2px 2px #DDD;
+}
+#biz-logo-container{
+   float:left;	
+	height:60px;
 	width:80px;
 	color:white;
-	font-size:100%;
 	text-align:center;
-	padding-top:10px;
+	padding-top:5px;
 	border-radius:10px;
 	background:purple;
-}	
-.right-side{
+}
+#about-biz{
+	float:left;
+	width:75%;
+	padding-left:5%;
+	
+}
+.follow-message-container{
+	width:100%;
+}
+
+#sendmessage-button,#follow-button,#editprofile-button{
+	margin-top:5%;
+	padding:2%;
+	border-radius:5px;
+	border:none;
+}
+#sendmessage-button{
+	width:50%;
+}
+#follow-button{
+	width:40%;
+	margin-top:7%;
+	padding:2%;
+	font-weight:bold;
+}
+#editprofile-button{
+	float:right;
+	margin-top:0px;;
+}
+.rhs{
 	width:30%;
 	float:left;
+	
+}
+.rhs-content{
+	margin-top:5%;
+}
+#stats-container,#other-agents-container{
 	box-shadow:2px 2px 2px 2px #DDD;
+}
+.rhs-headers{
+	display:inline-block;
+	background-color:white;
+	border-left:5px solid #6D0AAA;
+	text-align:center;
+	width:88%;
+	margin:auto;
+	padding:5%;
+	letter-spacing:10px;
+}
+li.agent-stats-list,li.other-agents-list{
+	color:grey;
+	display: block;
+	list-style-type:none;
+	padding:10px;
+	border-bottom:1px solid white;
+}
+li.other-agents-list:hover{
+	background-color:#DDD;
 }
 }
 @media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
 .right-side{
 	display:none;
 }	
-#biz-logo-container{
-	float:left;
+#logo-and-name{
+	width:90%;
+	margin:auto;
 	margin-top:3%;
-	margin-left:20px;
+	padding:2%;
+	height:450px;
+	box-shadow:3px 3px 3px 3px grey;
+	background-color:#DDD;
+}
+#biz-logo-container{
+   float:left;	
 	height:130px;
 	width:150px;
 	color:white;
-	font-size:100%;
 	text-align:center;
 	padding-top:20px;
 	border-radius:20px;
 	background:purple;
 }
-}
-
-
-
 #about-biz{
 	float:left;
+	width:75%;
 	padding-left:20px;
 }
+.follow-message-container{
+	width:100%;
+}
+
+#sendmessage-button,#follow-button,#editprofile-button{
+	margin-top:5%;
+	padding:2%;
+	border-radius:10px;
+	border:none;
+}
+#sendmessage-button{
+	width:50%;
+}
+#follow-button{
+	width:40%;
+	margin-top:7%;
+	padding:2%;
+	font-weight:bold;
+}
+#editprofile-button{
+	float:right;
+	margin-top:0px;;
+}
+
+.rhs{
+	width:90%;
+	padding:5%;
+	
+}
+.rhs-content{
+	padding-left:20px;
+	margin-top:5%;
+	
+}
+#stats-container,#other-agents-container{
+box-shadow:3px 3px 3px 3px #DDD;
+}
+li.agent-stats-list,li.other-agents-list{
+	color:grey;
+	display: block;
+	list-style-type:none;
+	padding:20px;
+	border-bottom:2px solid white;
+}
+li.other-agents-list:hover{
+	background-color:#DDD;
+}
+
+}
+
+
+
+
 .following-status{
 	width:100%;
 	
@@ -59,7 +176,6 @@ hr{
 	cursor:pointer;	
 }
 .profile-buttons{
-	padding:5px;
 	background-color:#6D0AAA;
 	color:white;	
 }
@@ -71,7 +187,9 @@ hr{
 	background-position: -72px 0px ;
 }
 .recent-uploads{
-	width:100%;
+	width:95%;
+	margin:auto;
+	box-shadow:3px 3px 3px 3px #DDD;
 }
 
 .editbutton{

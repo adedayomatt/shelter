@@ -1,7 +1,7 @@
 /*
 @media screen and (min-width:1025px)*/
 html{
-		font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+		font-family: Helvetica,Arial,sans-serif;
 		font-size: 16px;
 		font-weight:normal;
 		line-height:1.2em;
@@ -19,7 +19,9 @@ html{
 	padding:2%;
 	border-bottom:1px solid white;
 }
-
+ul.no-padding-ul{
+	padding:0px;
+}
 .suggestion-box-link:hover{
 	text-decoration:none;
 }
@@ -34,10 +36,29 @@ html{
 	font-family:arial;
 	background-color: #6D0AAA;
 	color:white;
+	font-size:100%;
 }
 .show-more-link:hover{
 	background-color:grey;
 text-decoration:none;
+}
+.white-icon{
+	display: inline-block;
+width: 24px;
+height: 14px;
+line-height: 14px;
+margin-top:1px;
+vertical-align: text-top;
+	background-image:url("../resrc/white-icons.png");
+}
+.black-icon{
+display: inline-block;
+width: 24px;
+height: 14px;
+line-height: 14px;
+margin-top:1px;
+vertical-align: text-top;
+	background-image:url("../resrc/black-icons.png");
 }
 @media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
 		body{
@@ -47,10 +68,19 @@ text-decoration:none;
 	body{
 	font-size:250%;
 		
-		}		
+		}
+input,label,select,legend{
+	font-size:130%;
+}
+input[type=text],input[type=password],input[type=email]{
+	padding:3%;
+	
+}	
+
 		input:focus{
 			font-size:180%;
 		}
+		
 	div.sidebar{
 		display:none;
 	font-size:90%;		
@@ -60,12 +90,16 @@ text-decoration:none;
 	}
 	div.main-content{
 	width:100%;
+	font-size:100%;
 }
 div.content-before-footer{
 	min-height:1200px;
 }
 .follow-button,.unfollow-button{
 	width:300px;
+}
+.black-icon,.white-icon{
+	display:none;
 }
 }
 @media only screen and (min-device-width: 300px) and (max-device-width: 1000px) and (orientation: landscape){
@@ -81,6 +115,9 @@ div.content-before-footer{
 	body,input,button{
 		font-size:90%;	
 	}
+	input[type=text],input[type=password],input[type=email]{
+	padding:2%;
+}
 	.sidebar{
 		font-size:80%;
 	}
@@ -139,29 +176,27 @@ a{
 a:hover{
 	text-decoration:underline;
 }
-.white-icon{
-	display: inline-block;
-width: 24px;
-height: 14px;
-line-height: 14px;
-margin-top:1px;
-vertical-align: text-top;
-	background-image:url("../resrc/white-icons.png");
+a.list-link{
+		text-decoration:none;
+		color:inherit;
+	}
+a.list-link:hover{
+	text-decoration:none;
 }
-.black-icon{
-display: inline-block;
-width: 24px;
-height: 14px;
-line-height: 14px;
-margin-top:1px;
-vertical-align: text-top;
-	background-image:url("../resrc/black-icons.png");
+.container-headers{
+	display:inline-block;
+	background-color:white;
+	border-left:5px solid #6D0AAA;
+	text-align:center;
+	width:88%;
+	margin:auto;
+	padding:5%;
+	letter-spacing:10px;
 }
 .follow-button,.unfollow-button{
 	cursor:pointer;
 	margin-top:5px;
 	text-align:center;
-	float:right;
 	margin-right:5px;
 	border:1px solid grey;
 }

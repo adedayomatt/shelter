@@ -61,7 +61,7 @@ while($i < $count){
 //signifies if matches for CTA
 if(isset($rqtype) && isset($rqpricemax) && isset($rqlocation)){
 	if(in_array($propertyId[$i],$CTAmatches)){
-	$m="<i class=\"black-icon\" style=\"background-position:-72px -144px\"></i><i style=\"color:blue\"></i>";
+	$m="<span class=\"black-icon\" style=\"background-position:-72px -144px\"></span>";
 	}
 	else{
 	$m='';	
@@ -82,7 +82,7 @@ else{
 	$rentperannum = $rent[$i];
 	$OneAndHalf =  $rentperannum + ($rentperannum/2);
 	$TwoYears = $rentperannum*2;
-	$firstpayment = ($min_payment[$i] == '1 year' ? number_format($rentperannum) : ($min_payment[$i] == '1 year, 6 Months' ? number_format($OneAndHalf) : ($min_payment[$i] == '2 years' ? number_format($TwoYears) : '')));
+	$firstpayment = ($min_payment[$i] == '1 year' ? number_format($rentperannum) : ($min_payment[$i] == '1 year, 6 months' ? number_format($OneAndHalf) : ($min_payment[$i] == '2 years' ? number_format($TwoYears) : '')));
 	
 	/* I'll need when i want make my image animation in js
 	<input id=\"$propertyId[$i]hidden01\" type=\"text\" value=\"".checkimage($imageurl,$propertyId[$i]."_01.png")."\"  />
@@ -93,10 +93,10 @@ else{
 	//main box divided into two >>image:info=50:50
 	
 	if($status==9){
-	$clipbutton = "<a  class=\"options\"  href=\"$root/cta/c.php?p=$propertyId[$i]&cb=$ctaid&ref=$ref\" id=\"$propertyId[$i]clipbutton\" onclick=\"makeclip('$propertyId[$i]clipbutton','$ctaid','$ref')\"><i class=\"black-icon\" id=\"like\"></i>".clip($propertyId[$i],$ctaid)."</a>";
+	$clipbutton = "<a  class=\"options\"  href=\"$root/cta/c.php?p=$propertyId[$i]&cb=$ctaid&ref=$ref\" id=\"$propertyId[$i]clipbutton\" onclick=\"makeclip('$propertyId[$i]clipbutton','$ctaid','$ref')\"><span class=\"black-icon clip-icon\"></span>".clip($propertyId[$i],$ctaid)."</a>";
 	}
 else {
-	$clipbutton = "<a class=\"options disabled\"  href=\"$root/cta/checkin.php?_rdr=1\"><i class=\"black-icon\" id=\"like\"></i>clip</a>";
+	$clipbutton = "<a class=\"options disabled\"  href=\"$root/cta/checkin.php?_rdr=1\"><span class=\"black-icon clip-icon\"></span>clip</a>";
 	
 }
 	
@@ -108,11 +108,13 @@ if($ref=='search_page'){
 	</div>
 	<div class=\"mini-info\">
 	<span class=\"mini-detail\"><a href=\"$root/properties/$propertydir[$i]\">$type[$i] at $location[$i]</a>$m</span>
-	<span class=\"mini-detail\"><i class=\"black-icon\" id=\"price\"></i> Rent: N ".number_format($rentperannum)."/year</span>
-	<span class=\"mini-detail\"><i class=\"black-icon\" id=\"min\"></i><strong>$min_payment[$i]</strong> payment required (N $firstpayment)</span>
-	<span class = \"mini-detail time\" align=\"left\"><i class=\"black-icon\" id=\"date\"></i>".timeuploaded($howlong[$i])."</span>
+	<span class=\"mini-detail\"><span class=\"black-icon price-icon\"></span> Rent: N ".number_format($rentperannum)."/year</span>
+	<span class=\"mini-detail\"><span class=\"black-icon min-payment-icon\"></span><strong>$min_payment[$i]</strong> payment required (N $firstpayment)</span>
+	<span class = \"mini-detail time\" align=\"left\"><span class=\"black-icon time-icon\"></span>".timeuploaded($howlong[$i])."</span>
 	</div>
-	</div>";	
+	</div>";
+		$advertimage1 = "../resrc/image/advert1.jpeg";
+		$advertimage2 = "../resrc/image/advert2.jpeg";
 }
 else if($ref=='profile_page'){
 	$page = "
@@ -122,20 +124,22 @@ else if($ref=='profile_page'){
 	</div>
 	<div class=\"mini-info\">
 	<span class=\"mini-detail\"><a href=\"$root/properties/$propertydir[$i]\">$type[$i] at $location[$i]</a>$m</span>
-	<span class=\"mini-detail\"><i class=\"black-icon\" id=\"price\"></i> Rent: N ".number_format($rentperannum)."/year</span>
-	<span class=\"mini-detail\"><i class=\"black-icon\" id=\"min\"></i> <strong>$min_payment[$i]</strong> payment required (N $firstpayment)</span>
-	<span class = \"mini-detail time\" align=\"left\"><i class=\"black-icon\" id=\"date\"></i>".timeuploaded($howlong[$i])."</span>
+	<span class=\"mini-detail\"><span class=\"black-icon price-icon\" ></span> Rent: N ".number_format($rentperannum)."/year</span>
+	<span class=\"mini-detail\"><span class=\"black-icon min-payment-icon\"></span> <strong>$min_payment[$i]</strong> payment required (N $firstpayment)</span>
+	<span class = \"mini-detail time\" align=\"left\"><span class=\"black-icon time-icon\"></span>".timeuploaded($howlong[$i])."</span>
 	$clipbutton
-	<a  class=\"options\" id=\"report-property\" href=\"#\"><i class=\"black-icon\" id=\"eye\"></i>(0)views</a>
+	<a  class=\"options\" href=\"#\"><span class=\"black-icon eye-icon\"></span>(0)views</a>
 	</div>
 	</div>";	
+	$advertimage1 = "../resrc/image/advert1.jpeg";
+		$advertimage2 = "../resrc/image/advert2.jpeg";
 }
 else{
 	$page = "<div id=\"$propertyId[$i]\" class=\"propertybox\">
 	<div class=\"property-heading\">
 	<div class=\"detail\" >
-	<a href=\"$root/properties/$propertydir[$i]\">$type[$i] at $location[$i]</a>$m
-	<span class=\"status\"><i class=\"black-icon\" id=\"status\"></i> <span style=\"color:green\">Available</span></span>
+	<a href=\"$root/properties/$propertydir[$i]\">$type[$i] at $location[$i]</a>$m<br/>
+	<span class=\"status\"><span class=\"black-icon status-icon\"></span> <span style=\"color:green\">Available</span></span>
 	</div>
 	</div>
 	<div class=\"image-info\">
@@ -145,26 +149,35 @@ else{
 	</div>
 	
 	<div class=\"infobox\">
-	<span class=\"detail\"><i class=\"black-icon\" id=\"price\"></i> Rent: N ".number_format($rentperannum)."/year</span>
-	<span class=\"detail\"><i class=\"black-icon\" id=\"min\"></i><strong>$min_payment[$i]</strong> payment required (N $firstpayment)</span>
-	<span class =\"description detail\"><i class=\"black-icon\" id=\"com\"></i> Description: </span><div class=\"comment\"><i>$description[$i]</i></div>
+	<span class=\"detail\"><span class=\"black-icon price-icon\"></span> Rent: N ".number_format($rentperannum)."/year</span>
+	<span class=\"detail\"><span class=\"black-icon min-payment-icon\"></span><strong>$min_payment[$i]</strong> payment required (N $firstpayment)</span>
+	<span class =\"description detail\"><span class=\"black-icon comment-icon\"></span> Description: </span><div class=\"comment\"><i>$description[$i]</i></div>
 	<span class=\"detail\">Managed by <a class=\"agent-link\" href=\"$root/$uploadby[$i]\">$Bname</a></span>
 	</div>
-	<span class = \"detail time\" align=\"left\"><i class=\"black-icon\" id=\"date\"></i>".timeuploaded($howlong[$i])."</span>
+	<span class = \"detail time\" align=\"left\"><span class=\"black-icon time-icon\"></span>".timeuploaded($howlong[$i])."</span>
 	</div>";
 
 //the like pane
 	$page .= "<div class=\"like-pane\">
 	<hr/>
 		$clipbutton
-		<a  class=\"options\" id=\"report-property\" href=\"$root/properties/$propertydir[$i]\"><i class=\"black-icon\" id=\"see-more\"></i>see details</a>
-		<div class=\"agent-contacts-box\" id=\"\">$Bname<ul><li>$officeNo</li><li>$PhoneNo</li><li>$altPhoneNo</li></ul></div>
-		<a  class=\"options\" id=\"agent-contacts\"><i class=\"black-icon\" id=\"contact-agent\"></i>Agent</a>
-		<a  class=\"options\" id=\"report-property\" href=\"#\"><i class=\"black-icon\" id=\"eye\"></i>(0)views</a>
+		<a  class=\"options report-icon\" href=\"$root/properties/$propertydir[$i]\"><span class=\"black-icon see-more-icon\"></span>see details</a>
+		<div class=\"agent-contacts-box\">$Bname<ul><li>$officeNo</li><li>$PhoneNo</li><li>$altPhoneNo</li></ul></div>
+		<a  class=\"options agent-contacts\"><span class=\"black-icon contact-icon\"></span>Agent</a>
+		<a  class=\"options report-property\" href=\"#\"><span class=\"black-icon eye-icon\"></span>(0)views</a>
 		</div>
 		</div>";
+		$advertimage1 = "resrc/image/advert1.jpeg";
+		$advertimage2 = "resrc/image/advert2.jpeg";
 }
 	print $page;
+	
+if($i == 1){
+	echo "<img class=\"in-between-advert\" src=\"$advertimage1\" />";
+}
+if($i == 5){
+	echo "<img class=\"in-between-advert\" src=\"$advertimage2\" />";
+}
 	$i++;
 }
 }

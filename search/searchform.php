@@ -80,6 +80,8 @@ function setLocation(location){
 	font-weight:bold;
 	color:white;
 	padding:2%;
+	padding-left:5%;
+	padding-right:5%;
 	box-shadow: 2px 2px 2px 2px grey;
 }
 #search-btn:hover{

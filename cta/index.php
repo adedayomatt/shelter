@@ -29,13 +29,29 @@ else if($status==0){
 	width:100%;
 	text-align:center;
 }	
+.rhs{
+	display:none;
+}
 }
 @media only screen and (min-device-width: 1000px){
 	#denial{
 	width:60%;
 	text-align:center;
 }
-
+.rhs{
+	width:40%;
+	float:left;
+	background-color:green;
+}
+.rhs-content{
+	position:fixed;
+	background-color:red;
+	height:80%;
+}
+#big-side-advert{
+	height:100%;
+	width:400px;
+}
 }
 
 </style>
@@ -94,7 +110,7 @@ if($executequery){
 $ref = "ctaPage";	
 	require('../require/propertyboxes.php');
 if(!empty($propertyId)){
-	echo "<a style=\"margin-left:80%\" href =\"?src=matches&next=$end\">show more<a/>";	
+	echo "<a class=\"show-more-link\" href =\"?src=matches&next=$end\">show more >></a>";	
 }
 else{
 if($start==0){
@@ -160,6 +176,13 @@ require('../require/propertyboxes.php');
 mysql_close($db_connection);
 }
 ?>
+</div>
+
+<div class="rhs">
+<div class="rhs-content">
+<img src="../resrc/image/advert2.jpeg" id="big-side-advert"/>
+</div>
+
 </div>
 </body>
 </html>

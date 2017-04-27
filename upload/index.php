@@ -171,7 +171,7 @@ else{
 </select></label><br/><br/>
 <?php?>
 <label for="rent">Rent N </label><input name="rent" type="text" placeholder="Actual rent"/> per annum<br/><br/>
-<label for="duration">Minimum payment required </label><input name="min_payment" type="radio" value="1 Year"/>1 year <input name="min_payment" type="radio" value="1 Year, 6 Months"/>1Year, 6 Months <input name="min_payment" type="radio" value="2 years"/>2 Years<br/><br/>
+<label for="duration">Minimum payment required </label><input name="min_payment" type="radio" value="1 Year"/>1 year <input name="min_payment" type="radio" value="1 year, 6 months"/>1Year, 6 Months <input name="min_payment" type="radio" value="2 years"/>2 Years<br/><br/>
 <label for="location">Location </label><input name="location" type="text" size="50" placeholder="Address of the property"/><br/><br/>
 </fieldset>
 <br/>

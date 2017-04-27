@@ -42,7 +42,7 @@ $ref="search_page";
 require("../require/propertyboxes.php");
 
 if(!empty($propertyId)){
-echo "<a class=\"show-more-link\" href =\"?type=$propertytype&max=$maxprice&location=$loc&next=$end\" >show more results >></a>";
+echo "<p> showing $x - $y of $totalFound found results<a class=\"show-more-link\" href =\"?type=$propertytype&max=$maxprice&location=$loc&next=$y\" >show more results >></a> </p>";
 }
 
 //if no match is found for the search, get related results
@@ -55,7 +55,8 @@ else if($start>0){
 	}
 
 	
-echo "<h4>Show other results on</h4> <ul>";
+echo "<div>
+	<h4>Show other results on</h4> <ul>";
 	if(isset($_GET['type']) && !empty($_GET['type']) && $_GET['type'] != "All types" && $_GET['type'] != 'all')
 	{echo "<li><a href=\"?type=".$_GET['type']."&max=0&location=everywhere\">".$_GET['type']."</a></li>";}
 
@@ -65,7 +66,8 @@ echo "<h4>Show other results on</h4> <ul>";
 	if(isset($_GET['location'])&& !empty($_GET['location']) && $_GET['location'] != "everywhere")
 	{echo "<li><a href=\"?type=all&max=0&location=".$_GET['location']."\">Properties around ".$_GET['location']."</a></li>";}
 
-	echo "</ul>";
+	echo "</ul>
+	</div>";
 	}
 		
 }
@@ -79,7 +81,7 @@ echo "<h4>Show other results on</h4> <ul>";
 <div class="related-results">
 <?php
 if(isset($_GET['type']) || isset($_GET['max']) || isset($_GET['location'])){
-	echo "<h3 align=\"center\">Related Results</h3>";
+	echo "<h4 class=\"container-headers\" align=\"center\">Related Results</h4>";
 	$IDsuggest = array();
 	$typesuggest = array();
 	$locationsuggest = array();

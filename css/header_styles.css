@@ -31,9 +31,11 @@ div#menus{
 }
 #top-nav-bar-content-on-scroll-content{
 	display:block;
+	overflow-x:scroll;
 }
 #mobile-head-search-container{
 	display:none;
+	
 }
 }
 @media only screen and (min-device-width: 1000px){

@@ -17,7 +17,6 @@ if(sidebar.style.display != 'block'){
 	sidebar.style.width = '75%';
 	sidebar.style.marginTop = '0px';
 	sidebar.style.overflow = 'scroll';
-//	body.style.opacity = '';
 	menu.innerHTML = '&times hide';
 	sidebar.focus();
 	hangingHead.style.display = 'none';

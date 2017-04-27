@@ -43,25 +43,15 @@ xmlhttp.send();
 function changeStuffs(response){
 	if(response == 'positive'){
 		button.className = 'unfollow-button';
-	button.innerHTML = "<i class=\"white-icon unfollow-icon\"></i> unfollow"
-	document.getElementById('following-status').innerHTML = "you are now following "+following;
+	button.innerHTML = "<span class=\"white-icon unfollow-icon\"></span> unfollow";
+	//document.getElementById('following-status').innerHTML = "you are now following "+following;
 	}
 	else if(response == 'negative'){
 		button.className = 'follow-button';
-	button.innerHTML = "<i class=\"black-icon follow-icon\"></i> follow"
-	document.getElementById('following-status').innerHTML = "you no longer follow "+following;
+	button.innerHTML = "<span class=\"black-icon follow-icon\"></span> follow";
+	//document.getElementById('following-status').innerHTML = "you no longer follow "+following;
 	}
 }
-
-
-
-
-
-
-
-
-
-
 
 
 }

@@ -9,7 +9,6 @@
 </script>
 <?php 
 $pagetitle = 'Home';
-//this $reference_page is needed in the header to specify if script should get further info
 $connect = true;
 $getuserName = true;
 require("require/header.php");
@@ -20,26 +19,26 @@ require("require/header.php");
 </header>
 
 <body class="no-pic-background">
-<div class="">
 <!--Leftmost side begins-->
 <?php require('require/sidebar.php'); ?>
 <!--Leftmost side ends-->
-
-<!--<div class= "search_area">
-<div class="short-note"><p><b>Shelter.com is a platform that takes advantage of technology to ease your troubles in finding properties to rent or buy anywhere in Nigeria...</b><a href="about">learn more</a></p></div>
-<p>You can search for property using the search preference</p>
-</div>-->
+<?php
+//This is where the main content begin, only this div element would be visible in mobiles
+?>
 <div class="recent-uploads-container main-content" id="linear-layout-content">
 
 <div id="top-nav-bar-content-on-scroll">
 
 <div id="top-nav-bar-content-on-scroll-content">
-
+<div>
 <button class="on-scrolltop-button" id="toggle-search-agent-container-button" onclick="showSearchAgent()">search agent</button>
 <a href="search"><button class="on-scrolltop-button">search property</button></a>
 <?php echo ($status==9 ? "<a href=\"cta\"><button class=\"on-scrolltop-button\">$ctaname</button> </a>" :
 			($status==1 ? "<a href=\"$profile_name\"><button class=\"on-scrolltop-button\">".substr($Business_Name,0,12)."...</button> </a>": "<a style=\"color:white\" href=\"cta/checkin.php#create\"><button class=\"on-scrolltop-button\">create CTA</button></a>" ) )?>
-
+<!--
+<button class="on-scrolltop-button" title = "Refresh Page" value="refresh" onclick="javascript:location.reload()"><i class="white-icon" style="background-position:-216px -24px;"></i></button>
+-->
+</div>
 <div id="mobile-head-search-container">
 <input onkeyup="getAgents(this.value,'agents-snipet-search-input-mobile','suggested-agents-search-container-mobile','suggested-agents-search-list-mobile')" class="agents-snipet-search-input" id="agents-snipet-search-input-mobile" type="text" placeholder="search for an agent" maxlength="50"/>
 <a href="agents" style="margin-left:60%;">view all agents</a>
@@ -63,32 +62,31 @@ require("require/header.php");
 	}
 	*/
 ?>
-<button type="button" title = "Refresh Page" value="refresh" onclick="javascript:location.reload()" style="border:none; cursor:pointer; background-color:inherit; display:inline; float:right;"><i style="display:inline-block;width:14px;height:14px;background-image:url('resrc/black-icons.png');background-position:-216px -24px;"></i>Refresh</button>
 <form style = "margin-left:20px; font-weight:normal"> <label for="filter" >Filter recent uploads by location</label>
 <select  name="filter">
 <option value="all">Everywhere</option>
 <option value="Ibadan">Ibadan</option>
 <option value="Abeokuta">Abeokuta</option>
 </select>
+<!--
 <input type="submit" value="Filter" style="background-color:#6D0AAA; color:white; cursor:pointer; border:none"/>
+-->
 </form>
 <div class="content-before-footer">
 <?php
 //get some properties from the database
-$max = 4;
+$max = 8;
 if(isset($_GET['next']) && $_GET['next']>0){
 	$start = $_GET['next'];
-	$end = $_GET['next'] + $max;
 }
  else{
 	 $start = 0;
-	 $end = $max;
  }
  $x = $start+1;
  $y = $start;
  
  $totalproperties = mysql_num_rows(mysql_query("SELECT property_ID FROM properties"));
- $fetchproperties = mysql_query("SELECT property_ID,directory,type,location,min_payment,bath,toilet,rent,description,uploadby,date_uploaded,timestamp FROM properties ORDER BY date_uploaded DESC LIMIT $start,$end");
+ $fetchproperties = mysql_query("SELECT property_ID,directory,type,location,min_payment,bath,toilet,rent,description,uploadby,date_uploaded,timestamp FROM properties ORDER BY date_uploaded DESC LIMIT $start,$max");
  if($fetchproperties){
 	$count = 0;
 	while($property = mysql_fetch_array($fetchproperties,MYSQL_ASSOC)){
@@ -113,7 +111,7 @@ if(isset($_GET['next']) && $_GET['next']>0){
 $ref="home_page";
 require("require/propertyboxes.php");	
 if(!empty($propertyId)){
-	echo "<p>showing $x - $y of $totalproperties <a class=\"show-more-link\" href=\"?next=$end\" >show more >></a></p>";
+	echo "<p>showing $x - $y of $totalproperties <a class=\"show-more-link\" href=\"?next=$y\" >show more >></a></p>";
 }
 else{
 if($start==0){
@@ -132,8 +130,6 @@ else{
 	we regret any inconvience this might bring you </div>";
 			}
 
-
-
 	?>
 </div>
 <div>
@@ -141,7 +137,9 @@ else{
  ?>
 </div>
 </div>
-
+<?php 
+//side 3 begins here
+ ?>
 <div class="agents-snipet" id="agents-snipet-top">
 <div id="front-image">
 
@@ -191,14 +189,14 @@ else{
 	$f = 'follow-button';
 	$ficon = 'black-icon follow-icon';
 		}
-echo "<button class=\"$f\" id=\"$buttonid\" onclick=\"follow('$buttonid','$user','$userid','$target','$followtype')\" ><i class=\"$ficon\"></i> $text</button></li>";
+echo "<button style=\"float:right\" class=\"$f\" id=\"$buttonid\" onclick=\"follow('$buttonid','$user','$userid','$target','$followtype')\" ><i class=\"$ficon\"></i> $text</button></li>";
 	}
 //if it was a visitor
 else{
 	$text = 'follow';
 	$f = 'follow-button';
 	$ficon = 'black-icon follow-icon';
-echo "<a href=\"$root/cta/checkin.php?_rdr=1\"><button class=\"$f\" ><i class=\"$ficon\"></i>  $text</button></li>";
+echo "<a href=\"$root/cta/checkin.php?_rdr=1\"><button style=\"float:right\" class=\"$f\" ><i class=\"$ficon\"></i>  $text</button></li>";
 	
 }
 	}
@@ -216,6 +214,5 @@ mysql_close($db_connection);
 <a style="float:right;" href="agents">see all agents>></a>
 </div>
 
-</div>
 </body>
 </html>

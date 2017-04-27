@@ -11,11 +11,17 @@
 	margin:auto;
 }
 fieldset{
-	width:80%;
-	margin:auto;
-	padding:5%;
+	width:90%;
 	border-radius:5px;
 	margin-top:50px;
+}
+
+#checkin-button,#create-button{
+	border-radius:10px;
+}
+#denial{
+	width:90%;
+	text-align:center;
 }
 }
 @media only screen and (min-device-width: 1000px){
@@ -29,21 +35,23 @@ fieldset{
 	padding:5%;
 	border-radius:5px;
 }
+#checkin-button,#create-button{
+	border-radius:5px;
 }
-
-
 #denial{
 	width:50%;
 	text-align:center;
 }
+}
+
 #prompt-container{
 	background-color:#00EEEE;
 }
 #prompt-icon{
 	background-position: 0px -120px;
 }
-#checkin,#createnew{
-	padding:10%;
+#checkin-container,#createnew-container{
+	padding:5%;
 	background-color:white;
 	margin-top:5px;
 	box-shadow: 1px 1px 1px 1px grey;
@@ -52,7 +60,6 @@ fieldset{
 
 legend{
 	font-size:120%;
-	color:grey;	
 }
 .checkin-input,.create-new-input{
 	display:block;
@@ -60,15 +67,16 @@ legend{
 	padding:3%;
 }
 #checkin-button,#create-button{
+	width:100%;
+	margin:auto;
 	padding:5%;
 	cursor:pointer;
 	background-color:#6D0AAA;
 	color:white;
 	letter-spacing:2px;
 	border:none;
-	border-radius:5px;
 	box-shadow: 2px 2px 2px 2px grey;
-	font-size:110%;
+	font-size:120%;
 	font-weight:bold;
 	font-family:san-serif;
 }
@@ -80,9 +88,7 @@ legend{
 	color:#6D0AAA;
 	border:2px solid #6D0AAA;
 }
-#create-button{
-	float:right;
-}
+
 .error-flags{
 	color:red;
 }
@@ -115,7 +121,7 @@ if(isset($_POST['checkin'])){
 //if either or both of the name and password field is empty
 if(empty($_POST['checkinName']) || empty($_POST['checkinPassword']) ){
 	$checkinReport = "<h3 class=\"error-flags\"><span class=\"black-icon\" id=\"error-icon\"></span> Fields Missing!</h3>
-						Please input your name/phone number and password";
+						<p>Please input your name/phone number and password</p>";
 }
 //if either or both of the name and password field is not empty
 else{
@@ -153,7 +159,7 @@ if($getCTAquery && mysql_num_rows($getCTAquery)==1){
 //if no match is found for the account trying to be logged in
 	else{
 	$checkinReport = "<h3 class=\"error-flags\"><span class=\"black-icon\" id=\"error-icon\"></span> Checkin Failed!</h3>
-						Incorrect name/phone number and password, check your input or <a href=\"#createnew\">create a new CTA</a>";
+						<p>Incorrect name/phone number and password, check your input or <a href=\"#createnew\">create a new CTA</a></p>";
 	}
 	
 		}	
@@ -166,7 +172,7 @@ if(isset($_POST['create'])){
 //if some necessary fields are empty
 	if(empty($_POST['newname']) || !is_numeric($_POST['newphone']) || empty($_POST['newmail']) || empty($_POST['newpass1']) || empty($_POST['newpass2'])){
 		$createCTAReport = "<h3 class=\"error-flags\"><span class=\"black-icon\" id=\"error-icon\"></span> Fields Missing!</h3>
-						Some fields are either empty or not filled correctly<br/>please check your input and try again";
+						<p>Some fields are either empty or not filled correctly. Please check your input and try again</p>";
 						$success = 0;
 	}
 //if necessary fields are not empty
@@ -187,26 +193,27 @@ if(mysql_num_rows(mysql_query("SELECT * FROM cta WHERE name='$ctaname'"))==0){
 //if query is correct
 if($createnewCTA){
 	mysql_query("INSERT INTO notifications (notificationid,subject,subjecttrace,receiver,action,status,time) VALUE ('".uniqid('CTAcreate')."','$ctaname','$ctaid','$ctaname','CTA created','unseen',".time().")");
-			$createCTAReport = "<h3>CTA created successfully</h3>You can now request your property with preferences and get notifications when they are available<br/>
-			<a href=\"#checkin\">checkin now</a> to explore!";
+			$createCTAReport = "<h3>CTA created successfully</h3>
+			<p>You can now request your property with preferences and get notifications when they are available
+			<a href=\"#checkin\">checkin now</a> to explore!</p>";
 		$success = 1;
 }
 else{
 	$createCTAReport = "<h3 class=\"error-flags\"><span class=\"black-icon\" id=\"error-icon\"></span> Failed!</h3>
-							CTA could not be created, please try again later";
+							<p>CTA could not be created, please try again later</p>";
 		$success = 0;
 		}	
 	}
 else{
 	$createCTAReport = "<h3 class=\"error-flags\"><span class=\"black-icon\" id=\"error-icon\"></span> CTA name already exist!</h3>
-							Another user is using this name '$ctaname', please use another name for your CTA";
+							<p>Another user is using this name '$ctaname', please use another name for your CTA</p>";
 		$success = 0;
 	}
 }
 //if password do not match
 else{
 	$createCTAReport = "<h3 class=\"error-flags\"><span class=\"black-icon\" id=\"error-icon\"></span> Password Inconsistency!</h3>
-							passwords do not match";
+							<p>passwords do not match</p>";
 	$success = 0;
 }
 	
@@ -216,12 +223,12 @@ else{
 
 if($status==1){
 	$denialMessage = "<h3 class=\"error-flags\"><span class=\"black-icon\" id=\"error-icon\"></span> Access Denied!</h3>
-						You cannot use Client Temporary Account because you are currently logged in as <a href=\"$root/$profile_name\">$Business_Name</a> <br/>
-						<a href=\"../logout\">Logout</a> first";
+						<p>You cannot use Client Temporary Account because you are currently logged in as <a href=\"$root/$profile_name\">$Business_Name</a>
+						<a href=\"../logout\">Logout</a> first</p>";
 }
 else if($status==9){
 $denialMessage = "<h3><span class=\"black-icon\" id=\"error-icon\"></span> Already checked in!</h3>
-				A CTA is already checked in as <strong>$ctaname</strong><br/><a href=\"../logout\">checkout</a>";
+				<p>A CTA is already checked in as <strong>$ctaname</strong><br/><a href=\"../logout\">checkout</a></p>";
 }
 ?>
 </head>
@@ -240,7 +247,7 @@ if(!empty($checkinreminder) || $checkinreminder != ""){
 }
 ?>
 </div>
-<div id="checkin">
+<div id="checkin-container">
 <?php
 //if there is error while trying to checkin
 if(isset($checkinReport)){
@@ -257,8 +264,8 @@ if(isset($checkinReport)){
 </fieldset>
 </div>
 <h3 style="letter-spacing:3px; color:#6D0AAA">Don't Have a CTA? </h3>
-<span style="letter-spacing:3px; color:grey" >You can create a new Client Temporary Account(CTA) Now or you may want to <a href="">learn more</a> about CTA</span>
-<div id="createnew">
+<span style="line-height:150%;color:grey" >You can create a new Client Temporary Account(CTA) Now or you may want to <a href="">learn more</a> about CTA</span>
+<div id="createnew-container">
 <?php
 //if there is error while trying to create new CTA
 if(isset($createCTAReport) && $success == 0){
@@ -280,7 +287,7 @@ else if(isset($createCTAReport) && $success == 1){
 <label for="name">Password</label>
 <input class="create-new-input" name="newpass1" type="password" size="30" placeholder="choose password"/>
 <input class="create-new-input" name="newpass2" type="password" size="30" placeholder="Repeat password"/>
-I want to get notifications via<br/>
+<p>I want to get notifications via</p>
 <input class="checkbox" name="phone" type="checkbox"/><label for="phone">Phone</label><br/>
 <input class="checkbox" name="mail" type="checkbox"/><label for="mail">Email</label><br/>
 <input id="create-button" name="create"  type="submit"  value="create"/>

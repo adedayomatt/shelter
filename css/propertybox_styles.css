@@ -1,13 +1,14 @@
 /*
 @media screen and (min-width:1025px)*/
-.propertybox{
-	box-shadow:1px 5px 5px 0px grey;
-}
+
 @media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
 	.propertybox{
+	
+}
+.propertybox{
+	box-shadow:2px 2px 2px 2px grey;
 		margin:auto;
 		margin-bottom:15px;
-		font-size:100%;
 	}
 .imagebox{ 
 	height: 700px; 
@@ -27,7 +28,10 @@ a.options{
 	margin:0px;
 	margin-bottom:20px;
 }
-#agent-contacts{
+.options,.status{
+	display:inline-block;	
+}
+.agent-contacts{
 	display:none;
 }
 span.detail{
@@ -37,12 +41,12 @@ div.detail{
 	padding:2%;
 }
 .mini-propertybox{
+	font-size:100%;
 	margin-left:10px;
 	width:95%;
-	height:450px;
+	height:480px;
 	min-height:350px;
 	margin:auto;
-	box-shadow:2px 2px 2px 2px grey;
 	background-color:white;
 	margin-bottom:10px;
 }
@@ -61,9 +65,24 @@ div.detail{
 	display:block;
 	line-height:180%;
 }
+a.options{
+	border:3px solid grey;
+}
+
+.in-between-advert{
+	height:200px;
+	width:95%;
+	margin:2.5%;
+	margin-bottom:10px;
+	border-radius:10px;
+}
 }
 @media only screen and (min-device-width: 1000px){
+.propertybox,.mini-propertybox{	
+	font-size:100%;
+}
 .propertybox{
+	box-shadow:1px 5px 5px 0px grey;
 	margin:auto;
 		margin-bottom:10px;
 	}
@@ -87,7 +106,7 @@ a.options{
 .mini-propertybox{
 	margin-left:10px;
 	width:95%;
-	height:150px;
+	height:180px;
 	min-height:150px;
 	box-shadow:1px 1px 1px 1px grey;
 	background-color:white;
@@ -107,6 +126,20 @@ a.options{
 .mini-detail{
 	display:block;
 	line-height:200%;
+}
+.options,.status{
+	display:inline-block;	
+}
+a.options{
+	border:1px solid grey;
+}
+
+.in-between-advert{
+	height:100px;
+	width:95%;
+	margin:2.5%;
+	margin-bottom:5px;
+	border-radius:5px;
 }
 }
 	.propertybox{
@@ -128,7 +161,7 @@ a.options{
 }
 
 .status{
-	float:right; 
+	margin-left:70%;
 	}
 
 .bath-toilet-btn{
@@ -136,9 +169,6 @@ a.options{
 	border:0px;
 	border-left: 2px solid #6D0AAA;
 	margin-left:5px;
-}
-.infobox{
-	font-size:95%;
 }
 span.detail{
 	display:block;
@@ -157,46 +187,43 @@ background-color:white;
 	margin:auto;
 }
 
-#price{
+.price-icon{
 	background-position: -72px 112px;
 }
-#min{
+.min-payment-icon{
 	background-position: -120px 223px;
 }
-#com{
+.comment-icon{
 	background-position: -240px 675px;
 }
 .time{
 	color:grey;
 	font-size:80%;
 }
-#date{
+.time-icon{
 	background-position: -48px -24px;
 }
-#status{
+.status-icon{
 	background-position: -72px -96px;
 }
-#eye{
+.eye-icon{
 	background-position: -96px -120px;
 }
-#see-more{
+.see-more-icon{
 	background-position: -336px -96px;
 }
-#like{
+.clip-icon{
 	background-position: -96px 0px;
 }
-#report{
+.report-icon{
 	background-position: -24px -144px;
 }
 
-.options,.status{
-	display:inline-block;	
-}
+
 a.options{
 	cursor:pointer;
 	background-color:white;
 	color:grey;
-	border:1px solid grey;
 	text-align:center;
 	padding:2px;
 	margin-bottom:3px;
@@ -209,7 +236,7 @@ a.options:hover{
 	background-color:#EEEEEE;
 	text-decoration:none;
 }
-#contact-agent{
+.contact-icon{
 	background-position: -168px 0px;
 }
 .agent-contacts-box{
