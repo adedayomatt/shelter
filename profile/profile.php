@@ -63,9 +63,8 @@ $editprofile='';
 $followStatus = '';
 if($status==1 || $status==9){
 	//check if conversation has existed between the users 
-$possible1 = $myid.$key;
-$possible2 = $key.$myid;
-$mutual = mysql_query("SELECT conversationid FROM messagelinker WHERE (conversationid='$possible1' OR conversationid='$possible2')");
+$possible1 = $myid + $key;
+$mutual = mysql_query("SELECT conversationid FROM messagelinker WHERE (conversationid='$possible1')");
 //if conversation has exited before, get the conversationid and take as the token
 if(mysql_num_rows($mutual) ==1){
 	$x = mysql_fetch_array($mutual,MYSQL_ASSOC);
@@ -73,7 +72,7 @@ if(mysql_num_rows($mutual) ==1){
 }
 //if there exist any conversation before, create a conversation id
 else{
-	$token = $myid.$key;
+	$token = $myid + $key;
 }
 }
 //if an agent is logged in
@@ -93,12 +92,12 @@ case 1:
 	   $f = 'follow-button';
 	   $ficon = 'black-icon follow-icon';	
 		}
-	$sendmessage = "<a href=\"$root/messages/compose.php?cv=".$token."&i=$Business_Name&rcpt=$key\"><button class=\"profile-buttons\" id=\"sendmessage-button\"><i class=\"white-icon\" id=\"message-icon\"></i>send message</button></a>";
+	$sendmessage = "<a href=\"$root/messages/compose.php?cv=".$token."&i=$Business_Name&rcpt=$key\"><button class=\"profile-buttons\" id=\"sendmessage-button\"><i class=\"black-icon\" id=\"message-icon\"></i>send message</button></a>";
 	$followup = "<button class=\"$f\" id=\"follow-button\" onclick=\"follow('follow-button','$Business_Name','$profile_name','$BizName','A4A')\"><i class=\"$ficon\"></i>  $text</button>";
 	}
 	else{
 
-	$editprofile = "<a href=\"$root/manage/account.php\"><button class=\"profile-buttons\" id=\"editprofile-button\"><i class=\"white-icon\" id=\"edit-icon\"></i> Edit profile</button></a>";
+	$editprofile = "<a href=\"$root/manage/account.php\"><button class=\"profile-buttons\" id=\"editprofile-button\"><i class=\"black-icon\" id=\"edit-icon\"></i> Edit profile</button></a>";
 	}
 break;
 //if a client is logged in
@@ -116,12 +115,12 @@ if (checkfollow($ctaname,$BizName)=='positive'){
 	$ficon = 'black-icon follow-icon';	
 		}
 		
-$sendmessage = "<a href=\"$root/messages/compose.php?cv=".$token."&i=$ctaname&rcpt=$key\"><button class=\"profile-buttons\" id=\"sendmessage-button\"><span class=\"white-icon\" id=\"message-icon\"></span>send message</button></a>";
+$sendmessage = "<a href=\"$root/messages/compose.php?cv=".$token."&i=$ctaname&rcpt=$key\"><button class=\"profile-buttons\" id=\"sendmessage-button\"><span class=\"black-icon\" id=\"message-icon\"></span>send message</button></a>";
 	$followup = "<button class=\"$f\" id=\"follow-button\" onclick=\"follow('follow-button','$ctaname','$ctaid','$BizName','C4A')\"><span class=\"$ficon\"></span>  $text</button>";
 	break;
 //for visitors
 default:
-$sendmessage = "<a href=\"$root/cta/checkin.php?_rdr=1\"><button class=\"profile-buttons\" id=\"sendmessage-button\"><span class=\"white-icon\" id=\"message-icon\"></span>send message</button></a>";
+$sendmessage = "<a href=\"$root/cta/checkin.php?_rdr=1\"><button class=\"profile-buttons\" id=\"sendmessage-button\"><span class=\"black-icon\" id=\"message-icon\"></span>send message</button></a>";
 	$followup =  "<a href=\"$root/cta/checkin.php?_rdr=1\"><button class=\"follow-button\" id=\"follow-button\"><i class=\"black-icon follow-icon\"></i> follow</button></a>";
 	break;
 }
@@ -137,7 +136,7 @@ $sendmessage = "<a href=\"$root/cta/checkin.php?_rdr=1\"><button class=\"profile
 </div>
 <div id="about-biz">
 <?php
-echo $BizName;
+echo "<h3  id=\"bizname\" >$BizName</h3>";
 if($followStatus=='yes'){
 	//echo "<div class=\"following-status\" id=\"following-status\" style=\"font-weight:normal; font-size:80%;color:grey;\">you are currently following $BizName</div>
 	echo "<div class=\"follow-message-container\">".$followup.$sendmessage."</div>";
@@ -225,7 +224,7 @@ else{
 ?>
 </div>
 <div class="rhs">
-<div class="rhs-content">
+<div class="relative-rhs-content">
 
 <div id="stats-container">
 <h4 class="container-headers">STATS</h4>

@@ -1,20 +1,23 @@
 hr{
 	background-color:purple;
 }
+#bizname{
+	padding:0px;
+	margin:0px;
+}
 @media only screen and (min-device-width: 1000px){
 .sidebar{
-	display:none;
+	
 }
 .main-content{
-	margin-left:10%;
+
 }
+
 #logo-and-name{
 	width:90%;
 	margin:auto;
-	margin-top:3%;
 	padding:2%;
 	height:175px;
-	box-shadow:2px 2px 2px 2px #DDD;
 }
 #biz-logo-container{
    float:left;	
@@ -39,42 +42,33 @@ hr{
 #sendmessage-button,#follow-button,#editprofile-button{
 	margin-top:5%;
 	padding:2%;
+	border:1px solid #6D0AAA;
 	border-radius:5px;
-	border:none;
 }
 #sendmessage-button{
 	width:50%;
-}
+	background-color:white;
+	color:#6D0AAA;	
+	}
 #follow-button{
 	width:40%;
 	margin-top:7%;
 	padding:2%;
-	font-weight:bold;
 }
 #editprofile-button{
+	background-color:white;
+	color:#6D0AAA;	
 	float:right;
-	margin-top:0px;;
+	margin-top:0px;
 }
-.rhs{
-	width:30%;
-	float:left;
-	
+#sendmessage-button:hover,#follow-button:hover,#editprofile-button:hover{
+	box-shadow: 2px 2px 2px 2px #DDD;
 }
-.rhs-content{
+.fixed-rhs-content{
 	margin-top:5%;
 }
 #stats-container,#other-agents-container{
 	box-shadow:2px 2px 2px 2px #DDD;
-}
-.rhs-headers{
-	display:inline-block;
-	background-color:white;
-	border-left:5px solid #6D0AAA;
-	text-align:center;
-	width:88%;
-	margin:auto;
-	padding:5%;
-	letter-spacing:10px;
 }
 li.agent-stats-list,li.other-agents-list{
 	color:grey;
@@ -97,8 +91,7 @@ li.other-agents-list:hover{
 	margin-top:3%;
 	padding:2%;
 	height:450px;
-	box-shadow:3px 3px 3px 3px grey;
-	background-color:#DDD;
+
 }
 #biz-logo-container{
    float:left;	
@@ -122,33 +115,27 @@ li.other-agents-list:hover{
 #sendmessage-button,#follow-button,#editprofile-button{
 	margin-top:5%;
 	padding:2%;
+	border:1px solid #6D0AAA;
 	border-radius:10px;
-	border:none;
 }
 #sendmessage-button{
+	background-color:white;
+	color:#6D0AAA;	
 	width:50%;
 }
 #follow-button{
 	width:40%;
 	margin-top:7%;
 	padding:2%;
-	font-weight:bold;
 }
 #editprofile-button{
+	background-color:white;
+	color:#6D0AAA;	
 	float:right;
 	margin-top:0px;;
 }
 
-.rhs{
-	width:90%;
-	padding:5%;
-	
-}
-.rhs-content{
-	padding-left:20px;
-	margin-top:5%;
-	
-}
+
 #stats-container,#other-agents-container{
 box-shadow:3px 3px 3px 3px #DDD;
 }
@@ -176,8 +163,7 @@ li.other-agents-list:hover{
 	cursor:pointer;	
 }
 .profile-buttons{
-	background-color:#6D0AAA;
-	color:white;	
+	
 }
 
 #edit-icon{
@@ -197,7 +183,6 @@ li.other-agents-list:hover{
 	color:white;
 	border:0px;
 	cursor:pointer;
-	border-radius:15x 2px 15px 2px;
 }
 .editbutton:hover{
 	background-color:purple;

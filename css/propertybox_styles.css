@@ -18,10 +18,12 @@
 }	
 a.options{
 	height:70px;
-	padding-top:10px;
+	padding-top:20px;
 	width:220px;
 	margin-left:5px;
 	background-color:#DDD;
+	border:3px solid grey;
+	border-radius:10px;
 }
 .bath-toilet{
 	height:40px;
@@ -44,7 +46,7 @@ div.detail{
 	font-size:100%;
 	margin-left:10px;
 	width:95%;
-	height:480px;
+	height:550px;
 	min-height:350px;
 	margin:auto;
 	background-color:white;
@@ -52,7 +54,7 @@ div.detail{
 }
 .mini-image{
 	width:30%;
-	height:80%;
+	height:60%;
 	margin:15px;
 	float:left;
 }
@@ -65,12 +67,9 @@ div.detail{
 	display:block;
 	line-height:180%;
 }
-a.options{
-	border:3px solid grey;
-}
 
 .in-between-advert{
-	height:200px;
+	height:500px;
 	width:95%;
 	margin:2.5%;
 	margin-bottom:10px;
@@ -132,10 +131,11 @@ a.options{
 }
 a.options{
 	border:1px solid grey;
+	border-radius:5px;
 }
 
 .in-between-advert{
-	height:100px;
+	height:200px;
 	width:95%;
 	margin:2.5%;
 	margin-bottom:5px;
@@ -161,7 +161,14 @@ a.options{
 }
 
 .status{
+
 	margin-left:70%;
+	padding:1%; 
+	border:1px solid #6D0AAA; 
+	border-radius:5px;
+	margin-bottom:2px;
+	background-color:green;
+	font-weight:bold;
 	}
 
 .bath-toilet-btn{
@@ -174,7 +181,7 @@ span.detail{
 	display:block;
 }
 .comment{
-	color: blue;
+	color: #6D0AAA;
 	margin-left:30px;
 	margin-right:30px;
 	text-decoration:blink;
@@ -186,7 +193,13 @@ background-color:white;
 	width:99%;
 	margin:auto;
 }
+.rent-figure{
+	display:inline;
+	font-family:Georgia;
+	font-size:150%;
+	font-weight:bold;
 
+}
 .price-icon{
 	background-position: -72px 112px;
 }

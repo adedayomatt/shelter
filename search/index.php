@@ -1,4 +1,5 @@
 <html>
+<meta name="viewport" content="max-width=1000px,maximum-scale=0.35" />
 <link href="../css/general.css" type="text/css" rel="stylesheet" />
 <link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
 <link href="../css/searchresult_styles.css" type="text/css" rel="stylesheet" />

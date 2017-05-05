@@ -12,11 +12,11 @@ switch($status){
 	case 0:
 echo $hiddenTopMenu;
 echo "<div class=\"account-nav-container\">
-	<h4 align=\"center\" style=\"margin-bottom:0px; color:grey; \">Agents</h4>
+	<h4 align=\"center\" class=\"sidebar-headings\">Agents</h4>
 		<a href=\"$root/login\" class=\"account-nav-link\">Login</a>
 		<a href=\"$root/signup\" class=\"account-nav-link\">Sign up</a>
 		<hr/>
-	<h4 align=\"center\" style=\"display:block; color:grey; \">Client Temporary Account (CTA)</h4>
+	<h4 align=\"center\" class=\"sidebar-headings\">Client Temporary Account (CTA)</h4>
 		<a href=\"$root/cta/checkin.php?_rdr=0#checkin\" class=\"account-nav-link\">Checkin my CTA</a>
 		<a href=\"$root/cta/checkin.php?_rdr=0#createnew\" class=\"account-nav-link\">Create new CTA</a>
 		<a href=\"\" class=\"account-nav-link\">What is CTA?</a>
@@ -41,8 +41,20 @@ echo "<div class=\"account-nav-container\">
 break;
 case 9:
 echo $hiddenTopMenu;
+$ExpiryDate = date('D, d M Y ',$expiryTime);
+$BeforeExpiryTime = (int) (($expiryTime - time())/86400);
+
+
 echo "<div class=\"account-nav-container\">
 	<h4 class=\"username\">$ctaname</h4>
+	<div id=\"cta-status-container\">
+	<h4>Time Before Expiry</h4>
+	<p>$ExpiryDate</p>
+	<p>Remaining $BeforeExpiryTime days</p>
+	<a href=\"\" id=\"cta-renewal-link\">Renew</a>
+	<p>I have seen what i need <a href=\"\" style=\"color:red\">deactivate this CTA</a></p>
+	</div>
+	
 	<a href=\"$root/messages\" class=\"account-nav-link\" id=\"msgs\">($messages) Messages</a>
 	<a href=\"$root/cta/?src=matches\" class=\"account-nav-link\">($matchcounter) Matches</a>
 	<a href=\"$root/cta/?src=clipped\" class=\"account-nav-link\" id=\"clipstring\">($clipcounter) Clipped properties</a>
@@ -50,8 +62,7 @@ echo "<div class=\"account-nav-container\">
 	<a href=\"\" class=\"account-nav-link\">(0) Agents Suggestions</a>
 	<a href=\"$root/cta/request.php?p=$rqstatus\" class=\"account-nav-link\">Adjust request</a>
 	<a href=\"\" class=\"account-nav-link\">Change CTA details</a>
-	<a href=\"\" class=\"account-nav-link\">Check out</a>
-	<a href=\"\" class=\"account-nav-link\">Deactivate this CTA</a>	
+	<a href=\"$root/logout\" class=\"account-nav-link\">Check out</a>
 	<hr/>
 	</div>";
 break;

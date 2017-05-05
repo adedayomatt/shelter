@@ -23,10 +23,10 @@
 }
 	.top-nav-bar{
 		width:100%;
-		height:100px;
+		height:150px;
 	}
 
-div#menus{
+div#menus,#rhs-top-search-btn{
 	display:none;
 }
 #top-nav-bar-content-on-scroll-content{
@@ -34,8 +34,11 @@ div#menus{
 	overflow-x:scroll;
 }
 #mobile-head-search-container{
-	display:none;
+	display:none; /*This is an initial style in mobile, when scrolled, it would be displayed*/
 	
+}
+#desktop-search-container{
+	display:none;
 }
 }
 @media only screen and (min-device-width: 1000px){
@@ -45,6 +48,9 @@ div#menus{
 	#top-nav-bar-content{
 	position:fixed;
 	background-color:#6D0AAA;
+}
+#top-nav-bar-under{
+	display:block;
 }
 #templogo{
 	float:left;
@@ -64,8 +70,29 @@ div#menus{
 	padding-left:50px;
 	padding-right:50px;
 }
+#rhs-top-search-btn{
+	display:none;
+	float:right;
+	background-color:white;
+	color: #6D0AAA;
+	padding:10px;
+	padding-left:30px;
+	padding-right:30px;
+	margin-right:20px;
+	border:1px solid #6D0AAA;
+	border-radius:10px;
+	
+	
+}
 #top-nav-bar-content-on-scroll-content{
 display:none;
+}
+
+#desktop-search-container{
+	width:100%;
+	height:50px;
+	background-color:#6D0AAA;
+	color:white;
 }
 }
 #menuicon{
@@ -119,7 +146,6 @@ li.nav-menu{
 #top-nav-bar-content-on-scroll-content{
 	background-color:white;
 	color:#6D0AAA;
-	box-shadow:3px 3px 3px 3px grey;
 	padding:5px;
 margin:0px;	
 }

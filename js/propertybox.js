@@ -4,7 +4,7 @@ function makeclip(propertyclipbutton,clipper,ref){
 	var propertyid = propertyclipbutton.substring(0,propertyclipbutton.indexOf('clipbutton'));
 
 	var clipbutton = document.getElementById(propertyclipbutton);
-	clipbutton.innerHTML = "<li class=\"options\" ><i class=\"black-icon\" id=\"like\"></i>...</li>";
+	clipbutton.innerHTML = "<span class=\"black-icon clip-icon\"></span>...";
 //if the page is the homepage where the sidebar is...
 	if(ref=='home_page' || ref=='ctaPage'){
 	var sidebar = document.getElementById('clipstring');
@@ -42,36 +42,8 @@ function clip(){
 	if(xmlhttp.status==200){
 //if communication was successfull and response is gotten successfully
 if(xmlhttp.readyState == 4){
-
-if(xmlhttp.responseText.substring(0,2)=='cl'){
-	response = xmlhttp.responseText;
-	if(ref=='home_page' || ref=='ctaPage'){
-		sidebar.innerHTML = "(" + response.substring(response.indexOf('/')+1) + ")" + clipcounterstatement;
-	}
-clipbutton.innerHTML = "<li class=\"options\" id=\"clip-property\" ><i class=\"black-icon\" id=\"like\"></i>"+response.substring(0,response.indexOf('/'))+"</li>";
-
-}
-else if(xmlhttp.responseText.substring(0,2)=='un'){
-	response = xmlhttp.responseText;
-	if(ref=='home_page' || ref=='ctaPage'){
-		sidebar.innerHTML = "(" + response.substring(response.indexOf('/')+1) + ")" + clipcounterstatement;	
-	}
-clipbutton.innerHTML = "<li class=\"options\" id=\"clip-property\"><i class=\"black-icon\" id=\"like\"></i>"+response.substring(0,response.indexOf('/'))+"</li>";
-	}
-	
-else if(xmlhttp.responseText.substring(0,2) == 're'){
-	response = xmlhttp.responseText;
-	if(ref=='home_page' || ref=='ctaPage'){
-	sidebar.innerHTML = "(" + response.substring(response.indexOf('/')+1) + ")" + clipcounterstatement;
-	}
-	document.getElementById(propertyid).style.display = "none";
-	
-}
-
-}
-	else{
-		clipbutton.innerHTML = "<li class=\"options\" id=\"clip-property\"><i class=\"black-icon\" id=\"like\"></i>processing...</li>" ;
-	}
+	sync(xmlhttp.responseText);
+		}
 }
 	else if(xmlhttp.status==404){
 		alert("things did not go well:404!");
@@ -81,5 +53,30 @@ var url = "http://192.168.173.1/shelter/cta/c.php?p="+propertyid+"&cb="+clipper+
 xmlhttp.open("GET",url, true);
 xmlhttp.send();
   
+  }
+  
+  function sync(response){
+if(response.substring(0,2)=='cl'){
+	if(ref=='home_page' || ref=='ctaPage'){
+		sidebar.innerHTML = "(" + response.substring(response.indexOf('/')+1) + ")" + clipcounterstatement;
+	}
+clipbutton.innerHTML = "<span class=\"black-icon clip-icon\" ></span>"+response.substring(0,response.indexOf('/'));
+
+}
+else if(response.substring(0,2)=='un'){
+	if(ref=='home_page' || ref=='ctaPage'){
+		sidebar.innerHTML = "(" + response.substring(response.indexOf('/')+1) + ")" + clipcounterstatement;	
+	}
+clipbutton.innerHTML = "<span class=\"black-icon clip-icon\"></span>"+response.substring(0,response.indexOf('/'));
+	}
+	
+else if(response.substring(0,2) == 're'){
+	if(ref=='home_page' || ref=='ctaPage'){
+	sidebar.innerHTML = "(" + response.substring(response.indexOf('/')+1) + ")" + clipcounterstatement;
+	}
+	document.getElementById(propertyid).style.display = "none";
+	
+}
+
   }
 }

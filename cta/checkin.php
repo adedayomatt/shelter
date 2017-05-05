@@ -20,7 +20,7 @@ fieldset{
 	border-radius:10px;
 }
 #denial{
-	width:90%;
+	width:80%;
 	text-align:center;
 }
 }
@@ -45,7 +45,11 @@ fieldset{
 }
 
 #prompt-container{
-	background-color:#00EEEE;
+	font-size:120%;
+	background-color:#6D0AAA;
+	color:white;
+	border-radius:5px;
+	margin-bottom:10px;
 }
 #prompt-icon{
 	background-position: 0px -120px;
@@ -59,7 +63,11 @@ fieldset{
 }
 
 legend{
-	font-size:120%;
+	font-family:Georgia;
+	font-size:200%;
+	letter-spacing:2px;
+	font-weight:normal;
+	margin-bottom:10%;
 }
 .checkin-input,.create-new-input{
 	display:block;
@@ -91,6 +99,8 @@ legend{
 
 .error-flags{
 	color:red;
+	font-size:150%;
+	line-height:120%;
 }
 #error-container,#success-container{
 	width:80%;
@@ -111,7 +121,7 @@ $pagetitle = "CTA-checkin";
 $getuserName = true;
 $ref = "ctaPage";
 $connect = true;
-require('../require/header.php');
+require('../require/connexion.php');
 
 //if a visitor has attempted an action, and redirect to this page $_GET['_rdr'] would be set
 $checkinreminder =((isset($_GET['_rdr'])&&$_GET['_rdr']==1) ? "You need to checkin first or <a href=\"$root/login\">login</a> as an agent":'');
@@ -188,8 +198,10 @@ if($ctapass != null){
 $ctaid = time() - rand(1000,9999);
 //check if there is no account with this name
 if(mysql_num_rows(mysql_query("SELECT * FROM cta WHERE name='$ctaname'"))==0){
-	
-	$createnewCTA = @mysql_query("INSERT INTO cta (ctaid,name,phone,email,request,password,datecreated) VALUES('$ctaid','$ctaname',$ctaphone,'$ctamail',0,'$ctapass',NOW())");
+	$timeCreated = time();
+//add 30 days
+	$expiryTime = time() + 2592000;
+	$createnewCTA = @mysql_query("INSERT INTO cta (ctaid,name,phone,email,request,password,datecreated,timeCreated,expiryTime) VALUES('$ctaid','$ctaname',$ctaphone,'$ctamail',0,'$ctapass',NOW(),$timeCreated,$expiryTime)");
 //if query is correct
 if($createnewCTA){
 	mysql_query("INSERT INTO notifications (notificationid,subject,subjecttrace,receiver,action,status,time) VALUE ('".uniqid('CTAcreate')."','$ctaname','$ctaid','$ctaname','CTA created','unseen',".time().")");
@@ -221,18 +233,19 @@ else{
 }
 //CTA creation ends here
 
-if($status==1){
+if(isset($_COOKIE['name'])){
 	$denialMessage = "<h3 class=\"error-flags\"><span class=\"black-icon\" id=\"error-icon\"></span> Access Denied!</h3>
-						<p>You cannot use Client Temporary Account because you are currently logged in as <a href=\"$root/$profile_name\">$Business_Name</a>
+						<p>You cannot use Client Temporary Account because you are currently logged in as an agent
 						<a href=\"../logout\">Logout</a> first</p>";
 }
-else if($status==9){
-$denialMessage = "<h3><span class=\"black-icon\" id=\"error-icon\"></span> Already checked in!</h3>
-				<p>A CTA is already checked in as <strong>$ctaname</strong><br/><a href=\"../logout\">checkout</a></p>";
+else if(isset($_COOKIE['CTA'])){
+$denialMessage = "<h3 class=\"error-flags\"><span class=\"black-icon\" id=\"error-icon\"></span> Already checked in!</h3>
+				<p>A CTA is already checked in as <strong>".$_COOKIE['CTA']."</strong><br/><a href=\"../logout\">checkout</a></p>";
 }
 ?>
 </head>
-<body class="no-pic-background">
+<body class="mixedcolor-background">
+<h2 align="center" style="color:white;font-size:200%">Shelter</h2>
 <?php if(isset($denialMessage)){
 	echo "<div class=\"operation-report-container\" id=\"denial\">$denialMessage</div></body></html>";
 	exit();
@@ -241,14 +254,13 @@ $denialMessage = "<h3><span class=\"black-icon\" id=\"error-icon\"></span> Alrea
 <div class="all-content">
 <div id="introduction">
 <!--<p>Client Temporary Account (CTA) is account for clients who wish to get notifications on the availability of their requested</p>-->
+
+</div>
+<div id="checkin-container">
 <?php
 if(!empty($checkinreminder) || $checkinreminder != ""){
 	echo "<div class=\"operation-report-container\" id=\"prompt-container\" ><p><i class=\"white-icon\" id=\"prompt-icon\"></i> $checkinreminder</p></div>";
 }
-?>
-</div>
-<div id="checkin-container">
-<?php
 //if there is error while trying to checkin
 if(isset($checkinReport)){
 	echo "<div class=\"operation-report-container\" id=\"error-container\" >$checkinReport</div>";
@@ -263,8 +275,8 @@ if(isset($checkinReport)){
 </form>
 </fieldset>
 </div>
-<h3 style="letter-spacing:3px; color:#6D0AAA">Don't Have a CTA? </h3>
-<span style="line-height:150%;color:grey" >You can create a new Client Temporary Account(CTA) Now or you may want to <a href="">learn more</a> about CTA</span>
+<h3 style="letter-spacing:3px; font-size:200%">Don't Have a CTA? </h3>
+<span style="line-height:150%" >You can create a new Client Temporary Account(CTA) Now or you may want to <a href="">learn more</a> about CTA</span>
 <div id="createnew-container">
 <?php
 //if there is error while trying to create new CTA
@@ -295,6 +307,8 @@ else if(isset($createCTAReport) && $success == 1){
 </fieldset>
 </div>
 </div>
+
+
 </body>
 <?php mysql_close($db_connection) ?>
 </html>

@@ -6,20 +6,24 @@ window.onclick = function(event){
 	*/
 	}
 window.onscroll = function(event){
+	//alert(window.pageYOffset);
 	var ele = document.getElementById('agents-snipet-top');
 	var put = document.getElementById('agents-snipet-search');
 	var header = document.getElementById('top-nav-bar-content');
 	var headerUnder = document.getElementById('top-nav-bar-under');
+	var fixedhead = document.getElementById('fixed-head-after-scroll');
 	var headercontainer = document.getElementById('top-nav-bar-container');
 	var headerHeight = header.clientHeight;
-	 if(window.pageYOffset >= headerHeight){
-ele.style.marginTop = window.pageYOffset+'px';
-//header.style.display = 'none';
+	 if(window.pageYOffset >= headerHeight ){
+ele.style.marginTop = (window.pageYOffset - headerHeight)+'px';
+
+//In mobile
 document.getElementById('top-nav-bar-content-on-scroll').style.display = "block";
 document.getElementById('top-nav-bar-content-on-scroll').style.position = "fixed";
 
 }
 else{
+ele.style.marginTop = '0px';
 //headercontainer.style.display = 'block';
 document.getElementById('top-nav-bar-content-on-scroll').style.display = "none";
 document.getElementsByClassName('agents-snipet-search-input')[0].value="";
@@ -35,13 +39,14 @@ function showSearchAgent(){
 	var agentSearchContainer = document.getElementById('mobile-head-search-container');
 	if(agentSearchContainer.style.display != 'block'){
 		agentSearchContainer.style.display = 'block';
-		document.getElementById('toggle-search-agent-container-button').innerHTML ='&times Hide';
-		document.getElementById('toggle-search-agent-container-button').style.color ='red';
+		document.getElementById('toggle-search-agent-container-button').innerHTML ='&times';
+		document.getElementById('toggle-search-agent-container-button').style.fontSize ='200%';
 	}
 	else{
 		agentSearchContainer.style.display = 'none';
 		 document.getElementById('suggested-agents-search-container-mobile').style.display ='none';
 		 document.getElementById('toggle-search-agent-container-button').innerHTML ='search agent';
+		 document.getElementById('toggle-search-agent-container-button').style.fontSize ='80%';
 		 		document.getElementById('toggle-search-agent-container-button').style.color ='white';
 
 		

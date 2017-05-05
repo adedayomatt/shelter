@@ -54,9 +54,9 @@ else{
 }
 ?>
 
-<body class="special-background">
+<body class="mixedcolor-background">
 			<div class="main-login">
-			<a id="shelter" href="../"><h1>Shelter</h1></a>
+			<a id="shelter" href="../"><h1 align="center">Shelter</h1></a>
 <form action="<?php $_PHP_SELF ?>" method="post">
 	<?php if(isset($loginReport) && $case==1){
 	echo "<div class=\"operation-report-container\">$loginReport</div>";

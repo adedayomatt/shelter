@@ -85,7 +85,8 @@ if(isset($_GET['next']) && $_GET['next']>0){
 if($req=='matches' || $req==""){
 //if there are preferences request
 if($rqstatus==1 && isset($rqtype) && isset($rqpricemax) && isset($rqlocation)){
-echo "<p>You have requested for $rqtype with rent not more than N".number_format($rqpricemax)." preferably around $rqlocation  <a href=\"request.php?p=$rqstatus\">change</a></p>";
+	echo "<h1 style=\"font-family:Georgia;font-weight:normal;font-size:200%;letter-spacing:2px;\">Matched properties</h1>";
+echo "<p>You have requested for <strong>$rqtype</strong> with rent not more than <strong>N".number_format($rqpricemax)."</strong> preferably around <strong>$rqlocation</strong>  <a href=\"request.php?p=$rqstatus\">change</a></p>";
 $query =  "SELECT property_ID,directory,type,location,min_payment,bath,toilet,rent,description,uploadby,date_uploaded,timestamp 
             FROM properties WHERE (type='$rqtype' AND rent<=$rqpricemax AND location LIKE '%$rqlocation%') ORDER BY date_uploaded DESC LIMIT $start,$end";
 $executequery = mysql_query($query);
@@ -130,13 +131,13 @@ else{
 			}			
 }
 else{
-	echo "<div class=\"no-property\">You have not specified your preferences</div>";
+	echo "<div class=\"no-property\">You have not specified your preferences. <a href=\"request.php?p=0\">specify what you need</a> now</div>";
 }
 mysql_close($db_connection);
 }
 
 else if($req=='clipped'){
-echo "<p>You have clipped the following properties</p>";
+echo "<h1 style=\"font-family:Georgia;font-weight:normal;font-size:200%;letter-spacing:2px;\">Clipped properties</h1>";
 while($count<$clipcounter){
 $getclipped = mysql_query("SELECT property_ID,directory,type,location,min_payment,bath,toilet,rent,description,uploadby,date_uploaded,timestamp
          FROM properties WHERE (property_ID='".$clippedproperty[$count]."') ORDER BY date_uploaded DESC");

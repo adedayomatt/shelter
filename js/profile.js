@@ -1,7 +1,8 @@
 function follow(buttonid,follower,followerid,following,type){
 	var button = document.getElementById(buttonid);
-	
-	
+	button.innerHTML = "...";
+	setTimeout(f,2000);
+function f(){	
 	try{
 		//opera 8+, firefox,safari
 		xmlhttp = new XMLHttpRequest();
@@ -53,5 +54,5 @@ function changeStuffs(response){
 	}
 }
 
-
+}
 }

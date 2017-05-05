@@ -1,11 +1,16 @@
 /*
 @media screen and (min-width:1025px)*/
 html{
-		font-family: Helvetica,Arial,sans-serif;
 		font-size: 16px;
 		font-weight:normal;
 		line-height:1.2em;
 	}
+html,button,input,select,option{
+font-family: Tahoma,Georgia,"Century Gothic",Arial,sans-serif;
+	}
+h1,h2,h3,h4,h5,h6{
+	line-height:150%;
+}
 .suggestion-box{
 		background-color:black;
 		opacity:0.7;
@@ -60,37 +65,71 @@ margin-top:1px;
 vertical-align: text-top;
 	background-image:url("../resrc/black-icons.png");
 }
+.sidebar{
+	font-family:Tahoma;
+}
 @media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
+	html,button,input,select,option{
+font-family: Georgia;
+	}
 		body{
 		max-width:1000px;
 		min-width:300px;
 	}
 	body{
 	font-size:250%;
-		
+	letter-spacing: 1px;
 		}
+body.mixedcolor-background{
+	background: #EEEEEE url('../resrc/mixedcolormobile.png') repeat-x;
+}
 input,label,select,legend{
 	font-size:130%;
 }
+table,tr,td{
+	font-size:100%;
+}
 input[type=text],input[type=password],input[type=email]{
 	padding:3%;
-	
+	font-size:100%;
 }	
 
 		input:focus{
-			font-size:180%;
-		}
+			font-size:150%;
+					}
 		
 	div.sidebar{
 		display:none;
-	font-size:90%;		
+	font-size:100%;	
+background-color:#6D0AAA;
+	color:white;
 	}
+.sidebar-headings{
+	display:block;
+	padding:5%;
+	background-color:white;
+	color:#6D0AAA;
+}
 	.account-nav-link{
 		padding:3% 3% 3% 10%;
+		color:white;
+		font-size:110%;
+		font-weight:bold;
 	}
 	div.main-content{
 	width:100%;
 	font-size:100%;
+}
+.rhs{
+	margin-top:5%;
+	width:90%;
+	padding:5%;
+	
+}
+.fixed-rhs-content,.relative-rhs-content{
+	padding-left:20px;
+	
+	
 }
 div.content-before-footer{
 	min-height:1200px;
@@ -103,23 +142,37 @@ div.content-before-footer{
 }
 }
 @media only screen and (min-device-width: 300px) and (max-device-width: 1000px) and (orientation: landscape){
+
 	body{
 		font-size:180%;
+				width:90%;
 		}	
 }
 @media only screen and (min-device-width: 1000px){
+	html,button,input,select,option{
+		letter-spacing:1px;
+	}
 	body{
 		width:100%;
 		min-width:1000px;	
 	}
 	body,input,button{
 		font-size:90%;	
+		
 	}
+	body.mixedcolor-background{
+	background: #EEEEEE url('../resrc/mixedcolor.png') repeat-x;
+}
 	input[type=text],input[type=password],input[type=email]{
-	padding:2%;
+	
 }
 	.sidebar{
-		font-size:80%;
+		font-size:100%;
+		letter-spacing: 1px;
+	}
+	.account-nav-link{
+		padding:3% 3% 3% 10%;
+		color:black;
 	}
 #hiddenTopMenu{
 	display:none;
@@ -128,11 +181,20 @@ div.main-content{
 	width:40%;
 	float:left;
 }
+div.rhs{
+	margin-top:2%;
+	width:30%;
+	float:left;
+}
+div.fixed-rhs-content{
+	position:fixed;
+}
+
 div.content-before-footer{
 	min-height:500px;
 }
 .follow-button,.unfollow-button{
-	width:100px;
+	width:110px;
 }
 .follow-button:hover,.unfollow-button:hover{
 	width:120px;
@@ -161,7 +223,8 @@ p,a,li,label {
 line-height:1.4em;
 }
 body.pic-background{
-		background-image: url("../resrc/ground.png");
+		/*background-image: url("../resrc/ground.png");*/
+		background-color:#eeeeee;
 	}
 body.no-pic-background{
 		background-color:#eeeeee;
@@ -171,14 +234,13 @@ body.special-background{
 }
 a{
 		text-decoration:none;
-		color:#6D0AAA;
+	
 	}
 a:hover{
 	text-decoration:underline;
 }
 a.list-link{
 		text-decoration:none;
-		color:inherit;
 	}
 a.list-link:hover{
 	text-decoration:none;
@@ -198,7 +260,8 @@ a.list-link:hover{
 	margin-top:5px;
 	text-align:center;
 	margin-right:5px;
-	border:1px solid grey;
+	border:1px solid #6D0AAA;
+	border-radius:5px;
 }
 .follow-button{
 	background-color:white;
@@ -223,7 +286,6 @@ a.list-link:hover{
 	padding:5%;
 	color:grey;
 	background-color:white;
-	box-shadow: 1px 2px 2px 2px grey;
 	line-height:100%;
 }
 
@@ -234,7 +296,6 @@ div.sidebar{
 	min-width:200px;
 	width:20%;
 	float:left;
-	background-color:#eeeeee;
 }
 #sidebar-original{
 	overflow:hidden;
@@ -252,7 +313,34 @@ div.sidebar{
 	display:block;
 	text-transform:uppercase;
 	text-align:center;
-	font-weight:normal;
+	font-weight:bold;
+}
+#cta-status-container{
+	font-size:90%;
+	background-color:white;
+	border-radius:5px;
+	color:grey;
+	text-align:center;
+	box-shadow:3px 3px 3px 3px #DDD;
+	padding-top:3%;
+	padding-bottom:3%;
+	line-height:50%;
+}
+#cta-renewal-link{
+	display:inline-block;
+	padding:2%;
+	padding-left:5%;
+	padding-right:5%;
+	border:1px solid #6D0AAA;
+	border-radius:5px;
+	background-color: #485689;
+	color:white;
+	text-align:center;
+}
+#cta-renewal-link:hover{
+	background-color:grey;
+	color:white;
+	text-decoration:none;
 }
 #upload-btn{
 width:70%;
@@ -277,7 +365,6 @@ font-weight:bold;
 .account-nav-link{
 	display:block;
 	width:85%;
-	color:black;
 }
 .account-nav-link:hover{
 	text-decoration:none;

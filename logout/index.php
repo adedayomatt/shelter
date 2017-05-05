@@ -1,5 +1,26 @@
+
+<html>
 <link href="../css/general.css" type="text/css" rel="stylesheet" />
 <link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
+<header>
+<style>
+#all-header-container{
+	display:none;
+}
+h1{
+	font-size:250%;
+	color:white;
+}
+#logout-prompt{
+	padding:5%;
+	background-color:white;
+	width:80%;
+	margin:auto;
+	color:grey;
+	box-shadow:3px 3px 3px 3px #DDD;
+	border-radius:5px;
+}
+</style>
 <?php
 $pagetitle ='logout';
 $ref='logoutpage';
@@ -7,21 +28,17 @@ $getuserName=true;
 $connect = true;
 require('../require/header.php');
 if($status==0){
-	$confirmation = "You were not logged in!<br/>You can <a href=\"$root/login\">login now</a> or <a href=\"$root/shelter/signup\">signup today</a>";
+	$confirmation = "<h2>You were not logged in!</h2><p>You can <a href=\"$root/login\">login now</a> or <a href=\"$root/signup\">signup today</a></p>";
 }
 else{
 setcookie('name',"",time()-60,"/","",0);
 setcookie('CTA',"",time()-60,"/","",0);
-$confirmation = "<p><br/>Your account has been logged out successfull!<br/>click <a style=\"text-decoration: none\" href=\"$root/login\"><b>here</b></a> to login </p>";
+$confirmation = "<h2>Logged out</h2><p>Your account has been logged out successfully, click <a href=\"$root/login\"><b>here</b></a> to login </p>";
 }
 ?>
-<html>
-<header>
-<?php 
-?>
 </header>
-<body class="pic-background"> <p align="center"><?php echo $confirmation; ?></p>	</body>
+<body class="mixedcolor-background"> 
+<h1 align="center">Shelter</h1>
+<div id="logout-prompt" align="center"><?php echo $confirmation; ?></div>	</body>
 
-<style>
-</style>
 </html>

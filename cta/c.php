@@ -6,11 +6,11 @@ if(isset($_GET['p']) && isset($_GET['cb']) && isset($_GET['ref'])){
 	$connect = true;
 //since this scripts does not require header, then the connexion is required directly
 	require('../require/connexion.php');
-	$RemainingClips = "SELECT * FROM clipped where (clippedby='$by')" ;
-	$getclipped = mysql_query("SELECT * FROM clipped where (propertyId='$property' AND clippedby='$by')");
+	$RemainingClips = "SELECT * FROM clipped where (clippedby=$by)" ;
+	$getclipped = mysql_query("SELECT * FROM clipped WHERE (propertyId='$property' AND clippedby=$by)");
 //if clipped already
 	if(mysql_num_rows($getclipped)==1){
-		$unclip = mysql_query("DELETE FROM clipped WHERE (clipped.propertyId='$property' AND clipped.clippedby='$by')");
+		$unclip = mysql_query("DELETE FROM clipped WHERE (clipped.propertyId='$property' AND clipped.clippedby=$by)");
 		if($unclip){
 	$remains = mysql_num_rows(mysql_query($RemainingClips));
 			if($ref=='ctaPage'){
@@ -25,7 +25,7 @@ if(isset($_GET['p']) && isset($_GET['cb']) && isset($_GET['ref'])){
 	}
 //if not clipped before
 	else{
-		$clip = mysql_query("INSERT INTO clipped (propertyId,clippedby) VALUE ('$property','$by')");
+		$clip = mysql_query("INSERT INTO clipped (propertyId,clippedby) VALUE ('$property',$by)");
 		if($clip){
 			$remains = mysql_num_rows(mysql_query($RemainingClips));
 			echo "unclip/".$remains;
@@ -60,6 +60,9 @@ if(isset($_GET['p']) && isset($_GET['cb']) && isset($_GET['ref'])){
 	*/
 	
 }
-
+else{
+	header('http://192.168.173.1/shelter');
+	exit();
+}
 
 ?>

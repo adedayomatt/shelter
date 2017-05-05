@@ -14,10 +14,10 @@ if(sidebar.style.display != 'block'){
 	headerunder.style.display = 'block';
 	headertop.style.position = 'fixed';
 	sidebar.style.display = 'block';
-	sidebar.style.width = '75%';
+	sidebar.style.width = '95%';
 	sidebar.style.marginTop = '0px';
 	sidebar.style.overflow = 'scroll';
-	menu.innerHTML = '&times hide';
+	menu.innerHTML = "<span style=\"font-size:150%\">&times</span>";
 	sidebar.focus();
 	hangingHead.style.display = 'none';
 	document.getElementById('suggested-agents-search-list-mobile').style.display ='none';
@@ -71,7 +71,7 @@ if(isset($getuserName) && $getuserName==true){
 $matchcounter = 0;
 	$k=0;
 //get CTA 	
-$getCTA = mysql_query("SELECT ctaid,name,request FROM cta WHERE (ctaid='$ctaid')");
+$getCTA = mysql_query("SELECT ctaid,name,request,timeCreated,expiryTime FROM cta WHERE (ctaid='$ctaid')");
 	 if($getCTA && mysql_num_rows($getCTA)==1){
 //if CTA is found...
 	 if(mysql_num_rows($getCTA)==1){
@@ -79,6 +79,8 @@ $getCTA = mysql_query("SELECT ctaid,name,request FROM cta WHERE (ctaid='$ctaid')
 				 $ctaname = $cta['name'];
 				 $myid  = $cta['ctaid'];
 				 $rqstatus = $cta['request'];
+				 $timeCreated = $cta['timeCreated'];
+				 $expiryTime = $cta['expiryTime'];
 //if request has been placed
 if($rqstatus==1){
 //get request 
@@ -136,6 +138,50 @@ else{
 ?>
 
 <title>Shelter | <?php echo $pagetitle; ?></title>
+<style>
+span#refresh{
+	margin-top:5px
+}
+a#notification{
+	padding-top:0px;
+	padding-left:50px;
+	color:white;
+	font-size:10px;
+	font-weight:bold;
+	margin-left:20px;
+}
+#notifications-icon{
+	background-position:-48px -144px;
+}
+
+.fixed-head-after-scroll{
+	height:50px;
+}
+#desktop-search{
+	margin-left:20px;;
+}
+input.home-search{
+	font-family:Georgia;
+	border: 2px solid #6D0AAA;
+	border-radius:5px;
+	background-color:white;
+	padding:5px;
+}
+input.select-type{
+	width: 200px;
+}
+input.max-price{
+	width: 80px;
+}
+input.location{
+	width: 250px;
+}
+input.search{
+	color:#6D0AAA;
+}
+
+</style>
+<div id="all-header-container">
 <div id="top-nav-bar-container">
 <div class="top-nav-bar" id="top-nav-bar-content">
 <span id="top"></span>
@@ -152,30 +198,42 @@ else{
 <a href="<?php echo $root."/agents"; ?>" title="Agents"><li class="nav-menu" >Agents</li></a>
 <a href="#" title="Contacts"><li class="nav-menu" >Contacts</li></a>
 <a href="#" title="About"><li class="nav-menu" >FAQs</li></a>
-<style>
-#notification{
-	padding-top:15px;
-	padding-left:50px;
-	color:white;
-	font-size:10px;
-	font-weight:bold;
-	margin-left:20px;
-}
-#notifications-icon{
-	background-position:-48px -144px;
-}
-</style>
-<?php
-if($status==1 || $status==9){
-	echo "<a href=\"$root/notifications\"><li id=\"notification\">$notifications<i class=\"white-icon\" id=\"notifications-icon\"></i></li></a>";
-}
- ?>
+
 </ul>
 </div>
+
+<?php
+if($status==1 || $status==9){
+	echo "<a id=\"notification\" title=\"notifications\" href=\"$root/notifications\">$notifications<span class=\"white-icon\" id=\"notifications-icon\"></span></a>";
+}
+ ?>
+<span title="refresh page" id="refresh" class="white-icon" style="background-position:-216px -24px;" onclick="javascript:location.reload()" ></span>
+
+<script>
+window.onscroll = function(event){
+	 if(window.pageYOffset >= document.getElementById('top-nav-bar-content').clientHeight){
+		 document.getElementById('rhs-top-search-btn').style.display = "inline-block";
+}
+else{
+	document.getElementById('rhs-top-search-btn').style.display = "none";
+	}
+}
+</script>
+
+<button id="rhs-top-search-btn" style=""> Search </button>
 </div>
 </div>
 <div class="top-nav-bar" id="top-nav-bar-under" ></div>
 
+<div id="desktop-search-container">
+<form id="desktop-search">
+<input class="home-search select-type" type="text" placeholder="select property type"/>
+<input class="home-search max-price" type="text" placeholder="Max price"/>
+<input class="home-search location" type="text" placeholder="location"/>
+<input class="home-search search" type="submit" value="search"/>
+</form>
+</div>
+</div>
 
 <?php
 if($status == 0){

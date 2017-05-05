@@ -1,43 +1,162 @@
 #shelter{
+	font-family:Georgia;
 	color:white;
 	font-size:150%;
-	text-align:left;
+	text-align:center;
 }
 #shelter:hover{
 	text-decoration:none;
 }
-input{
+input:not(input[type=checkbox]){
 		display:block;
-		margin-bottom:10px;
-	}
-@media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
-	.mainsignup{
-	width:100%;
 	}
 input{
-	padding:4%;
+		margin:10px;
+	}
+
+#mainsignup{
+
+}
+@media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
+	#mainsignup{
+	width:100%;
+	height:100%;
+	}
+#yes-js-mainsignup{
+	width:100%;
+}
+.signup-tabs{
+	width:95%;
+	margin:auto;
+	margin-bottom:30px;
+	box-shadow:2px 2px 2px 2px grey;
+	
+}
+#business-info-tab{
+	display:block;
+}
+#personal-info-tab{
+	display:none;
+}
+#login-info-tab{
+	display:none;
+}
+.step{
+	font-size:250%;
+	letter-spacing:2px;
+}
+fieldset{
+	width:95%;
+	background-color:white;
+	margin-bottom:10px;
+	padding:20px;	
+	border:none;
+	border-radius:5px;
+	box-shadow:2px 2px 2px 2px #DDD;
+}
+input[type=text],input[type=password],input[type=email]{
+	width:96%;
+	padding:2%;
 	border:1px solid grey;
-	width:90%;
-	border:2px solid grey;
+	border:none;
+	border-bottom:1px solid black;
+}
+input:focus{
+	border:none;
+	border-bottom:5px solid #6D0AAA;
+}
+
+.continue-or-back-button{
+	background-color:white;
+	color:#6D0AAA;
+	border: 5px solid #6D0AAA;
+	border-radius: 10px;
+	padding:3%;
+	padding-left:10%;
+	padding-right:10%;
+	cursor:pointer;
+	letter-spacing:2px;
+	font-weight:bold;
 }
 #signupbutton{	
-	width:250px;
-	height:100px;
+	width:80%;
+	margin:auto;
+	padding:5%;
+	padding-left:10%;
+	padding-right:10%;
+	border:5px solid #6D0AAA;
+	border-radius:10px;
 }
+
 }
 @media only screen and (min-device-width: 1000px){
-	.mainsignup{
+	#mainsignup{
+	width:100%;
+	height:100%;
+	}
+#yes-js-mainsignup{
+	width:100%;
+	
+}
+.signup-tabs{
 	width:50%;
 	margin:auto;
-	height:100%;}
-input{
-	padding:1%;
+	margin-bottom:10px;
+}
+#business-info-tab{
+	display:block;
+}
+#personal-info-tab{
+	display:none;
+}
+#login-info-tab{
+	display:none;
+}
+.step{
+	font-size:250%;
+	letter-spacing:2px;
+}
+fieldset{
+	width:100%;
+	background-color:white;
+	margin-bottom:10px;
+	padding:20px;	
+	border:none;
+	border-radius:5px;
+	box-shadow:2px 2px 2px 2px #DDD;
+}
+input[type=text],input[type=password],input[type=email]{
+	width:96%;
+	padding:2%;
 	border:1px solid grey;
-	max-width:300px;
+	border:none;
+	border-bottom:1px solid black;
+}
+input:focus{
+	border:none;
+	border-bottom:5px solid #6D0AAA;
+}
+
+.continue-or-back-button{
+	background-color:white;
+	color:#6D0AAA;
+	border: 1px solid #6D0AAA;
+	border-radius: 5px;
+	padding:1%;
+	padding-left:3%;
+	padding-right:3%;
+	cursor:pointer;
+	letter-spacing:2px;
+	font-weight:bold;
 }
 #signupbutton{	
-	width:120px;
-	height:40px;
+	width:50%;
+	margin:auto;
+	padding:2%;
+	padding-left:10%;
+	padding-right:10%;
+	border:1px solid #6D0AAA;
+	border-radius:10px;
 }
 }
 
@@ -56,48 +175,33 @@ input{
 #registration-successful{
 	color: green;
 }	
-	
-	
-fieldset{
-	padding:20px;	
-	border:none;
-	border-radius:5px;
-}
-
 .legend{
-	font-size:120%;
+	font-size:150%;
+	letter-spacing:3px;
 	color:grey;
 }
 .instruction{
 	color:grey;
-	font-size:80%;
 }
 #agreement{
 	color:grey;
 }
 #agreement-box{
-	
 	display:inline;
 }
 .Business,.personal{
-	width:90%;
-	margin:auto;
-	background-color:white;
-	color:#6D0AAA;
-	margin-bottom:10px;
+	
 }
 #signupbutton{
 	cursor:pointer;
-	background-color:white;
-	color:#6D0AAA;
-	font-size:120%;
-	border:2px solid grey;
-	border-radius:5px;
-	font-weight:bold;
-}
-#signupbutton:hover{
 	background-color:#6D0AAA;
 	color:white;
+	font-size:120%;
+	font-weight:bold;
+	margin-top:5%;
+}
+#signupbutton:hover{
+	background-color:grey;
 }
 
 

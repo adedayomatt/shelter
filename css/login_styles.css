@@ -1,14 +1,11 @@
 #shelter{
 	color:white;
 	font-size:150%;
-	text-align:left;
 }
 .main-login{
-	color:#6D0AAA;
 	min-height:400px;
 	width:60%;
 	margin:auto;
-	
 }
 .login-form{
 	padding:5%;
@@ -16,15 +13,14 @@
 	width: 50%;
 	margin:auto;
 	border:none;
-	border-radius:5px;
-	box-shadow:2px #333;
+	box-shadow:5px 5px 5px 5px white;
+	font-size:120%;
 }
 @media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
 body{
 		background-color:#eeeeee;
 	}
 	.main-login{
-	color:#6D0AAA;
 	width:100%;
 	margin:auto;
 }
@@ -53,7 +49,6 @@ body{
 		background-color:#6D0AAA;
 	}
 	.main-login{
-	color:#6D0AAA;
 	min-height:400px;
 	width:60%;
 	margin:auto;
@@ -65,7 +60,6 @@ body{
 	margin:auto;
 	border:none;
 	border-radius:5px;
-	box-shadow:2px #333;
 }
 #login-input-area{
 	padding:20px;

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+<meta name="viewport" content="max-width=1000px,maximum-scale=0.35" />
 <header>
 <link href="css/general.css" type="text/css" rel="stylesheet" />
 <link href="css/header_styles.css" type="text/css" rel="stylesheet" />
@@ -27,17 +28,15 @@ require("require/header.php");
 ?>
 <div class="recent-uploads-container main-content" id="linear-layout-content">
 
+<!--This is only for mobile, the display for the parent element should be none in the media query corresponding to desktop-->
 <div id="top-nav-bar-content-on-scroll">
-
 <div id="top-nav-bar-content-on-scroll-content">
 <div>
 <button class="on-scrolltop-button" id="toggle-search-agent-container-button" onclick="showSearchAgent()">search agent</button>
 <a href="search"><button class="on-scrolltop-button">search property</button></a>
 <?php echo ($status==9 ? "<a href=\"cta\"><button class=\"on-scrolltop-button\">$ctaname</button> </a>" :
 			($status==1 ? "<a href=\"$profile_name\"><button class=\"on-scrolltop-button\">".substr($Business_Name,0,12)."...</button> </a>": "<a style=\"color:white\" href=\"cta/checkin.php#create\"><button class=\"on-scrolltop-button\">create CTA</button></a>" ) )?>
-<!--
-<button class="on-scrolltop-button" title = "Refresh Page" value="refresh" onclick="javascript:location.reload()"><i class="white-icon" style="background-position:-216px -24px;"></i></button>
--->
+
 </div>
 <div id="mobile-head-search-container">
 <input onkeyup="getAgents(this.value,'agents-snipet-search-input-mobile','suggested-agents-search-container-mobile','suggested-agents-search-list-mobile')" class="agents-snipet-search-input" id="agents-snipet-search-input-mobile" type="text" placeholder="search for an agent" maxlength="50"/>
@@ -49,12 +48,9 @@ require("require/header.php");
 </div>
 
 </div>
-
 </div>
+<!--Mobile on scroll head ends here-->
 
-<div id="search-box">
-<?php require("search/searchform.php")?>
-</div>
 <?php
 /*if($status != 1){
 	$todo = "Have any property to sell, put it on Shelter today and connect with the buyer.<br/>It is easy, just click <a id=\"links\" href=\"signup.php\"><strong>here<strong></a>";
@@ -62,17 +58,41 @@ require("require/header.php");
 	}
 	*/
 ?>
-<form style = "margin-left:20px; font-weight:normal"> <label for="filter" >Filter recent uploads by location</label>
-<select  name="filter">
+<!--
+<form style = "font-weight:normal; text-align:center; line-height: 200%;"> <span>Filter recent uploads</span>
+<select  id="filter-selection" name="filter">
 <option value="all">Everywhere</option>
 <option value="Ibadan">Ibadan</option>
 <option value="Abeokuta">Abeokuta</option>
 </select>
-<!--
 <input type="submit" value="Filter" style="background-color:#6D0AAA; color:white; cursor:pointer; border:none"/>
--->
 </form>
+-->
 <div class="content-before-footer">
+<div id="search-box">
+<h1 id="search-head">Search</h1>
+<?php require("search/searchform.php")?>
+</div>
+<script>
+function showdialog(){
+	alert('Jao!');
+	
+}
+</script>
+<?php 
+if(!isset($_GET['next']) || $_GET['next']==0){
+	echo "<div id=\"mandate-container\">
+<h1 id=\"mandate-head\">Our Mandate</h1>
+<p id=\"mandate\">We provide an exclusive realty services all over the country. Getting your choice of property is our concern. We help you to find that your dream home you want to live in. <a href=\"\">Read more</a> on how we operate.</p>
+</div>";
+}
+else{
+	if($status==0){
+		echo "<div id=\"hold-up-container\"><h1 id=\"hold-up-head\">HOLD UP!</h1><p id=\"hold-up\">You are viewing recent uploads by our agents. We can help you find what you are looking for; you can <a href=\"search\">use the local search engine</a> or make a special by <a href=\"cta/checlin.php\">creating a CTA</a></p></div>";
+	}
+}
+?>
+<h1  id="recent-uploads-head"><?php echo ((!isset($_GET['next']) || $_GET['next']==0) ? "Recent Uploads" : "More recent uploads") ?></h1>
 <?php
 //get some properties from the database
 $max = 8;

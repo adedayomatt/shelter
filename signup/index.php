@@ -30,7 +30,7 @@ require('../require/connexion.php');
 			</script>		
 		
 			</header>			
-<body class="special-background">
+<body class="mixedcolor-background">
 		<?php 
 //if submitted		
 if(isset($_POST['register'])){			
@@ -142,8 +142,7 @@ else{
 
 			}
 		?>
-		
-<div class="mainsignup">
+<div id="mainsignup">
 <a id="shelter" href="../"><h1>Shelter</h1></a>
 	<?php 
 //Here gives the repoort of the registration. successful or fail
@@ -180,39 +179,78 @@ echo "</ul>check your input and try again</div>";
 
 }
 	?>
-			<form name="signupform" action="<?php $_PHP_SELF ?>" method="POST" onsubmit="return(verify())">
-			<fieldset class="Business">
+	<!--if javascript is not active on the browser, just display all the steps-->		
+	<noscript>
+	<style>
+	.continue-or-back-button{
+		display:none;
+	}
+	#business-info-tab,#personal-info-tab,#login-info-tab{
+		display:block;
+	}
+	</style>
+	</noscript>
+			<div id="yes-js-mainsignup" >
+			<p style="color:white"align="center">Already have an account? You can <a href="../login">login</a></p>
+		<form name="signupform" action="<?php $_PHP_SELF ?>" method="POST" onsubmit="return(verify())">
+		<div class="signup-tabs" id="business-info-tab">
+		<fieldset class="Business" >
+		<h3 class="step">Step 1</h3>
 			<h3 class="legend">Business Information</h3>
+			<p>Let people know your business name, address and contacts. It makes it easier for clients and potential clients to locate or contact you.</p>
 			<p class="instruction"><b>Fields asterisks (<span style="color: red">*</span>) are necessary</b></p>
-			<label><span style="color: red">*</span>Business Registered Name: <input name="Business_name" size="60" maxlength="50" type="text" required="required" value="<?php if(isset($_POST['Business_name'])){echo $_POST['Business_name']; }?>"/></label>
-			<label><span style="color: red">*</span>Office Address: <input name="Office_Address" size="100" maxlength="150" type="text" required="required" value="<?php if(isset($_POST['Office_Address'])){echo $_POST['Office_Address']; }?>"></label>
-			<label><span style="color: red">*</span>Office Tel No: <input name="Office_No" size="30" maxlength="11" type="text" required="required" value="<?php if(isset($_POST['Office_No'])){echo $_POST['Office_No']; }?>"></label>
-			<label>Business's e-mail: <input name="Office_mail" size="30" maxlength="30" type="email" required="required" value="<?php if(isset($_POST['Office_mail'])){echo $_POST['Office_mail']; }?>"></label>
-			</fieldset>
-			<fieldset class="personal">
-			<h3 class="legend">Personal Information</h3>
-			<p class="instruction"><b>Fields asterisks (<span style="color: red">*</span>) are necessary</b> </p>
-			<label><span style="color: red">*</span>CEO Name: <input name="personal_name" size="60" maxlength="50" type="text" required="required" value="<?php if(isset($_POST['personal_name'])){echo $_POST['personal_name']; }?>"></label>
-			<label><span style="color: red">*</span>Phone No: <input name="personal_No" size="40" maxlength="11" type="text" required="required" value="<?php if(isset($_POST['personal_No'])){echo $_POST['personal_No']; }?>"></label>
-			<label>Alternative Phone No: <input name="personal_No2" size="40" maxlength="11" type="text" value="<?php if(isset($_POST['personal_No2'])){echo $_POST['personal_No2']; }?>"/></label>
-			<label><span style="color: red">*</span>e-mail: <input name="personal_mail" size="30" maxlength="30" type="email" required="required" value="<?php if(isset($_POST['personal_mail'])){echo $_POST['personal_mail']; }?>"></label>
-			</fieldset>
-			<fieldset class="personal">
-			<h3 class="legend">Login Details</h3>
-			<p class="instruction"><b>Fields asterisks (<span style="color: red">*</span>) are necessary</b></p>
-			<p class="instruction"><b>please choose a user ID, this will be for used to login subsequently</b></p>
-			<label><span style="color: red">*</span>User ID: <input name="userID" size="30" maxlength="20" type="text" required="required" value="<?php if(isset($_POST['userID'])){echo $_POST['userID']; }?>"/></label>
-			<p class="instruction"><b>create password, make sure this password is secured</b></p>
-			<label><span style="color: red">*</span>Password: <input name="pass1" size="30" maxlength="25" type="password" required="required"/></label>
-			<label><span style="color: red">*</span>Repeat Password: <input name="pass2" size="30" maxlength="25" type="password" required="required"/></label>
+			<label><span style="color: red">*</span>Business Registered Name: <input name="Business_name" placeholder="Enter business name here" size="60" maxlength="50" type="text" required="required" value="<?php if(isset($_POST['Business_name'])){echo $_POST['Business_name']; }?>"/></label>
+			<label><span style="color: red">*</span>Office Address: <input name="Office_Address" placeholder="Enter office address here "  size="100" maxlength="150" type="text" required="required" value="<?php if(isset($_POST['Office_Address'])){echo $_POST['Office_Address']; }?>"></label>
+			<label><span style="color: red">*</span>Office Tel No: <input placeholder="Enter office Tel here"  name="Office_No" size="30" maxlength="11" type="text" required="required" value="<?php if(isset($_POST['Office_No'])){echo $_POST['Office_No']; }?>"></label>
+			<label>Business's e-mail: <input name="Office_mail" placeholder="Enter business e-mail here" size="30" maxlength="30" type="email" required="required" value="<?php if(isset($_POST['Office_mail'])){echo $_POST['Office_mail']; }?>"></label>
 			
-			<span id="agreement"> <input id="agreement-box" name="agreement" value="<?php if(isset($_POST['agreement'])) echo 'yes'; else echo 'no';?>"  type="checkbox" checked="checked"> <b>I agree with the <a href="#">terms and conditions</a> of shelter.com</b></span>
-			<input name="register" value="sign up"  type="submit" id="signupbutton" align="right"/>
+			<button class="continue-or-back-button" onclick="javascript:document.getElementById('business-info-tab').style.display = 'none';
+										document.getElementById('personal-info-tab').style.display = 'block';">Continue >></button>
 			</fieldset>
-			
-						</form>
 			
 			</div>
+			
+			<div class="signup-tabs" id="personal-info-tab">
+			<fieldset class="personal">
+			<h3 class="step">Step 2</h3>
+			<h3 class="legend">Business Owner Information</h3>
+			<p>Provide us with the business owner's information. Be assured that this information will not be shared publicly. For more information, you can <a href="">read our privacy policy</a> or <a href="">contact us</a></p>
+			<p class="instruction"><b>Fields asterisks (<span style="color: red">*</span>) are necessary</b> </p>
+			<label><span style="color: red">*</span>CEO Name: <input name="personal_name" placeholder="Enter business owner's name here" size="60" maxlength="50" type="text" required="required" value="<?php if(isset($_POST['personal_name'])){echo $_POST['personal_name']; }?>"></label>
+			<label><span style="color: red">*</span>Phone No: <input name="personal_No" placeholder="Enter business owner's phone no here" size="40" maxlength="11" type="text" required="required" value="<?php if(isset($_POST['personal_No'])){echo $_POST['personal_No']; }?>"></label>
+			<label>Alternative Phone No: <input name="personal_No2" size="40" placeholder="Enter business owner's alternative phone no here" maxlength="11" type="text" value="<?php if(isset($_POST['personal_No2'])){echo $_POST['personal_No2']; }?>"/></label>
+			<label><span style="color: red">*</span>e-mail: <input name="personal_mail" placeholder="Enter business owner's e-mail address here" size="30" maxlength="30" type="email" required="required" value="<?php if(isset($_POST['personal_mail'])){echo $_POST['personal_mail']; }?>"></label>
+			<button class="continue-or-back-button" onclick="javascript:document.getElementById('personal-info-tab').style.display = 'none';
+										document.getElementById('business-info-tab').style.display = 'block';"><< Go back</button>
+										
+			<button class="continue-or-back-button" onclick="javascript:document.getElementById('personal-info-tab').style.display = 'none';
+										document.getElementById('login-info-tab').style.display = 'block';">Continue >></button>
+			</fieldset>
+			</div>
+			
+			<div class="signup-tabs" id="login-info-tab">
+			<fieldset class="personal">
+			<h3 class="step">Step 3</h3>
+			<h3 class="legend">Login Details</h3>
+			<p>Choose a username and created password. Make sure this password is secured. The combination of your username and password would be used for subsequent logins</p>
+			<p class="instruction"><b>Fields asterisks (<span style="color: red">*</span>) are necessary</b></p>
+			<label><span style="color: red">*</span>User ID: <input name="userID" placeholder="Choose a username" size="30" maxlength="20" type="text" required="required" value="<?php if(isset($_POST['userID'])){echo $_POST['userID']; }?>"/></label>
+			<label><span style="color: red">*</span>Password: <input name="pass1" placeholder="Input password" size="30" maxlength="25" type="password" required="required"/></label>
+			<label><span style="color: red">*</span>Repeat Password: <input name="pass2" placeholder="Repeat password" size="30" maxlength="25" type="password" required="required"/></label>
+			
+			<button class="continue-or-back-button" onclick="javascript:document.getElementById('login-info-tab').style.display = 'none';
+										document.getElementById('personal-info-tab').style.display = 'block';"><< Go back</button>
+			
+			<div > <input name="agreement" value="<?php if(isset($_POST['agreement'])) echo 'yes'; else echo 'no';?>"  type="checkbox" checked="checked">I agree with the <a href="#">terms and conditions</a> of shelter.com</div>
+			<input name="register" value="sign up"  type="submit" id="signupbutton" align="right"/>
+			</fieldset>
+			</div>
+			</form>
+		</div>	
+			
+			
+			</div>
+
 			</body>
 			<?php
 			mysql_close($db_connection);

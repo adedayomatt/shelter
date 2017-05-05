@@ -74,22 +74,25 @@ $changeReport = "Some fields are empty or filled incorrectly";
 
 </head>
 <style>
+#all-header-container{
+	display:none;
+}
+#request-form-container{
+	background-color:white;
+}
 #request-error-container,#request-sent-container{
 	width:98%;
 	padding:1%;
-	color:white;
+	font-size:150%;
 	border-radius:5px;
 }
 #request-error-container{
-	background-color:red;
+	color:red;
 }
 #request-sent-container{
-	background-color:green;
 }
-legend{
-	font-weight:bold;
-}
-input,.input-labels{
+
+input.request-input,.input-labels{
 	display:block;
 }
 #type-input,#type-select{
@@ -109,40 +112,69 @@ input,.input-labels{
 }
 @media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
 	#request-form-container{
+		width:80%;
+		margin:auto;
+		padding:5%;
 	margin-top:5%;
 	line-height:300%;
+	box-shadow:3px 3px 3px 3px #DDD;
+}
+legend{
+	font-weight:normal;
+	font-size:250%;
+	letter-spacing:2px;
+}
+select{
+	width:96%;
+	padding:2%;
+	
 }
 .request-input{
-	width:94%;
+	width:90%;
+	padding:3%;
 }
 #submit-button{
-	width:50%;
+	width:90%;
+	margin:auto;
 	padding:5%;
 	border-radius:10px;
-	
+	margin-top:50px;
 }
 }
 @media only screen and (min-device-width: 1000px){
 	#request-form-container{
+	width:40%;
+	margin:auto;
 	margin-top:5%;
-	padding-left:30%;
-	padding-right:30%;
+	padding:5%;
 	line-height:200%;
+	border-radius:5px;
+	box-shadow:3px 3px 3px 3px #DDD;
 }
-
+fieldset{
+	padding:5%;
+}
+legend{
+	font-weight:normal;
+	font-size:250%;
+	letter-spacing:2px;
+}
 .request-input{
 	width:94%;
+	padding:2%;
 }
 
 #submit-button{
 	width:30%;
 	padding:2%;
+	margin-top:20px;
 	border-radius:5px;
 }
 }
 
 </style>
-<body class="no-pic-background">
+<body class="mixedcolor-background">
+<h1 align="center" style="font-size:300%; font-weight:normal; color:white;margin:0px">Shelter</h1>
 <div id="request-form-container">
 <?php 
 //if no request has been made

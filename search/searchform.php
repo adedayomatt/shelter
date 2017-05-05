@@ -60,34 +60,38 @@ function setLocation(location){
 </script>
 <style>
 .search-field{
-	padding:2%;
+	padding:1%;
 	width:46%;
 	margin-right:2%;
 	margin-bottom:4px;
 	background-color:white;
+	
 }
 #location-input{
-	width:50%;
+	width:60%;
 }
 #search-icon{
 	background-position: -48px 0px;
 }
 #search-btn{
 	cursor:pointer;
-	background-color:#6D0AAA;
-	border:none;
+	background-color:white;
+	border:1px solid #6D0AAA;
 	border-radius:5px;
 	font-weight:bold;
-	color:white;
+	color:#6D0AAA;;
 	padding:2%;
 	padding-left:5%;
 	padding-right:5%;
-	box-shadow: 2px 2px 2px 2px grey;
 }
 #search-btn:hover{
-	box-shadow: 2px 2px 2px 2px #333;
+	box-shadow: 2px 2px 2px 2px #DDD;
 }
 @media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
+	.search-field{
+		border:2px solid #6D0AAA;
+		border-radius:10px;
+	}
 #suggested-location-container{
 	position:absolute;
 	width:70%;
@@ -104,6 +108,10 @@ function setLocation(location){
 }	
 }
 @media only screen and (min-device-width: 1000px){
+	.search-field{
+		border:1px solid #6D0AAA;
+		border-radius:5px;
+	}
 	#suggested-location-container{
 	position:absolute;
 	width:300px;
@@ -165,7 +173,7 @@ li.suggested-location-list:hover{
 </select>
 <br/>
 <input onkeyup="getLocations(this.value)" class="search-field" id="location-input" placeholder="Input location" name="location" size="15" type="text" value="<?php if(isset($_GET['location'])){echo $_GET['location'];}?>"/></label>
-<button type="submit" id="search-btn"><i class="white-icon" id="search-icon"></i>search</button>
+<button type="submit" id="search-btn"><i class="black-icon" id="search-icon"></i>search</button>
 <div id="suggested-location-container"></div>
 </form>
 

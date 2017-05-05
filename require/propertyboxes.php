@@ -93,7 +93,7 @@ else{
 	//main box divided into two >>image:info=50:50
 	
 	if($status==9){
-	$clipbutton = "<a  class=\"options\"  href=\"$root/cta/c.php?p=$propertyId[$i]&cb=$ctaid&ref=$ref\" id=\"$propertyId[$i]clipbutton\" onclick=\"makeclip('$propertyId[$i]clipbutton','$ctaid','$ref')\"><span class=\"black-icon clip-icon\"></span>".clip($propertyId[$i],$ctaid)."</a>";
+	$clipbutton = "<a  class=\"options\"  href=\"$root/cta/c.php?p=$propertyId[$i]&cb=$ctaid&ref=$ref\" id=\"$propertyId[$i]clipbutton\" onclick=\"makeclip('$propertyId[$i]clipbutton',$ctaid,'$ref')\"><span class=\"black-icon clip-icon\"></span>".clip($propertyId[$i],$ctaid)."</a>";
 	}
 else {
 	$clipbutton = "<a class=\"options disabled\"  href=\"$root/cta/checkin.php?_rdr=1\"><span class=\"black-icon clip-icon\"></span>clip</a>";
@@ -104,11 +104,12 @@ if($ref=='search_page'){
 	$page = "
 	<div class=\"mini-propertybox\">
 	<div class=\"mini-image\">
+	<a href=\"$root/properties/$propertydir[$i]\">
 	<img id=\"$propertyId[$i]image\" height=\"100%\" width=\"100%\" src=\"$image\"/>
 	</div>
 	<div class=\"mini-info\">
-	<span class=\"mini-detail\"><a href=\"$root/properties/$propertydir[$i]\">$type[$i] at $location[$i]</a>$m</span>
-	<span class=\"mini-detail\"><span class=\"black-icon price-icon\"></span> Rent: N ".number_format($rentperannum)."/year</span>
+	<span class=\"mini-detail\">".substr("$type[$i] at $location[$i]",0,20)."...</a>$m</span>
+	<span class=\"mini-detail\"><span class=\"black-icon price-icon\"></span>Rent: <span>N ".number_format($rentperannum)."/year
 	<span class=\"mini-detail\"><span class=\"black-icon min-payment-icon\"></span><strong>$min_payment[$i]</strong> payment required (N $firstpayment)</span>
 	<span class = \"mini-detail time\" align=\"left\"><span class=\"black-icon time-icon\"></span>".timeuploaded($howlong[$i])."</span>
 	</div>
@@ -120,11 +121,12 @@ else if($ref=='profile_page'){
 	$page = "
 	<div class=\"mini-propertybox\">
 	<div class=\"mini-image\">
+	<a href=\"$root/properties/$propertydir[$i]\">
 	<img id=\"$propertyId[$i]image\" height=\"100%\" width=\"100%\" src=\"$image\"/>
 	</div>
 	<div class=\"mini-info\">
-	<span class=\"mini-detail\"><a href=\"$root/properties/$propertydir[$i]\">$type[$i] at $location[$i]</a>$m</span>
-	<span class=\"mini-detail\"><span class=\"black-icon price-icon\" ></span> Rent: N ".number_format($rentperannum)."/year</span>
+	<span class=\"mini-detail\">".substr("$type[$i] at $location[$i]",0,20)."...</a>$m</span>
+	<span class=\"mini-detail\"><span class=\"black-icon price-icon\" ></span><span class=\"rent-figure\"> N ".number_format($rentperannum)."/year</span></span>
 	<span class=\"mini-detail\"><span class=\"black-icon min-payment-icon\"></span> <strong>$min_payment[$i]</strong> payment required (N $firstpayment)</span>
 	<span class = \"mini-detail time\" align=\"left\"><span class=\"black-icon time-icon\"></span>".timeuploaded($howlong[$i])."</span>
 	$clipbutton
@@ -138,18 +140,18 @@ else{
 	$page = "<div id=\"$propertyId[$i]\" class=\"propertybox\">
 	<div class=\"property-heading\">
 	<div class=\"detail\" >
-	<a href=\"$root/properties/$propertydir[$i]\">$type[$i] at $location[$i]</a>$m<br/>
-	<span class=\"status\"><span class=\"black-icon status-icon\"></span> <span style=\"color:green\">Available</span></span>
+	<a href=\"$root/properties/$propertydir[$i]\">$type[$i] at $location[$i]$m<br/>
+	<span class=\"status\" style=\"color:white\"> <span ><span class=\"white-icon status-icon\"></span>Available</span></span>
 	</div>
 	</div>
 	<div class=\"image-info\">
 	<div id = \"$propertyId[$i]container\" class=\"imagebox\">
-	<img id=\"$propertyId[$i]image\" onclick=\"animatePropertyImages('$propertyId[$i]image','$image')\" height=\"90%\" width=\"100%\" src=\"$image\"/>
+	<img id=\"$propertyId[$i]image\" onclick=\"animatePropertyImages('$propertyId[$i]image','$image')\" height=\"90%\" width=\"100%\" src=\"$image\"/></a>
 	<div class=\"bath-toilet\"><button class=\"bath-toilet-btn\">($bath[$i]) Baths(s)</button><button class=\"bath-toilet-btn\">($toilet[$i]) Toilet(s)</button></div>
 	</div>
 	
 	<div class=\"infobox\">
-	<span class=\"detail\"><span class=\"black-icon price-icon\"></span> Rent: N ".number_format($rentperannum)."/year</span>
+	<span class=\"detail\"><span class=\"black-icon price-icon\"></span><span class=\"rent-figure\"> N ".number_format($rentperannum)."/year</span></span>
 	<span class=\"detail\"><span class=\"black-icon min-payment-icon\"></span><strong>$min_payment[$i]</strong> payment required (N $firstpayment)</span>
 	<span class =\"description detail\"><span class=\"black-icon comment-icon\"></span> Description: </span><div class=\"comment\"><i>$description[$i]</i></div>
 	<span class=\"detail\">Managed by <a class=\"agent-link\" href=\"$root/$uploadby[$i]\">$Bname</a></span>
@@ -161,7 +163,7 @@ else{
 	$page .= "<div class=\"like-pane\">
 	<hr/>
 		$clipbutton
-		<a  class=\"options report-icon\" href=\"$root/properties/$propertydir[$i]\"><span class=\"black-icon see-more-icon\"></span>see details</a>
+		<a  class=\"options report-icon\" href=\"$root/properties/$propertydir[$i]\"><span class=\"black-icon see-more-icon\"></span>Details</a>
 		<div class=\"agent-contacts-box\">$Bname<ul><li>$officeNo</li><li>$PhoneNo</li><li>$altPhoneNo</li></ul></div>
 		<a  class=\"options agent-contacts\"><span class=\"black-icon contact-icon\"></span>Agent</a>
 		<a  class=\"options report-property\" href=\"#\"><span class=\"black-icon eye-icon\"></span>(0)views</a>
