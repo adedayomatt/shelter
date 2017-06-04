@@ -6,7 +6,7 @@ $hiddenTopMenu = "<div class=\"account-nav-container\" id=\"hiddenTopMenu\">
 					<a href=\"$root\" class=\"account-nav-link\">Home</a>
 					<a href=\"$root/agents\" class=\"account-nav-link\">Agents</a>
 					<a href=\"$root/search\" class=\"account-nav-link\">Search</a>
-						<hr/></div>";
+						</div>";
 switch($status){
 //All the variables like $messages,$following,$clientfollower are already set in the header
 	case 0:
@@ -15,15 +15,15 @@ echo "<div class=\"account-nav-container\">
 	<h4 align=\"center\" class=\"sidebar-headings\">Agents</h4>
 		<a href=\"$root/login\" class=\"account-nav-link\">Login</a>
 		<a href=\"$root/signup\" class=\"account-nav-link\">Sign up</a>
-		<hr/>
+		</div>
+		<div class=\"account-nav-container\">
 	<h4 align=\"center\" class=\"sidebar-headings\">Client Temporary Account (CTA)</h4>
 		<a href=\"$root/cta/checkin.php?_rdr=0#checkin\" class=\"account-nav-link\">Checkin my CTA</a>
 		<a href=\"$root/cta/checkin.php?_rdr=0#createnew\" class=\"account-nav-link\">Create new CTA</a>
 		<a href=\"\" class=\"account-nav-link\">What is CTA?</a>
 		<a href=\"$root/cta/checkin.php?_rdr=1\" class=\"account-nav-link\">My Clipped properties</a>
 		<a href=\"$root/cta/checkin.php?_rdr=1\" class=\"account-nav-link\">My agents</a>
-		<hr/>
-	</div>";
+		</div>";
 break;
 	case 1:
 echo $hiddenTopMenu;
@@ -36,25 +36,28 @@ echo "<div class=\"account-nav-container\">
 	<a href=\"\" class=\"account-nav-link\">($agentfollower) Follower[agent]</a>
 	<a href=\"$root/manage/account.php\" class=\"account-nav-link\">Edit profile</a>
 	<a href=\"$root/manage\" class=\"account-nav-link\">Manage Property</a>
-	<hr/>
 	</div>";
 break;
 case 9:
 echo $hiddenTopMenu;
 $ExpiryDate = date('D, d M Y ',$expiryTime);
 $BeforeExpiryTime = (int) (($expiryTime - time())/86400);
+$timeRemaining = ($BeforeExpiryTime < 1 ? "<span style=\"color:red;\">".(int)(($expiryTime - time())/3600)." hours</span>" : $BeforeExpiryTime.' days');
 
-
-echo "<div class=\"account-nav-container\">
+echo "
 	<h4 class=\"username\">$ctaname</h4>
+	
+	<div class=\"account-nav-container\">
 	<div id=\"cta-status-container\">
 	<h4>Time Before Expiry</h4>
 	<p>$ExpiryDate</p>
-	<p>Remaining $BeforeExpiryTime days</p>
-	<a href=\"\" id=\"cta-renewal-link\">Renew</a>
-	<p>I have seen what i need <a href=\"\" style=\"color:red\">deactivate this CTA</a></p>
+	<p>Remaining $timeRemaining</p>
+	<a href=\"\" class=\"cta-status-link\">Renew</a>
+	<a href=\"\" class=\"cta-status-link\">Deactivate this CTA</a>
+	</div>
 	</div>
 	
+	<div class=\"account-nav-container\">
 	<a href=\"$root/messages\" class=\"account-nav-link\" id=\"msgs\">($messages) Messages</a>
 	<a href=\"$root/cta/?src=matches\" class=\"account-nav-link\">($matchcounter) Matches</a>
 	<a href=\"$root/cta/?src=clipped\" class=\"account-nav-link\" id=\"clipstring\">($clipcounter) Clipped properties</a>
@@ -63,7 +66,6 @@ echo "<div class=\"account-nav-container\">
 	<a href=\"$root/cta/request.php?p=$rqstatus\" class=\"account-nav-link\">Adjust request</a>
 	<a href=\"\" class=\"account-nav-link\">Change CTA details</a>
 	<a href=\"$root/logout\" class=\"account-nav-link\">Check out</a>
-	<hr/>
 	</div>";
 break;
 default:
@@ -74,7 +76,7 @@ break;
 } 
 ?>
 
-<span align="center" id="categories"><i class="black-icon" id="category-icon"></i>Categories</span>
+<a href="<?php echo $root."/categories" ?>"><span align="center" id="categories"><i class="black-icon" id="category-icon"></i>Categories</span>
 <div id="category-container">
 <div class = "btn-dropdown" id="all-btn-dropdown" onclick="toggleall()">Expand all <i id="all-arrow" class="arrow-down" title="Expand all"></i></div>
 <div id="flats" class = "btn-dropdown" style="font: Arial" onclick="toggleSidebar('flats','flat-dropdown','flat-arrow')">Flats<i title="Expand" id="flat-arrow" class="arrow-down"></i></div>

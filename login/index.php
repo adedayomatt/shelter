@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-
+<meta name="viewport" content="width=1000px,maximum-scale=0.35" />
 <link href="../css/general.css" type="text/css" rel="stylesheet" />
 <link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
 <link href="../css/login_styles.css" type="text/css" rel="stylesheet">
@@ -41,13 +41,13 @@ mysql_close($db_connection);
 	}
 //if password is incorrect
 	else{
-	$loginReport = "<h2>Cannot Log In</h2>Incorrect password";
+	$loginReport = "<h2>Login Failed!</h2>Incorrect password";
 					$case = 2;	
 	}
 }
 //if no username matches
 else{
-	$loginReport = "<h2>Cannot Log In</h2>user Id <b>'".$_POST['username']."'</b> does not exists<br/>check your input or <a href=\"$root/signup\">create a new account</a></p>";
+	$loginReport = "<h2>Login Failed!</h2>user Id <b>'".$_POST['username']."'</b> does not exists<br/>check your input or <a href=\"$root/signup\">create a new account</a></p>";
 				$case = 3;
 }
 	
@@ -58,16 +58,16 @@ else{
 			<div class="main-login">
 			<a id="shelter" href="../"><h1 align="center">Shelter</h1></a>
 <form action="<?php $_PHP_SELF ?>" method="post">
-	<?php if(isset($loginReport) && $case==1){
+	<fieldset class=" box-shadow-1 login-form">
+			<?php if(isset($loginReport) && $case==1){
 	echo "<div class=\"operation-report-container\">$loginReport</div>";
 		mysql_close($db_connection);
 		exit();
 	} ?>
 
 	<?php if(isset($loginReport) && $case!=1){
-	echo "<div class=\"operation-report-container\" id=\"login-error\">$loginReport</div>";
+	echo "<div class=\"operation-report-container operation-fail-container\">$loginReport</div>";
 	} ?>
-			<fieldset class="login-form">
 			<div id="login-input-area">
 			Provide your login details<br/><br/>
 		<input placeholder="Agents ID" class="input" name="username" size="40" maxlength="30" type="text" required="required" value="<?php if(isset($_POST['username'])) echo $_POST['username'];?>">

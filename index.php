@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<meta name="viewport" content="max-width=1000px,maximum-scale=0.35" />
+<meta name="viewport" content="width=1000px,maximum-scale=0.35" />
 <header>
 <link href="css/general.css" type="text/css" rel="stylesheet" />
 <link href="css/header_styles.css" type="text/css" rel="stylesheet" />
@@ -40,7 +40,8 @@ require("require/header.php");
 </div>
 <div id="mobile-head-search-container">
 <input onkeyup="getAgents(this.value,'agents-snipet-search-input-mobile','suggested-agents-search-container-mobile','suggested-agents-search-list-mobile')" class="agents-snipet-search-input" id="agents-snipet-search-input-mobile" type="text" placeholder="search for an agent" maxlength="50"/>
-<a href="agents" style="margin-left:60%;">view all agents</a>
+<a href="agents" style="padding:1%;background-color:purple;color:white; border-radius:10px; float:left">view all agents</a>
+<a href="search" style="padding:1%;padding-left:2%;padding-right:2%;background-color:purple;color:white; border-radius:10px;float:right">search</a> 
 <div class="suggested-agents-search-container suggestion-box" id="suggested-agents-search-container-mobile">
 <div class="suggested-agents-search-list" id="suggested-agents-search-list-mobile" style="padding:0px; ">
 </div>
@@ -69,10 +70,6 @@ require("require/header.php");
 </form>
 -->
 <div class="content-before-footer">
-<div id="search-box">
-<h1 id="search-head">Search</h1>
-<?php require("search/searchform.php")?>
-</div>
 <script>
 function showdialog(){
 	alert('Jao!');
@@ -81,18 +78,78 @@ function showdialog(){
 </script>
 <?php 
 if(!isset($_GET['next']) || $_GET['next']==0){
-	echo "<div id=\"mandate-container\">
-<h1 id=\"mandate-head\">Our Mandate</h1>
-<p id=\"mandate\">We provide an exclusive realty services all over the country. Getting your choice of property is our concern. We help you to find that your dream home you want to live in. <a href=\"\">Read more</a> on how we operate.</p>
+	
+//show visitors only this message 
+if($status ==0){
+	echo "<div class=\"\" id=\"about-container\">
+	<h1 id=\"about-head\">About</h1>
+<p id=\"about\">Shelter.com provide an exclusive realty services all over the country. Getting your choice of property is our concern. We help you to find that your dream home you want to live in. <a href=\"\">Read more</a> on how we operate.</p>
 </div>";
+}	
+if(isset($remainingDaysNotice) && !empty($remainingDaysNotice) ){
+	echo "<div class=\"cta-expiry-notice\">$remainingDaysNotice</div>";
 }
-else{
-	if($status==0){
-		echo "<div id=\"hold-up-container\"><h1 id=\"hold-up-head\">HOLD UP!</h1><p id=\"hold-up\">You are viewing recent uploads by our agents. We can help you find what you are looking for; you can <a href=\"search\">use the local search engine</a> or make a special by <a href=\"cta/checlin.php\">creating a CTA</a></p></div>";
-	}
 }
 ?>
-<h1  id="recent-uploads-head"><?php echo ((!isset($_GET['next']) || $_GET['next']==0) ? "Recent Uploads" : "More recent uploads") ?></h1>
+
+<?php
+//one or two notifications will appear here only on the load of the homepage and not when viewing more uploads
+if(!isset($_GET['next']) || $_GET['next']==0){
+if($status==1 || $status==9){
+	echo "<div class=\"operation-report-container\" id=\"mini-notification\">";
+	
+if($status == 1){
+   $totalNotification = mysql_num_rows(mysql_query("SELECT * FROM notifications WHERE (receiver='$Business_Name' OR receiver='allAgents')"));
+	$getnotifications = mysql_query("SELECT * FROM notifications WHERE (receiver='$Business_Name' OR receiver='allAgents')  ORDER BY time DESC LIMIT 2");
+}
+else if($status == 9){
+	   $totalNotification = mysql_num_rows(mysql_query("SELECT * FROM notifications WHERE (receiver='$ctaname' OR receiver='allAgents')"));
+	$getnotifications = mysql_query("SELECT * FROM notifications WHERE (receiver='$ctaname' OR receiver='allAgents') ORDER BY time DESC");
+}
+echo "<h4 style=\"font-weight:bold;margin:0px\">Notifications ($totalNotification)</h4>";
+if($getnotifications){
+	if(mysql_num_rows($getnotifications) != 0){
+//the function notify() is in this required file, it returns list of the notifications. This file is also used on the notifications page itself
+	require("notifications/functionNotice.php");	
+//start the notification list
+	echo "<ul class=\"no-padding-ul\">";
+		while($n = mysql_fetch_array($getnotifications,MYSQL_ASSOC)){
+			//if notification was received on the same date with the date of checking notifications
+if(date('dmy',$n['time'])== date('dmy',time())){
+	echo notify($n['subject'],$n['subjecttrace'],$n['action'],$n['time'],'today');
+}
+//if notification was received a day before date of checking notifications
+else if((date('d',time())- date('d',$n['time']))==1){
+	echo notify($n['subject'],$n['subjecttrace'],$n['action'],$n['time'],'yesterday');
+	}
+else{
+	echo notify($n['subject'],$n['subjecttrace'],$n['action'],$n['time'],'older');
+	}
+		}
+//notification list ends here
+echo "</ul>";
+echo "<a href=\"notifications\" style=\"text-align:right\">See all notifications</a>";
+	}else{
+		echo "<span class=\"notice no-notice\">You do not have any notification for now</span>";
+	}
+}
+echo "</div>";
+}
+}
+
+?>
+
+<div class="operation-report-container" id="search-box">
+<h4 style="margin:0px">Search</h4>
+<?php require("search/searchform.php")?>
+</div>
+
+<div id="front-ad-wrapper">
+<img src="resrc/image/advert2.jpeg" id="front-ad"/>
+</div>
+
+<?php echo "".((!isset($_GET['next']) || $_GET['next']==0) ? "<h4 style=\"margin:2% 0px 0px 5%\" id=\"recent-uploads-head\">Recent Uploads</h4>" : 
+				"<h4  style=\"margin:2% 0px 0px 5%\" id=\"recent-uploads-head\">More recent uploads</h4><p style=\"margin:2% 0px 0px 0px\">For more filtered properties <a href=\"categories\">Go to categories</a></p>").""?>
 <?php
 //get some properties from the database
 $max = 8;
@@ -106,7 +163,7 @@ if(isset($_GET['next']) && $_GET['next']>0){
  $y = $start;
  
  $totalproperties = mysql_num_rows(mysql_query("SELECT property_ID FROM properties"));
- $fetchproperties = mysql_query("SELECT property_ID,directory,type,location,min_payment,bath,toilet,rent,description,uploadby,date_uploaded,timestamp FROM properties ORDER BY date_uploaded DESC LIMIT $start,$max");
+ $fetchproperties = mysql_query("SELECT property_ID,directory,type,location,min_payment,bath,toilet,rent,description,uploadby,date_uploaded,timestamp,views FROM properties ORDER BY date_uploaded DESC LIMIT $start,$max");
  if($fetchproperties){
 	$count = 0;
 	while($property = mysql_fetch_array($fetchproperties,MYSQL_ASSOC)){
@@ -122,6 +179,7 @@ if(isset($_GET['next']) && $_GET['next']>0){
 	$date_uploaded[$count] = $property['date_uploaded'];
 	$uploadby[$count] = $property['uploadby'];
 	$howlong[$count] = $property['timestamp'];
+	$views[$count] = $property['views'];
 	$count++;
 	$y++;
 //last value of count will eventually equals to the total records fetched.
@@ -161,16 +219,51 @@ else{
 //side 3 begins here
  ?>
 <div class="agents-snipet" id="agents-snipet-top">
-<div id="front-image">
-
+<div id="most-viewed-wrapper">
+<h3 id="most-viewed-heading" >Most Viewed</h3>
+<div id="most-viewed-container">
+<?php
+$getMostViewed = mysql_query("SELECT property_ID,directory,type,location,rent,date_uploaded,uploadby,timestamp,views FROM properties ORDER BY views DESC LIMIT 10");
+ if($getMostViewed){
+	echo "<ul class=\"no-padding-ul\">";
+	while($mv = mysql_fetch_array($getMostViewed,MYSQL_ASSOC)){
+	$mv_id = $mv['property_ID'];
+	$mv_dir = $mv['directory'];
+	$mv_type = $mv['type'];
+	$mv_location = $mv['location'];
+	$mv_rent = $mv['rent'];
+	$mv_view = $mv['views'];
+	$mv_uploadby = $mv['uploadby'];
+	$mv_timeuploaded = $mv['timestamp'];
+	$ub = mysql_query("SELECT Business_Name FROM profiles WHERE User_ID = '$mv_uploadby'");
+	if($ub){
+		$uu = mysql_fetch_array($ub,MYSQL_ASSOC);
+		$uploaderBusinessName = $uu['Business_Name'];
+	}else{
+		$uploaderBusinessName = "Unknown";
+	}
+ echo "<li class=\"most-viewed-list\"><a style=\"color:purple\" href=\"properties/$mv_dir\">$mv_type at $mv_location</a>
+ <br/><span class=\"rent-figure\" style=\"opacity:0.5\"> N ".number_format($mv_rent)."</span>
+ <p style=\"margin:0px;color:grey;text-align:right\">$mv_view views</p>
+ <p class=\"extra-info\"> uploaded by <a href=\"$mv_uploadby\">$uploaderBusinessName </a><br/> on ".Timestamp($mv_timeuploaded)."</p>
+ </li>
+ ";
+	
+}
+echo "</ul>";
+ }
+?>
 </div>
-<hr/>
-<div style="width:90%;margin:auto;">
+</div>
+<div id="agents-list-wrapper">
+<div style="width:97%;margin:auto; padding:1.5%; background-color:#CECECE">
+<h4 style="margin:0px">Agents</h4>
+<div id="agents-snipet-search-input-desktop-wrapper">
 <input onkeyup="getAgents(this.value,'agents-snipet-search-input-desktop','suggested-agents-search-container-desktop','suggested-agents-search-list-desktop')" class="agents-snipet-search-input" id="agents-snipet-search-input-desktop" type="text" placeholder="search for an agent" maxlength="50"/>
+<img src="resrc/loading.gif" id="loading-gif"/>
 </div>
-<hr/>
+</div>
 <div id="agents-list-container">
-
 <div class="suggested-agents-search-container suggestion-box" id="suggested-agents-search-container-desktop">
 <div class="suggested-agents-search-list" id="suggested-agents-search-list-desktop" style="padding:0px; ">
 </div>
@@ -181,7 +274,8 @@ else{
 $getAgents = mysql_query("SELECT Business_Name,User_ID FROM profiles LIMIT 10");
 if($getAgents){
 	while($agent = mysql_fetch_array($getAgents,MYSQL_ASSOC)){
-	echo "<li class=\"agents-list\"><a class=\"agents-list\" href=\"".$agent['User_ID']."\"><span class=\"black-icon agent-avatar\"></span>".$agent['Business_Name']."</a>";
+	echo "<li class=\"agents-list\"><a class=\"agents-list\" href=\"".$agent['User_ID']."\"><span class=\"black-icon agent-avatar\"></span>".$agent['Business_Name']."</a>
+	<p class=\"extra-info\">".mysql_num_rows(mysql_query("SELECT property_ID FROM properties WHERE uploadby = '".$agent['User_ID']."'"))." properties";
 	
 if($status==1 || $status==9){
 //check for follow
@@ -209,7 +303,8 @@ else{
 	$f = 'follow-button';
 	$ficon = 'black-icon follow-icon';
 		}
-echo "<button style=\"float:right\" class=\"$f\" id=\"$buttonid\" onclick=\"follow('$buttonid','$user','$userid','$target','$followtype')\" ><i class=\"$ficon\"></i> $text</button></li>";
+echo "<button style=\"float:right;\" class=\"$f\" id=\"$buttonid\" onclick=\"follow('$buttonid','$user','$userid','$target','$followtype')\" ><i class=\"$ficon\"></i> $text</button>
+</p></li>";
 	}
 //if it was a visitor
 else{
@@ -229,9 +324,10 @@ else{
 mysql_close($db_connection);
 ?>
 </ul>
+<a style="float:right;" href="agents">see all agents>></a>
+</div>
 </div>
 
-<a style="float:right;" href="agents">see all agents>></a>
 </div>
 
 </body>

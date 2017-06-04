@@ -46,8 +46,7 @@ function showSearchAgent(){
 		agentSearchContainer.style.display = 'none';
 		 document.getElementById('suggested-agents-search-container-mobile').style.display ='none';
 		 document.getElementById('toggle-search-agent-container-button').innerHTML ='search agent';
-		 document.getElementById('toggle-search-agent-container-button').style.fontSize ='80%';
-		 		document.getElementById('toggle-search-agent-container-button').style.color ='white';
+		 document.getElementById('toggle-search-agent-container-button').style.fontSize ='100%';
 
 		
 	}

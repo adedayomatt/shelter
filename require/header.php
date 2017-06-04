@@ -1,7 +1,31 @@
 
 <script type="text/javascript" language="javascript" src="http://localhost/shelter/js/jquery-3.1.1.min.js"></script>
 <script  type="text/javascript" language="javascript">
-
+<?php
+//This function takes care of timestamp
+function Timestamp($timestamp){
+	$time = time() - $timestamp;
+	if($time<60){
+		$since = $time.' seconds ago';
+	}
+	else if($time>=60 && $time<3600){
+		$since = (int)($time/60).' minutes ago';
+	}
+	else if($time>=3600 && $time<86400){
+		$since = (int)($time/3600).' hours, '.(($time/60)%60).' minutes ago';
+	}
+	else if($time>=86400 && $time<604800){
+		$since = date('l, M d ',$timestamp).'('.(int)($time/86400).' days ago)';
+	}
+	else if($time>=604800 && $time<18144000){
+		$since = date('M d  ',$timestamp).'('.(int)($time/604800).' weeks ago)';
+	}
+	else{
+		$since = "sometime ago";
+	}
+return $since;
+		}
+?>
 function togglemenu(){
 var sidebar = document.getElementById('sidebar-original');
 var menu = document.getElementById('menuicon');
@@ -75,12 +99,26 @@ $getCTA = mysql_query("SELECT ctaid,name,request,timeCreated,expiryTime FROM cta
 	 if($getCTA && mysql_num_rows($getCTA)==1){
 //if CTA is found...
 	 if(mysql_num_rows($getCTA)==1){
+			$now = time();
 			 $cta = mysql_fetch_array($getCTA,MYSQL_ASSOC);
 				 $ctaname = $cta['name'];
 				 $myid  = $cta['ctaid'];
 				 $rqstatus = $cta['request'];
 				 $timeCreated = $cta['timeCreated'];
 				 $expiryTime = $cta['expiryTime'];
+				 $secondsLeft = $expiryTime - $now;
+//if CTA has expired, log it out immediately, so the cookies can be cleared
+	if($secondsLeft<0){
+	header("location: $root/logout");
+exit();	
+	}
+//Give a major notification as per how many days remaining when the remaining days is <= 6 days
+else if($secondsLeft <= (86400 * 6)){
+	$remainingDays = (int) (($expiryTime-$now)/86400);
+	$remainingDaysNotice = "<h1>NOTICE</h2>
+							<p>This CTA will expire ".($remainingDays >=1? "in <strong class=\"cta-time-remaining\">$remainingDays days</strong> time.":($remainingDays <1 ? "in the next <strong class=\"cta-time-remaining\">".(int)(($expiryTime-$now)/3600)." hours.</strong>" : "in an unknown time"))."</p>
+							<br/><a id=\"renew-in-notice\" href=\"#\">Renew CTA</a>";
+}
 //if request has been placed
 if($rqstatus==1){
 //get request 
@@ -162,10 +200,13 @@ a#notification{
 }
 input.home-search{
 	font-family:Georgia;
-	border: 2px solid #6D0AAA;
+	border:none;
 	border-radius:5px;
-	background-color:white;
+	background-color:rgba(236, 87, 236, 0.2);
 	padding:5px;
+}
+input.home-search:focus{
+	border:none;
 }
 input.select-type{
 	width: 200px;
@@ -177,7 +218,8 @@ input.location{
 	width: 250px;
 }
 input.search{
-	color:#6D0AAA;
+	background-color:purple;
+	color:white;
 }
 
 </style>
@@ -220,7 +262,7 @@ else{
 }
 </script>
 
-<button id="rhs-top-search-btn" style=""> Search </button>
+<!--<button id="rhs-top-search-btn" style=""> Search </button>-->
 </div>
 </div>
 <div class="top-nav-bar" id="top-nav-bar-under" ></div>
@@ -234,9 +276,3 @@ else{
 </form>
 </div>
 </div>
-
-<?php
-if($status == 0){
- //echo "<div style=\"width:20%;margin:0\"><marquee style=\"font-size:12px; color:red\"><i><b>*NOTICE: you are currently not logged in as agent</b></i></marquee></div>";
-}
-?>

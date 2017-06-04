@@ -149,7 +149,6 @@ select{
 	padding:5%;
 	line-height:200%;
 	border-radius:5px;
-	box-shadow:3px 3px 3px 3px #DDD;
 }
 fieldset{
 	padding:5%;
@@ -175,7 +174,7 @@ legend{
 </style>
 <body class="mixedcolor-background">
 <h1 align="center" style="font-size:300%; font-weight:normal; color:white;margin:0px">Shelter</h1>
-<div id="request-form-container">
+<div class="box-shadow-1" id="request-form-container">
 <?php 
 //if no request has been made
 if(isset($_GET['p']) && $_GET['p']==0) {

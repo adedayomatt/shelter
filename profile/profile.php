@@ -132,7 +132,7 @@ $sendmessage = "<a href=\"$root/cta/checkin.php?_rdr=1\"><button class=\"profile
 <div class="main-content">
 <div id="logo-and-name">
 <div id="biz-logo-container">
-<?php echo "<h1>".substr($BizName,0,1)."</h1> "?>
+<?php echo "<h1 class=\"avatar\">".substr($BizName,0,1)."</h1> "?>
 </div>
 <div id="about-biz">
 <?php
@@ -172,7 +172,7 @@ if(isset($_GET['next']) && $_GET['next']>0){
 	 $end = $max;
  }
 
-$fetchproperties = mysql_query("SELECT property_ID,directory,type,location,rent,min_payment,bath,toilet,description,uploadby,date_uploaded,timestamp FROM
+$fetchproperties = mysql_query("SELECT property_ID,directory,type,location,rent,min_payment,bath,toilet,description,uploadby,date_uploaded,timestamp,views FROM
                                properties WHERE (uploadby='$Aid')ORDER BY date_uploaded DESC LIMIT $start,$end");
 //if there is any record fetched
 if($fetchproperties){
@@ -194,6 +194,7 @@ if($fetchproperties){
 	$date_uploaded[$count] = $property['date_uploaded'];
 	$uploadby[$count] = $property['uploadby'];
 	$howlong[$count] = $property['timestamp'];
+	$views[$count] = $property['views'];
 	$count++;
 //last value of count will eventually equals to the total records fetched.
 		}
@@ -226,7 +227,7 @@ else{
 <div class="rhs">
 <div class="relative-rhs-content">
 
-<div id="stats-container">
+<div class="all-corners-border" id="stats-container">
 <h4 class="container-headers">STATS</h4>
 <?php
 function timeReg($timestamp){

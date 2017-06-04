@@ -76,10 +76,10 @@ if($propertytype=="all"  && $loc=="everywhere" || $maxprice==0){
 	}
 //if from suggestions
 	
-echo "<p style=\"margin-left:20px;\">$contentshowing</p>";
+echo "<p class=\"inline-block all-corners-border-1\" style=\" padding: 2%;\">$contentshowing</p>";
 $fetchresult = mysql_query($fetchpropeties);
 if($fetchresult){
-echo "<p>Total Result found: ".$totalFound."</p>";
+echo "<p class=\"inline-block all-corners-border-1\" style=\" padding: 2%;\">Total Result found: ".$totalFound."</p>";
 	while($property = mysql_fetch_array($fetchresult,MYSQL_ASSOC)){
 	$propertyId[$count] = $property['property_ID'];
 	$propertydir[$count] = $property['directory'];

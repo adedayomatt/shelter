@@ -3,20 +3,29 @@
 @media only screen and (min-device-width: 1000px){
 div.other-search-info{
 	float:left;
+	width:30%;
+	margin-left:2%;
+	margin-top:2%;
 }
 
 div.related-results,div.contact-search-help-container{
-	box-shadow: 2px 2px 2px 2px grey;
-	margin-bottom:10px;
+	box-shadow: 0px 2px 2px #DDD inset;
+	margin-bottom:5px;
+	width:100%;
 }
 li.related-results-list{
-	display: block;
+	display: inline-block;
+	width:96%;
+	color:#000;
 	padding:2%;
-	border-bottom:1px solid white;
+	border-bottom:2px solid #E5E5E5;
 }
 li.related-results-list:hover{
 	background-color:#DDD;
 	
+}
+a.related-results{
+	color:#000;
 }
 }
 
@@ -26,16 +35,17 @@ div.other-search-info{
 }
 div.related-results,div.contact-search-help-container{
 	padding:2%;
-	width:80%;
+	width:96%;
 	margin:auto;
 	margin-bottom:50px;
-	box-shadow: 3px 3px 3px 3px grey;
+	box-shadow:  0px 3px 3px grey inset;
+
 }
 li.related-results-list{
-	display: block;
+	color:#000;
 	list-style-type:none;
 	padding:2%;
-	border-bottom:4px solid white;
+	border-bottom:5px solid #E5E5E5;
 }
 
 

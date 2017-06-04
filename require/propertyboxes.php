@@ -103,13 +103,15 @@ else {
 if($ref=='search_page'){
 	$page = "
 	<div class=\"mini-propertybox\">
-	<div class=\"mini-image\">
 	<a href=\"$root/properties/$propertydir[$i]\">
+	<span class=\"mini-heading\">".$type[$i]." at ".$location[$i]."</a>$m</span>
+	
+	<div class=\"mini-image\">
 	<img id=\"$propertyId[$i]image\" height=\"100%\" width=\"100%\" src=\"$image\"/>
 	</div>
 	<div class=\"mini-info\">
-	<span class=\"mini-detail\">".substr("$type[$i] at $location[$i]",0,20)."...</a>$m</span>
-	<span class=\"mini-detail\"><span class=\"black-icon price-icon\"></span>Rent: <span>N ".number_format($rentperannum)."/year
+	
+	<span class=\"mini-detail\"><span class=\"black-icon price-icon\"></span><span class=\"rent-figure\">N ".number_format($rentperannum)."/year</span></span>
 	<span class=\"mini-detail\"><span class=\"black-icon min-payment-icon\"></span><strong>$min_payment[$i]</strong> payment required (N $firstpayment)</span>
 	<span class = \"mini-detail time\" align=\"left\"><span class=\"black-icon time-icon\"></span>".timeuploaded($howlong[$i])."</span>
 	</div>
@@ -120,17 +122,18 @@ if($ref=='search_page'){
 else if($ref=='profile_page'){
 	$page = "
 	<div class=\"mini-propertybox\">
-	<div class=\"mini-image\">
 	<a href=\"$root/properties/$propertydir[$i]\">
+	<span class=\"mini-heading\">".$type[$i]." at ".$location[$i]."</a>$m</span>
+	
+	<div class=\"mini-image\">
 	<img id=\"$propertyId[$i]image\" height=\"100%\" width=\"100%\" src=\"$image\"/>
 	</div>
 	<div class=\"mini-info\">
-	<span class=\"mini-detail\">".substr("$type[$i] at $location[$i]",0,20)."...</a>$m</span>
 	<span class=\"mini-detail\"><span class=\"black-icon price-icon\" ></span><span class=\"rent-figure\"> N ".number_format($rentperannum)."/year</span></span>
 	<span class=\"mini-detail\"><span class=\"black-icon min-payment-icon\"></span> <strong>$min_payment[$i]</strong> payment required (N $firstpayment)</span>
 	<span class = \"mini-detail time\" align=\"left\"><span class=\"black-icon time-icon\"></span>".timeuploaded($howlong[$i])."</span>
 	$clipbutton
-	<a  class=\"options\" href=\"#\"><span class=\"black-icon eye-icon\"></span>(0)views</a>
+	<a  class=\"options\" href=\"#\"><span class=\"black-icon eye-icon\"></span>".$views[$i]." views</a>
 	</div>
 	</div>";	
 	$advertimage1 = "../resrc/image/advert1.jpeg";
@@ -138,15 +141,13 @@ else if($ref=='profile_page'){
 }
 else{
 	$page = "<div id=\"$propertyId[$i]\" class=\"propertybox\">
-	<div class=\"property-heading\">
-	<div class=\"detail\" >
-	<a href=\"$root/properties/$propertydir[$i]\">$type[$i] at $location[$i]$m<br/>
+	<div class=\"property-heading-container\">
+	<a href=\"$root/properties/$propertydir[$i]\" class=\"property-heading\" >$type[$i] at $location[$i]$m</a>
 	<span class=\"status\" style=\"color:white\"> <span ><span class=\"white-icon status-icon\"></span>Available</span></span>
-	</div>
 	</div>
 	<div class=\"image-info\">
 	<div id = \"$propertyId[$i]container\" class=\"imagebox\">
-	<img id=\"$propertyId[$i]image\" onclick=\"animatePropertyImages('$propertyId[$i]image','$image')\" height=\"90%\" width=\"100%\" src=\"$image\"/></a>
+	<img id=\"$propertyId[$i]image\" onclick=\"animatePropertyImages('$propertyId[$i]image','$image')\" height=\"90%\" width=\"100%\" src=\"$image\"/>
 	<div class=\"bath-toilet\"><button class=\"bath-toilet-btn\">($bath[$i]) Baths(s)</button><button class=\"bath-toilet-btn\">($toilet[$i]) Toilet(s)</button></div>
 	</div>
 	
@@ -166,7 +167,7 @@ else{
 		<a  class=\"options report-icon\" href=\"$root/properties/$propertydir[$i]\"><span class=\"black-icon see-more-icon\"></span>Details</a>
 		<div class=\"agent-contacts-box\">$Bname<ul><li>$officeNo</li><li>$PhoneNo</li><li>$altPhoneNo</li></ul></div>
 		<a  class=\"options agent-contacts\"><span class=\"black-icon contact-icon\"></span>Agent</a>
-		<a  class=\"options report-property\" href=\"#\"><span class=\"black-icon eye-icon\"></span>(0)views</a>
+		<a  class=\"options report-property\" href=\"#\"><span class=\"black-icon eye-icon\"></span>".$views[$i]." views</a>
 		</div>
 		</div>";
 		$advertimage1 = "resrc/image/advert1.jpeg";

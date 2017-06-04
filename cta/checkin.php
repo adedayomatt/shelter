@@ -15,13 +15,29 @@ fieldset{
 	border-radius:5px;
 	margin-top:50px;
 }
-
+#checkin,#createnew{
+	padding:5%;
+	background-color:#F5F5F5;
+	margin-top:5px;
+	border-radius:5px;
+}
+.checkin-input,.create-new-input{
+	display:block;
+	width:96%;
+	border:none;
+	border-radius:4px;
+	padding:5% 2% 5% 2%;
+	margin-top:2%;
+}
 #checkin-button,#create-button{
 	border-radius:10px;
+	margin-top:5%;
 }
 #denial{
 	width:80%;
 	text-align:center;
+	background-color:#DDD;
+	border-radius:5px;
 }
 }
 @media only screen and (min-device-width: 1000px){
@@ -35,30 +51,31 @@ fieldset{
 	padding:5%;
 	border-radius:5px;
 }
+
 #checkin-button,#create-button{
 	border-radius:5px;
 }
 #denial{
 	width:50%;
 	text-align:center;
+	background-color:#DDD;
+	border-radius:5px;
 }
 }
 
 #prompt-container{
 	font-size:120%;
-	background-color:#6D0AAA;
-	color:white;
+	background-color:rgba(221, 94, 94, 0.5);
 	border-radius:5px;
 	margin-bottom:10px;
 }
 #prompt-icon{
 	background-position: 0px -120px;
 }
-#checkin-container,#createnew-container{
+#checkin,#createnew{
 	padding:5%;
-	background-color:white;
-	margin-top:5px;
-	box-shadow: 1px 1px 1px 1px grey;
+	background-color:#F5F5F5;
+	margin-top:2px;
 	border-radius:5px;
 }
 
@@ -71,25 +88,28 @@ legend{
 }
 .checkin-input,.create-new-input{
 	display:block;
-	width:94%;
-	padding:3%;
+	width:96%;
+	border:none;
+	border-radius:4px;
+	padding:5% 2% 5% 2%;
+	margin-top:2%;
 }
 #checkin-button,#create-button{
-	width:100%;
-	margin:auto;
+	width:50%;
+	margin:5% 20% 5% 20%;
 	padding:5%;
 	cursor:pointer;
-	background-color:#6D0AAA;
+	background-color:purple;
 	color:white;
 	letter-spacing:2px;
 	border:none;
-	box-shadow: 2px 2px 2px 2px grey;
+	box-shadow: 0px 5px 5px rgba(0,0,0,0.05) inset;
 	font-size:120%;
 	font-weight:bold;
 	font-family:san-serif;
 }
 #checkin-button:hover,#create-button:hover{
-	box-shadow: 2px 2px 2px 2px #333;
+	opacity:0.8;
 }
 #checkin-button:click{
 	background-color:white;
@@ -103,7 +123,7 @@ legend{
 	line-height:120%;
 }
 #error-container,#success-container{
-	width:80%;
+	width:70%;
 	margin-bottom:10px;
 }
 #error-icon{
@@ -113,11 +133,13 @@ legend{
 #success-icon{
 	background-position:-288px 0px;
 }
-
+input{
+	
+}
 
 </style>
 <?php
-$pagetitle = "CTA-checkin";
+$pagetitle = "CTA";
 $getuserName = true;
 $ref = "ctaPage";
 $connect = true;
@@ -140,11 +162,11 @@ $pass = $_POST['checkinPassword'];
 
 //if user want to checkin with number...
 if(is_numeric($user)){
-	$getCTA = "SELECT ctaid, phone,request,password FROM cta WHERE (phone=$user AND password='$pass')";
+	$getCTA = "SELECT ctaid, phone,request,password,expiryTime FROM cta WHERE (phone=$user AND password='$pass')";
 }
 //...or name
 else{
-	$getCTA = "SELECT ctaid,name,request,password FROM cta WHERE (name='$user' AND password='$pass')";
+	$getCTA = "SELECT ctaid,name,request,password,expiryTime FROM cta WHERE (name='$user' AND password='$pass')";
 }
 $getCTAquery = @mysql_query($getCTA);
 //if query is correct
@@ -153,6 +175,13 @@ if($getCTAquery && mysql_num_rows($getCTAquery)==1){
 	$ctaid = @mysql_fetch_array($getCTAquery,MYSQL_ASSOC);
 	$id = $ctaid['ctaid'];
 	$requeststatus = $ctaid['request'];
+	$CTAexpires = $ctaid['expiryTime'];
+//if cta has expired
+	if($CTAexpires <= time()){
+		header("location: $root/cta/?checkin=false&acct=xyz");
+		exit();
+	}
+	else{
 		setcookie('CTA',$id,time()+2592000,"/","",0);
 //if there is request already, redirect to homepage else redirect to the request page
 		switch($requeststatus){
@@ -164,6 +193,8 @@ if($getCTAquery && mysql_num_rows($getCTAquery)==1){
 		header("location: $root/cta/request.php?p=$requeststatus");
 		exit();
 		}
+	}
+		
 		
 	}
 //if no match is found for the account trying to be logged in
@@ -204,7 +235,9 @@ if(mysql_num_rows(mysql_query("SELECT * FROM cta WHERE name='$ctaname'"))==0){
 	$createnewCTA = @mysql_query("INSERT INTO cta (ctaid,name,phone,email,request,password,datecreated,timeCreated,expiryTime) VALUES('$ctaid','$ctaname',$ctaphone,'$ctamail',0,'$ctapass',NOW(),$timeCreated,$expiryTime)");
 //if query is correct
 if($createnewCTA){
-	mysql_query("INSERT INTO notifications (notificationid,subject,subjecttrace,receiver,action,status,time) VALUE ('".uniqid('CTAcreate')."','$ctaname','$ctaid','$ctaname','CTA created','unseen',".time().")");
+	@mysql_query("INSERT INTO notifications (notificationid,subject,subjecttrace,receiver,action,status,time) VALUE ('".uniqid('CTAcreate')."','$ctaname','$ctaid','$ctaname','CTA created','unseen',".time().")");
+	$activityID = uniqid(time());
+	@mysql_query("INSERT INTO activities (activityID, action, subject, subject_ID, subject_Username, status, timestamp) VALUES('$activityID','CAO','$ctaname','$ctaid','$ctaname','unseen',$timeCreated)");
 			$createCTAReport = "<h3>CTA created successfully</h3>
 			<p>You can now request your property with preferences and get notifications when they are available
 			<a href=\"#checkin\">checkin now</a> to explore!</p>";
@@ -235,19 +268,19 @@ else{
 
 if(isset($_COOKIE['name'])){
 	$denialMessage = "<h3 class=\"error-flags\"><span class=\"black-icon\" id=\"error-icon\"></span> Access Denied!</h3>
-						<p>You cannot use Client Temporary Account because you are currently logged in as an agent
-						<a href=\"../logout\">Logout</a> first</p>";
+						<p>You cannot use Client Temporary Account because you are currently logged in as an agent logout first
+						<a class=\"inline-block-link white-on-red\" href=\"../logout\">Logout</a> </p>";
 }
 else if(isset($_COOKIE['CTA'])){
 $denialMessage = "<h3 class=\"error-flags\"><span class=\"black-icon\" id=\"error-icon\"></span> Already checked in!</h3>
-				<p>A CTA is already checked in as <strong>".$_COOKIE['CTA']."</strong><br/><a href=\"../logout\">checkout</a></p>";
+				<p>A CTA is already checked in as <strong>".$_COOKIE['CTA']."</strong> <a class=\"inline-block-link white-on-red\" href=\"../logout\">checkout</a></p>";
 }
 ?>
 </head>
 <body class="mixedcolor-background">
 <h2 align="center" style="color:white;font-size:200%">Shelter</h2>
 <?php if(isset($denialMessage)){
-	echo "<div class=\"operation-report-container\" id=\"denial\">$denialMessage</div></body></html>";
+	echo "<div class=\"operation-report-container box-shadow-1\" id=\"denial\">$denialMessage</div></body></html>";
 	exit();
 }?>
 
@@ -256,14 +289,14 @@ $denialMessage = "<h3 class=\"error-flags\"><span class=\"black-icon\" id=\"erro
 <!--<p>Client Temporary Account (CTA) is account for clients who wish to get notifications on the availability of their requested</p>-->
 
 </div>
-<div id="checkin-container">
+<div class="box-shadow-1" id="checkin">
 <?php
 if(!empty($checkinreminder) || $checkinreminder != ""){
-	echo "<div class=\"operation-report-container\" id=\"prompt-container\" ><p><i class=\"white-icon\" id=\"prompt-icon\"></i> $checkinreminder</p></div>";
+	echo "<div class=\"operation-report-container\" id=\"prompt-container\" ><p><i class=\"black-icon\" id=\"prompt-icon\"></i> $checkinreminder</p></div>";
 }
 //if there is error while trying to checkin
 if(isset($checkinReport)){
-	echo "<div class=\"operation-report-container\" id=\"error-container\" >$checkinReport</div>";
+	echo "<div class=\"operation-fail-container\" id=\"error-container\" >$checkinReport</div>";
 }
 ?>
 <fieldset>
@@ -277,7 +310,7 @@ if(isset($checkinReport)){
 </div>
 <h3 style="letter-spacing:3px; font-size:200%">Don't Have a CTA? </h3>
 <span style="line-height:150%" >You can create a new Client Temporary Account(CTA) Now or you may want to <a href="">learn more</a> about CTA</span>
-<div id="createnew-container">
+<div class="box-shadow-1" id="createnew">
 <?php
 //if there is error while trying to create new CTA
 if(isset($createCTAReport) && $success == 0){

@@ -73,7 +73,8 @@ if(empty($error)){
 	$email = mysql_real_escape_string($_POST['personal_mail']);
 	$UserId = mysql_real_escape_string($_POST['userID']);
 	$password = $_POST['pass2'];
-	$id = time(); 
+	$id = time() + rand(1000,9999); 
+	$timeCreated = time();
 //if $phone_No2 is empty or invalid, set a default value 0
 	if(empty($Phone_No2) || !is_numeric($Phone_No2)){
 		$Phone_No2 = 0;
@@ -81,11 +82,11 @@ if(empty($error)){
 //if user check the agreement box
 	if(isset($_POST['agreement'])){
 //if there is no any account or user with the same username, create account and make directory for the new user
-		if(!file_exists("../$UserId") || mysql_num_rows(mysql_query("SELECT User_ID FROM profiles WHERE User_ID='$UserId'"))==1){
+		if(!file_exists("../$UserId") || mysql_num_rows(mysql_query("SELECT User_ID FROM profiles WHERE User_ID='$UserId'"))==0){
 //if there is no other account with the business name
 if(mysql_num_rows(mysql_query("SELECT Business_Name FROM profiles WHERE Business_Name='$Business_Name'"))==0){
-$data = "INSERT INTO profiles(ID,Business_Name,Office_Address,Office_Tel_No,Business_email,CEO_Name,Phone_No,Alt_Phone_No,email, User_ID,password)";
-	$data .="VALUES('$id','$Business_Name','$Office_Address',$Office_Tel,'$Office_mail','$CEO',$Phone_No,$Phone_No2,'$email','$UserId','$password')";
+$data = "INSERT INTO profiles(ID,Business_Name,Office_Address,Office_Tel_No,Business_email,CEO_Name,Phone_No,Alt_Phone_No,email, User_ID,password,timestamp)";
+	$data .="VALUES('$id','$Business_Name','$Office_Address',$Office_Tel,'$Office_mail','$CEO',$Phone_No,$Phone_No2,'$email','$UserId','$password',$timeCreated)";
 	$reg = mysql_query($data);
 	if($reg) {
 	//create a directory for new user 
@@ -103,7 +104,15 @@ $data = "INSERT INTO profiles(ID,Business_Name,Office_Address,Office_Tel_No,Busi
 			fclose($open);
 		$registerationReport = "Your Account as been registered successfully as <b>$UserId</b><br/> Click <a href=\"../login\"> here </a> to continue</h3>" ;
 			$case = 1;
-			}	
+	//insert in activity log
+	$activityID = uniqid(time());
+	@mysql_query("INSERT INTO activities (activityID, action, subject, subject_ID, subject_Username, status, timestamp) VALUES('$activityID','AAO','$Business_Name','$id','$UserId','unseen',$timeCreated)");
+
+			}
+else{
+	$registerationReport = "Sorry, You can not use the username <strong>'$UserId'</strong>. It has been used by another agent";
+	$case = 2;
+}			
 	}
 else{
 	$registerationReport = "There was an error while registering your account, please bear with us and try again";
@@ -112,8 +121,8 @@ else{
 				}
 			}
 else{
-	$registerationReport = "Sorry, you cannot use the Business name <strong>'$Business_Name'</strong> because a user is using it already<br/>
-	If you own the account but forgot the password, you can <a href=\"#\">Recover Password</a> <br/>
+	$registerationReport = "Sorry, you cannot use the Business name <strong>'$Business_Name'</strong> because a user is using it already. <br/><br/>
+	If you own the account but forgot the password, you can <a href=\"#\">Recover Password</a> <br/><br/>
 	If this is an error, <a href=\"#\">Report Now</a>";
 	$case = 3;
 }
@@ -144,41 +153,16 @@ else{
 		?>
 <div id="mainsignup">
 <a id="shelter" href="../"><h1>Shelter</h1></a>
-	<?php 
-//Here gives the repoort of the registration. successful or fail
-if(isset($registerationReport)){
-switch ($case){
-//case 1: Registration is successful
-	case 1:
+	<?php
+	if(isset($case) and $case == 1){
 	$icon = "background-position:-288px 0px";
 	echo "<div id = \"registration-successful\">
 	<h1>Sucessful!</h1>
 	$registerationReport</div>";
 	exit();
-	break;
-//case 6: Form is not completed correctly
-	case 6:
-	$icon = "background-position:-312px 0px";
-	echo "<div id=\"registration-not-successful\" >
-	<h1>Failed!</h1>
-	$registerationReport<br/>";
-//List the invalid data
-echo "<ul>";
-foreach($error as $e){
-	echo "<li >". $e."</li>";
 	}
-echo "</ul>check your input and try again</div>";
-	break;
-	default:
-	$icon = "background-position:-312px 0px";
-	echo "<div id=\"registration-not-successful\">
-	<h1>Failed!</h1>
-	$registerationReport</div>";
-	break;
-}
-
-}
 	?>
+	
 	<!--if javascript is not active on the browser, just display all the steps-->		
 	<noscript>
 	<style>
@@ -191,10 +175,40 @@ echo "</ul>check your input and try again</div>";
 	</style>
 	</noscript>
 			<div id="yes-js-mainsignup" >
+			
 			<p style="color:white"align="center">Already have an account? You can <a href="../login">login</a></p>
 		<form name="signupform" action="<?php $_PHP_SELF ?>" method="POST" onsubmit="return(verify())">
 		<div class="signup-tabs" id="business-info-tab">
 		<fieldset class="Business" >
+		
+		
+					<?php 
+//Here gives the repoort of the registration. successful or fail
+if(isset($registerationReport)){
+switch ($case){
+//case 6: Form is not completed correctly
+	case 6:
+	$icon = "background-position:-312px 0px";
+	echo "<div class=\"operation-fail-container\" id=\"registration-not-successful\" >
+	<h1>Failed!</h1>
+	$registerationReport<br/>";
+//List the invalid data
+echo "<ul>";
+foreach($error as $e){
+	echo "<li >". $e."</li>";
+	}
+echo "</ul>check your input and try again</div>";
+	break;
+	default:
+	$icon = "background-position:-312px 0px";
+	echo "<div class=\"operation-fail-container\" id=\"registration-not-successful\">
+	<h1>Failed!</h1>
+	$registerationReport</div>";
+	break;
+}
+
+}
+	?>	
 		<h3 class="step">Step 1</h3>
 			<h3 class="legend">Business Information</h3>
 			<p>Let people know your business name, address and contacts. It makes it easier for clients and potential clients to locate or contact you.</p>

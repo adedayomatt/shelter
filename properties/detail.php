@@ -21,7 +21,8 @@ $social = $detail['socialization'];
 $security = $detail['security'];
 $description = $detail['description'];
 $date = $detail['date_uploaded'];
-$managerId = $detail['uploadby'];	
+$managerId = $detail['uploadby'];
+$views = $detail['views'];	
 	}
 	else{
 		echo "<br/><br/><div class=\"no-property\">No property with the ID <b>".$ID."</b>. It may have been deleted or banned.<br/>If you think this is an error, please  <a href=\"\">Report Now</a></div>";
@@ -80,6 +81,7 @@ echo (checkForImage($ID.'_04.png') != "" ? checkForImage($ID.'_04.png')  : "<div
 ?>
 </div>
 </div>
+<p style="color:purple"><?php echo" This property has been viewed  $views other times" ?></p>
 <div id="detail-tray">
 
 <div id="info-container">
@@ -220,5 +222,8 @@ echo "<div class=\"related-property\">
 <div style="margin-top:355px">
 <?php  
 //require('../../require/footer.html');
+//update number of views
+$newviews = $views + 1;
+mysql_query("UPDATE properties SET views=$newviews WHERE (property_ID='$ID')");
 mysql_close($db_connection);
 ?></div>

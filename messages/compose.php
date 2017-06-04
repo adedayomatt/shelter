@@ -4,6 +4,7 @@
 <meta name="viewport" content="max-width=1000px,maximum-scale=0.35" />
 <link href="../css/general.css" type="text/css" rel="stylesheet" />
 <link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
+<link href="../css/messages_styles.css" type="text/css" rel="stylesheet" />
 <head>
 <?php
 $pagetitle = "Send Message";
@@ -57,10 +58,10 @@ $sendmessage = mysql_query("INSERT INTO messages (conversationid,messageid,subje
 			}
 //if message was sent successfully or not
 	if($sendmessage){
-	$sent = "<p style=\"color=#6D0AAA\">Your message to $receiver was sent successfully</p>";
-	mysql_close($db_connection);
-	header("location: http://192.168.173.1/shelter/messages");
-	exit();
+	$sent = "<p style=\"color=#6D0AAA\">Your message to $receiver was sent successfully.<br/><br/><a style=\"padding:2%;background-color:purple;color:yellow; border-radius:5px;text-decoration:none;\" href=\"../messages\">Go to inbox</a></p>";
+	//mysql_close($db_connection);
+	//header("location: http://192.168.173.1/shelter/messages");
+	//exit();
 	}
 	else{
 		$sent = "<p style=\"color: red\">Your message to $receiver was not sent successfully</p>";
@@ -77,91 +78,6 @@ else{
 ?>
 
 <style>
-@media only screen and (min-device-width: 1000px){
-	#compose-area{
-		width:50%;
-	margin:auto;
-	background-color:#eeeeee;
-	padding-top:20px;
-	padding-left:50px;
-	min-height:400px;
-border-radius:10px;
-line-height:200%;
-	}
-	#sent-report{
-		width:100%;
-	}
-	input.message-input{
-	padding:1%;
-	display:block;
-	width:80%;
-	margin:auto;
-}
-#sendmessage-button{
-	float:right;
-	padding:1%;
-	padding-left:5%;
-	padding-right:5%;
-	border:none;
-	border-radius:5px;
-	background-color:#6D0AAA;
-	color:white;
-	letter-spacing:2px;
-}
-
-}
-@media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
-	#compose-area{
-		width:98%;
-	padding:1%;
-	background-color:#eeeeee;
-  line-height:300%;
-}
-input.message-input{
-	padding:1%;
-	display:block;
-	width:80%;
-	margin:auto;
-}
-	#message-textarea{
-		font-size:100%;
-	}
-	#sent-report{
-		width:100%;
-	}
-#sendmessage-button{
-	width:100%;
-	margin:auto;
-	margin-top:30px;
-	padding:4%;
-	border:none;
-	border-radius:10px;
-	background-color:#6D0AAA;
-	color:white;
-	letter-spacing:2px;
-}
-}
-#sent-report{
-	margin:auto;
-	padding:5px;
-	background-color:white;
-	text-align:center;
-	border-radius:5px;
-	box-shadow:3px 3px 3px 3px grey;
-}
-
-#confirm{
-	font-size:120%;
-}
-
-#message-textarea{
-	padding:1%;
-	display:block;
-	width:100%;
-height:300px;
-max-heigh:200px;
-font-family:Georgia;
-}
 
 </style>
 <body class="pic-background">
@@ -169,7 +85,8 @@ font-family:Georgia;
 <?php
 if(isset($_GET['cv']) && isset($_GET['rcpt']) && !empty($_GET['rcpt'])&& !empty($_GET['rcpt'])){
 	//first confirm the existentence of the recipient
-	$getrecipient = mysql_query("SELECT Business_Name FROM profiles WHERE ID='".$_GET['rcpt']."'");
+	$r = $_GET['rcpt'];
+	$getrecipient = mysql_query("SELECT Business_Name FROM profiles WHERE ID=$r");
 if(mysql_num_rows($getrecipient)==1){
 	$recipient = mysql_fetch_array($getrecipient,MYSQL_ASSOC);
 $confirm = "Message <strong>".$recipient['Business_Name']."</strong>";

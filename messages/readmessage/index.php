@@ -1,7 +1,9 @@
+
 <!DOCTYPE html>
 <html>
 <link href="../../css/general.css" type="text/css" rel="stylesheet" />
 <link href="../../css/header_styles.css" type="text/css" rel="stylesheet" />
+<link href="../../css/messages_styles.css" type="text/css" rel="stylesheet" />
 <header>
 <?php
 $pagetitle = "Read Message";
@@ -13,64 +15,45 @@ if($status==0){
 	redirect();
 }
 ?>
-<style>
-div.no-message{
-	margin-top:100px;
-	width:70%;
-	margin:auto;
-	padding:10px;
-	background-color:white;
-	border-radius:5px;
-	color:#6D0AAA;
-	text-align:center;
-}
-#messages-parent{
-	min-height:400px;
-	margin-top:30px;
-}
-div.messages-side-bar{
-	width:20%;
-	float:left;
-}
-div.all-messages-container{
-	width:70%;
-	float:left;
-}
-div.message-content{
-	width:100%;
-	float:left;
-	min-height: 100px;
-	background-color:white;
-	margin-bottom:10px;
-	border-radius: 2px;
-	box-shadow:1px 5px 5px 0px grey;
-}
-div.message-heading{
-	padding:1%;
-	color:grey;
-	text-align:left;
-	border-top:1px solid grey;
-	border-bottom:1px solid grey;
+<?php
+//This place takes care of replying
+//COMING BACK TO THAT LATER
+if(isset($_POST['reply'])){
 	
 }
-.out{
-	background-position: -288px -144px;
-}
-.in{
-	background-position: -312px -144px;
-}
-.message-time{
-	font-size:12px;
-	float:right;
-}
-div.message-body{
-	padding:20px;
-}
+?>
 
-</style>
+<script>
+function toggleReplyContainer(){
+var butt = document.getElementById('reply-button');
+var replyContainer = document.getElementById('reply-box');
+if(replyContainer.style.display != 'block'){
+	replyContainer.style.display = 'block';
+}
+else{
+	replyContainer.style.display = 'none';
+}
+}
+</script>
 </header>
 <body class="no-pic-background">
+
+<div id="reply-box">
+<span style="float:right; color:red;font-size:200%;cursor:pointer;:hover:color:purple" onclick="toggleReplyContainer()"> &times </span>
+<form id="reply-form" action="<?php $_PHP_SELF ?>" method="POST">
+<?php
+	$msg = mysql_fetch_array(mysql_query("SELECT subject,initiator,participant FROM messagelinker WHERE (conversationid=".$_GET['cv'].")"),MYSQL_ASSOC);
+	$secondParty = @(($msg['initiator']=="$Business_Name" || $msg['initiator']=="$ctaname") ? $msg['participant'] : $msg['initiator']);
+?>
+<h2 style="font-weight:normal">Reply <?php echo $secondParty ?></h2>
+<input id="reply-subject" name="subject" value="<?php echo ($msg['subject'] == "no subject" ? '' :  $msg['subject'])?>"  placeholder="subject" type="text"/>
+<textarea id="reply-body" name="body" placeholder="Reply <?php echo ""?>"></textarea>
+<input id="send-reply-button" name="reply" value="Send"  placeholder="subject" type="submit"/>
+</form>
+</div>
+
 <div id="messages-parent">
+
 <?php
 if(isset($_GET['cv'])){
 	$cv = $_GET['cv'];
@@ -80,22 +63,22 @@ if($status == 1){
 else if($status == 9){
 		$user = $ctaname;
 	}
-	$getMessages = mysql_query($messageQuery = "SELECT * FROM messages WHERE (conversationid = '$cv' AND (sender='$user' OR receiver = '$user')) ORDER BY timestamp DESC ");
-if(mysql_num_rows($getMessages) >= 1){
-	$totalMessages = mysql_num_rows($getMessages);
-echo "
-<div class=\"messages-side-bar\">
-Total Messages : $totalMessages
-</div>
-";	
 
-echo "<div class=\"all-messages-container\">";
+//opening tag for all-messages-container
+echo "<div class=\"all-messages-container\">
+<a class=\"message-menu inline-block\" id=\"reply-button\" onclick=\"toggleReplyContainer()\">Reply</a>
+<a class=\"message-menu inline-block\" href=\"../\"> Go to inbox</a>
+";
+
+$getMessages = mysql_query("SELECT * FROM messages WHERE (conversationid = '$cv' AND (sender='$user' OR receiver = '$user')) ORDER BY timestamp DESC");
+if(mysql_num_rows($getMessages) != 0){
 	while($message = mysql_fetch_array($getMessages,MYSQL_ASSOC)){
 	$messageid = $message['messageid'];
 	$subject = 	$message['subject'];
 	$sender = $message['sender'];
 	$receiver = $message['receiver'];
 	$body = $message['body'];
+	$read = ($message['status']== 'unseen' ? 'unread-messages' :'read-messages');
 	if($sender == $user){
 		$messagetime = messageTime('sent',$message['timestamp']);
 		$sentOrReceived = "Sent to: ".$receiver;
@@ -106,8 +89,7 @@ echo "<div class=\"all-messages-container\">";
 		$sentOrReceived = "Received from: ".$sender;
 		$inOrOut = 'in';
 	}
-		echo "
-		<div class=\"message-content\">
+		echo "<div class=\"message-content\" id=\"$messageid\">
 		<div class=\"message-heading\">
 		Subject: $subject<br/>
 		<i class=\"black-icon $inOrOut\"></i>$sentOrReceived
@@ -119,13 +101,18 @@ echo "<div class=\"all-messages-container\">";
 		</div>
 		";
 		}
+		ECHO "<a class=\"message-menu inline-block white-on-red\" style=\"color:white\" href=\"../\">Clear conversation</a>";
+}
+else{
+		echo "<div style=\"text-align:center\" class=\"operation-report-container\">Empty Messages</div>";
+}
 //closing tag for all-messages-container
 	echo "</div>";
 	}
-else{
-	$MessageQueryReport = "No Message for this conversation";
+/*else{
+	$MessageQueryReport = "There is no message in this conversation or you are not involved in the conversation";
 	}
-}
+*/
 else{
 $MessageQueryReport =  "No Valid conversation ID";	
 }
@@ -157,16 +144,27 @@ function messageTime($sender,$timestamp){
 	}
 switch($sender){
 	case 'received':
-	return 'received: '.$since;
+	//return 'received: '.$since;
+	return $since;
 	break;
 	case 'sent':
-	return 'sent: '.$since;
+	//return 'sent: '.$since;
+	return $since;
 	break;
 }
 
 		}
 ?>
+
 </div>
+
+
+<?php
+//update the messages as read
+@mysql_query("UPDATE messagelinker SET status='seen' WHERE conversationid=$cv");
+@mysql_query("UPDATE messages SET status='seen' WHERE conversationid=$cv");
+mysql_close($db_connection);
+?>
 </body>
 
 <footer></footer>

@@ -8,7 +8,7 @@ $affected = array();
 //if submitted...
 if(isset($_GET['execute'])){
 /*connect to the database*/
-	require('../../require/db_connect.php');
+	require('../../require/connexion.php');
 /*if connection is successful*/
 	if($db_connection){
 /*select database*/
@@ -64,7 +64,8 @@ else{
 
 function erase($que){
 	$no = 1;
-	require('../../require/db_connect.php');
+	$connect = true;
+	require('../../require/connexion.php');
 	mysql_select_db('shelter');
 		$delete_statement = "DELETE FROM profiles WHERE profiles.ID='".$que."'";
 		$delete_query = mysql_query($delete_statement,$db_connection);

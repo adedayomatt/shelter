@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <html>
 <head>
 <link href="../css/general.css" type="text/css" rel="stylesheet" />
@@ -15,10 +16,20 @@ $pagetitle = "upload";
 	}
 ?>
 <?php
+
+	function status($form_field){
+	if(isset($form_field) AND !empty($form_field)){
+	return $form_field;
+}
+else{
+	return 'No';
+			}
+		}
 /*
 if upload is submitted
 */
 if(isset($_POST['upload'])){
+
 	//Receiving information from the submitted form
 $propertyId = generateid();
 $type = $_POST['type'];
@@ -27,11 +38,11 @@ $rent = $_POST['rent'];
 $min_payment = $_POST['min_payment'];
 $bath = $_POST['bath'];
 $loo = $_POST['loo'];
-$pmachine = status($_POST['pmachine']);
-$borehole = status($_POST['borehole']);
-$well = status($_POST['well']);
-$tiles = status($_POST['tiles']);
-$pspace = status($_POST['pspace']);
+$pmachine = @status($_POST['pmachine']);
+$borehole = @status($_POST['borehole']);
+$well = @status($_POST['well']);
+$tiles = @status($_POST['tiles']);
+$pspace = @status($_POST['pspace']);
 $electricity = $_POST['electricity'];
 $road = $_POST['road'];
 $social = $_POST['social'];
@@ -46,9 +57,11 @@ $upload .= "(property_ID,directory,type,location,rent,min_payment,bath,toilet,pu
 $upload .="VALUES('$propertyId',trim('$dirName'),'$type','$location',$rent,'$min_payment',$bath,$loo,'$pmachine','$borehole','$well','$tiles','$pspace',$electricity,$road,$social,$security,'$description','$profile_name',NOW(),$timestamp)";
 //echo $upload;
 $uploadQuery = mysql_query($upload);
-//if recorded addedd successfully
+//if record added successfully
 if($uploadQuery){
-session_start();
+	$activityID = uniqid(time());
+@mysql_query("INSERT INTO activities (activityID, action, subject, subject_ID, subject_Username, status,otherlink,timestamp) VALUES('$activityID','upload','$Business_Name','$profile_name','$myid','unseen',trim('$dirName'),$timestamp)");
+
 	//create a directory for new property 
 $propertydir = '../properties/'.$dirName;
 $_SESSION['directory'] = $propertydir;
@@ -134,15 +147,6 @@ function generateid(){
 	
 }
 
-function status($form_field){
-	if(isset($form_field)){
-	return $form_field;
-}
-else{
-	return 'No';
-}
-}
-
 
 ?>
 <script type="text/javascript" src="verify.js" ></script>
@@ -171,7 +175,7 @@ else{
 </select></label><br/><br/>
 <?php?>
 <label for="rent">Rent N </label><input name="rent" type="text" placeholder="Actual rent"/> per annum<br/><br/>
-<label for="duration">Minimum payment required </label><input name="min_payment" type="radio" value="1 Year"/>1 year <input name="min_payment" type="radio" value="1 year, 6 months"/>1Year, 6 Months <input name="min_payment" type="radio" value="2 years"/>2 Years<br/><br/>
+<label for="duration">Minimum payment required </label><input name="min_payment" type="radio" value="1 year"/>1 year <input name="min_payment" type="radio" value="1 year, 6 months"/>1Year, 6 Months <input name="min_payment" type="radio" value="2 years"/>2 Years<br/><br/>
 <label for="location">Location </label><input name="location" type="text" size="50" placeholder="Address of the property"/><br/><br/>
 </fieldset>
 <br/>

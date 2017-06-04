@@ -43,7 +43,7 @@ $ref="search_page";
 require("../require/propertyboxes.php");
 
 if(!empty($propertyId)){
-echo "<p> showing $x - $y of $totalFound found results<a class=\"show-more-link\" href =\"?type=$propertytype&max=$maxprice&location=$loc&next=$y\" >show more results >></a> </p>";
+echo "<p class=\"inline-block\"> showing $x - $y of $totalFound found results<a class=\"show-more-link\" href =\"?type=$propertytype&max=$maxprice&location=$loc&next=$y\" >show more results >></a> </p>";
 }
 
 //if no match is found for the search, get related results
@@ -101,7 +101,7 @@ if(isset($_GET['type']) || isset($_GET['max']) || isset($_GET['location'])){
 		echo "<ul id=\"related-results-list\">";
 		while($suggest = mysql_fetch_array($getsuggestions_query,MYSQL_ASSOC)){
 		$dir[$s] = $suggest['directory'];
-		echo "<li class=\"related-results-list\"><a class=\"related-results\" href=\"$root/properties/".$suggest['directory']."\">".$suggest['type']." at ".$suggest['location']." for N ".number_format($suggest['rent'])."</a></li>";
+		echo "<a class=\"related-results\" href=\"$root/properties/".$suggest['directory']."\"><li class=\"related-results-list inline-block-fullwidth\">".$suggest['type']." at ".$suggest['location']." for N ".number_format($suggest['rent'])."</li></a>";
 		$s++;
 //display max of 12 related results
 		if($s==12){
@@ -126,9 +126,9 @@ if(isset($_GET['type']) || isset($_GET['max']) || isset($_GET['location'])){
 <div class="contact-search-help-container">
 <?php
 if($status == 0 || $status==9)	{
-echo "<br/><br/><p align=\"left\" style=\"padding-left:10px;\">Can't find what you are looking for?, Try a new search</p>
-	 <p align=\"left\" style=\"padding-left:10px;\"><a href=\"../cta/request.php?p=1\">make a special request</a></p>
-     <p align=\"right\" style=\"padding-right:10px;\"><b>Have any problem searching?<br/>contact <a href=\"\">our help center</a></b></p>";
+echo "<p class=\"inline-block\" align=\"left\" style=\"padding-left:10px;\">Can't find what you are looking for?, Try a new search</p>
+	 <a class=\"inline-block-link white-on-purple\" href=\"../cta/request.php?p=1\">make a special request</a>
+     <p class=\"inline-block\"><b>Have any problem searching?</b> <a class=\"inline-block-link white-on-purple\" href=\"\">contact our help center</a></p>";
 }
 ?>
 </div>

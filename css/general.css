@@ -6,10 +6,22 @@ html{
 		line-height:1.2em;
 	}
 html,button,input,select,option{
-font-family: Tahoma,Georgia,"Century Gothic",Arial,sans-serif;
+font-family: Helvetica,Georgia,"Century Gothic",Arial,sans-serif;
 	}
 h1,h2,h3,h4,h5,h6{
 	line-height:150%;
+}
+textarea{
+	resize:none;
+}
+a{
+	color:blue;
+}
+.account-nav-link:visited{
+	color:black;
+}
+.inline-block-link:visited,.cta-status-link:visited{
+	color:white;
 }
 .suggestion-box{
 		background-color:black;
@@ -36,15 +48,17 @@ ul.no-padding-ul{
 .show-more-link{
 	display:inline-block;
 	padding:2%;
+	padding-right:10%;
+	padding-left:10%;
 	margin:4%;
 	border-radius:8px;
 	font-family:arial;
-	background-color: #6D0AAA;
+	background-color: grey;
 	color:white;
 	font-size:100%;
 }
 .show-more-link:hover{
-	background-color:grey;
+	font-size:110%;
 text-decoration:none;
 }
 .white-icon{
@@ -68,9 +82,31 @@ vertical-align: text-top;
 .sidebar{
 	font-family:Tahoma;
 }
+.cta-expiry-notice>h1{
+	font-weight:normal;
+}
+.cta-expiry-notice>p{
+	color:white;
+}
+a#renew-in-notice{
+	display:inline-block;
+	text-align:center;
+	text-decoration:none;
+	padding:2%;
+	padding-left:5%;
+	padding-right:5%;
+	background-color:purple;
+	color:white;
+	border-radius:5px;
+}
+.cta-time-remaining{
+	color:red;
+	font-size:120%;
+}
+
 @media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
 	html,button,input,select,option{
-font-family: Georgia;
+/*font-family: Georgia;*/
 	}
 		body{
 		max-width:1000px;
@@ -80,7 +116,7 @@ font-family: Georgia;
 	font-size:250%;
 	letter-spacing: 1px;
 		}
-body.mixedcolor-background{
+body.mixedcolor-background,div.mixedcolor-background{
 	background: #EEEEEE url('../resrc/mixedcolormobile.png') repeat-x;
 }
 input,label,select,legend{
@@ -91,28 +127,73 @@ table,tr,td{
 }
 input[type=text],input[type=password],input[type=email]{
 	padding:3%;
-	font-size:100%;
+	font-size:110%;
+	border-radius:10px;
 }	
+input[type=text]:focus,input[type=password]:focus,input[type=email]:focus{
+	font-size:160%;
+}
+/* I put this style because in mobile chrome, some text always appear unusually larger than it should
+and i noticed that this style correct it
+*/
+p,h1,h2,h3,h4,h5,h6,span,li,.inline-block,.inline-block-fullwidth{
+	display:inline-block;
+	max-height:1000px;
+}
+.inline-block-fullwidth{
+	width:100%;
+}
 
-		input:focus{
-			font-size:150%;
-					}
-		
+.all-corners-border-1{
+	border: 5px solid rgba(0,0,0,0.1);
+}
+.box-shadow-1{
+	box-shadow: 4px 10px 20px #555;
+}
+	
+.cta-expiry-notice{
+	background-color:rgba(221, 94, 94, 0.5);
+	width:95%;
+	margin:auto;
+	padding:1%;
+	color:red;
+	letter-spacing:2px;
+}
+
 	div.sidebar{
 		display:none;
 	font-size:100%;	
-background-color:#6D0AAA;
-	color:white;
 	}
+	#sidebar-original{
+	overflow:hidden;
+	position:fixed;
+	background-color:#F5F5F5;
+	box-shadow:0px 5px 5px rgba(0, 0, 0, 0.05) inset;
+	border-radius:2px;
+	}
+#sidebar-original:hover{
+	overflow-y:scroll;
+	overflow-x:hidden;
+}
 .sidebar-headings{
 	display:block;
-	padding:5%;
-	background-color:white;
-	color:#6D0AAA;
+	font-size:200%;
+	padding:0px;
+	letter-spacing:10px;
+	font-weight:normal;
+	color:purple;
 }
-	.account-nav-link{
+.account-nav-container{
+	background-color:#DDD;
+	width:90%;
+	margin:1% 5% 1% 5%;
+	border: 5px solid #C7C7C7;
+	opacity:0.8;
+}
+
+.account-nav-link{
 		padding:3% 3% 3% 10%;
-		color:white;
+		color:black;
 		font-size:110%;
 		font-weight:bold;
 	}
@@ -149,8 +230,10 @@ div.content-before-footer{
 		}	
 }
 @media only screen and (min-device-width: 1000px){
+	
 	html,button,input,select,option{
-		letter-spacing:1px;
+		/*font-family: Georgia;*/
+		letter-spacing:0.5px;
 	}
 	body{
 		width:100%;
@@ -160,16 +243,63 @@ div.content-before-footer{
 		font-size:90%;	
 		
 	}
-	body.mixedcolor-background{
+	body.mixedcolor-background,div.mixedcolor-background{
 	background: #EEEEEE url('../resrc/mixedcolor.png') repeat-x;
 }
 	input[type=text],input[type=password],input[type=email]{
 	
 }
+
+.all-corners-border-1{
+	border: 2px solid rgba(0,0,0,0.1);
+}
+.box-shadow-1{
+	box-shadow: 2px 5px 12px #555;
+}
+.cta-expiry-notice{
+	display:none;
+	background-color:rgba(221, 94, 94, 0.5);
+	border-top:2px solid red;
+	border-bottom:2px solid red;
+	width:98%;
+	margin:auto;
+	padding:1%;
+	color:red;
+	letter-spacing:2px;
+}
 	.sidebar{
 		font-size:100%;
 		letter-spacing: 1px;
 	}
+	#sidebar-original{
+	overflow:hidden;
+	position:fixed;
+	/*background: #F5F5F5 url('../resrc/sidebar_bg.png') repeat-y right 0;
+	box-shadow:0px 5px 5px rgba(0, 0, 0, 0.05) inset;
+	border-radius:2px;*/
+	background-color:inherit;
+	}
+#sidebar-original:hover{
+	overflow-y:scroll;
+	overflow-x:hidden;
+}
+	.sidebar-headings{
+	display:block;
+	font-size:120%;
+	padding:0px;
+	letter-spacing:3px;
+	font-weight:normal;
+	color:purple;
+}
+.account-nav-container{
+	/*background-color:#F5F5F5;
+	width:98%;
+	margin:3px 1% 10px 1%;
+	border: 2px solid #C7C7C7;
+	opacity:0.8;
+	box-shadow:0px 2px 2px rgba(0, 0, 0, 0.05) inset;*/
+}
+
 	.account-nav-link{
 		padding:3% 3% 3% 10%;
 		color:black;
@@ -194,10 +324,10 @@ div.content-before-footer{
 	min-height:500px;
 }
 .follow-button,.unfollow-button{
-	width:110px;
+	width:115px;
 }
 .follow-button:hover,.unfollow-button:hover{
-	width:120px;
+	width:125px;
 }
 }
 
@@ -239,6 +369,9 @@ a{
 a:hover{
 	text-decoration:underline;
 }
+a:visited{
+	
+}
 a.list-link{
 		text-decoration:none;
 	}
@@ -260,12 +393,12 @@ a.list-link:hover{
 	margin-top:5px;
 	text-align:center;
 	margin-right:5px;
-	border:1px solid #6D0AAA;
+	border:1px solid purple;
 	border-radius:5px;
 }
 .follow-button{
 	background-color:white;
-	color:#6D0AAA;
+	color:purple;
 }
 .unfollow-button{
 	background-color:#6D0AAA;
@@ -283,60 +416,86 @@ a.list-link:hover{
 	width:80%;
 	margin:auto;
 	margin-bottom:5px;
+	margin-top:5%;
 	padding:5%;
-	color:grey;
-	background-color:white;
 	line-height:100%;
+	background-color:#F5F5F5;
+	border: 1px solid #E3E3E3;
+	box-shadow:0px 2px 2px rgba(0, 0, 0, 0.05) inset;
+}
+.operation-fail-container{
+	color:red;	
+	width:80%;
+	margin:auto;
+	margin-top:5%;
+	padding:5%;
+	line-height:200%;
+	border-radius:5px;
+	background-color:rgba(233, 114, 114, 0.58);
+	box-shadow:0px 2px 2px rgba(0, 0, 0, 0.05) inset;
+}
+a.inline-block-link{
+	display:inline-block;
+	padding:2%;
+	padding-left:5%;
+	padding-right:5%;
+	margin:2%;
+	border-radius:5px;
+	text-decoration:none;
+}
+a.inline-block-link:hover{
+	opacity:0.8;
+}
+.white-on-purple{
+	background-color:purple;
+	color:white;
+}
+.white-on-red{
+	background-color:red;
+	color:white;
 }
 
 /*Sidebar*/
 div.sidebar{
-	height:100%;
+	height:80%;
 	min-height:550px;
 	min-width:200px;
 	width:20%;
 	float:left;
-}
-#sidebar-original{
-	overflow:hidden;
-	position:fixed;
-	}
-#sidebar-original:hover{
-	overflow-y:scroll;
-	overflow-x:hidden;
-}
 
+}
 .account-nav-link{
 		padding:3% 3% 3% 10%;
 	}
 	.username{
 	display:block;
 	text-transform:uppercase;
+	letter-spacing:2px;
 	text-align:center;
-	font-weight:bold;
+	font-weight:normal;
 }
 #cta-status-container{
-	font-size:90%;
-	background-color:white;
-	border-radius:5px;
-	color:grey;
-	text-align:center;
-	box-shadow:3px 3px 3px 3px #DDD;
+	width: 98%;
 	padding-top:3%;
 	padding-bottom:3%;
+	font-size:90%;
+	border-radius:5px;
+	text-align:center;
+	box-shadow:0px 3px 3px rgba(0,0,0,0.05) inset;
 	line-height:50%;
 }
-#cta-renewal-link{
+.cta-status-link{
 	display:inline-block;
 	padding:2%;
 	padding-left:5%;
 	padding-right:5%;
-	border:1px solid #6D0AAA;
 	border-radius:5px;
 	background-color: #485689;
 	color:white;
 	text-align:center;
+	text-decoration:none;
 }
+
 #cta-renewal-link:hover{
 	background-color:grey;
 	color:white;
@@ -348,23 +507,17 @@ margin:auto;
 padding:5%;
 text-align:center;
 cursor:pointer;
-background-color:#6D0AAA;
+background-color:purple;
 color:white;
 border:none;
-border-radius: 20px;
+border-radius: 10px;
 font-weight:bold;
-}
-.account-nav-container{
-	background-color:inherit;
-	margin-bottom:5px;
-	width:98%;
-	border-radius: 5px;
-	opacity:0.8;
 }
 
 .account-nav-link{
-	display:block;
+	display:inline-block;
 	width:85%;
+	max-height:100px;
 }
 .account-nav-link:hover{
 	text-decoration:none;

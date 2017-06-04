@@ -87,7 +87,10 @@ input:focus{
 	border:5px solid #6D0AAA;
 	border-radius:10px;
 }
-
+#registration-successful,
+#registration-not-successful{
+width:90%;
+}
 }
 @media only screen and (min-device-width: 1000px){
 	#mainsignup{
@@ -158,15 +161,19 @@ input:focus{
 	border:1px solid #6D0AAA;
 	border-radius:10px;
 }
+#registration-successful{
+width:50%;
+}
+#registration-not-successful{
+width:90%;
+}
 }
 
 
 #registration-successful,#registration-not-successful{
 	margin:auto;
-	background-color:white;
-	width:90%;
 	padding:20px;
-	box-shadow:1px 3px 2px 2px grey;
+box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.05) inset;
 	margin-bottom:10px;
 }
 #registration-not-successful{

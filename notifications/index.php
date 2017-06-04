@@ -48,7 +48,7 @@ border-radius:10px;
 	font-size:110%;
 }
 .client-follow-notice{
-	height:50px;
+	height:80px;
 }
 .notice:not(.no-nofication):hover,.client-follow-notice:hover{
 	box-shadow:1px 2px 2px 2px grey;
@@ -64,7 +64,6 @@ border-radius:10px;
 	float:right;
 	padding-right:10px;
 	color:grey;
-	font-size:12px;
 }
 ul{
 	padding-left:0px;
@@ -163,75 +162,8 @@ else{
 ?>
 
 <?php
-function notify($subject,$subjecttrace,$action,$timestamp,$howold){
-	$time = time() - $timestamp;
-//if less than 60 secs
-if($howold=="yesterday"){
-	$since = "Yesterday at ".date('h:i a ',$timestamp);
-}
-else{
-	if($time<60){
-		$since = $time.' seconds ago';
-	}
-	else if($time>=60 && $time<3600){
-		$since = (int)($time/60).' minutes ago';
-	}
-	else if($time>=3600 && $time<86400){
-		$since = (int)($time/3600).' hours, '.(($time/60)%60).' minutes ago';
-	}
-	else if($time>=86400 && $time<604800){
-		$since = date('l, d M, Y  ',$timestamp).'('.(int)($time/86400).' days ago)';
-	}
-	else if($time>=604800 && $time<18144000){
-		$since = date('l, d M, Y  ',$timestamp).'('.(int)($time/604800).' weeks ago)';
-	}
-}
-	
-	switch($action){
-	//if it is a client following an agent, specify the client need
-		case 'C4Afollow':
-		$requests = mysql_query("SELECT * FROM cta_request WHERE (ctaid='$subjecttrace')");
-		if(mysql_num_rows($requests)!=0){
-			$get=mysql_fetch_array($requests,MYSQL_ASSOC);
-			$reqtype = $get['type'] ;
-			$reqmaxprice =$get['maxprice'];
-			$reqlocation = $get['location'];
-			$xtra = "<br/>
-					 <i style=\"font-style:normal; font-size:12px;\">This client needs $reqtype with rent not more than N".number_format($reqmaxprice)." around $reqlocation <a href=\"\">Suggest a property for this client</a></i>";
-					
-		}
-		else{
-			$xtra="<br/>
-			This client has no specific preference <a href=\"\">Suggest a property for this client</a></i>";
-		}
-		return "<li class=\"client-follow-notice\">
-					+<i class=\"black-icon user-icon\"></i>A client <a href=\"../cta/ctarequests/?target=$subjecttrace\">(".$subject.")</a> started following you
-					 <i class=\"since\">$since</i>
-					 $xtra</li>";
-		break;
-		
-		case 'A4Afollow':
-		return "<li class=\"notice\">
-					+<i class=\"black-icon user-icon\" ></i>An agent <a href=\"../$subjecttrace\">(".$subject.")</a> started following you
-					 <i class=\"since\">$since</i>
-					 
-						</li>";
-		break;
-		
-
-		case 'CTA created':
-		return "<li class=\"notice\">
-					+<i class=\"black-icon\" id=\"user-icon\"></i>You created your CTA as $subject
-					 <i class=\"since\">".date('l, d M, Y  ',$timestamp)."($since)</i>
-					 
-						</li>";
-		break;
-		case '':
-		break;
-	}
-}
-?>
-<?php
+//include the noticefunction, i put the function in another file because i want to use on the homepage too,to avoid code replication
+require('functionNotice.php');
 if($status==1){
 	$getnotifications = mysql_query("SELECT * FROM notifications WHERE (receiver='$Business_Name' OR receiver='allAgents') ORDER BY time DESC");
 	$clearAllNotification = "<a href=\"?token=$myid&target=$Business_Name&action=clearall&confirm=".SHA1('no')."\"><button class=\"option-button\">clear all notifications</button></a>";

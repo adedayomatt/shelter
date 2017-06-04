@@ -9,12 +9,9 @@
 }
 .login-form{
 	padding:5%;
-	background-color:white;
-	width: 50%;
+	background-color:#F5F5F5;
 	margin:auto;
 	border:none;
-	box-shadow:5px 5px 5px 5px white;
-	font-size:120%;
 }
 @media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
 body{
@@ -26,21 +23,18 @@ body{
 }
 .login-form{
 	padding:2%;
-	background-color:white;
 	width: 90%;
-	height:800px;
-	padding-top:200px;
+	min-height:600px;
 	margin:auto;
 	border:none;
 	border-radius:5px;
-	box-shadow:5px #333;
 }
 #login-input-area{
-	padding:20px;
-	width:80%;
+	width:95%;
+	padding:2.5%;
+	min-height:800px;
 	margin:auto;
 	text-align:center;
-	border:2px solid grey;
 }
 }
 
@@ -55,18 +49,17 @@ body{
 }
 .login-form{
 	padding:5%;
-	background-color:white;
 	width: 50%;
 	margin:auto;
 	border:none;
-	border-radius:5px;
+	border-radius:3px;
 }
 #login-input-area{
 	padding:20px;
-	width:80%;
+	width:90%;
 	margin:auto;
 	text-align:center;
-	border:1px solid grey;
+	border-radius:3px;
 }
 }
 
@@ -77,26 +70,28 @@ input.input,#login-button{
 	margin:auto;
 	padding:5%;
 	display:block;
-	margin-top:5px;
+	margin-top:10px;
+	border:none;
 }
-
+input.input{
+	border-radius:4px;
+}
 #login-button{
 cursor:pointer;
-background-color:#6D0AAA;
+background-color:purple;
 color:white;
 border:none;
 font-size:120%;
 border:none;
 border-radius:3px;
 letter-spacing:0.5em;
+margin-top:30px;
 }
 #login-button:hover{
-	background-color:grey;
+opacity:0.8;
 
 }
 #foot{
 	color:white;
 }
-#login-error{
-	color:red;	
-}
+

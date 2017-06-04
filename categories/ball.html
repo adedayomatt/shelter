@@ -1,0 +1,17 @@
+<script>
+var mTop = 0;
+window.onscroll = function(event){
+var contentHeight  = document.getElementsByTagName("body")[0].clientHeight;
+if(window.pageYOffset <= (contentHeight*2)){
+	mTop = window.pageYOffset;
+}
+else{
+	mTop =0;
+}
+document.getElementById("menu-ball").style.marginTop =  mTop + window.screen.height + "px";
+
+}
+</script>
+<body style="background-color:green;height:2000px;">
+<div id="menu-ball" style="height:200px;width:200px;border-radius:100px;background-color:black; margin-top:80%;position:absolute;margin-left:80%"></div>
+</body>
