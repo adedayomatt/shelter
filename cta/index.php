@@ -1,60 +1,27 @@
+<?php 
+$connect = true;
+require('../require/connexion.php'); 
+?>
+
 <!DOCTYPE html>
 <html>
+<?php require('../require/meta-head.html'); ?>
 <link href="../css/general.css" type="text/css" rel="stylesheet" />
 <link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
+<link href="../css/ctastyles.css" type="text/css" rel="stylesheet" />
 <link href="../css/propertybox_styles.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript" src="../js/propertybox.js"></script>
-<style>
-@media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
-.denial{
-	width:80%;
-	padding:5%;
-	margin: 5%;
-	text-align:center;
-}	
-.rhs{
-	display:none;
-}
-}
-@media only screen and (min-device-width: 1000px){
-	.denial{
-	width:45%;
-	padding:2.5%;
-	margin: 5% 25% 0px 25% ;
-	text-align:center;
-}
-.rhs{
-	width:40%;
-	float:left;
-	background-color:green;
-}
-.rhs-content{
-	position:fixed;
-	background-color:red;
-	height:80%;
-}
-#big-side-advert{
-	height:100%;
-	width:400px;
-}
-.denial{
-	background-color:#DDD;
-	line-height:150%;
-}
-}
 
-</style>
 <header>
-
+<?php
+$pagetitle = "CTA";
+require('../require/header.php');
+?>
 </header>
 
 <body class="no-pic-background">
 
 <?php
-$pagetitle = "CTA";
-$connect = true;
-$getuserName = true;
-require('../require/header.php');
 //if user is logged in as an agent
 if($status==1){
 	$denialMessage = "You cannot use Client Temporary Account because you are currently logged in as <br/><a href=\"$root/$profile_name\">$Business_Name</a> <br/><a href=\"../logout\">Logout</a> first";
@@ -67,16 +34,16 @@ else if($status==0){
 	exit();*/
 	if(isset($_GET['checkin']) && isset($_GET['acct']) ){
 		echo "<div class=\"box-shadow-1 denial\">
-			<span style=\"font-size:120%\">This CTA you are attempting to checkin has expired You can create new CTA.</span><br/><br/>
-			<a class=\"inline-block-link white-on-purple\"  href=\"checkin.php\">create new CTA</a>
+			<span style=\"\">This CTA you are attempting to checkin has expired since <span style=\"color:red\">".Timestamp($_GET['exp'])."</span>You can create new CTA.</span><br/><br/>
+			<a class=\"skyblue-inline-block-link\"  href=\"checkin.php\">create new CTA</a>
 		</div>";
 		exit();
 }
 else{
 	echo "<div class=\"box-shadow-1 denial\">
 			<span style=\"font-size:120%\">You are currently not checked in.</span><br/><br/>
-			<a class=\"inline-block-link white-on-purple\" href=\"checkin.php\">checkin</a>
-			<a class=\"inline-block-link white-on-purple\" href=\"checkin.php\">create new CTA</a>
+			<a class=\"skyblue-inline-block-link\" href=\"checkin.php\">checkin</a>
+			<a class=\"skyblue-inline-block-link \" href=\"checkin.php\">create new CTA</a>
 		</div>";
 		exit();
 }
@@ -215,11 +182,5 @@ mysql_close($db_connection);
 ?>
 </div>
 
-<div class="rhs">
-<div class="rhs-content">
-<img src="../resrc/image/advert2.jpeg" id="big-side-advert"/>
-</div>
-
-</div>
 </body>
 </html>

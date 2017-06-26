@@ -1,3 +1,11 @@
+<?php if(!isset($_COOKIE['CTA'])){
+	header('location: checkin.php?_rdr=1');
+	exit();
+}
+?>
+<?php 
+$connect = true;
+require('../require/connexion.php'); ?>
 
 <!DOCTYPE html>
 <html>
@@ -7,16 +15,11 @@
 <?php
 $pagetitle = "Request";
 $ref='ctarequest';
-$connect = true;
 $getuserName=true;
 require('../require/header.php');
 //if not no CTA is checked in
-if($status != 9){
-	mysql_close($db_connection);
-	header('location: checkin.php?_rdr=1');
-	exit();
-}
 ?>
+
 <?php
 if(isset($_POST['request'])){
 	if(!empty($_POST['maxprice']) && is_numeric($_POST['maxprice']) && !empty($_POST['type']) && !empty($_POST['location'])){

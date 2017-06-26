@@ -15,7 +15,7 @@ window.onscroll = function(event){
 	var headercontainer = document.getElementById('top-nav-bar-container');
 	var headerHeight = header.clientHeight;
 	 if(window.pageYOffset >= headerHeight ){
-ele.style.marginTop = (window.pageYOffset - headerHeight)+'px';
+//ele.style.marginTop = (window.pageYOffset - headerHeight)+'px';
 
 //In mobile
 document.getElementById('top-nav-bar-content-on-scroll').style.display = "block";
@@ -86,51 +86,6 @@ Everything about the side bar toggles ends here
 
 /*----------------------------------------------------------------------------------------------------------------------------------------------*/
 
-function getAgents(key,inputId,container,list){
-	var agentSearchField = document.getElementById(inputId);
-	var containerBox = document.getElementById(container);
-	if(agentSearchField.value != ''){
-		containerBox.style.display = 'block';
-try{
-		//opera 8+, firefox,safari
-		xmlhttp = new XMLHttpRequest();
-	}
-	catch(e){
-		//Internet Explorer
-		try{
-			xmlhttp = new ActiveXObject('Msxml2.XMLHTTP');
-		}
-	catch(e){
-		try{
-		xmlhttp = new ActiveXObject('Microsoft.XMLHTTP');
-		}
-		catch(e){
-			alert('This browser is crazy!');
-		}
-	}	
-	}
-	xmlhttp.onreadystatechange = function(){
-var thelist = document.getElementById(list);
-	if(xmlhttp.status == 200){
-if(xmlhttp.readyState == 4){
-//first clear the list
-	thelist.innerHTML = "";
-thelist.innerHTML += xmlhttp.responseText;
-		}
-	}
-	else if(xmlhttp.status==404){
-		alert("things did not go well:404!");
-	}
-}
-var url = "http://192.168.173.1/shelter/resrc/getagents.php?key="+key;
-xmlhttp.open("GET",url, true);
-xmlhttp.send();	
-	
-	}
-	else{
-		//containerBox.innerHTML = "";
-		containerBox.style.display = 'none';
-	}
-}
+
 
 

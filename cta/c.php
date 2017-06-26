@@ -3,9 +3,14 @@ if(isset($_GET['p']) && isset($_GET['cb']) && isset($_GET['ref'])){
 	$property = $_GET['p'];
 	$by = $_GET['cb'];
 	$ref = $_GET['ref'];
-	$connect = true;
-//since this scripts does not require header, then the connexion is required directly
-	require('../require/connexion.php');
+	
+	$dbhost = '127.0.0.1';
+$dbuser = 'adedayo';
+$dbpass = 'matthew';
+$db_connection = @mysql_connect($dbhost, $dbuser, $dbpass);
+if($db_connection) {
+mysql_select_db('shelter');
+
 	$RemainingClips = "SELECT * FROM clipped where (clippedby=$by)" ;
 	$getclipped = mysql_query("SELECT * FROM clipped WHERE (propertyId='$property' AND clippedby=$by)");
 //if clipped already
@@ -59,6 +64,7 @@ if(isset($_GET['p']) && isset($_GET['cb']) && isset($_GET['ref'])){
 	}
 	*/
 	
+}
 }
 else{
 	header('http://192.168.173.1/shelter');

@@ -1,5 +1,9 @@
  <!DOCTYPE html>
+ <?php 
+$connect = true;
+require('../require/connexion.php'); ?>
 <html>
+<?php require('../require/meta-head.html'); ?>
 <link href="../css/general.css" type="text/css" rel="stylesheet" />
  <link href="../css/agentlist_styles.css" type="text/css" rel="stylesheet" />
  <link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
@@ -13,13 +17,11 @@ require('../require/header.php');
 ?>
 </head>
 <body class="no-pic-background">
-<br/>
-<input name="searchagent" size="40" type="search" placeholder="Search for an Agent"/><input value="Go" type="submit"/>
-<p align="center" style="font: Arial">The following Land and Estate Agents are duly registered under the Corporate Affairs Commision and with Shelter. <a class="learn" href="criteria.html">Learn more</a> on criteria for registering our agents </p>
-	<hr/>
+<?php require('../require/sidebar.php'); ?>
+
 <div class="maincontent">
+<h3 style="font-weight:normal;">Agents</h3>
 <div class="mainlist">	
-<button type="button" autofocus="autofocus" value="refresh" onclick="javascript:location.reload(true)" style="border:none; cursor:pointer; background-color:inherit; display:inline; float:right;"><i style="display:inline-block;width:14px;height:14px;background-image:url('../resrc/black-icons.png');background-position:-216px -24px;"></i>Refresh</button>
 <?php
 $BizName = array();
  $OAddress = array();
@@ -47,11 +49,12 @@ if($fetchprofiles){
 		$email[$count] = $user['email'];
 		$user_id[$count] = $user['User_ID'];
 		$password[$count] = $user['password'];
+		$timestamp[$count] = $user['timestamp'];
 		$count++;
 	}
 //display the records
 $j = 0;
-$max = 3;
+$max = 10;
 if(isset($_GET['next'])){
 	$i =$_GET['next'];
 }
@@ -62,19 +65,27 @@ if($i>=0){
 while($i < $count){
 		$profile = "<div class = \"Agentbox\"><div class=\"contacts-container\">
 		 <ul>
-		<li><h4><a href=\"$root/".$user_id[$i]."\">[".($i+1)."]  ".$BizName[$i]."</a></h4>
+		<li><a href=\"$root/".$user_id[$i]."\"><h4 class=\"Bname\">".$BizName[$i]."</h4></a>
+		<span class=\"follow-unfollow-button\"><span class=\"black-icon follow-icon\"></span>Follow</span>
 		<ul>
-		<li class=\"Agent_Address\">Office Address: ".$OAddress[$i]."</li>
+		<li class=\"Agent_Address\"><span class=\"black-icon location-icon\"></span> ".$OAddress[$i]."</li>
 		<li class=\"acontact\">Contact
 		<ul>
 		<li class=\"tel\">Tel: ".$OTel[$i]."</li>												
 		<li class=\"email\">e-mail: ".$Omail[$i]."</li>
-		 </ul></li></ul></ul><hr/></div>
-		<div class=\"fav-container\">options will be placed here</div>
+		 </ul>
+		 </li>
+		 </ul>
+		 </ul>
+		 </div>
+		 <span class=\"time\"> Shelter agent since: ".Timestamp($timestamp[$i])."</span>
 		 </div>";
 		echo $profile;
 			$i++;
 			$j++;
+		if($j==3){
+			echo "<a href=\"adone.html\"><img src=\"../image/images5.jpeg\" alt=\"Advert will be placed here\" class=\"ad\" ></img></a>";
+		}
 			if($j==$max){
 				break;
 			}
@@ -112,15 +123,11 @@ echo "<h3 align=\"center\">There was an error while fetching profiles</h3>
 	}
 	</style>
 	</div>
-<div align="center" class="RHSr">
-<h3>Ads</h3><p size="10px"><a href="advert.html">Place your advert here</a></p>
-<a href="adone.html"><img src="../image/images5.jpeg" height="25%" width="100%" ></img></a>
-<a href="adtwo.html"><img src="../image/images6.jpeg" height="25%" width="100%"></img></a>
-<a href="adthree.html"><img src="../image/images7.jpeg" height="25%" width="100%"></img></a>
-</div>
-			</div>
-			</body>
 	<?php require('../require/footer.html');
 	mysql_close($db_connection);
 	?>
-			</html>
+			</div>
+		
+			
+			</body>
+		</html>

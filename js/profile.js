@@ -45,12 +45,12 @@ function changeStuffs(response){
 	if(response == 'positive'){
 		button.className = 'unfollow-button';
 	button.innerHTML = "<span class=\"white-icon unfollow-icon\"></span> unfollow";
-	//document.getElementById('following-status').innerHTML = "you are now following "+following;
+	document.getElementById('follow-status').innerHTML = "You are now following "+following;
 	}
 	else if(response == 'negative'){
 		button.className = 'follow-button';
 	button.innerHTML = "<span class=\"black-icon follow-icon\"></span> follow";
-	//document.getElementById('following-status').innerHTML = "you no longer follow "+following;
+	document.getElementById('follow-status').innerHTML = "You have stopped following "+following;
 	}
 }
 

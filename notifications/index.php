@@ -1,4 +1,11 @@
-
+<?php 
+$connect = true;
+require('../require/connexion.php'); 
+ //confirm if user is still logged in 
+if(!isset($_COOKIE['name']) && !isset($_COOKIE['CTA'])){
+	header("Location: ../login");
+}
+?>
 <!DOCTYPE html>
 <html>
 <link href="../css/general.css" type="text/css" rel="stylesheet" />
@@ -8,13 +15,7 @@
 $pagetitle = "Notifications";
 $ref='notificatons';
 $getuserName=true;
-$connect =true;
 require('../require/header.php');
-//if not no CTA is checked in
-if($status == 0){
-	header('location: ../login');
-	exit();
-}
 ?>
 </head>
 <style>

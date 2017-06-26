@@ -1,15 +1,12 @@
 
 <?php
 function clip($p,$cta){
-	$connect = true;
-	require('connexion.php');
 	$checkclip = mysql_query("SELECT * FROM clipped WHERE (propertyId='$p' AND clippedby='$cta')");
 	if(mysql_num_rows($checkclip)==1){
 		return 'unclip';
 	}else{
 		return 'clip';
 	}
-	mysql_close($db_connection);
 }
 
 function timeuploaded($timestamp){
@@ -24,10 +21,10 @@ function timeuploaded($timestamp){
 		$since = (int)($time/3600).' hours, '.(($time/60)%60).' minutes ago';
 	}
 	else if($time>=86400 && $time<604800){
-		$since = date('l, M d ',$timestamp).'('.(int)($time/86400).' days ago)';
+		$since = (int)($time/86400).' days ago, '.date('M d ',$timestamp);
 	}
 	else if($time>=604800 && $time<18144000){
-		$since = date('M d  ',$timestamp).'('.(int)($time/604800).' weeks ago)';
+		$since = (int)($time/604800).' weeks ago, '.date('M d  ',$timestamp);
 	}
 	else{
 		$since = "sometime ago";
@@ -61,7 +58,7 @@ while($i < $count){
 //signifies if matches for CTA
 if(isset($rqtype) && isset($rqpricemax) && isset($rqlocation)){
 	if(in_array($propertyId[$i],$CTAmatches)){
-	$m="<span class=\"black-icon\" style=\"background-position:-72px -144px\"></span>";
+	$m="<span class=\"black-icon\" style=\"background-position:-72px -144px\"></span>match";
 	}
 	else{
 	$m='';	
@@ -103,16 +100,16 @@ else {
 if($ref=='search_page'){
 	$page = "
 	<div class=\"mini-propertybox\">
-	<a href=\"$root/properties/$propertydir[$i]\">
-	<span class=\"mini-heading\">".$type[$i]." at ".$location[$i]."</a>$m</span>
-	
+	<a href=\"$root/properties/$propertydir[$i]\"><span class=\"mini-heading\">".$type[$i]."<span class=\"match-indicator\">$m</span></span></a>
+	<span class=\"status\"> <span><span class=\"black-icon status-icon\"></span>Available</span></span>
+	<span class=\"detail property-address\"><span class=\"black-icon location-icon\"></span>".(strlen($location[$i]) > 30 ? substr($location[$i],0,29)."...": $location[$i])."</span> 
 	<div class=\"mini-image\">
 	<img id=\"$propertyId[$i]image\" height=\"100%\" width=\"100%\" src=\"$image\"/>
 	</div>
 	<div class=\"mini-info\">
 	
-	<span class=\"mini-detail\"><span class=\"black-icon price-icon\"></span><span class=\"rent-figure\">N ".number_format($rentperannum)."/year</span></span>
-	<span class=\"mini-detail\"><span class=\"black-icon min-payment-icon\"></span><strong>$min_payment[$i]</strong> payment required (N $firstpayment)</span>
+	<span class=\"mini-detail\"></span><span class=\"rent-figure\">N ".number_format($rentperannum)."/year</span></span>
+	<span class=\"mini-detail payment-required\"><span class=\"black-icon min-payment-icon\"></span><strong>$min_payment[$i]</strong> payment required (N $firstpayment)</span>
 	<span class = \"mini-detail time\" align=\"left\"><span class=\"black-icon time-icon\"></span>".timeuploaded($howlong[$i])."</span>
 	</div>
 	</div>";
@@ -121,38 +118,80 @@ if($ref=='search_page'){
 }
 else if($ref=='profile_page'){
 	$page = "
-	<div class=\"mini-propertybox\">
-	<a href=\"$root/properties/$propertydir[$i]\">
-	<span class=\"mini-heading\">".$type[$i]." at ".$location[$i]."</a>$m</span>
-	
+	<div class=\"mini-propertybox-in-profile\">
+	<div class=\"property-heading-container\" >
+	<a href=\"$root/properties/$propertydir[$i]\"><span class=\"mini-heading\">".$type[$i]."<span class=\"match-indicator\">$m</span></a>
+	<span class=\"status\"> <span><span class=\"black-icon status-icon\"></span>Available</span></span>
+	</div>
+	<span class=\"detail property-address\"><span class=\"black-icon location-icon\"></span>".(strlen($location[$i]) > 30 ? substr($location[$i],0,29)."...": $location[$i])."</span> 
 	<div class=\"mini-image\">
 	<img id=\"$propertyId[$i]image\" height=\"100%\" width=\"100%\" src=\"$image\"/>
 	</div>
 	<div class=\"mini-info\">
-	<span class=\"mini-detail\"><span class=\"black-icon price-icon\" ></span><span class=\"rent-figure\"> N ".number_format($rentperannum)."/year</span></span>
-	<span class=\"mini-detail\"><span class=\"black-icon min-payment-icon\"></span> <strong>$min_payment[$i]</strong> payment required (N $firstpayment)</span>
+	<span class=\"mini-detail\"><span class=\"rent-figure rent-figure-on-profilepage\"> N ".number_format($rentperannum)."/year</span></span>
+	<span class=\"mini-detail payment-required\"><span class=\"black-icon min-payment-icon\"></span> <strong>$min_payment[$i]</strong> payment required (N $firstpayment)</span>
 	<span class = \"mini-detail time\" align=\"left\"><span class=\"black-icon time-icon\"></span>".timeuploaded($howlong[$i])."</span>
 	$clipbutton
-	<a  class=\"options\" href=\"#\"><span class=\"black-icon eye-icon\"></span>".$views[$i]." views</a>
+	<a  class=\"options-on-profilepage\" href=\"#\"><span class=\"black-icon eye-icon\"></span>".$views[$i]." views</a>
 	</div>
 	</div>";	
 	$advertimage1 = "../resrc/image/advert1.jpeg";
 		$advertimage2 = "../resrc/image/advert2.jpeg";
 }
+
+else if($ref=='home_page' || $ref="ctaPage"){
+	$page = "<div id=\"$propertyId[$i]\" class=\"propertybox home-property-box\">
+	<div class=\"property-heading-container\">
+	<a href=\"$root/properties/$propertydir[$i]\" class=\"property-heading\" >$type[$i]<span class=\"match-indicator\">$m</span></a>
+	<span class=\"status\"> <span><span class=\"black-icon status-icon\"></span>Available</span></span>
+	</div>
+	<div class=\"image-info\">
+	<span class=\"detail property-address\"><span class=\"black-icon location-icon\"></span>".(strlen($location[$i]) > 30 ? substr($location[$i],0,29)."...": $location[$i])."</span> 
+	<div id = \"$propertyId[$i]container\" class=\"home-imagebox\">
+	<img id=\"$propertyId[$i]image\" onclick=\"animatePropertyImages('$propertyId[$i]image','$image')\" height=\"90%\" width=\"100%\" src=\"$image\"/>
+	<div id=\"bath-loo-wrapper\"><span id=\"bath\">($bath[$i]) Baths(s)</span><span id=\"loo\">($toilet[$i]) Toilet(s)</span></div>
+	</div>
+	
+	<div class=\"infobox\">
+	<div><span class=\"detail\"><span class=\"rent-figure\"> N ".number_format($rentperannum)."/year</span></span></div>
+	<span class=\"detail home-min-payment-detail\"><span class=\"black-icon min-payment-icon\"></span><strong>$min_payment[$i]</strong> payment required (N $firstpayment)</span>
+	
+	<div class=\"home-description-container\">
+	<span class =\"description detail\"><span class=\"black-icon comment-icon\"></span> Description: </span><div class=\"comment\"><i>$description[$i]</i></div>
+	</div>
+	<span class=\"detail\">Managed by <a class=\"agent-link\" href=\"$root/$uploadby[$i]\">$Bname</a></span>
+	</div>
+	<span class = \"detail time\" align=\"left\"><span class=\"black-icon time-icon\"></span>".timeuploaded($howlong[$i])."</span>
+	</div>";
+
+//the like pane
+	$page .= "<div class=\"like-pane\">
+	<hr/>
+		$clipbutton
+		<a  class=\"options-on-homepage\" href=\"$root/properties/$propertydir[$i]\"><span class=\"black-icon see-more-icon\"></span>Details</a>
+		<div class=\"agent-contacts-box\">$Bname<ul><li>$officeNo</li><li>$PhoneNo</li><li>$altPhoneNo</li></ul></div>
+		<a  class=\"options-on-homepage\"><span class=\"black-icon contact-icon\"></span>Agent</a>
+		<a  class=\"options-on-homepage\" href=\"#\"><span class=\"black-icon eye-icon\"></span>".$views[$i]." views</a>
+		</div>
+		</div>";
+		$advertimage1 = "resrc/image/advert1.jpeg";
+		$advertimage2 = "resrc/image/advert2.jpeg";
+}
 else{
 	$page = "<div id=\"$propertyId[$i]\" class=\"propertybox\">
 	<div class=\"property-heading-container\">
-	<a href=\"$root/properties/$propertydir[$i]\" class=\"property-heading\" >$type[$i] at $location[$i]$m</a>
-	<span class=\"status\" style=\"color:white\"> <span ><span class=\"white-icon status-icon\"></span>Available</span></span>
+	<a href=\"$root/properties/$propertydir[$i]\" class=\"property-heading\" >$type[$i] <span class=\"match-indicator\">$m</span></a>
+	<span class=\"status\"> <span><span class=\"black-icon status-icon\"></span>Available</span></span>
 	</div>
 	<div class=\"image-info\">
+	<span class=\"detail property-address\"><span class=\"black-icon location-icon\"></span>".(strlen($location[$i]) > 30 ? substr($location[$i],0,29)."...": $location[$i])."</span> 
 	<div id = \"$propertyId[$i]container\" class=\"imagebox\">
 	<img id=\"$propertyId[$i]image\" onclick=\"animatePropertyImages('$propertyId[$i]image','$image')\" height=\"90%\" width=\"100%\" src=\"$image\"/>
 	<div class=\"bath-toilet\"><button class=\"bath-toilet-btn\">($bath[$i]) Baths(s)</button><button class=\"bath-toilet-btn\">($toilet[$i]) Toilet(s)</button></div>
 	</div>
 	
 	<div class=\"infobox\">
-	<span class=\"detail\"><span class=\"black-icon price-icon\"></span><span class=\"rent-figure\"> N ".number_format($rentperannum)."/year</span></span>
+	<span class=\"detail\"><span class=\"rent-figure\"> N ".number_format($rentperannum)."/year</span></span>
 	<span class=\"detail\"><span class=\"black-icon min-payment-icon\"></span><strong>$min_payment[$i]</strong> payment required (N $firstpayment)</span>
 	<span class =\"description detail\"><span class=\"black-icon comment-icon\"></span> Description: </span><div class=\"comment\"><i>$description[$i]</i></div>
 	<span class=\"detail\">Managed by <a class=\"agent-link\" href=\"$root/$uploadby[$i]\">$Bname</a></span>
@@ -174,12 +213,13 @@ else{
 		$advertimage2 = "resrc/image/advert2.jpeg";
 }
 	print $page;
-	
-if($i == 1){
-	echo "<img class=\"in-between-advert\" src=\"$advertimage1\" />";
+//show the first ad after 3 properties
+if($i == 2){
+	echo "<img alt=\"Advert will be placed here\" class=\"in-between-advert\" src=\"$advertimage1\" />";
 }
+//show the second ad after the 6 properties
 if($i == 5){
-	echo "<img class=\"in-between-advert\" src=\"$advertimage2\" />";
+	echo "<img alt=\"Advert will be placed here\" class=\"in-between-advert\" src=\"$advertimage2\" />";
 }
 	$i++;
 }

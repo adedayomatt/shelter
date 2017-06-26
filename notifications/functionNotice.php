@@ -39,26 +39,26 @@ else{
 		else{
 			$xtra="<p>This client has no specific preference <a href=\"\">Suggest a property for this client</a></p>";
 		}
-		return "<li class=\"client-follow-notice\">
+		return "<div class=\"client-follow-notice\">
 					+<i class=\"black-icon user-icon\"></i>A client <a href=\"$root/cta/ctarequests/?target=$subjecttrace\">(".$subject.")</a> started following you
 					 <p class=\"since\">$since</p>
-					 $xtra</li>";
+					 $xtra</div>";
 		break;
 		
 		case 'A4Afollow':
-		return "<li class=\"notice\">
+		return "<div class=\"notice\">
 					+<i class=\"black-icon user-icon\" ></i>An agent <a href=\"$root/$subjecttrace\">(".$subject.")</a> started following you
 					 <p class=\"since\">$since</p>
-						</li>";
+						</div>";
 		break;
 		
 
 		case 'CTA created':
-		return "<li class=\"notice\">
+		return "<div class=\"notice\">
 					+<i class=\"black-icon\" id=\"user-icon\"></i>You created your CTA as $subject
 					 <p class=\"since\">$since</p>
 					 
-						</li>";
+						</div>";
 		break;
 		case '':
 		break;

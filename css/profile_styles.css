@@ -1,183 +1,103 @@
-hr{
+#profile-wrapper,#stat-wrapper{
+	width:100%;
+	border:1px solid #E5E5E5;
+	margin-top:5px;
+}
+#profile-wrapper{
+	background-color:white;
+}
+#logo-and-name{
+	display:inline-block;
+	width:58%;
+	padding:2%;
+}
+h1#avatar{
+	display:inline-block;
+	padding:5% 6% 5% 6%;
 	background-color:purple;
+	border-radius:50%;
+	color:white;
+	vertical-align:top;
+}
+#BizName-and-buttons{
+	display:inline-block;
+	padding:2%;
+	margin-left:2%;
 }
 #bizname{
+	color:purple;
+	font-size:150%;
+	font-weight:normal;
 	padding:0px;
-	margin:0px;
-}
-h1.avatar{
-	line-height:90%;
-}
-@media only screen and (min-device-width: 1000px){
-.sidebar{
-	
-}
-.main-content{
-
-}
-
-#logo-and-name{
-	width:90%;
-	margin:auto;
-	padding:2%;
-	height:175px;
-}
-#biz-logo-container{
-	line-height:100%;
-   float:left;	
-	height:60px;
-	width:80px;
-	color:white;
-	text-align:center;
-	padding-top:5px;
-	border-radius:10px;
-	background:purple;
-}
-#about-biz{
-	float:left;
-	width:75%;
-	padding-left:5%;
-	
+	margin-bottom:10px;
 }
 .follow-message-container{
+	margin:0px;
 	width:100%;
 }
 
-#sendmessage-button,#follow-button,#editprofile-button{
-	margin-top:5%;
+#sendmessage-button,#editprofile-button{
+	margin-top:2%;
 	padding:2%;
-	border:none;
+	border:1px solid #E3E3E3;
 	border-radius:5px;
 }
 #sendmessage-button{
 	width:50%;
 	background-color:white;
-	color:#6D0AAA;	
+	color:grey;	
 	}
-#follow-button{
-	width:40%;
-	margin-top:7%;
-	padding:2%;
-}
+
 #editprofile-button{
+	width:150px;
 	background-color:white;
-	color:#6D0AAA;	
-	float:right;
-	margin-top:0px;
+	color:grey;	
 }
 #sendmessage-button:hover,#follow-button:hover,#editprofile-button:hover{
 	box-shadow:0px 2px 2px #DDD inset;
 }
-.fixed-rhs-content,.relative-rhs-content{
-	margin:5% 0px 5% 5%;
-}
-#stats-container,#other-agents-container{
-border:2px solid #E5E5E5;
-margin-bottom:2%;
-}
-li.agent-stats-list,li.other-agents-list{
-	display: block;
-	list-style-type:none;
-	padding:10px;
-	border-bottom:1px solid #E5E5E5;
-}
-li.other-agents-list:hover{
-	background-color:#DDD;
-}
-}
-@media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
-.right-side{
-	display:none;
-}	
-#logo-and-name{
-	width:90%;
-	margin:auto;
-	margin-top:3%;
-	padding:2%;
-	height:450px;
-
-}
-#biz-logo-container{
-   float:left;	
-	height:130px;
-	width:150px;
-	color:white;
-	text-align:center;
-	padding-bottom:30px;
-	border-radius:20px;
-	background:purple;
-}
-#about-biz{
-	float:left;
-	width:75%;
-	padding-left:20px;
-}
-.follow-message-container{
-	width:100%;
-}
-
-#sendmessage-button,#follow-button,#editprofile-button{
-	margin-top:5%;
-	padding:2%;
-	border-radius:10px;
-}
-#sendmessage-button{
-	background-color:white;
-	color:#6D0AAA;	
-	width:50%;
-}
-#follow-button{
-	width:40%;
-	margin-top:7%;
-	padding:2%;
-}
-#editprofile-button{
-	background-color:white;
-	color:#6D0AAA;	
-	float:right;
-	margin-top:0px;;
-}
-
-
-#stats-container,#other-agents-container{
-border:4px solid #E5E5E5;
-}
-li.agent-stats-list,li.other-agents-list{
-	display: block;
-	list-style-type:none;
-	padding:20px;
-	border-bottom:2px solid #E5E5E5;
-}
-li.other-agents-list:hover{
-	background-color:#DDD;
-}
-
-}
-
-
-
-
-.following-status{
-	width:100%;
-	
-}
 .profile-buttons{
 	cursor:pointer;	
 }
-.profile-buttons{
-	
+#follow-status{
+	margin:0px;
+	color:grey;
+	font-size:80%;
 }
 
-#edit-icon{
-	background-position: 0px -72px;
-}
-#message-icon{
-	background-position: -72px 0px ;
-}
-.recent-uploads{
-	width:100%;
-	margin:auto;
 
+#stat-wrapper{
+	background-color:white;
+}
+
+#biz-contacts-wrapper{
+	display:inline-block;
+	width:30%;
+	padding-left:2%;
+	background-color: rgba(236, 87, 236, 0.2);
+}
+
+
+li.agent-stats-list,li.other-agents-list{
+	display: inline-block;
+	list-style-type:circle;
+	padding:10px;
+	color:black;
+}
+
+div#other-agents-wrapper{
+	width:50%;
+	border:1px solid #E5E5E5;
+}
+
+
+li.other-agents-list{
+	display:block;
+	background-color:white;
+	list-style-type:none;
+	padding:10px;
+	color:black;
+	margin-bottom:2px;
 }
 
 .editbutton{
@@ -190,4 +110,52 @@ li.other-agents-list:hover{
 	background-color:purple;
 	color:white;
 }
+.other-agents-address{
+	display:block;
+	color:grey;
+	font-size:80%;
+	margin:0px;
+}
+.container-headers{
+	text-align:left;
+}
+@media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
+.profile-main-content{
+width:100%;
+}
+#logo-and-name{
+	display:block;
+	width:98%;
+	padding:1%;
+}
+#BizName-and-buttons{
+	width:240px;
+	height:150px;
+	padding:1%;
+}
+#biz-contacts-wrapper{
+	display:block;
+	width:100%;
+	padding-left:2%;
+	background-color: rgba(236, 87, 236, 0.2);
+}
+div#other-agents-wrapper{
+	width:100%;
+}
+}
+@media only screen and (min-device-width: 1000px){
+	.profile-main-content{
+	float:left;
+width:78%;
+margin-left:1%;
+}
+#profile-wrapper,#biz-contacts-wrapper,#logo-and-name{
+	height:200px;
+}
+#biz-contacts-wrapper,#logo-and-name{
+	float:left;
+}
+}
+
+
 

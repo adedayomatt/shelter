@@ -13,7 +13,7 @@ function makeclip(propertyclipbutton,clipper,ref){
 	var response = "";
 	setTimeout(clip,2000);
 	
-	
+
 function clip(){
 	
 	//create the XMLHttpRequest object

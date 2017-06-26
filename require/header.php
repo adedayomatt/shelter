@@ -1,33 +1,17 @@
 
+<?php
+/*
+All the variables in this script are initialized or set in connexion.php; 
+connexion.php must have been required before the header is required anywhere
+The reason for this is to use header to redirect appropriately from anywhere 
+*/
+?>
+
 <script type="text/javascript" language="javascript" src="http://localhost/shelter/js/jquery-3.1.1.min.js"></script>
 <script  type="text/javascript" language="javascript">
-<?php
-//This function takes care of timestamp
-function Timestamp($timestamp){
-	$time = time() - $timestamp;
-	if($time<60){
-		$since = $time.' seconds ago';
-	}
-	else if($time>=60 && $time<3600){
-		$since = (int)($time/60).' minutes ago';
-	}
-	else if($time>=3600 && $time<86400){
-		$since = (int)($time/3600).' hours, '.(($time/60)%60).' minutes ago';
-	}
-	else if($time>=86400 && $time<604800){
-		$since = date('l, M d ',$timestamp).'('.(int)($time/86400).' days ago)';
-	}
-	else if($time>=604800 && $time<18144000){
-		$since = date('M d  ',$timestamp).'('.(int)($time/604800).' weeks ago)';
-	}
-	else{
-		$since = "sometime ago";
-	}
-return $since;
-		}
-?>
+
 function togglemenu(){
-var sidebar = document.getElementById('sidebar-original');
+var sidebar = document.getElementById('sidebar-wrapper');
 var menu = document.getElementById('menuicon');
 var headerunder = document.getElementById('top-nav-bar-under');
 var headertop = document.getElementById('top-nav-bar-content');
@@ -38,7 +22,7 @@ if(sidebar.style.display != 'block'){
 	headerunder.style.display = 'block';
 	headertop.style.position = 'fixed';
 	sidebar.style.display = 'block';
-	sidebar.style.width = '95%';
+	//sidebar.style.width = '95%';
 	sidebar.style.marginTop = '0px';
 	sidebar.style.overflow = 'scroll';
 	menu.innerHTML = "<span style=\"font-size:150%\">&times</span>";
@@ -48,150 +32,121 @@ if(sidebar.style.display != 'block'){
 		}
 else{
 	sidebar.style.display = 'none';
-	menu.innerHTML = 'MENU';
+	menu.innerHTML = "<span class=\"menu-lines\"></span><span class=\"menu-lines\"></span><span class=\"menu-lines\"></span>";
 		}
 	}
-</script>
-<?php
-function redirect(){
-	header("location: http://192.168.173.1/shelter/login");
-	//header("location: http://localhost/shelter/login");
-	exit();
+	
+function getAgents(key,inputId,container,list){
+	var agentSearchField = document.getElementById(inputId);
+	var containerBox = document.getElementById(container);
+	if(agentSearchField.value != ''){
+		containerBox.style.display = 'block';
+try{
+		//opera 8+, firefox,safari
+		xmlhttp = new XMLHttpRequest();
+	}
+	catch(e){
+		//Internet Explorer
+		try{
+			xmlhttp = new ActiveXObject('Msxml2.XMLHTTP');
+		}
+	catch(e){
+		try{
+		xmlhttp = new ActiveXObject('Microsoft.XMLHTTP');
+		}
+		catch(e){
+			alert('This browser is crazy!');
+		}
+	}	
+	}
+var thelist = document.getElementById(list);
+	xmlhttp.onreadystatechange = function(){
+	if(xmlhttp.status == 200){
+if(xmlhttp.readyState == 4){
+//first clear the list
+	thelist.innerHTML = "";
+thelist.innerHTML += xmlhttp.responseText;
+		}
+	}
+	else if(xmlhttp.status==404){
+		alert("things did not go well:404!");
+	}
 }
 
-//since this headeer scripts will always be required by scripts other than the homepage
-require('connexion.php');
+thelist.innerHTML = "<p class=\"loading-data\"> searching '"+key+"'</p>";
 
-//if user is logged in as an agent
-if(isset($_COOKIE['name']) ){
-	$status = 1;
-	 $profile_name=$_COOKIE['name'];
-//if this header is required from a page where the Business name is needed, get it!
-	 if(isset($getuserName) && $getuserName==true){
-		 $getBussinessName = mysql_query("SELECT ID,Business_Name FROM profiles WHERE (User_ID='$profile_name')");
-		 if($getBussinessName && mysql_num_rows($getBussinessName)==1){
-			 $biz = mysql_fetch_array($getBussinessName,MYSQL_ASSOC);
-				 $Business_Name = $biz['Business_Name'];
-				 $myid  = $biz['ID'];
-		 }else{
-			 $Business_Name = "couldn't reach profile";
-		 }
+var url = "http://192.168.173.1/shelter/resrc/getagents.php?key="+key;
+xmlhttp.open("GET",url, true);
+xmlhttp.send();	
+	
+	}
+	else{
+		//containerBox.innerHTML = "";
+		containerBox.style.display = 'none';
+	}
 }
-//get the number of notifications, followers, following corresponding to the user
-$messages = mysql_num_rows(mysql_query("SELECT * FROM messages WHERE receiver='$Business_Name' AND status='unseen'"));
-$notifications = mysql_num_rows(mysql_query("SELECT * FROM notifications WHERE receiver='$Business_Name' AND status='unseen'"));	 
- $following = mysql_num_rows(mysql_query("SELECT * FROM follow WHERE follower='$Business_Name'"));	
- $clientfollower = mysql_num_rows(mysql_query("SELECT * FROM follow WHERE following='$Business_Name' AND followtype='C4A'"));	
- $agentfollower = mysql_num_rows(mysql_query("SELECT * FROM follow WHERE following='$Business_Name' AND followtype='A4A'"));	
+function timecountdown(containerId,initial){
+var counter = setInterval(countdown,1000);
+var container = document.getElementById(containerId);
+var day = document.getElementById('day-countdown');
+var hour = document.getElementById('hr-countdown');
+var min = document.getElementById('min-countdown');
+var sec = document.getElementById('sec-countdown');
+
+var d = parseInt(initial/86400);
+var h = parseInt((initial%86400)/3600);
+var m =  parseInt((initial%3600)/60);
+var s = initial%60;
+function countdown(){
+	if(d==0 && h==0 && m==0 && s==0){
+		clearInterval(counter);
+		day.innerHTML = '00';
+	hour.innerHTML = '00';
+	min.innerHTML = '00';
+	sec.innerHTML = '00';
+	day.style.color='red';
+	hour.style.color='red';
+	min.style.color='red';
+	sec.style.color='red';
+	}
+	else{
+	s--;
+	if(s<0){
+		m--;
+		s=59;
+		if(m<0){
+			h--;
+			m=59;
+			if(h<0){
+				d--;
+				h=23;
+			}
+		}
+	}
+	if(d<=5){
+		day.style.color='red';
+	}
+	if(d==0 && h<12){
+		hour.style.color='red';
+	}
+	if(d==0 && h==0 && m<=30){
+		min.style.color='red';
+		sec.style.color='red';
 		
 	}
-//if a CTA account is logged in
-else if(isset($_COOKIE['CTA'])) {
-	$ctaid = $_COOKIE['CTA'];
-	$status = 9;
-//get CTA data
-if(isset($getuserName) && $getuserName==true){
-	$CTAmatches = array();
-$matchcounter = 0;
-	$k=0;
-//get CTA 	
-$getCTA = mysql_query("SELECT ctaid,name,request,timeCreated,expiryTime FROM cta WHERE (ctaid='$ctaid')");
-	 if($getCTA && mysql_num_rows($getCTA)==1){
-//if CTA is found...
-	 if(mysql_num_rows($getCTA)==1){
-			$now = time();
-			 $cta = mysql_fetch_array($getCTA,MYSQL_ASSOC);
-				 $ctaname = $cta['name'];
-				 $myid  = $cta['ctaid'];
-				 $rqstatus = $cta['request'];
-				 $timeCreated = $cta['timeCreated'];
-				 $expiryTime = $cta['expiryTime'];
-				 $secondsLeft = $expiryTime - $now;
-//if CTA has expired, log it out immediately, so the cookies can be cleared
-	if($secondsLeft<0){
-	header("location: $root/logout");
-exit();	
+	day.innerHTML = (d<10 ? '0'+d : d)+'d';
+	hour.innerHTML = (h<10 ? '0'+h : h)+'h';	
+	min.innerHTML = (m<10 ? '0'+m : m)+'m';	
+	sec.innerHTML = (s<10 ? '0'+s : s)+'s';	
+	
 	}
-//Give a major notification as per how many days remaining when the remaining days is <= 6 days
-else if($secondsLeft <= (86400 * 6)){
-	$remainingDays = (int) (($expiryTime-$now)/86400);
-	$remainingDaysNotice = "<h1>NOTICE</h2>
-							<p>This CTA will expire ".($remainingDays >=1? "in <strong class=\"cta-time-remaining\">$remainingDays days</strong> time.":($remainingDays <1 ? "in the next <strong class=\"cta-time-remaining\">".(int)(($expiryTime-$now)/3600)." hours.</strong>" : "in an unknown time"))."</p>
-							<br/><a id=\"renew-in-notice\" href=\"#\">Renew CTA</a>";
+	
+}	
 }
-//if request has been placed
-if($rqstatus==1){
-//get request 
-$rq = mysql_query("SELECT * FROM cta_request WHERE (ctaid='$ctaid')");
-if($rq){
-$request = mysql_fetch_array($rq,MYSQL_ASSOC);
- $rqtype = $request['type'];
- $rqpricemax = $request['maxprice'];
- $rqlocation = $request['location'];
- 
-		}
-	}
- //get matches id after the requests data has been retrieved and get the number of rows that mathes the request
-if(isset($rqtype) && isset($rqpricemax) && isset($rqlocation)){
-$getCTAmatches = mysql_query("SELECT property_ID FROM properties WHERE (type='$rqtype' AND rent<=$rqpricemax AND location LIKE '%$rqlocation%')");
-	$matchcounter = mysql_num_rows($getCTAmatches);
-	while($match=mysql_fetch_array($getCTAmatches,MYSQL_ASSOC)){
-		$CTAmatches[$k]=$match['property_ID'];
-		$k++;
-	}
-			 }
-				}
-		 
-//get clipped
-$getclipped = mysql_query("SELECT * FROM clipped WHERE clippedby='$ctaid'");
-if($getclipped){
-	$c = 0;
-	$clipcounter = mysql_num_rows($getclipped);
-	while($clipped = mysql_fetch_array($getclipped,MYSQL_ASSOC)){
-		$clippedproperty[$c] = $clipped['propertyId'];
-		$c++;
-	}
-}
-else{
-	$clipcounter = 999;
-}
-$messages = mysql_num_rows(mysql_query("SELECT * FROM messages WHERE receiver='$ctaname' AND status='unseen'"));
-	$notifications = mysql_num_rows(mysql_query("SELECT * FROM notifications WHERE receiver='$ctaname' AND status='unseen'"));
-$following = mysql_num_rows(mysql_query("SELECT * FROM follow WHERE follower='$ctaname'"));
-
-}
-else{
-	//if the cta info cannot be get, clear cookie and redirect to checkin
-	setcookie('CTA',"",time()-60,"/","",0);
-		header("location: $root/cta/checkin.php");
-	mysql_close($db_connection);
-	exit();
-		 }
-}
-}
- //if user is not logged in as either agent or client
-else{
-	$status = 0;
-}
-?>
+</script>
 
 <title>Shelter | <?php echo $pagetitle; ?></title>
 <style>
-span#refresh{
-	margin-top:5px
-}
-a#notification{
-	padding-top:0px;
-	padding-left:50px;
-	color:white;
-	font-size:10px;
-	font-weight:bold;
-	margin-left:20px;
-}
-#notifications-icon{
-	background-position:-48px -144px;
-}
-
 .fixed-head-after-scroll{
 	height:50px;
 }
@@ -228,7 +183,12 @@ input.search{
 <div class="top-nav-bar" id="top-nav-bar-content">
 <span id="top"></span>
 <span id="basic-head">
-<button id="menuicon" onclick="javascript:togglemenu()">MENU</button><span id="templogo"><a href="<?php echo $root ?>"><h1 style="display:inline; color:white;">Shelter</h1><h6 style="display:inline; color:white;" >.com</h6></a></span>
+<a href="#" id="menuicon" onclick="javascript:togglemenu()">
+<span class="menu-lines"></span>
+<span class="menu-lines"></span>
+<span class="menu-lines"></span>
+</a>
+<span id="templogo"><a href="<?php echo $root ?>"><h1 style="display:inline; color:white;">Shelter</h1><h6 style="display:inline; color:white;" >.com</h6></a></span>
 </span>
 <div id="menus">
 <ul id="nav-bar">
@@ -244,13 +204,24 @@ input.search{
 </ul>
 </div>
 
+<div id="agent-search">
+<input style="width:100%;height:30px;margin-top:5px;padding-left:5px" type="search" onkeyup="getAgents(this.value,'agents-snipet-search-input-desktop','suggested-agents-search-container-desktop','suggested-agents-search-list-desktop')" class="search-input-field" id="agents-snipet-search-input-desktop" type="text" placeholder="search for agent" maxlength="50"/>
+<!--<button class="search-btn">Go</button>-->
+
+<div style="margin-top:5px" class="suggested-agents-search-container suggestion-box" id="suggested-agents-search-container-desktop">
+<div class="suggested-agents-search-list" id="suggested-agents-search-list-desktop" style="padding:0px; ">
+</div>
+</div>
+
+</div>
+<span id="header-notice-wrapper">
 <?php
 if($status==1 || $status==9){
-	echo "<a id=\"notification\" title=\"notifications\" href=\"$root/notifications\">$notifications<span class=\"white-icon\" id=\"notifications-icon\"></span></a>";
+	echo "<span id=\"notification\">$notifications<a  title=\"notifications\" href=\"$root/notifications\"><span class=\"black-icon bell-icon\"></span></a></span>";
 }
  ?>
-<span title="refresh page" id="refresh" class="white-icon" style="background-position:-216px -24px;" onclick="javascript:location.reload()" ></span>
-
+<span title="refresh page" id="refresh" class="white-icon refresh-icon" onclick="javascript:location.reload()" ></span>
+</span>
 <script>
 window.onscroll = function(event){
 	 if(window.pageYOffset >= document.getElementById('top-nav-bar-content').clientHeight){
@@ -267,12 +238,4 @@ else{
 </div>
 <div class="top-nav-bar" id="top-nav-bar-under" ></div>
 
-<div id="desktop-search-container">
-<form id="desktop-search">
-<input class="home-search select-type" type="text" placeholder="select property type"/>
-<input class="home-search max-price" type="text" placeholder="Max price"/>
-<input class="home-search location" type="text" placeholder="location"/>
-<input class="home-search search" type="submit" value="search"/>
-</form>
-</div>
 </div>

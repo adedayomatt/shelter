@@ -1,7 +1,14 @@
-
+<?php 
+$connect = true;
+require('../require/connexion.php'); 
+ //confirm if user is still logged in 
+if(!isset($_COOKIE['name']) && !isset($_COOKIE['CTA'])){
+	header("Location: ../login");
+}
+?>
 <!DOCTYPE html>
 <html>
-<meta name="viewport" content="max-width=1000px,maximum-scale=0.35" />
+<?php require('../require/meta-head.html'); ?>
 <link href="../css/general.css" type="text/css" rel="stylesheet" />
 <link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
 <link href="../css/messages_styles.css" type="text/css" rel="stylesheet" />
@@ -10,15 +17,10 @@
 $pagetitle = "Send Message";
 $ref='messagepage';
 $getuserName=true;
-$connect = true;
 require('../require/header.php');
 ?>
 </head>
 <?php 
- //confirm if user is still logged in 
-if($status == 0){
-	redirect();
-}
 //when the message is sent
 if(isset($_POST['send'])){	
 //if all fields are not empty
@@ -108,7 +110,7 @@ echo (isset($confirm)? "<div id=\"confirm\">$confirm</div>" : '');
 <label>Subject <input class="message-input" name="subject" maxlength="150" type="text" placeholder="no subject"/></label>
 <label>Message</label>
 <textarea id="message-textarea" name="msgbody" cols="40" rows="5" placeholder="message body"></textarea>
-	<input id="sendmessage-button" name="send" type="submit" value="send" />
+	<input class="sendmessage-button" name="send" type="submit" value="send" />
 </form>
 
 </div>

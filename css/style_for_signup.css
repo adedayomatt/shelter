@@ -1,12 +1,4 @@
-#shelter{
-	font-family:Georgia;
-	color:white;
-	font-size:150%;
-	text-align:center;
-}
-#shelter:hover{
-	text-decoration:none;
-}
+
 input:not(input[type=checkbox]){
 		display:block;
 	}
@@ -15,22 +7,19 @@ input{
 	}
 
 #mainsignup{
-
-}
-@media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
-	#mainsignup{
 	width:100%;
 	height:100%;
 	}
 #yes-js-mainsignup{
 	width:100%;
-}
-.signup-tabs{
-	width:95%;
-	margin:auto;
-	margin-bottom:30px;
-	box-shadow:2px 2px 2px 2px grey;
 	
+}
+
+.signup-tabs{
+	margin:auto;
+	margin-bottom:10px;
+	box-shadow:5px 10px 10px #555;
+	line-height:30px;
 }
 #business-info-tab{
 	display:block;
@@ -46,111 +35,30 @@ input{
 	letter-spacing:2px;
 }
 fieldset{
-	width:95%;
 	background-color:white;
 	margin-bottom:10px;
 	padding:20px;	
 	border:none;
-	border-radius:5px;
-	box-shadow:2px 2px 2px 2px #DDD;
+	border-radius:3px;
 }
 input[type=text],input[type=password],input[type=email]{
 	width:96%;
 	padding:2%;
-	border:1px solid grey;
 	border:none;
-	border-bottom:1px solid black;
-}
-input:focus{
-	border:none;
-	border-bottom:5px solid #6D0AAA;
+	border-bottom:2px solid purple;
 }
 
 .continue-or-back-button{
-	background-color:white;
-	color:#6D0AAA;
-	border: 5px solid #6D0AAA;
-	border-radius: 10px;
-	padding:3%;
-	padding-left:10%;
-	padding-right:10%;
-	cursor:pointer;
-	letter-spacing:2px;
-	font-weight:bold;
-}
-#signupbutton{	
-	width:80%;
-	margin:auto;
-	padding:5%;
-	padding-left:10%;
-	padding-right:10%;
-	border:5px solid #6D0AAA;
-	border-radius:10px;
-}
-#registration-successful,
-#registration-not-successful{
-width:90%;
-}
-}
-@media only screen and (min-device-width: 1000px){
-	#mainsignup{
-	width:100%;
-	height:100%;
-	}
-#yes-js-mainsignup{
-	width:100%;
-	
-}
-.signup-tabs{
-	width:50%;
-	margin:auto;
-	margin-bottom:10px;
-}
-#business-info-tab{
-	display:block;
-}
-#personal-info-tab{
-	display:none;
-}
-#login-info-tab{
-	display:none;
-}
-.step{
-	font-size:250%;
-	letter-spacing:2px;
-}
-fieldset{
-	width:100%;
-	background-color:white;
-	margin-bottom:10px;
-	padding:20px;	
-	border:none;
-	border-radius:5px;
-	box-shadow:2px 2px 2px 2px #DDD;
-}
-input[type=text],input[type=password],input[type=email]{
-	width:96%;
-	padding:2%;
-	border:1px solid grey;
-	border:none;
-	border-bottom:1px solid black;
-}
-input:focus{
-	border:none;
-	border-bottom:5px solid #6D0AAA;
-}
-
-.continue-or-back-button{
-	background-color:white;
-	color:#6D0AAA;
-	border: 1px solid #6D0AAA;
-	border-radius: 5px;
+	background-color:green;
+	color:white;
+	border-radius: 2px;
 	padding:1%;
 	padding-left:3%;
 	padding-right:3%;
 	cursor:pointer;
-	letter-spacing:2px;
 	font-weight:bold;
+	border:none;
+	box-shadow:0px 5px 5px rgba(0,0,0,0.1) inset;
 }
 #signupbutton{	
 	width:50%;
@@ -159,21 +67,15 @@ input:focus{
 	padding-left:10%;
 	padding-right:10%;
 	border:1px solid #6D0AAA;
-	border-radius:10px;
+	border-radius:2px;
+	box-shadow:0px 5px 5px rgba(0,0,0,0.1) inset;
 }
-#registration-successful{
-width:50%;
-}
+#registration-successful,
 #registration-not-successful{
-width:90%;
-}
-}
-
-
-#registration-successful,#registration-not-successful{
+width:80%;
 	margin:auto;
 	padding:20px;
-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.05) inset;
+	box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.05) inset;
 	margin-bottom:10px;
 }
 #registration-not-successful{
@@ -181,7 +83,7 @@ box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.05) inset;
 }
 #registration-successful{
 	color: green;
-}	
+}
 .legend{
 	font-size:150%;
 	letter-spacing:3px;
@@ -196,20 +98,32 @@ box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.05) inset;
 #agreement-box{
 	display:inline;
 }
-.Business,.personal{
-	
-}
+
 #signupbutton{
 	cursor:pointer;
-	background-color:#6D0AAA;
+	background-color:purple;
 	color:white;
 	font-size:120%;
 	font-weight:bold;
 	margin-top:5%;
 }
 #signupbutton:hover{
-	background-color:grey;
+	opacity:0.8;
 }
+@media only screen and (max-width: 800px){
+.signup-tabs{
+	width:90%;
+}
+
+
+}
+@media only screen and (min-width: 800px){
+.signup-tabs{
+width:50%;
+}
+}
+
+
 
 
 

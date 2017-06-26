@@ -1,6 +1,15 @@
+<?php 
+$connect = true;
+require('../require/connexion.php'); 
+ //confirm if user is still logged in 
+if($status==0){
+	redirect();
+}
+?>
 
 <!DOCTYPE html>
 <html>
+<?php require('../require/meta-head.html'); ?>
 <link href="../css/general.css" type="text/css" rel="stylesheet" />
 <link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
 <link href="../css/messages_styles.css" type="text/css" rel="stylesheet" />
@@ -9,11 +18,7 @@
 $pagetitle = "Messages";
 $ref='messagepage';
 $getuserName=true;
-$connect=true;
 require('../require/header.php');
-if($status==0){
-	redirect();
-}
 ?>
 </head>
 <body class="pic-background">
@@ -36,10 +41,10 @@ function Message($cvid,$msgid,$initiator,$participant,$subject,$lastmessage,$sen
 		$since = (int)($time/3600).' hours ago';
 	}
 	else if($time>=86400 && $time<604800){
-		$since = date('l, d M, Y  ',$timestamp).'('.(int)($time/86400).' days ago)';
+		$since = (int)($time/86400).' days ago, '.date('l, d M, Y  ',$timestamp);
 	}
 	else if($time>=604800 && $time<18144000){
-		$since = date('l, d M, Y  ',$timestamp).'('.(int)($time/604800).' weeks ago)';
+		$since = (int)($time/604800).' weeks ago, '.date('l, d M, Y  ',$timestamp);
 	}
 	
 if($initiator==$receiver){
@@ -50,18 +55,19 @@ else if($participant==$receiver){
 }
 //if the message was sent by this particular user, then it is an outbox message
 if($sender==$receiver){
-	$messageclass='outbox';
+	$messageclass='outbox-icon';
 	$read = "read-messages";
 }
 else{
-	$messageclass='inbox';
+	$messageclass='inbox-icon';
 	$read = ($status == 'unseen' ? 'unread-messages' : 'read-messages');
 }
 	return "<li class=\"message $read\">
-					<div><i class=\"black-icon\" id=\"$messageclass\"></i>
-					 <a href=\"readmessage/?cv=$cvid".($msgid != 'na' ? "#$msgid" : '')."\" class=\"message-heading\" href=\"\">".$head." [$subject]</a></div>
+					<div><i class=\"black-icon $messageclass\" ></i>
+					 <a href=\"readmessage/?cv=$cvid".($msgid != 'na' ? "#$msgid" : '')."\" class=\"message-heading\" href=\"\">".$head." [$subject]</a>
+					 <span class=\"time\">$since</span></div>
 					 <p class=\"lastmessage inline-block-fullwidth\">".(strlen($lastmessage) >= 100 ? substr($lastmessage,0,100)."...<a href=\"readmessage/?cv=$cvid".($msgid != 'na' ? "#$msgid" : '')."\" >continue reading</a>" : $lastmessage)."</p>
-					 <i class=\"since inline-block\">$since</i>
+					 
 					 
 						</li>";		
 	

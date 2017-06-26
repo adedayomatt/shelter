@@ -1,6 +1,9 @@
 
 /*Rigt hand side*/
 @media only screen and (min-device-width: 1000px){
+	.results{
+		width:40%;
+	}
 div.other-search-info{
 	float:left;
 	width:30%;
@@ -9,9 +12,17 @@ div.other-search-info{
 }
 
 div.related-results,div.contact-search-help-container{
-	box-shadow: 0px 2px 2px #DDD inset;
+	background-color:white;
 	margin-bottom:5px;
 	width:100%;
+}
+div#related-results-wrapper{
+	padding:2%;
+	background-color:rgba(236, 87, 236, 0.2);
+}
+div.contact-search-help-container{
+	padding:2% 2% 10% 2%;
+	box-shadow: 0px 2px 2px #DDD inset;
 }
 li.related-results-list{
 	display: inline-block;
@@ -33,13 +44,23 @@ a.related-results{
 div.other-search-info{
 	width:100%;
 }
+div#related-results-wrapper{
+	padding:1%;
+	background-color:rgba(236, 87, 236, 0.2);
+}
 div.related-results,div.contact-search-help-container{
 	padding:2%;
 	width:96%;
 	margin:auto;
 	margin-bottom:50px;
+	background-color:white;
+}
+div.related-results{
+	background-color:rgba(236, 87, 236, 0.2);
+}
+div.contact-search-help-container{
+	padding:2% 2% 10% 2%;
 	box-shadow:  0px 3px 3px grey inset;
-
 }
 li.related-results-list{
 	color:#000;

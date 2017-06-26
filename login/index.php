@@ -1,18 +1,22 @@
+<?php 
+$connect = true;
+require('../require/connexion.php'); ?>
+
 <!DOCTYPE html>
 <html>
-<meta name="viewport" content="width=1000px,maximum-scale=0.35" />
+<?php require('../require/meta-head.html'); ?>
 <link href="../css/general.css" type="text/css" rel="stylesheet" />
 <link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
 <link href="../css/login_styles.css" type="text/css" rel="stylesheet">
 <header>
+<title>Login</title>
 <?php
 $pagetitle="Log in";
 $ref ='loginpage';
 $getuserName=true;
-$connect=true;
-	require('../require/connexion.php');
+require('../require/plain-header.html');
 if(isset($_COOKIE['name'])){
-	$loginReport = "<h1>Already logged in</h1>You are already logged in <a href=\"../logout\">Logout</a>";
+	$loginReport = "<h1>Already logged in</h1><p>You are already logged in <a href=\"../logout\">Logout</a></p>";
 	$case = 1;
 	}
 ?>
@@ -41,22 +45,21 @@ mysql_close($db_connection);
 	}
 //if password is incorrect
 	else{
-	$loginReport = "<h2>Login Failed!</h2>Incorrect password";
+	$loginReport = "<h2>Login Failed!</h2><p>Incorrect password</p>";
 					$case = 2;	
 	}
 }
 //if no username matches
 else{
-	$loginReport = "<h2>Login Failed!</h2>user Id <b>'".$_POST['username']."'</b> does not exists<br/>check your input or <a href=\"$root/signup\">create a new account</a></p>";
+	$loginReport = "<h2>Login Failed!</h2><p>user Id <b>'".$_POST['username']."'</b> does not exists<br/>check your input or <a href=\"$root/signup\">create a new account</a></p>";
 				$case = 3;
 }
 	
 }
 ?>
 
-<body class="mixedcolor-background">
+<body class="picture-background">
 			<div class="main-login">
-			<a id="shelter" href="../"><h1 align="center">Shelter</h1></a>
 <form action="<?php $_PHP_SELF ?>" method="post">
 	<fieldset class=" box-shadow-1 login-form">
 			<?php if(isset($loginReport) && $case==1){

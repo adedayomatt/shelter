@@ -1,18 +1,30 @@
-<?php session_start(); ?>
+<?php session_start();
+$connect = true;
+require('../require/connexion.php');
+
+if(isset($_SESSION['id']) && isset($_SESSION['directory'])){
+	$imgurl = $_SESSION['directory'];
+	$imgname = $_SESSION['id'];
+}
+else{
+	mysql_close($db_connection);
+	header("location: $root/upload");
+	exit();
+}
+
+ ?>
 <html>
+<?php require('../require/meta-head.html'); ?>
 <link href="../css/general.css" type="text/css" rel="stylesheet" />
 <link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
 <head>
 <?php
 //check if user is logged in
 $pagetitle = "Add photo";
-$connect = true;
-$getuserName = true;
-require('../require/header.php');
+require('../require/plain-header.html');
 if($status != 1){
 		redirect();
-	exit();
-}
+	}
 ?>
 <style>
 #message{
@@ -36,17 +48,6 @@ if($status != 1){
 </style>
 </head>
 <body class="pic-background">
-<?php
-if(isset($_SESSION['id']) && isset($_SESSION['directory'])){
-	$imgurl = $_SESSION['directory'];
-	$imgname = $_SESSION['id'];
-}
-else{
-	mysql_close($db_connection);
-	header("location: $root/shelter/upload");
-	exit();
-}
-?>
 <script>
 function finish(){
 	alert("property added successfully");

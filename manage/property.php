@@ -1,4 +1,13 @@
+<?php 
+$connect = true;
+require('../require/connexion.php'); 
+ //confirm if user is still logged in 
+if(!isset($_COOKIE['name'])){
+	header("Location: ../login");
+}
+?>
 <html>
+<?php require('../require/meta-head.html'); ?>
 <head>
 <link href="../css/general.css" type="text/css" rel="stylesheet" />
 <link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
@@ -7,13 +16,7 @@
 	$pagetitle = "Change Detail";
 	$ref='editproperty';
 $getuserName=true;
-$connect = true;
 	require('../require/header.php');
-	if($status==0){
-		mysql_close($db_connection);
-		redirect();
-		exit();
-	}
 	?>
 <script type="text/javascript" src="../js/editscript.js"></script>
 	</head>

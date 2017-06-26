@@ -1,5 +1,10 @@
 <!DOCTYPE html>
+<?php 
+$connect = true;
+require('../require/connexion.php'); ?>
+
 <html>
+<?php require('../require/meta-head.html'); ?>
 <link href="../css/general.css" type="text/css" rel="stylesheet" />
 <link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
 <link href="../css/style_for_signup.css" type="text/css" rel="stylesheet">
@@ -12,8 +17,7 @@ setcookie('CTA',"",time()-60,"/","",0);
 setcookie('name',"",time()-60,"/","",0);
 $pagetitle = 'signup';
 $ref='signup';
-$connect = true;
-require('../require/connexion.php');
+require('../require/plain-header.html');
 ?>
 <script>
 //This verify if the two paswords match		
@@ -30,7 +34,7 @@ require('../require/connexion.php');
 			</script>		
 		
 			</header>			
-<body class="mixedcolor-background">
+<body class="no-pic-background">
 		<?php 
 //if submitted		
 if(isset($_POST['register'])){			
@@ -152,7 +156,6 @@ else{
 			}
 		?>
 <div id="mainsignup">
-<a id="shelter" href="../"><h1>Shelter</h1></a>
 	<?php
 	if(isset($case) and $case == 1){
 	$icon = "background-position:-288px 0px";
@@ -171,12 +174,16 @@ else{
 	}
 	#business-info-tab,#personal-info-tab,#login-info-tab{
 		display:block;
+		box-shadow:none;
+	}
+	fieldset{
+		border:1px solid #E3E3E3;
 	}
 	</style>
 	</noscript>
 			<div id="yes-js-mainsignup" >
 			
-			<p style="color:white"align="center">Already have an account? You can <a href="../login">login</a></p>
+			<p align="center">Already have an account? You can <a href="../login">login</a></p>
 		<form name="signupform" action="<?php $_PHP_SELF ?>" method="POST" onsubmit="return(verify())">
 		<div class="signup-tabs" id="business-info-tab">
 		<fieldset class="Business" >
@@ -219,7 +226,7 @@ echo "</ul>check your input and try again</div>";
 			<label>Business's e-mail: <input name="Office_mail" placeholder="Enter business e-mail here" size="30" maxlength="30" type="email" required="required" value="<?php if(isset($_POST['Office_mail'])){echo $_POST['Office_mail']; }?>"></label>
 			
 			<button class="continue-or-back-button" onclick="javascript:document.getElementById('business-info-tab').style.display = 'none';
-										document.getElementById('personal-info-tab').style.display = 'block';">Continue >></button>
+										document.getElementById('personal-info-tab').style.display = 'block';">Continue »</button>
 			</fieldset>
 			
 			</div>
@@ -235,10 +242,10 @@ echo "</ul>check your input and try again</div>";
 			<label>Alternative Phone No: <input name="personal_No2" size="40" placeholder="Enter business owner's alternative phone no here" maxlength="11" type="text" value="<?php if(isset($_POST['personal_No2'])){echo $_POST['personal_No2']; }?>"/></label>
 			<label><span style="color: red">*</span>e-mail: <input name="personal_mail" placeholder="Enter business owner's e-mail address here" size="30" maxlength="30" type="email" required="required" value="<?php if(isset($_POST['personal_mail'])){echo $_POST['personal_mail']; }?>"></label>
 			<button class="continue-or-back-button" onclick="javascript:document.getElementById('personal-info-tab').style.display = 'none';
-										document.getElementById('business-info-tab').style.display = 'block';"><< Go back</button>
+										document.getElementById('business-info-tab').style.display = 'block';">« Go back</button>
 										
 			<button class="continue-or-back-button" onclick="javascript:document.getElementById('personal-info-tab').style.display = 'none';
-										document.getElementById('login-info-tab').style.display = 'block';">Continue >></button>
+										document.getElementById('login-info-tab').style.display = 'block';">Continue »</button>
 			</fieldset>
 			</div>
 			
@@ -253,7 +260,7 @@ echo "</ul>check your input and try again</div>";
 			<label><span style="color: red">*</span>Repeat Password: <input name="pass2" placeholder="Repeat password" size="30" maxlength="25" type="password" required="required"/></label>
 			
 			<button class="continue-or-back-button" onclick="javascript:document.getElementById('login-info-tab').style.display = 'none';
-										document.getElementById('personal-info-tab').style.display = 'block';"><< Go back</button>
+										document.getElementById('personal-info-tab').style.display = 'block';">« Go back</button>
 			
 			<div > <input name="agreement" value="<?php if(isset($_POST['agreement'])) echo 'yes'; else echo 'no';?>"  type="checkbox" checked="checked">I agree with the <a href="#">terms and conditions</a> of shelter.com</div>
 			<input name="register" value="sign up"  type="submit" id="signupbutton" align="right"/>

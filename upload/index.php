@@ -1,20 +1,28 @@
-<?php session_start(); ?>
+<?php session_start();
+$connect = true;
+require('../require/connexion.php');
+ ?>
 <html>
+<?php require('../require/meta-head.html'); ?>
 <head>
 <link href="../css/general.css" type="text/css" rel="stylesheet" />
 <link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
 <?php
 $pagetitle = "upload";
 	$ref = 'upload';
-	$connect = true;
+	
 	$getuserName = true;
-	require('../require/header.php');
+	require('../require/plain-header.html');
 //if user is not logged in want to access this page
-	if($status==0 || $status==9){
-		redirect();
+	if(!isset($_COOKIE['name'])){
+		header("location: ../login");
 		exit();
 	}
+	else{
+		$profile_name = $_COOKIE['name'];
+	}
 ?>
+
 <?php
 
 	function status($form_field){
@@ -68,14 +76,15 @@ $_SESSION['directory'] = $propertydir;
 	$_SESSION['id'] = $propertyId;
 		if(mkdir("$propertydir")){
 //This is a prepared statement for a new php file that will be the index of the new directory
-			$prepared = "<html>
+			$prepared = "<?php \$connect = true;
+			require('../../require/connexion.php'); ?>
+			<html>
+			<?php require('../../require/meta-head.html'); ?>
 <head>
 <link href=\"../../css/general.css\" type=\"text/css\" rel=\"stylesheet\" />
 <link href=\"../../css/header_styles.css\" type=\"text/css\" rel=\"stylesheet\" />
 <link href=\"../../css/details_styles.css\" type=\"text/css\" rel=\"stylesheet\" />
-<?php \$pagetitle=\"Details\"; 
-\$connect = true;
-\$getuserName = true;
+<?php \$pagetitle=\"$propertyId - $type for rent\"; 
 require('../../require/header.php') ?>
 <script type=\"text/javascript\" language=\"javascript\" src=\"../../js/detailsscript.js\"></script>
 </head>
@@ -93,13 +102,12 @@ require('../detail.php');
 			fclose($open);
 			}	
 	header("Location: $root/upload/addphoto.php");
+	exit();
 }
 else{
 	echo"<script>alert(\"There was an error\"); \"</script>";
 	//window.location=\"http://localhost/shelter/upload
 		}
-		
-		
 		mysql_close($db_connection);
 	
 
@@ -119,10 +127,10 @@ function generateid(){
 	$figure = rand(1000,9999);
 	$final = $firstalpha.$secondalpha.$thirdalpha.$figure;
 	//check if the ID already exist
-	$connect =true;
-	require("../require/connexion.php");
+	//$connect =true;
+	//require("../require/connexion.php");
 	$fetchId = "SELECT property_ID FROM properties";
-	$fetchIdQuery = mysql_query($fetchId,$db_connection);
+	$fetchIdQuery = mysql_query($fetchId);
 	//if fetching the IDs is successfull...
 	if($fetchIdQuery){
 		while($id = mysql_fetch_array($fetchIdQuery,MYSQL_ASSOC)){
@@ -143,7 +151,6 @@ function generateid(){
 	else{
 		echo 'Error occur while verifying ID';
 		}
-		mysql_close($db_connection);
 	
 }
 
@@ -294,10 +301,5 @@ label{
 	width:70%;
 margin-left:100px;
 }
-body{
-	background-image: url("../image/ground.png");
-	
-}
-
 </style>
 </html>

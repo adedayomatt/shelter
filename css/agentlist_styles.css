@@ -1,60 +1,64 @@
 
 div.maincontent{
-	height:500px;
-	width:100%;
 	background-color:#eeeeee;
+	width:70%;
+	float:left;
 }
 div.mainlist{
-	float:left;
-	height:500px;
-	width:80%;
 	background-color:inherit;
-	overflow-y:scroll;
-	overflow-x:hidden;
 }
 
 
 .Agentbox{
 	background-color:white;
-	height:180px;
 	width:98%;
 	margin:5px;
 	padding:5px;
-	border-radius:5px;
+	border:1px solid #E3E3E3;
+	border-radius:2px;
 	
 }
-hr{
-	color:purple;
-}
-ul{
+li{
 	list-style-type:none;
 }
-
-.address{
-	list-style-image:url("image/mm.png");
+.Bname{
+	color:purple;
 }
-.contact{
-	list-style-image:url("ping.png");
-}
-.tel{
-	list-style-image:url("ping.png");
-}
-.mail{
-	list-style-image:url("ping.png");
+.ad{
+	display:block;
+	height:100px;
+	width:100%;
 }
 div.contacts-container{
 	width:100%;
 	height:75%;
 }
-div.fav-container{
-	width:100%;
-	height:15%;
-	background-color:blue;
-	margin-top:0;
-}
-div.RHSr{
-	height:500px;
-	width:18%;
+
+.follow-unfollow-button{
 	float:right;
-	background-color:#eeeeee;
+	display:inline-block;
+	border:2px solid #E3E3E3;
+	border-radius:5px;
+	padding:1% 2% 1% 2%;
 }
+@media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
+	
+div.maincontent{
+	background-color:#eeeeee;
+	width:100%;
+}
+}
+@media only screen and (min-device-width: 1000px){
+	div.maincontent{
+	background-color:#eeeeee;
+	width:70%;
+	float:left;
+}
+}
+
+
+
+
+
+
+

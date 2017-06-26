@@ -1,5 +1,8 @@
+ <?php 
+$connect = true;
+require('../require/connexion.php'); ?>
 <html>
-<meta name="viewport" content="max-width=1000px,maximum-scale=0.35" />
+<?php require('../require/meta-head.html'); ?>
 <link href="../css/general.css" type="text/css" rel="stylesheet" />
 <link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
 <link href="../css/searchresult_styles.css" type="text/css" rel="stylesheet" />
@@ -10,7 +13,6 @@ $pagetitle = 'Search';
 ?>
 <?php
 $ref='searchpage';
-$connect =true;
 $getuserName=true;
 require("../require/header.php");
 ?>
@@ -43,7 +45,16 @@ $ref="search_page";
 require("../require/propertyboxes.php");
 
 if(!empty($propertyId)){
-echo "<p class=\"inline-block\"> showing $x - $y of $totalFound found results<a class=\"show-more-link\" href =\"?type=$propertytype&max=$maxprice&location=$loc&next=$y\" >show more results >></a> </p>";
+		echo "<p style=\"display:block\">showing $x - $y of $totalFound</p>";
+	
+	echo "<div class=\"next-prev-container\">";
+	if(isset($_GET['next']) && $_GET['next'] > 0 ){
+		echo "<a class=\"previous\" href =\"?type=$propertytype&max=$maxprice&location=$loc&next=".($y-2*$max)."\" >« prev</a>";
+	}
+if( !isset($_GET['next']) || (isset($_GET['next']) && ($_GET['next'] < ($totalFound-$max))) ){
+	echo "<a class=\"next\" href =\"?type=$propertytype&max=$maxprice&location=$loc&next=$y\" >next »</a>";
+}	
+echo "</div>";
 }
 
 //if no match is found for the search, get related results
@@ -79,10 +90,11 @@ echo "<div>
 
 
 <div class="other-search-info">
-<div class="related-results">
 <?php
 if(isset($_GET['type']) || isset($_GET['max']) || isset($_GET['location'])){
-	echo "<h4 class=\"container-headers\" align=\"center\">Related Results</h4>";
+	echo "<div id=\"related-results-wrapper\">";
+	echo "<h4 class=\"container-headers\" align=\"left\">Related Results</h4>";
+	echo "<div class=\"related-results\">";
 	$IDsuggest = array();
 	$typesuggest = array();
 	$locationsuggest = array();
@@ -117,18 +129,21 @@ if(isset($_GET['type']) || isset($_GET['max']) || isset($_GET['location'])){
 }
 //if getsuggestions query return false
 	else { echo "<p>could not get related results</p>"; }
-}
+echo "</div>
+		</div>";
+	}
 	
 	mysql_close($db_connection);
+	
 ?>
-</div>
+
 
 <div class="contact-search-help-container">
 <?php
 if($status == 0 || $status==9)	{
 echo "<p class=\"inline-block\" align=\"left\" style=\"padding-left:10px;\">Can't find what you are looking for?, Try a new search</p>
-	 <a class=\"inline-block-link white-on-purple\" href=\"../cta/request.php?p=1\">make a special request</a>
-     <p class=\"inline-block\"><b>Have any problem searching?</b> <a class=\"inline-block-link white-on-purple\" href=\"\">contact our help center</a></p>";
+	 <a class=\"skyblue-block-link\" href=\"../cta/request.php?p=1\">make a special request</a>
+     <p class=\"inline-block\"><b>Have any problem searching?</b> <a class=\"inline-block-link white-on-purple\" style=\"float:right\" href=\"\">contact our help center</a></p>";
 }
 ?>
 </div>

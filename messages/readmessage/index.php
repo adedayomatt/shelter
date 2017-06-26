@@ -1,6 +1,14 @@
-
+<?php 
+$connect = true;
+require('../../require/connexion.php'); 
+ //confirm if user is still logged in 
+if($status==0){
+	redirect();
+}
+?>
 <!DOCTYPE html>
 <html>
+<?php require('../../require/meta-head.html'); ?>
 <link href="../../css/general.css" type="text/css" rel="stylesheet" />
 <link href="../../css/header_styles.css" type="text/css" rel="stylesheet" />
 <link href="../../css/messages_styles.css" type="text/css" rel="stylesheet" />
@@ -9,11 +17,7 @@
 $pagetitle = "Read Message";
 $ref='messagepage';
 $getuserName=true;
-$connect=true;
 require('../../require/header.php');
-if($status==0){
-	redirect();
-}
 ?>
 <?php
 //This place takes care of replying
@@ -39,7 +43,7 @@ else{
 <body class="no-pic-background">
 
 <div id="reply-box">
-<span style="float:right; color:red;font-size:200%;cursor:pointer;:hover:color:purple" onclick="toggleReplyContainer()"> &times </span>
+<span class="close" title="close" onclick="toggleReplyContainer()"> &times </span>
 <form id="reply-form" action="<?php $_PHP_SELF ?>" method="POST">
 <?php
 	$msg = mysql_fetch_array(mysql_query("SELECT subject,initiator,participant FROM messagelinker WHERE (conversationid=".$_GET['cv'].")"),MYSQL_ASSOC);
@@ -48,7 +52,7 @@ else{
 <h2 style="font-weight:normal">Reply <?php echo $secondParty ?></h2>
 <input id="reply-subject" name="subject" value="<?php echo ($msg['subject'] == "no subject" ? '' :  $msg['subject'])?>"  placeholder="subject" type="text"/>
 <textarea id="reply-body" name="body" placeholder="Reply <?php echo ""?>"></textarea>
-<input id="send-reply-button" name="reply" value="Send"  placeholder="subject" type="submit"/>
+<input class="sendmessage-button" name="reply" value="send"  placeholder="subject" type="submit"/>
 </form>
 </div>
 
@@ -82,18 +86,18 @@ if(mysql_num_rows($getMessages) != 0){
 	if($sender == $user){
 		$messagetime = messageTime('sent',$message['timestamp']);
 		$sentOrReceived = "Sent to: ".$receiver;
-		$inOrOut = 'out';
+		$inOrOut = 'outbox-icon';
 	}
 	else if($receiver == $user){
 		$messagetime = messageTime('received',$message['timestamp']);
 		$sentOrReceived = "Received from: ".$sender;
-		$inOrOut = 'in';
+		$inOrOut = 'inbox-icon';
 	}
 		echo "<div class=\"message-content\" id=\"$messageid\">
 		<div class=\"message-heading\">
 		Subject: $subject<br/>
 		<i class=\"black-icon $inOrOut\"></i>$sentOrReceived
-		<span class=\"message-time\"><i>$messagetime</i></span>
+		<span class=\"time\"><i>$messagetime</i></span>
 		</div>
 		<div class=\"message-body\">
 		$body
