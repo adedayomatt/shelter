@@ -56,21 +56,6 @@ legend{
 		width:80px;
 		height:30px;
 	}
-.icon{
-		display: inline-block;
-width: 14px;
-height: 14px;
-line-height: 14px;
-margin-top:1px;
-vertical-align: text-top;
-	background-image:url("../resrc/black-icons.png");
-		background-position:0px -72px;
-		}
-#delete-icon{
-		background-image:url("../resrc/white-icons.png");
-		background-position:-456px 0px;
-	}
-
 	div#edit-area,div#images-area{
 		width: 70%;
 		margin-left:15%;

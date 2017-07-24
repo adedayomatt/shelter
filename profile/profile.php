@@ -93,7 +93,7 @@ case 1:
 	   $f = 'follow-button';
 	   $ficon = 'black-icon follow-icon';	
 		}
-	$sendmessage = "<a href=\"$root/messages/compose.php?cv=".$token."&i=$Business_Name&rcpt=$key\"><button class=\"profile-buttons\" id=\"sendmessage-button\"><i class=\"black-icon\" id=\"message-icon\"></i>send message</button></a>";
+	$sendmessage = "<a href=\"$root/messages/compose.php?cv=".$token."&i=$Business_Name&rcpt=$key\"><button class=\"profile-buttons\" id=\"sendmessage-button\"><i class=\"black-icon message-icon\"></i>send message</button></a>";
 	$followup = "<button class=\"$f\" id=\"follow-button\" onclick=\"follow('follow-button','$Business_Name','$profile_name','$BizName','A4A')\"><i class=\"$ficon\"></i>  $text</button>";
 	}
 	else{
@@ -121,7 +121,7 @@ $sendmessage = "<a href=\"$root/messages/compose.php?cv=".$token."&i=$ctaname&rc
 	break;
 //for visitors
 default:
-$sendmessage = "<a href=\"$root/cta/checkin.php?_rdr=1\"><button class=\"profile-buttons\" id=\"sendmessage-button\"><span class=\"black-icon\" id=\"message-icon\"></span>message</button></a>";
+$sendmessage = "<a href=\"$root/cta/checkin.php?_rdr=1\"><button class=\"profile-buttons\" id=\"sendmessage-button\"><span class=\"black-icon message-icon\"></span>message</button></a>";
 	$followup =  "<a href=\"$root/cta/checkin.php?_rdr=1\"><button class=\"follow-button\" id=\"follow-button\"><i class=\"black-icon follow-icon\"></i> follow</button></a>";
 	break;
 }
@@ -158,8 +158,8 @@ if($BizName != @$Business_Name){
  </div>
 </div>
  <div id="biz-contacts-wrapper">
-<h2 style="color: yellow">Contacts</h2>
-<p><?php echo $OAddress?></p>
+<h2 style="color: purple">Contacts</h2>
+<p><span class="black-icon location-icon"></span><?php echo $OAddress?></p>
 <p><?php echo $OTel?></p>
 <p> <?php echo $email?></p>
 </div>
@@ -200,7 +200,7 @@ $x = $start+1;
  $y = $start;
  
 $totalproperties = mysql_num_rows(mysql_query("SELECT property_ID FROM properties WHERE (uploadby='$Aid')"));
-$fetchproperties = mysql_query("SELECT property_ID,directory,type,location,rent,min_payment,bath,toilet,description,uploadby,date_uploaded,timestamp,views FROM
+$fetchproperties = mysql_query("SELECT property_ID,directory,type,location,rent,min_payment,bath,toilet,description,uploadby,date_uploaded,timestamp,views,last_reviewed,status FROM
                                properties WHERE (uploadby='$Aid')ORDER BY date_uploaded DESC LIMIT $start,$end");
 //if there is any record fetched
 if($fetchproperties){
@@ -220,6 +220,8 @@ if($fetchproperties){
 	$uploadby[$count] = $property['uploadby'];
 	$howlong[$count] = $property['timestamp'];
 	$views[$count] = $property['views'];
+	$lastReviewed[$count] = $property['last_reviewed'];
+	$avail[$count] = $property['status'];
 	$count++;
 	$y++;
 //last value of count will eventually equals to the total records fetched.
@@ -239,7 +241,15 @@ echo "</div>";
 }
 else{
 if($start==0){
-	echo "<div class=\"no-property\" align=\"center\">$BizName have not uploaded any property</div>";
+	if($status == 1 && $Business_Name == $BizName){
+		echo "<div class=\"no-property\" align=\"center\"><span class=\"black-icon warning-icon\"></span>You have not uploaded any property 
+		<a class=\"skyblue-inline-block-link\" href=\"$root/upload\"><span class=\"white-icon outbox-icon\"></span>upload now</a>
+		</div>";
+	}
+	else{
+		echo "<div class=\"no-property\" align=\"center\"><span class=\"black-icon warning-icon\"></span>$BizName have not uploaded any property</div>";
+	}
+	
 }
 else if($start>0){
 	echo "<div class=\"no-property\" align=\"center\">There are no more properties by $BizName</div>";
@@ -255,15 +265,16 @@ else{
 ?>
 </div>
 
-<div>
+<div id="bottom-links-container">
 <?php
-if($status != 1){
-	echo "
-		<li><a href=\"../signup\">Report this agent</a></li>
-	<li><a href=\"../signup\">create your own account</a></li>";
+if(($status ==1 && $BizName != $Business_Name) || $status !=1){
+	echo "<a class=\"bottom-links report\" href=\"../signup\"><span class=\"white-icon flag-icon\"></span>Report this agent</a>";	
 }
-else{
-	echo "<a href=\"../logout\">Logout</a>";
+if($status!=1){
+	echo "<a class=\"bottom-links create\" href=\"../signup\">create your own account</a>";
+}
+if($status == 1 && $BizName == $Business_Name){
+	echo "<a class=\"bottom-links logout\" href=\"../logout\">Logout</a>";
 }
 ?>
 

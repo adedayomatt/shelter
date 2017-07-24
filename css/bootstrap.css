@@ -170,8 +170,8 @@ a {
 }
 
 a:hover {
-  color: #005580;
-  text-decoration: underline;
+  /*color: #005580;
+  text-decoration: underline;*/
 }
 
 .row {

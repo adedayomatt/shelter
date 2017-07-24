@@ -21,6 +21,7 @@ h1#avatar{
 }
 #BizName-and-buttons{
 	display:inline-block;
+	width:75%;
 	padding:2%;
 	margin-left:2%;
 }
@@ -41,6 +42,9 @@ h1#avatar{
 	padding:2%;
 	border:1px solid #E3E3E3;
 	border-radius:5px;
+}
+#follow-button{
+	width:40%;
 }
 #sendmessage-button{
 	width:50%;
@@ -89,7 +93,10 @@ div#other-agents-wrapper{
 	width:50%;
 	border:1px solid #E5E5E5;
 }
-
+ul{
+	margin:0px;
+	padding:0px;
+}
 
 li.other-agents-list{
 	display:block;
@@ -119,7 +126,30 @@ li.other-agents-list{
 .container-headers{
 	text-align:left;
 }
-@media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
+#bottom-links-container{
+	height:70px;
+}
+.bottom-links{
+	display:inline-block;
+	padding:1% 2% 1% 2%;
+	margin:10px;
+	color:white;
+	border-radius:3px;
+	box-shadow: 0px 5px 5px rgba(0,0,0,0.2) inset;
+}
+.bottom-links:hover{
+	text-decoration:none;
+}
+.create{
+	background-color:purple;
+}
+.report{
+	background-color:orange;
+}
+.logout{
+	background-color: red;
+}
+@media only screen and (max-width: 800px){
 .profile-main-content{
 width:100%;
 }
@@ -129,7 +159,7 @@ width:100%;
 	padding:1%;
 }
 #BizName-and-buttons{
-	width:240px;
+	width:70%;
 	height:150px;
 	padding:1%;
 }
@@ -143,7 +173,7 @@ div#other-agents-wrapper{
 	width:100%;
 }
 }
-@media only screen and (min-device-width: 1000px){
+@media only screen and (min-width: 800px){
 	.profile-main-content{
 	float:left;
 width:78%;

@@ -9,7 +9,7 @@ require('../require/connexion.php'); ?>
  <link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
 <head>
 <?php 
-$pagetitle = 'Registered Agents';
+$pagetitle = 'Agents';
 $ref = "agentspage";
 $connect=true;
 $getuserName=true;
@@ -23,74 +23,56 @@ require('../require/header.php');
 <h3 style="font-weight:normal;">Agents</h3>
 <div class="mainlist">	
 <?php
-$BizName = array();
- $OAddress = array();
- $OTel = array();
- $Omail = array();
-	$CEO = array();
-$Phone = array();
-$Phone2 = array();
-$email = array();
-$user_id = array();
-$password = array();
 
-$fetchprofiles = mysql_query("SELECT * FROM profiles");
-$count = 0;
-if($fetchprofiles){
-	while($user = mysql_fetch_array($fetchprofiles,MYSQL_ASSOC)){
-		$ID = $user['ID'];
-		$BizName[$count] = $user['Business_Name'];
-		$OAddress[$count] = $user['Office_Address'];
-		$OTel[$count] = $user['Office_Tel_No'];
-		$Omail [$count]= $user['Business_email'];
-		$CEO[$count] = $user['CEO_Name'];
-		$Phone[$count] = $user['Phone_No'];
-		$Phone2[$count] = $user['Alt_Phone_No'];
-		$email[$count] = $user['email'];
-		$user_id[$count] = $user['User_ID'];
-		$password[$count] = $user['password'];
-		$timestamp[$count] = $user['timestamp'];
-		$count++;
-	}
-//display the records
-$j = 0;
 $max = 10;
-if(isset($_GET['next'])){
-	$i =$_GET['next'];
+$i = 0;
+if(isset($_GET['next']) && $_GET['next'] >= 0 ){
+	$start =$_GET['next'];
 }
 else{
-	$i=0;
+	$start=0;
 }
-if($i>=0){
-while($i < $count){
-		$profile = "<div class = \"Agentbox\"><div class=\"contacts-container\">
+$end = $start + $max;
+$totalAgents = mysql_num_rows(mysql_query("SELECT User_ID FROM profiles"));
+$fetchprofiles = mysql_query("SELECT * FROM profiles LIMIT $start,$end");
+$x = $start;
+$y = $x;
+if($fetchprofiles){
+	while($agent = mysql_fetch_array($fetchprofiles,MYSQL_ASSOC)){
+	$profile = "<div class = \"Agentbox\"><div class=\"contacts-container\">
 		 <ul>
-		<li><a href=\"$root/".$user_id[$i]."\"><h4 class=\"Bname\">".$BizName[$i]."</h4></a>
+		<li><a href=\"$root/".$agent['User_ID']."\"><h4 class=\"Bname\">".$agent['Business_Name']."</h4></a>
 		<span class=\"follow-unfollow-button\"><span class=\"black-icon follow-icon\"></span>Follow</span>
 		<ul>
-		<li class=\"Agent_Address\"><span class=\"black-icon location-icon\"></span> ".$OAddress[$i]."</li>
+		<li class=\"Agent_Address\"><span class=\"black-icon location-icon\"></span> ".$agent['Office_Address']."</li>
 		<li class=\"acontact\">Contact
 		<ul>
-		<li class=\"tel\">Tel: ".$OTel[$i]."</li>												
-		<li class=\"email\">e-mail: ".$Omail[$i]."</li>
+		<li class=\"tel\">Tel: ".$agent['Office_Tel_No']."</li>												
+		<li class=\"email\">e-mail: ".$agent['Business_email']."</li>
 		 </ul>
 		 </li>
 		 </ul>
 		 </ul>
 		 </div>
-		 <span class=\"time\"> Shelter agent since: ".Timestamp($timestamp[$i])."</span>
+		 <span class=\"time\"> Shelter agent since: ".Timestamp($agent['timestamp'])."</span>
 		 </div>";
 		echo $profile;
-			$i++;
-			$j++;
-		if($j==3){
-			echo "<a href=\"adone.html\"><img src=\"../image/images5.jpeg\" alt=\"Advert will be placed here\" class=\"ad\" ></img></a>";
+		$i++;
+		$y++;
+		if($i==3){
+		echo "<a href=\"adone.html\"><img src=\"../image/images5.jpeg\" alt=\"Advert will be placed here\" class=\"ad\" ></img></a>";
 		}
-			if($j==$max){
-				break;
-			}
-}
-}
+	}
+	echo "<p style=\"display:block\">showing ".($x+1)." - $y of $totalAgents</p>";
+	echo "<div class=\"next-prev-container\">";
+	if(isset($_GET['next']) && $_GET['next'] > 0 ){
+		echo "<a class=\"previous\" href=\"?next=".($start-$max)."\" >« prev</a>";
+	}
+if( !isset($_GET['next']) || $y < $totalAgents){
+	echo "<a class=\"next\" href=\"?next=$y\" >next »</a>";
+}	
+echo "</div>";
+	
 }
 	else{
 echo "<h3 align=\"center\">There was an error while fetching profiles</h3>
@@ -99,35 +81,10 @@ echo "<h3 align=\"center\">There was an error while fetching profiles</h3>
 
 ?>
 
-<div class="Navigate">
-<form  class="prev" action="<?php $_PHP_SELF ?>" method="get">
-	<input name="next" type="hidden" value="<?php echo $i-($max*2) ?>"/>
-	<input type="submit" value="<<Prev"/>
-	</form>	
-	
-	<form class="nxt" action="<?php $_PHP_SELF ?>" method="get">
-	<input name="next" type="hidden" value="<?php echo $i ?>"/>
-	<input type="submit" value="Next>>"/>
-	</form>	
-	</div>	
-	<style>
-	.prev{
-		display:inline;
-		float:left
-		margin-left:10px;
-	}
-	.nxt{
-		display:inline;
-		float:right;
-		margin-right: 10px;
-	}
-	</style>
 	</div>
 	<?php require('../require/footer.html');
 	mysql_close($db_connection);
 	?>
-			</div>
-		
-			
+			</div>	
 			</body>
 		</html>

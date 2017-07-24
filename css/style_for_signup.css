@@ -1,13 +1,56 @@
 
-input:not(input[type=checkbox]){
+#signup-progress-wrapper{
+    width:80%;
+    margin:auto;
+	margin-bottom: 10px;
+    text-align: center;
+}
+.active-step,.inactive-step{
+    cursor:pointer;
+}
+.active-step{
+font-size: 170%;
+color:purple;
+}
+.inactive-step{
+font-size: 100%;
+color:grey;
+}
+
+.active-step-no{
+background-color:purple;
+color:yellow;
+padding:5px 15px 5px 15px;
+}
+.inactive-step-no{
+background-color:grey;
+color:white;
+padding:5px 10px 5px 10px;
+}
+ .active-step-no,.inactive-step-no{
+        border-radius:50%;
+    }
+
+input:not(type='checkbox'){
 		display:block;
 	}
 input{
 		margin:10px;
 	}
-
-#mainsignup{
+#all-wrapper{
 	width:100%;
+	height:100vh;
+}
+#LHS{
+	position:fixed;
+	width:30%;
+	height:100vh;
+	text-align: center;
+	background: white url('../resrc/gifs/progress-circle.gif') center no-repeat;
+}
+#mainsignup{
+	width:70%;
+	float:right;
 	height:100%;
 	}
 #yes-js-mainsignup{
@@ -15,31 +58,23 @@ input{
 	
 }
 
-.signup-tabs{
+[class^=signup-tab]{
+	width:95%;
 	margin:auto;
 	margin-bottom:10px;
 	box-shadow:5px 10px 10px #555;
 	line-height:30px;
 }
-#business-info-tab{
-	display:block;
-}
-#personal-info-tab{
-	display:none;
-}
-#login-info-tab{
-	display:none;
-}
-.step{
-	font-size:250%;
-	letter-spacing:2px;
-}
+
 fieldset{
 	background-color:white;
 	margin-bottom:10px;
 	padding:20px;	
 	border:none;
 	border-radius:3px;
+}
+.instruction{
+    color:grey;
 }
 input[type=text],input[type=password],input[type=email]{
 	width:96%;
@@ -48,18 +83,6 @@ input[type=text],input[type=password],input[type=email]{
 	border-bottom:2px solid purple;
 }
 
-.continue-or-back-button{
-	background-color:green;
-	color:white;
-	border-radius: 2px;
-	padding:1%;
-	padding-left:3%;
-	padding-right:3%;
-	cursor:pointer;
-	font-weight:bold;
-	border:none;
-	box-shadow:0px 5px 5px rgba(0,0,0,0.1) inset;
-}
 #signupbutton{	
 	width:50%;
 	margin:auto;
@@ -85,9 +108,8 @@ width:80%;
 	color: green;
 }
 .legend{
-	font-size:150%;
-	letter-spacing:3px;
-	color:grey;
+	font-size:200%;
+	font-weight:normal;
 }
 .instruction{
 	color:grey;
@@ -111,16 +133,19 @@ width:80%;
 	opacity:0.8;
 }
 @media only screen and (max-width: 800px){
-.signup-tabs{
-	width:90%;
+#LHS{
+	display:none;
 }
-
-
+#mainsignup{
+	width:100%;
+}
+#signup-progress-wrapper>span[class$='step']{
+display:block;
+ text-align: right;
+ margin:15px;
+}
 }
 @media only screen and (min-width: 800px){
-.signup-tabs{
-width:50%;
-}
 }
 
 

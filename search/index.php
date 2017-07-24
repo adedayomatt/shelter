@@ -26,12 +26,13 @@ function ifset($variable){
 <?php require('../require/sidebar.php')?>
 
 <div class="main-content results">
+<h3 class="major-headings"><?php echo ((isset($_GET['type']) || isset($_GET['max']) || isset($_GET['location'])) ? "Search Results":"Search")?></h3>
 <?php
 //If nothing has been searched for , display the search form
 if(!isset($_GET['type']) || !isset($_GET['max']) || !isset($_GET['location'])){
-	echo "<br/><br/>";
-	echo "<p align=\"center\"><b>Please select your preference</b></p>";
-require("searchform.php");	
+	echo "<div id=\"search-box\"><p align=\"center\">Please select your preference</p>";
+require("searchform.php");
+echo "</div>";	
 	}
 //...else use the information in the search field to filter results
 else{
@@ -84,10 +85,6 @@ echo "<div>
 		
 }
 ?>
-</div>
-
-
-
 
 <div class="other-search-info">
 <?php
@@ -142,14 +139,14 @@ echo "</div>
 <?php
 if($status == 0 || $status==9)	{
 echo "<p class=\"inline-block\" align=\"left\" style=\"padding-left:10px;\">Can't find what you are looking for?, Try a new search</p>
-	 <a class=\"skyblue-block-link\" href=\"../cta/request.php?p=1\">make a special request</a>
+	 <a class=\"skyblue-inline-block-link\" href=\"../cta/request.php?p=1\">make a special request</a>
      <p class=\"inline-block\"><b>Have any problem searching?</b> <a class=\"inline-block-link white-on-purple\" style=\"float:right\" href=\"\">contact our help center</a></p>";
 }
 ?>
 </div>
 </div>
 
-
+</div>
 
 
 

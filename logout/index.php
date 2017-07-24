@@ -1,5 +1,5 @@
 <?php
-
+require('../phpscripts/masterScript.php'); 
 ?>
 <html>
 <link href="../css/general.css" type="text/css" rel="stylesheet" />
@@ -45,13 +45,13 @@ h1{
 
 </style>
 <?php
-$root = "http://192.168.173.1/shelter";
-if(isset($_COOKIE['name'])){
-	setcookie('name',"",time()-60,"/","",0);
+//$root = "http://192.168.173.1/shelter";
+if($general->check_cookie('user_agent')==true){
+	$general->unset_cookie('user_agent');
 	$confirmation = "<h2>Logged out</h2><p>Your account has been logged out successfully <a class=\"inline-block-link l\" href=\"$root/login\">Login</a></p>";
 }
-else if(isset($_COOKIE['CTA'])) {
-	setcookie('CTA',"",time()-60,"/","",0);
+else if($general->check_cookie('user_cta')==true) {
+	$general->unset_cookie('user_cta');
 		$confirmation = "<h2>Checked out</h2><p>Your CTA has been checked out successfully, <a class=\"inline-block-link l\" href=\"$root/cta/checkin.php\"><b>here</b></a></p>";
 }
 else{

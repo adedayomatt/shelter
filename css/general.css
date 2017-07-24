@@ -58,6 +58,12 @@ img,.photo-container{
 .inline-block-link:visited,.cta-status-link:visited{
 	color:white;
 }
+.major-headings{
+	font-weight: normal;
+	 font-size:200%;
+	  color:purple;
+	  margin:20px;
+}
 .suggestion-box{
 		display:none;
 		width:300px;
@@ -67,7 +73,8 @@ img,.photo-container{
 		overflow-y:scroll;
 		margin-top:0px;
 		z-index:99;
-		background: white url('../resrc/gifs/progress-circle.gif') center no-repeat;
+		background: white url('../resrc/gifs/loading.gif') center no-repeat;
+		box-shadow: 0px 2px 2px #555;
 	}
 /*I purposely put this here because the file where this element is required from two different location
 #suggested-location-container{
@@ -181,22 +188,40 @@ img.gif{
 	text-align:center;
 	color:white;
 	padding:1% 5% 1% 5%;
-	border-radius:5px;
-	box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.3) inset;
+	border-radius:3px;
+	box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.3) inset;
 }
 .purple-block-link,.purple-inline-block-link{
 	background-color:purple;
 	text-align:center;
 	color:white;
 	padding:1% 5% 1% 5%;
-	border-radius:5px;
-	box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.3) inset;
+	border-radius:3px;
+	box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.3) inset;
 }
-.skyblue-block-link,.yellow-block-link,.purple-block-link{
+.deepblue-inline-block-link,.deepblue-block-link{
+	background-color:#0d47a1;
+	text-align:center;
+	color:white;
+	padding:1% 5% 1% 5%;
+	border-radius:3px;
+	box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.3) inset;
+}
+.skyblue-block-link,.yellow-block-link,.purple-block-link,.deepblue-block-link{
 	display:block;
 }
-.skyblue-inline-block-link,.yellow-inline-block-link,.purple-inline-block-link{
+.skyblue-inline-block-link,.yellow-inline-block-link,.purple-inline-block-link,.deepblue-inline-block-link{
 	display:inline-block;
+}
+.skyblue-block-link:hover,
+.yellow-block-link:hover,
+.purple-block-link:hover,
+.deepblueblock-link:hover,
+.skyblue-inline-block-link:hover,
+.yellow-inline-block-link:hover,
+.purple-inline-block-link:hover,
+.deepblue-inline-block-link:hover{
+	text-decoration:none;
 }
 div.input-wrapper,input.search-input-field,.search-btn{
 	height:40px;
@@ -223,7 +248,32 @@ input.search-input-field{
 	padding-right:5%;
 	border:none;
 }
+.continue-or-back-button-wrapper{
+    height:50px;
+}
 
+.continue-or-back-button:hover,#finish-button:hover{
+    text-decoration:none;
+    opacity: 0.8;
+}
+.continue-or-back-button{
+	background-color:#0D47A1;
+	color:white;
+	border-radius: 2px;
+    margin:5px;
+	padding:1%;
+	padding-left:3%;
+	padding-right:3%;
+	cursor:pointer;
+	border:none;
+	box-shadow:0px 7px 7px rgba(0,0,0,0.1) inset;
+}
+.continue{
+    float:right;
+}
+.go-back{
+    float:left;
+}
 .all-corners-border-1{
 	border:1px solid rgba(0,0,0,0.1);
 }
@@ -256,13 +306,12 @@ div.content-before-footer{
 	min-height:500px;
 }
 .follow-button,.unfollow-button{
-	width:115px;
 	padding:2%;
 	border:1px solid #E3E3E3;
 	border-radius:5px;
 }
 .follow-button:hover,.unfollow-button:hover{
-	width:125px;
+	font-size:105%;
 }
 
 	
@@ -299,44 +348,42 @@ div.content-before-footer{
 	color:grey;
 }
 .unfollow-button{
-	background-color:purple;
+	background-color:#0d47a1;
 	color:white;
 }
 
 .time{
 	color:grey;
 	font-size:80%;
+	text-align:right;
 }
 
 
-.operation-report-container{
+.operation-report-container,.operation-fail-container{
+	text-align:center;
 	font-size:100%;
 	width:80%;
 	margin:auto;
 	margin-bottom:5px;
-	margin-top:5%;
+	margin-top:2%;
+	margin-bottom:2%;
 	padding:5%;
 	line-height:100%;
-	background-color:#F5F5F5;
 	border: 1px solid #E3E3E3;
 	box-shadow:0px 2px 2px rgba(0, 0, 0, 0.05) inset;
 }
+.operation-report-container{
+	background-color:#F5F5F5;
+}
 .operation-fail-container{
 	color:red;	
-	width:80%;
-	margin:auto;
-	margin-top:5%;
-	padding:5%;
-	line-height:200%;
-	border-radius:5px;
-	background-color:rgba(233, 114, 114, 0.58);
-	box-shadow:0px 2px 2px rgba(0, 0, 0, 0.05) inset;
+	background-color:rgba(200, 0, 0, 0.05);
 }
 
 /*Sidebar*/
 #sidebar-wrapper{
 		font-size:80%;
-		letter-spacing: 1px;
+		/*letter-spacing: 1px;*/
 		background-color:inherit;
 	}
 #sidebar-original{
@@ -384,11 +431,18 @@ div.content-before-footer{
 	margin:auto;
 	padding:2% 5% 2% 5%;
 	margin-bottom:10px;
-	border-radius:5px;
-	background-color: #485689;
-	color:white;
+	border-radius:3px;
+	background-color:#0d47a1;
+	color:blue;
+	font-weight:bold;
 	text-align:center;
 	text-decoration:none;
+	box-shadow:0px 5px 5px rgba(0,0,0,0.1) inset;
+}
+.cta-status-link:hover{
+	text-decoration:none;
+	opacity:0.8;
+	font-size:105%;
 }
 #side-bar-countdown-container{
 	min-height:20px;
@@ -408,11 +462,6 @@ div.content-before-footer{
 	padding:10px;
 	text-align:center;
 	box-shadow:0px 3px 3px rgba(0,0,0,0.1) inset;
-}
-#cta-renewal-link:hover{
-	background-color:grey;
-	color:white;
-	text-decoration:none;
 }
 #upload-btn{
 width:70%;
@@ -514,7 +563,6 @@ vertical-align: text-top;
 	background-image:url("http://192.168.173.1/shelter/resrc/black-icons.png");
 }
 .arrow-down, .arrow-up{
-float:left;
 margin-right:20px;
 display: inline-block;
 width: 14px;
@@ -533,9 +581,6 @@ background-image:url("http://192.168.173.1/shelter/resrc/black-icons.png");
 }
 .arrow-down{
 	background-position: -312px -120px;
-}
-#upload-icon{
-background-position: -288px -144px;
 }
 #category-icon{
 background-position: -240px 0px;
@@ -603,8 +648,35 @@ background-position: 0px -24px;
 .inbox-icon{
 	background-position: -312px -144px;
 }
+.user-icon{
+		background-position: -168px 0px;
+}
+.warning-icon{
+	background-position: -144px -120px;
+}
+.delete-icon{
+	background-position:-456px 0px;
+}
+.recycle-icon{
+	background-position:-240px -24px;
+}
+.flag-icon{
+	background-position:-312px -24px;
+}
+.tick-icon{
+	background-position:-288px 0px
+}
+.cross-icon{
+	background-position: -312px 0px;
+}
+.camera-icon{
+	background-position: -120px -48px;
+}
+.upload-icon{
+background-position: -288px -144px;
+}
 /*smartphone*/
-@media only screen and (min-width: 300px) and (max-width: 800px){
+@media only screen and (max-width: 800px){
 #sidebar-wrapper{
 	display:none;
 	float:left;
@@ -638,11 +710,12 @@ background-position: 0px -24px;
 		}
 
 }
-@media only screen and (min-width: 800px){
+@media all and (min-width: 800px){
 	body{
 		width:100%;	
 	}
 	#sidebar-wrapper{
+		display:block;
 	width:20%;
 	height:1px;/*Without this height, this element won't show*/
 	float:left;

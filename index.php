@@ -1,7 +1,11 @@
 
 <?php 
+
 $connect = true;
-require('require/connexion.php'); 
+require('phpscripts/masterScript.php'); 
+require('phpscripts/homeScript.php');
+$home_obj = new home();
+
 ?>
 
 <!DOCTYPE html>
@@ -38,8 +42,22 @@ require("require/header.php");
 <div>
 <span class="on-scrolltop-menu" id="toggle-search-agent-container-button" onclick="showSearchAgent()">search agent</span>
 <a href="#search"><span class="on-scrolltop-menu">search property</span></a>
-<?php echo ($status==9 ? "<a href=\"cta\"><span class=\"on-scrolltop-menu\">$ctaname</span> </a>" :
-			($status==1 ? "<a href=\"$profile_name\"><span class=\"on-scrolltop-menu\">".substr($Business_Name,0,12)."...</span> </a>": "<a style=\"color:white\" href=\"cta/checkin.php#create\"><span class=\"on-scrolltop-menu\">create CTA</span></a>" ) )?>
+<?php
+if($status==1){
+	$user = substr($Business_Name,0,12).'...';
+	$link = $profile_name;
+}
+else if($status==9){
+	$user = $ctaname;
+	$link = 'cta';
+}
+else{
+	$user = 'Create CTA';
+	$link = 'cta';
+}
+?>
+<a style="color:white" href="<?php echo $link ?>"><span class="on-scrolltop-menu"><?php echo $user ?></span></a>
+
 
 </div>
 <div style="" id="mobile-head-search-container">
@@ -58,85 +76,31 @@ require("require/header.php");
 </div>
 <!--Mobile on scroll head ends here-->
 
-<?php
-/*if($status != 1){
-	$todo = "Have any property to sell, put it on Shelter today and connect with the buyer.<br/>It is easy, just click <a id=\"links\" href=\"signup.php\"><strong>here<strong></a>";
-  echo "<p align=\"center\">$todo</p><hr/>";
-	}
-	*/
-?>
-<!--
-<form style = "font-weight:normal; text-align:center; line-height: 200%;"> <span>Filter recent uploads</span>
-<select  id="filter-selection" name="filter">
-<option value="all">Everywhere</option>
-<option value="Ibadan">Ibadan</option>
-<option value="Abeokuta">Abeokuta</option>
-</select>
-<input type="submit" value="Filter" style="background-color:#6D0AAA; color:white; cursor:pointer; border:none"/>
-</form>
--->
+
 <div class="content-before-footer">
-<script>
-function showdialog(){
-	alert('Jao!');
-	
-}
-</script>
+
 <?php 
 if(!isset($_GET['next']) || $_GET['next']==0){
-	
-	/*echo "<div id=\"search\">
-	<div class=\"\" id=\"about-container\">
-	<h1 id=\"about-head\">About Us</h1>
-<p id=\"about\">Shelter.com provide an exclusive realty services all over the country. Getting your choice of property is our concern. We help you to find that your dream home you want to live in. <br/><a style=\"float:right\" class=\"yellow-inline-block-link\" href=\"\">Learn more »</a></p>
+	?>
+<div class="" id="about-container">
+<p style="display:block;text-align:center;margin:0px">A graphic will appear here<br/>loading...</p>
+<img src="resrc/gifs/progress-circle.gif" class="front-image"/>
 </div>
-</div>";*/
-
-echo "<div class=\"\" id=\"about-container\">
-<p style=\"display:block;text-align:center;margin:0px\">A graphic will appear here<br/>loading...</p>
-<img src=\"resrc/gifs/progress-circle.gif\" class=\"front-image\"/>
-
-</div>";
+<?php
 }
 ?>
+
 <?php
 //one or two notifications will appear here only on the load of the homepage and not when viewing more uploads
 if(!isset($_GET['next']) || $_GET['next']==0){
 if($status==1 || $status==9){
-	
-if($status == 1){
-   $totalNotification = mysql_num_rows(mysql_query("SELECT * FROM notifications WHERE (receiver='$Business_Name' OR receiver='allAgents')"));
-	$getnotifications = mysql_query("SELECT * FROM notifications WHERE (receiver='$Business_Name' OR receiver='allAgents')  ORDER BY time DESC LIMIT 2");
-}
-else if($status == 9){
-	   $totalNotification = mysql_num_rows(mysql_query("SELECT * FROM notifications WHERE ((receiver='$ctaname' OR receiver='allAgents')  AND action != 'CTA created')"));
-	$getnotifications = mysql_query("SELECT * FROM notifications WHERE ((receiver='$ctaname' OR receiver='allAgents') AND action != 'CTA created') ORDER BY time DESC");
-}
-if($getnotifications){
-	if(mysql_num_rows($getnotifications) != 0){
-		echo "<div class=\"operation-report-container\" id=\"mini-notification\">
-		<h4  class=\"home-headings\">Notifications ($totalNotification)</h4>";
-//the function notify() is in this required file, it returns list of the notifications. This file is also used on the notifications page itself
-	require("notifications/functionNotice.php");	
-		while($n = mysql_fetch_array($getnotifications,MYSQL_ASSOC)){
-			//if notification was received on the same date with the date of checking notifications
-if(date('dmy',$n['time'])== date('dmy',time())){
-	echo notify($n['subject'],$n['subjecttrace'],$n['action'],$n['time'],'today');
-}
-//if notification was received a day before date of checking notifications
-else if((date('d',time())- date('d',$n['time']))==1){
-	echo notify($n['subject'],$n['subjecttrace'],$n['action'],$n['time'],'yesterday');
-	}
-else{
-	echo notify($n['subject'],$n['subjecttrace'],$n['action'],$n['time'],'older');
-	}
-		}
-//notification list ends here
-echo "<a href=\"notifications\" style=\"text-align:right\">See all notifications</a>
-</div>";
-			}
-		}
-
+	?>
+<div id="mini-notification">
+<?php
+$home_obj->mini_notification();
+?>
+</div>
+<?php
 	}
 }
 
@@ -147,11 +111,11 @@ echo "<a href=\"notifications\" style=\"text-align:right\">See all notifications
 <div style="border:1px solid #E3E3E3">
 <h3 id="search-heading">Search</h3>
 <div id="search-box">
-<?php require("search/searchform.php")?>
+<?php require("search/searchform.php") ?>
 </div>
 </div>
 <div id="front-ad-wrapper">
-<img src="resrc/image/advert2.jpeg" alt="Advert will be placed here" id="front-ad"/>
+<img src="" alt="Advert will be placed here" id="front-ad"/>
 </div>
 </div>
 
@@ -162,34 +126,29 @@ echo "<a href=\"notifications\" style=\"text-align:right\">See all notifications
 <div id="most-viewed-container">
 <div class="ul-wrapper">
 <?php
-$getMostViewed = mysql_query("SELECT property_ID,directory,type,location,rent,date_uploaded,uploadby,timestamp,views FROM properties ORDER BY views DESC LIMIT 10");
- if($getMostViewed){
-	while($mv = mysql_fetch_array($getMostViewed,MYSQL_ASSOC)){
-	$mv_id = $mv['property_ID'];
-	$mv_dir = $mv['directory'];
+$most_viewed_obj = null;
+$most_viewed_obj = $home_obj->most_viewed();
+if(is_object($most_viewed_obj)){
+	while($mv = $most_viewed_obj->fetch_array(MYSQLI_ASSOC)){
+	$mv_id = $mv['propertyid'];
+	$mv_dir = $mv['dir'];
 	$mv_type = $mv['type'];
 	$mv_location = $mv['location'];
 	$mv_rent = $mv['rent'];
 	$mv_view = $mv['views'];
-	$mv_uploadby = $mv['uploadby'];
-	$mv_timeuploaded = $mv['timestamp'];
-	$ub = mysql_query("SELECT Business_Name FROM profiles WHERE User_ID = '$mv_uploadby' LIMIT 10");
-	if($ub){
-		$uu = mysql_fetch_array($ub,MYSQL_ASSOC);
-		$uploaderBusinessName = $uu['Business_Name'];
-	}else{
-		$uploaderBusinessName = "Unknown";
-	}
- echo "<div class=\"most-viewed-list\"><a style=\"color:purple\" href=\"properties/$mv_dir\">$mv_type at $mv_location</a>
- <br/><span class=\"mv-rent-figure\"> N ".number_format($mv_rent)."</span>
- <p style=\"margin:0px;color:grey;text-align:right\">$mv_view views</p>
- <p class=\"extra-info\"> uploaded by <a href=\"$mv_uploadby\">$uploaderBusinessName </a><br/>".Timestamp($mv_timeuploaded)."</p>
- </div>
- ";
-	
-}
- }
+	$mv_timeuploaded = $mv['since'];
+    $mv_agent_username = $mv['agentUserName'];
+    $mv_agent_bizname = $mv['agentBussinessName'];
 ?>
+ <div class="most-viewed-list"><a style="color:purple" href="properties/<?php echo $mv_dir ?>"><?php echo "$mv_type at $mv_location" ?></a>
+ <br/><span class="mv-rent-figure"> N <?php echo number_format($mv_rent) ?></span>
+ <p style="margin:0px;color:grey;text-align:right"><?php echo $mv_view ?> views</p>
+ <p class="extra-info"> uploaded by <a href="<?php echo $mv_agent_username ?>"><?php echo $mv_agent_bizname ?> </a><br/><?php echo $general->since($mv_timeuploaded) ?></p>
+ </div>
+ <?php
+		}
+	}
+ ?>
 </div>
 </div>
 </div>
@@ -197,86 +156,95 @@ $getMostViewed = mysql_query("SELECT property_ID,directory,type,location,rent,da
 </div>
 
 </div>
-
 
 <?php
-//<h3 id=\"recent-uploads-heading\">Recent Uploads</h3>
-				echo (!isset($_GET['next']) || $_GET['next']==0) ? "":
-			"<a style=\" display:inline-block;padding:2% 5% 2% 5%; margin:2% 0px 2% 0px; color:white;background-color:#74B4E0; border-radius:5px\" href=\"categories\">Go to categories »</a><br/>";
-				?>
+if(isset($_GET['next']) && $_GET['next']!=0){ 
+?>
+<style>
+a[href="categories"]{
+display:inline-block;
+padding:2% 5% 2% 5%;
+ margin:2% 0px 2% 0px;
+  color:white;
+  background-color:#74B4E0;
+   border-radius:5px
+}
+</style>
+	<a href="categories">Go to categories »</a><br/>
 <?php
-//get some properties from the database
-$max = 9;
-if(isset($_GET['next']) && $_GET['next']>0){
-	$start = $_GET['next'];
-}
- else{
-	 $start = 0;
- }
- $x = $start+1;
- $y = $start;
- 
- $totalproperties = mysql_num_rows(mysql_query("SELECT property_ID FROM properties"));
- $fetchproperties = mysql_query("SELECT property_ID,directory,type,location,min_payment,bath,toilet,rent,description,uploadby,date_uploaded,timestamp,views FROM properties ORDER BY date_uploaded DESC LIMIT $start,$max");
- if($fetchproperties){
-	$count = 0;
-	while($property = mysql_fetch_array($fetchproperties,MYSQL_ASSOC)){
-	$propertyId[$count] = $property['property_ID'];
-	$propertydir[$count] = $property['directory'];
-	$type[$count] = $property['type'];
-	$location[$count] = $property['location'];
-	$rent[$count] = $property['rent'];
-	$min_payment[$count] = $property['min_payment'];
-	$bath[$count] = $property['bath'];
-	$toilet[$count] = $property['toilet'];
-	$description[$count] = $property['description'];
-	$date_uploaded[$count] = $property['date_uploaded'];
-	$uploadby[$count] = $property['uploadby'];
-	$howlong[$count] = $property['timestamp'];
-	$views[$count] = $property['views'];
-	$count++;
-	$y++;
-//last value of count will eventually equals to the total records fetched.
-}
-//request for script that will display the fetched record orderly
-//this $ref is needed to set URL [of the property image] in the included script 		
-$ref="home_page";
-require("require/propertyboxes.php");	
-if(!empty($propertyId)){
-	echo "<p style=\"display:block\">showing $x - $y of $totalproperties</p>";
-	
-	echo "<div class=\"next-prev-container\">";
-	if(isset($_GET['next']) && $_GET['next'] > 0 ){
-		echo "<a class=\"previous\" href=\"?next=".($y-2*$max)."\" >« prev</a>";
-	}
-if( !isset($_GET['next']) || (isset($_GET['next']) && ($_GET['next'] < ($totalproperties-$max))) ){
-	echo "<a class=\"next\" href=\"?next=$y\" >next »</a>";
-}	
-echo "</div>";
-	
+		}
+?>
+
+<?php
+$property = null;
+$property_in_page_counter = 1;
+$final_query = property::$property_query." LIMIT ".properties_config::$max_display;
+$property = $db->query_object($final_query);
+if(is_string($property)){
+	//echo $property;
+    error::report_error($property,__FILE__,__CLASS__,__FUNCTION__,__LINE__);
 }
 else{
-if($start==0){
-	echo "<div class=\"no-property\">There are no properties for now</div>";
-}
-else if($start>0){
-	echo "<div class=\"no-property\">There are no more recent properties</div>";
-	}
-}
-	
-
-	}
-	
-else{
-	echo "<div class=\"no-property\">An error occured!!<br/><br/>Recents upload records could not be get from the server at this time, we'll resolve this ASAP,
-	we regret any inconvience this might bring you </div>";
-			}
-
+$total_properties = $db->query_object("SELECT property_ID FROM properties")->num_rows;
+    //echo "Now we're good!";
+    while($p = $property->fetch_array(MYSQLI_ASSOC)){
+	require('phpscripts/set_property_variables.php');
 	?>
 	
+	<div id="<?php echo $propertyId ?>" class="propertybox home-property-box">
+	<div class="property-heading-container"><?php echo $review ?>
+	<a href="<?php echo $root.'/properties/'.$propertydir ?>" class="property-heading" ><?php echo $type ?>
+	<span class="match-indicator"><?php echo $match ?></span></a>
+	<span class="status"> <?php echo $availability ?> </span>
+	</div>
+	<div class="image-info">
+	<span class="detail property-address"><span class="black-icon location-icon"></span><?php echo $short_address ?></span> 
+	<div id = "<?php echo  $propertyId.'container' ?>" class="home-imagebox">
+	<img id="<?php echo  $propertyId.'image' ?>" onclick="animatePropertyImages('<?php echo  $propertyId.'image' ?>','<?php echo  $front_image ?>')" height="90%" width="100%" src="<?php echo $front_image ?>"/>
+	<div id="bath-loo-wrapper"><span id="bath">(<?php echo  $bath ?>) Baths(s)</span><span id="loo">(<?php echo  $toilet ?>) Toilet(s)</span></div>
+	</div>
+	<div id="<?php echo $propertyId.'agent' ?>" class="agent-contacts-box" style="display:none">
+	<span onclick="hideAgentBrief('<?php echo  $propertyId.'agent' ?>')" class="close">&times</span>
+	
+	<h4><?php echo $agent_businessname ?></h4>
+	<span class="black-icon location-icon"></span><?php echo $agent_office_add ?>
+	<ul>
+	<li><?php echo $agent_office_no ?></li>
+	<li><?php echo $agent_no ?></li>
+	<li><?php echo $agent_alt_no ?></li>
+	</ul>
+	<div><a href="<?php echo "$root/$agent_username" ?>" > Go to profile »</a>
+	<p>view profile to see other properties by <?php echo $agent_businessname ?></p>
+	</div>
+	</div>
+
+	<div class="infobox">
+	<div><span class="detail"><span class="rent-figure"> N <?php echo number_format($rent) ?>/year</span></span></div>
+	<span class="detail home-min-payment-detail"><span class="black-icon min-payment-icon"></span><strong><?php echo $min_payment ?></strong> payment required (N <?php echo $firstpayment ?>)</span>
 	
 	
-	
+	<div class="home-description-container">
+	<span class ="description detail"><span class="black-icon comment-icon"></span> Description: </span><div class="comment"><i><?php echo $description ?></i></div>
+	</div>
+	<span class="detail">Managed by <a onclick="showAgentBrief('<?php echo $propertyId.'agent' ?>')" class="agent-link" href=<?php echo "$root/$agent_username" ?>><?php echo $agent_businessname ?></a></span>
+	</div>
+	<span class = "detail time" align="left"><span class="black-icon upload-icon"></span><?php echo $upload_since ?></span>
+	<span class = "detail time" align="left"><span class="black-icon edit-icon"></span><?php echo $lastReviewed ?></span>
+	</div>
+	<div class="like-pane">
+	    <hr/>
+		<?php echo $clipbutton ?>
+		<a  class="options-on-homepage" href="<?php echo "$root/properties/$propertydir" ?>"><span class="black-icon see-more-icon"></span>Details</a>
+		<a  class="options-on-homepage" href="#"><span class="black-icon eye-icon"></span><?php echo $views ?> views</a>
+		</div>
+		</div>
+
+<?php //close them brackets
+
+}
+	}
+
+?>	
 	
 	<div id="agents-list-wrapper">
 <h3 id="agents-heading" style="margin:0px">Agents</h3>
@@ -285,60 +253,43 @@ else{
 <div>
 <div id="agents-list-container">
 <?php
-$getAgents = mysql_query("SELECT Business_Name,Office_Address,User_ID FROM profiles LIMIT 10");
-if($getAgents){
-	while($agent = mysql_fetch_array($getAgents,MYSQL_ASSOC)){
-	echo "<div class=\"agents-list\"><a href=\"".$agent['User_ID']."\"><span class=\"black-icon agent-avatar\"></span>".$agent['Business_Name']."</a>";
+$getAgents = null;
+$getAgents = $db->query_object("SELECT Business_Name,Office_Address,User_ID FROM profiles LIMIT 10");
+if(is_string($getAgents)){
+	error::report_error($getAgents,__FILE__,__CLASS__,__FUNCTION__,__LINE__);
+}
+else{
+	while($ag = $getAgents->fetch_array(MYSQL_ASSOC)){
+	//default follow button properties
+	$text = 'follow';
+	$f = 'follow-button';
+	$ficon = 'black-icon follow-icon';
+	$followtype = null;
+		?>
+	<div class="agents-list">
+	<a href="<?php echo $ag['User_ID'] ?>"><span class="black-icon agent-avatar"></span><?php echo $ag['Business_Name'] ?> </a>
+	<?php
 	if($status==1 || $status==9){
 //check for follow
 if($status==1){
-	$followQuery = "SELECT * FROM follow WHERE follower = '$Business_Name' AND following = '".$agent['Business_Name']."'";
-	$user = $Business_Name;
-	$userid = $profile_name;
-	$followtype = 'A4A';
+echo $agent->follow($ag['Business_Name'],$ag['User_ID'],$Business_Name,$profile_name,'A4A');
 }
 else if($status==9){
-	$followQuery = "SELECT * FROM follow WHERE follower = '$ctaname' AND following = '".$agent['Business_Name']."'";
-	$user = $ctaname;
-	$userid = $ctaid;
-	$followtype = 'C4A';
-}
-$target = $agent['Business_Name'];
-$buttonid = $agent['User_ID'];
-if(mysql_num_rows(mysql_query($followQuery))==1){
-	$text = 'unfollow';
-	$f = 'unfollow-button';
-	$ficon = 'white-icon unfollow-icon';
-}
-else{
-	$text = 'follow';
-	$f = 'follow-button';
-	$ficon = 'black-icon follow-icon';
-		}
-echo "<button style=\"float:right;\" class=\"$f\" id=\"$buttonid\" onclick=\"follow('$buttonid','$user','$userid','$target','$followtype')\" ><i class=\"$ficon\"></i> $text</button>
-";
+	echo $agent->follow($ag['Business_Name'],$ag['User_ID'],$ctaname,$ctaid,'C4A');	
 	}
-//if it was a visitor
-else{
-	$text = 'follow';
-	$f = 'follow-button';
-	$ficon = 'black-icon follow-icon';
-echo "<a href=\"$root/cta/checkin.php?_rdr=1\"><button style=\"float:right;\" class=\"$f\" ><i class=\"$ficon\"></i>  $text</button>";
-	
 }
-	
-echo "<p class=\"extra-info\">".$agent['Office_Address']."</p>
-	<p class=\"extra-info\" style=\"display:inline-block\">".mysql_num_rows(mysql_query("SELECT property_ID FROM properties WHERE uploadby = '".$agent['User_ID']."'"))." properties</p>";
-	
-
-echo "</div>";
+else{
+	?>
+<button style="float:right" class="follow-button" id="" onclick="" ><span class="black-icon follow-icon"></span>follow</button>
+<?php
+}	
+	?>
+<p class="extra-info"><?php echo $ag['Office_Address'] ?></p>
+<p class="extra-info" style="display:inline-block"><?php echo $db->query_object("SELECT property_ID FROM properties WHERE uploadby = '".$ag['User_ID']."'")->num_rows ?> properties</p>
+</div>
+<?php
 	}
-	
-}
-else{
-	echo "can't get agents from the server";
-}
-
+}	
 ?>
 </div>
 </div>
@@ -351,9 +302,8 @@ else{
 
 
 <div>
-<?php require('require/footer.html');
-
-mysql_close($db_connection);
+<?php
+ require('require/footer.php');
  ?>
 </div>
 </div>

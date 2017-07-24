@@ -1,18 +1,13 @@
 #property-head{
 	display:block;
 	padding:2%;
-	font-weight:bold;
 	background-color:white;
-	color:purple;
-	font-size:150%;
 }
 #image-tray{
 	
 		margin-bottom:10px;
 	}
 	div.photo-container{
-		display:inline-block;
-		width:48%;
 		margin:2px;
 		height:200px;
 	
@@ -29,13 +24,18 @@ div#detail-tray{
 }
 #image-tray,#info-container,#facilities-container,#rating-container,#agent-info-container{
 	font-size:100%;
-	width:100%;
-	padding-top:2%;
+	padding:1%;
 	margin-bottom:10px;
-	background-color:white;
 	box-shadow:0px 2px 2px rgba(0,0,0,0.05) inset;
 	border:1px solid #E3E3E3;
 	
+}
+.container-inside{
+	background-color: #F5F5F5;
+}
+#image-tray{
+	width: 96%;
+	margin:auto;
 }
 #agent-contacts{
 	
@@ -85,7 +85,6 @@ li.info-list,li.facilities-list,li.contact-list{
 }
 .related-property{
 	height:100px;
-	width:98%;
 	background-color:white;
 	margin-bottom:10px;
 	border:1px solid #E3E3E3;
@@ -133,38 +132,69 @@ p.bar-label{
 	text-align:center;
 }
 
-@media only screen and (min-width: 800px){
-	.main-content{
-		width:40%;
-		margin-left:2%;
+@media all and (min-device-width: 800px),
+(min-width:800px){
+	.details-wrapper{
+		width: 100%;
+		/*margin-left:2%;*/
 		background-color:#F5F5F5;
-		border:1px solid #E3E3E3;
-		padding:1%;
 	}
+#all-details-boxes-container{
+width:100%;
+	}
+#info-container,#facilities-container,#rating-container,#agent-info-container{
+	float: left;
+	width:47%;
+	margin:5px;
+	height:450px;
+	}
+div.photo-container{
+		display:inline-block;
+		width:19%;
+		
+}
 .other-properties{
-	float:left;
-	margin-left:10px;
-	width:50%;
+	
 }
 #see-also-container{
-	float:left;
-	width:58%;
+	
+}
+.related-property{
+	display:inline-block;
+	width: 30%;
+	margin:5px;
 }
 #agents-container{
-	float:left;
-width:36%;
+	
 }
 }
-@media only screen and (max-width: 800px){
+@media all and (max-device-width:800px),
+(max-width: 800px){
 .main-content{
+	width:100%;
+}
+div.photo-container{
+		display:inline-block;
+		width:48%;
+		
+}
+#info-container,#facilities-container,#rating-container,#agent-info-container{
+	float:none;
 	width:100%;
 }
 .other-properties{
 	width:100%;
 	display:block;
 }
+.related-property{
+	width:98%;
 }
-
+}
+@media all and (max-width:350px){
+div.photo-container{
+		width:100%;	
+}
+}
 
 
 

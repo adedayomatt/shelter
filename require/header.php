@@ -1,183 +1,53 @@
 
-<?php
-/*
-All the variables in this script are initialized or set in connexion.php; 
-connexion.php must have been required before the header is required anywhere
-The reason for this is to use header to redirect appropriately from anywhere 
-*/
+
+<?php 
+//get agent details if logged in
+if($agent->check_status()=='active'){
+	$status = 1;
+
+	$agent_details = $agent->get_agentProfile();
+
+	$profile_name = $agent_details['User_ID'];
+	$Business_Name = $agent_details['Business_Name'];
+	$agent_token = $agent_details['token'];
+
+	$messages = $agent_details['messages'];
+	$notifications = $agent_details['notifications'];
+	$followings = $agent_details['followings'];
+	$client_followers = $agent_details['c_followers'];
+	$agent_followers = $agent_details['a_followers'];
+
+}
+
+//get Client details
+else if($client->check_status()=='active'){
+	$status = 9;
+	$cta_details = $client->get_ctaProfile();
+
+$cta_name = $cta_details['ctaname'];
+$expiry_date = date('D, d M Y ',$cta_details['expiryTime']);
+$seconds_before_expiry = $cta_details['seconds_left'];
+$hours_before_expiry = round($seconds_before_expiry/3600);
+$days_before_expiry = round($seconds_before_expiry/86400);
+
+$request_status = $cta_details['request'];
+$messages = $cta_details['messages'];
+$notifications = $cta_details['notifications'];
+$followings = $cta_details['followings'];
+$matches = count($client_obj->get_matches());
+$clipped = count($client_obj->get_clipped());
+}
+else{
+	$status = 0;
+}
 ?>
 
-<script type="text/javascript" language="javascript" src="http://localhost/shelter/js/jquery-3.1.1.min.js"></script>
-<script  type="text/javascript" language="javascript">
+<script type="text/javascript" language="javascript" src="<?php echo $root.'/js/jquery-3.1.1.min.js' ?>"></script>
+<script  type="text/javascript" language="javascript" src="<?php echo $root.'/js/masterjs.js' ?>"></script>
 
-function togglemenu(){
-var sidebar = document.getElementById('sidebar-wrapper');
-var menu = document.getElementById('menuicon');
-var headerunder = document.getElementById('top-nav-bar-under');
-var headertop = document.getElementById('top-nav-bar-content');
-var body = document.getElementById('linear-layout-content');
-var hangingHead = document.getElementById('top-nav-bar-content-on-scroll');
-
-if(sidebar.style.display != 'block'){
-	headerunder.style.display = 'block';
-	headertop.style.position = 'fixed';
-	sidebar.style.display = 'block';
-	//sidebar.style.width = '95%';
-	sidebar.style.marginTop = '0px';
-	sidebar.style.overflow = 'scroll';
-	menu.innerHTML = "<span style=\"font-size:150%\">&times</span>";
-	sidebar.focus();
-	hangingHead.style.display = 'none';
-	document.getElementById('suggested-agents-search-list-mobile').style.display ='none';
-		}
-else{
-	sidebar.style.display = 'none';
-	menu.innerHTML = "<span class=\"menu-lines\"></span><span class=\"menu-lines\"></span><span class=\"menu-lines\"></span>";
-		}
-	}
-	
-function getAgents(key,inputId,container,list){
-	var agentSearchField = document.getElementById(inputId);
-	var containerBox = document.getElementById(container);
-	if(agentSearchField.value != ''){
-		containerBox.style.display = 'block';
-try{
-		//opera 8+, firefox,safari
-		xmlhttp = new XMLHttpRequest();
-	}
-	catch(e){
-		//Internet Explorer
-		try{
-			xmlhttp = new ActiveXObject('Msxml2.XMLHTTP');
-		}
-	catch(e){
-		try{
-		xmlhttp = new ActiveXObject('Microsoft.XMLHTTP');
-		}
-		catch(e){
-			alert('This browser is crazy!');
-		}
-	}	
-	}
-var thelist = document.getElementById(list);
-	xmlhttp.onreadystatechange = function(){
-	if(xmlhttp.status == 200){
-if(xmlhttp.readyState == 4){
-//first clear the list
-	thelist.innerHTML = "";
-thelist.innerHTML += xmlhttp.responseText;
-		}
-	}
-	else if(xmlhttp.status==404){
-		alert("things did not go well:404!");
-	}
-}
-
-thelist.innerHTML = "<p class=\"loading-data\"> searching '"+key+"'</p>";
-
-var url = "http://192.168.173.1/shelter/resrc/getagents.php?key="+key;
-xmlhttp.open("GET",url, true);
-xmlhttp.send();	
-	
-	}
-	else{
-		//containerBox.innerHTML = "";
-		containerBox.style.display = 'none';
-	}
-}
-function timecountdown(containerId,initial){
-var counter = setInterval(countdown,1000);
-var container = document.getElementById(containerId);
-var day = document.getElementById('day-countdown');
-var hour = document.getElementById('hr-countdown');
-var min = document.getElementById('min-countdown');
-var sec = document.getElementById('sec-countdown');
-
-var d = parseInt(initial/86400);
-var h = parseInt((initial%86400)/3600);
-var m =  parseInt((initial%3600)/60);
-var s = initial%60;
-function countdown(){
-	if(d==0 && h==0 && m==0 && s==0){
-		clearInterval(counter);
-		day.innerHTML = '00';
-	hour.innerHTML = '00';
-	min.innerHTML = '00';
-	sec.innerHTML = '00';
-	day.style.color='red';
-	hour.style.color='red';
-	min.style.color='red';
-	sec.style.color='red';
-	}
-	else{
-	s--;
-	if(s<0){
-		m--;
-		s=59;
-		if(m<0){
-			h--;
-			m=59;
-			if(h<0){
-				d--;
-				h=23;
-			}
-		}
-	}
-	if(d<=5){
-		day.style.color='red';
-	}
-	if(d==0 && h<12){
-		hour.style.color='red';
-	}
-	if(d==0 && h==0 && m<=30){
-		min.style.color='red';
-		sec.style.color='red';
-		
-	}
-	day.innerHTML = (d<10 ? '0'+d : d)+'d';
-	hour.innerHTML = (h<10 ? '0'+h : h)+'h';	
-	min.innerHTML = (m<10 ? '0'+m : m)+'m';	
-	sec.innerHTML = (s<10 ? '0'+s : s)+'s';	
-	
-	}
-	
-}	
-}
-</script>
 
 <title>Shelter | <?php echo $pagetitle; ?></title>
-<style>
-.fixed-head-after-scroll{
-	height:50px;
-}
-#desktop-search{
-	margin-left:20px;;
-}
-input.home-search{
-	font-family:Georgia;
-	border:none;
-	border-radius:5px;
-	background-color:rgba(236, 87, 236, 0.2);
-	padding:5px;
-}
-input.home-search:focus{
-	border:none;
-}
-input.select-type{
-	width: 200px;
-}
-input.max-price{
-	width: 80px;
-}
-input.location{
-	width: 250px;
-}
-input.search{
-	background-color:purple;
-	color:white;
-}
 
-</style>
 <div id="all-header-container">
 <div id="top-nav-bar-container">
 <div class="top-nav-bar" id="top-nav-bar-content">
@@ -193,10 +63,14 @@ input.search{
 <div id="menus">
 <ul id="nav-bar">
 <a  href="<?php echo $root ?>" title="Home"><li class="nav-menu">Home</li></a>
-<?php if($status==1){
+	
+<?php
 //if user is logged, include this menu on the nav-bar
-	echo "<a href=\"$root/$profile_name\" title=\"$profile_name\"> <li class=\"nav-menu\">Profile</li></a>";
-}?>
+if($status==1){
+	echo "<a href=\"$root/$profile_name\" title=\"$profile_name\"> <li class=\"nav-menu\">Account</li></a>";
+}
+?>
+
 <a href="<?php echo $root."/agents"; ?>" title="Agents"><li class="nav-menu" >Agents</li></a>
 <a href="#" title="Contacts"><li class="nav-menu" >Contacts</li></a>
 <a href="#" title="About"><li class="nav-menu" >FAQs</li></a>
@@ -222,16 +96,6 @@ if($status==1 || $status==9){
  ?>
 <span title="refresh page" id="refresh" class="white-icon refresh-icon" onclick="javascript:location.reload()" ></span>
 </span>
-<script>
-window.onscroll = function(event){
-	 if(window.pageYOffset >= document.getElementById('top-nav-bar-content').clientHeight){
-		 document.getElementById('rhs-top-search-btn').style.display = "inline-block";
-}
-else{
-	document.getElementById('rhs-top-search-btn').style.display = "none";
-	}
-}
-</script>
 
 <!--<button id="rhs-top-search-btn" style=""> Search </button>-->
 </div>

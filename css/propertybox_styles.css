@@ -21,7 +21,6 @@
 .home-property-box{
 display:inline-block;
 width:32%;	
-margin:0.5%;
 }
 	.property-heading-container{
 		padding:1%;
@@ -50,16 +49,24 @@ margin:0.5%;
 
 .status{
 	display:inline-block;
-	float:right;
-	display:inline-block;
 	padding:1%; 
-	border:1px solid grey; 
-	border-radius:5px;
-	margin-bottom:2px;
+	background-color:#F5F5F5;
+	border:1px solid #E3E3E3; 
+	border-radius:1px;
+	margin:0px 0px 2px 10px;
 	background-color:white;
 	font-weight:normal;
-	color:green;
+	box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.03) inset;
 	}
+	.available-property{
+color:green;
+	}
+	.unavailable-property{
+	color:red;	
+	}
+.unavailable-property{
+
+}
 .property-address{
 		padding:5px 0px 5px 0px;
 	}
@@ -94,7 +101,17 @@ text-align:center;
 	font-family:Georgia;
 	font-size:100%;
 	font-weight:bold;
-box-shadow: 0px 10px 10px rgba(236, 87, 236, 0.5) inset;
+box-shadow: 0px 3px 3px rgba(236, 87, 236, 0.5) inset;
+}
+.review-link{
+	float:right;
+	padding:1.5% 2% 1.5% 2%;
+	margin-left:5%;
+}
+.review-link:hover{
+background-color:#f7f7f7;
+	border:1px solid #e3e3e3;
+	box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.03) inset;
 }
 .rent-figure-on-profilepage{
 	display:block;
@@ -136,7 +153,7 @@ box-shadow: 0px 10px 10px rgba(236, 87, 236, 0.5) inset;
 .in-between-advert{
 	display:block;
 	height:100px;
-	width:100%;
+	width:98%;
 	margin:auto;
 }
 
@@ -169,7 +186,8 @@ a.options{
 	width:70px;
 }
 a.options-on-homepage{
-	width:70px;
+	width:80px;
+	margin:0px 5px 0px 5px;
 }
 a.options-on-profilepage{
 	width:90px;
@@ -177,7 +195,7 @@ a.options-on-profilepage{
 a.disabled{
 	
 }
-a.options:hover,a.home-options:hover{
+a.options:hover,a.options-on-homepage:hover{
 	color:purple;
 	font-size:105%;
 	text-decoration:none;
@@ -186,15 +204,39 @@ a.options:hover,a.home-options:hover{
 	background-position: -168px 0px;
 }
 .agent-contacts-box{
-	display:none;
 	position:absolute;
-	background-color:#6D0AAA;
-	color:white;
-	border-radius: 0px 0px 5px 5px;
-	padding-right:10px;
+	background-color:white;
+	width:250px;
+	padding:10px;
 	padding-left:10px;
-	margin-left:30%;
-	font-weight:bold;
+	border-radius: 2px;
+	box-shadow:0px 8px 8px rgba(0, 0, 0, 0.3);
+}
+.agent-contacts-box>h4{
+	font-size:120%;
+	color:purple;
+	font-weight:normal;
+	padding: 5px 0px 5px 0px;
+}
+.agent-contacts-box>ul>li{
+	list-style-type: none;
+	color:black;
+}
+.agent-contacts-box>div>a{
+	padding: 2% 4% 2% 4%;
+	background-color:purple;
+	color:white;
+	border-radius: 4px;
+	margin: 2px;
+	box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.05) inset;
+}
+.agent-contacts-box>div>a:hover{
+	text-decoration: none;
+}
+.agent-contacts-box>div>p{
+	color:grey;
+	font-size:80%;
+	margin-top: 5px;
 }
 div.no-property{
 	color:red;
@@ -224,7 +266,13 @@ margin-bottom:0.5%;
 	width:100%;
 	max-height:300px;
 }
+.review-link{
+background-color:#f7f7f7;
+	border:1px solid #e3e3e3;
+	box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.03) inset;
 }
+}
+
 @media only screen and (min-width:550px) and (max-width: 1100px){
 	.home-property-box{
 display:inline-block;

@@ -35,15 +35,15 @@ else if($status==0){
 	if(isset($_GET['checkin']) && isset($_GET['acct']) ){
 		echo "<div class=\"box-shadow-1 denial\">
 			<span style=\"\">This CTA you are attempting to checkin has expired since <span style=\"color:red\">".Timestamp($_GET['exp'])."</span>You can create new CTA.</span><br/><br/>
-			<a class=\"skyblue-inline-block-link\"  href=\"checkin.php\">create new CTA</a>
+			<a class=\"deepblue-inline-block-link\"  href=\"checkin.php\">create new CTA</a>
 		</div>";
 		exit();
 }
 else{
 	echo "<div class=\"box-shadow-1 denial\">
 			<span style=\"font-size:120%\">You are currently not checked in.</span><br/><br/>
-			<a class=\"skyblue-inline-block-link\" href=\"checkin.php\">checkin</a>
-			<a class=\"skyblue-inline-block-link \" href=\"checkin.php\">create new CTA</a>
+			<a class=\"deepblue-inline-block-link\" href=\"checkin.php\">checkin</a>
+			<a class=\"deepblue-inline-block-link \" href=\"checkin.php\">create new CTA</a>
 		</div>";
 		exit();
 }
@@ -85,9 +85,9 @@ if(isset($_GET['next']) && $_GET['next']>0){
 if($req=='matches' || $req==""){
 //if there are preferences request
 if($rqstatus==1 && isset($rqtype) && isset($rqpricemax) && isset($rqlocation)){
-	echo "<h3 style=\"\">Matched properties</h3>";
+	echo "<h3 class=\"major-headings\" >Matched properties</h3>";
 echo "<p>You have requested for <strong>$rqtype</strong> with rent not more than <strong>N".number_format($rqpricemax)."</strong> preferably around <strong>$rqlocation</strong>  <a href=\"request.php?p=$rqstatus\">change</a></p>";
-$query =  "SELECT property_ID,directory,type,location,min_payment,bath,toilet,rent,description,uploadby,date_uploaded,timestamp,views 
+$query =  "SELECT property_ID,directory,type,location,min_payment,bath,toilet,rent,description,uploadby,date_uploaded,timestamp,views,last_reviewed,status 
             FROM properties WHERE (type='$rqtype' AND rent<=$rqpricemax AND location LIKE '%$rqlocation%') ORDER BY date_uploaded DESC LIMIT $start,$end";
 $executequery = mysql_query($query);
 if($executequery){
@@ -106,6 +106,8 @@ if($executequery){
 	$uploadby[$count] = $property['uploadby'];
 	$howlong[$count] = $property['timestamp'];
 	$views[$count] = $property['views'];
+	$lastReviewed[$count] = $property['last_reviewed'];
+	$avail[$count] = $property['status'];
 	$count++;
 //last value of count will eventually equals to the total records fetched.
 		}
@@ -139,9 +141,9 @@ mysql_close($db_connection);
 }
 
 else if($req=='clipped'){
-echo "<h3>Clipped properties</h3>";
+echo "<h3 class=\"major-headings\">Clipped properties</h3>";
 while($count<$clipcounter){
-$getclipped = mysql_query("SELECT property_ID,directory,type,location,min_payment,bath,toilet,rent,description,uploadby,date_uploaded,timestamp,views
+$getclipped = mysql_query("SELECT property_ID,directory,type,location,min_payment,bath,toilet,rent,description,uploadby,date_uploaded,timestamp,views,last_reviewed,status 
          FROM properties WHERE (property_ID='".$clippedproperty[$count]."') ORDER BY date_uploaded DESC");
 if($getclipped){
 	$property = mysql_fetch_array($getclipped,MYSQL_ASSOC);
@@ -158,6 +160,8 @@ if($getclipped){
 	$uploadby[$count] = $property['uploadby'];
 	$howlong[$count] = $property['timestamp'];
 	$views[$count] = $property['views'];
+	$lastReviewed[$count] = $property['last_reviewed'];
+	$avail[$count] = $property['status'];
 		 $count++;
 }
 else{

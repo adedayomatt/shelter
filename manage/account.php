@@ -112,7 +112,7 @@ if(isset($accountreport) && !empty($accountreport)){
 <legend style="color:#6D0AAA"><strong><?php echo "<a href=\"$root/$editUsername\">".$editBN."</a>" ?></strong></legend>
 <form action="delete.php" method="POST">
 <input name="deleteid" type="hidden" value="<?php echo $editid ?>"/>
- <button name="submitdelete" id="deactivatebtn"type="submit" value="delete"><i class="icon" id="delete-icon"></i> Deactivate account</button>
+ <button name="submitdelete" id="deactivatebtn"type="submit" value="delete"><i class="black-icon delete-icon"></i> Deactivate account</button>
   </form>
   
 <form action="<?php $_PHP_SELF ?>" method="POST">

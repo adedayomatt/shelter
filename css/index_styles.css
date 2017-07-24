@@ -1,18 +1,26 @@
 /* Desktop version
 @media screen and (min-width:1025px)*/
+img.front-image{
+	display:inline-block;
+	/*width:100px;
+	height:150px;*/
+	border:none;
+}
 #mini-notification{
 	width:99%;
 	margin:auto;
-	margin:10px 0px 10px 0px;
-	padding:0px;
+	margin-bottom:2%;
+	line-height:100%;
+	border: 1px solid #E3E3E3;
+	box-shadow:0px 2px 2px rgba(0, 0, 0, 0.05) inset;
 }
 .notice,.client-follow-notice{
 	display:block;
 	list-style-type:none;
-	width:95%;
+	width:98%;
 	margin:auto;
 	margin-bottom:4px;
-	padding:5px;
+	padding:1%;
 	cursor:default;
 	background-color:white;
 	border-bottom: 1px solid #E5E5E5;
@@ -33,7 +41,6 @@
 }
 
 #front-ad-wrapper{
-	
 	width:100%;
 	margin:auto;
 	margin-top:10px;
@@ -93,11 +100,6 @@
 	background-color:rgba(129, 1, 129, 0.8);
 	padding:2% 2% 5% 2%;*/
 }
-img.front-image{
-	display:inline-block;
-	width:100px;
-	border:none;
-}
 /*Only in desktop*/
 div.agents-snipet{
 	float:left;
@@ -114,6 +116,7 @@ div.agents-snipet{
 	height:80%;
 	position:absolute;
 	overflow-y:scroll;
+	box-shadow:1px 5px 5px 2px rgba(0,0,0,0.5);
 }
 .ul-wrapper{
 	padding:1%;
@@ -132,7 +135,8 @@ div#most-viewed-wrapper{
 }
 #search-heading,#most-viewed-heading,#agents-heading,#recent-uploads-heading{
 	font-weight:normal;
-	text-align:center;
+	font-size:150%;
+	text-align:left;
 	margin:0px;
 	height:30px;
 	padding:2%;
@@ -145,7 +149,9 @@ div#most-viewed-wrapper{
 	background-color:white;
 }
 div#agents-list-wrapper{
-	width:70%;
+	width:96%;
+	margin:auto;
+	margin-bottom:20px;
 }
 
 
@@ -197,10 +203,23 @@ a.agents-list:hover{
 	width:250px;
 	max-height:250px;
 }
-	
-@media only screen and (min-width: 300px) and (max-width: 800px){
+
+@media all and (min-device-width: 800px),
+(min-width: 800px){
+		div.recent-uploads-container{
+	width:79%;
+	padding-left: 1%;
+}
+#top-nav-bar-content-on-scroll-content{
+	display:none;
+}
+	}
+
+@media all and (max-device-width: 800px),
+ (max-width:800px){
 		div.recent-uploads-container{
 	width:100%;
+	padding: 0px;
 }
 #top-nav-bar-content-on-scroll,#top-nav-bar-content-on-scroll-content{
 	width:100%;
@@ -208,6 +227,7 @@ a.agents-list:hover{
 }
 #top-nav-bar-content-on-scroll{
 	display:none;
+	box-shadow: 5px 5px 2px 2px rgba(0,0,0,0.4);
 }
 span.on-scrolltop-menu{
 	display:inline-block;
@@ -223,18 +243,7 @@ div.agents-snipet{
 #search-box-ad-container{
 		width:100%;
 }
-div#agents-list-wrapper{
-	width:96%;
-	margin:auto;
 }
-}
-@media only screen and (min-width: 800px){
-		div.recent-uploads-container{
-	width:79.5%;
-}
-#top-nav-bar-content-on-scroll-content{
-	display:none;
-}
-	}
+
 
 

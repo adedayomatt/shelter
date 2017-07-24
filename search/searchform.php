@@ -66,7 +66,6 @@ function setLocation(location){
 </script>
 <style>
 .search-field{
-	padding:1%;
 	width:46%;
 	margin-right:2%;
 	margin-bottom:4px;

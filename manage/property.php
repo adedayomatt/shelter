@@ -2,10 +2,28 @@
 $connect = true;
 require('../require/connexion.php'); 
  //confirm if user is still logged in 
-if(!isset($_COOKIE['name'])){
-	header("Location: ../login");
+if($status != 1){
+	redirect();
 }
+	
+function checkbox($source,$condition){
+		if($source==$condition){
+			return "checked=\"checked\"";
+		}else{ return null;}
+	}
+	
+function checkForImage($dir,$imgName){
+	if(file_exists("../properties/$dir/$imgName")){
+		$image = "<img alt=\"Not Available\" class=\"property-photo\" src=\"../properties/$dir/$imgName\" />
+		";
+		}else
+		{
+			$image = "";
+		}
+		return $image;
+	}
 ?>
+
 <html>
 <?php require('../require/meta-head.html'); ?>
 <head>
@@ -59,8 +77,9 @@ function checkRadiochanges($oldvalue,$newvalue){
 			$update .= "road=".changefacility($_POST['oldRoad'],$_POST['newRoad']).",";
 			$update .= "socialization=".changefacility($_POST['oldSocial'],$_POST['newSocial']).",";
 			$update .= "security=".changefacility($_POST['oldSecurity'],$_POST['newSecurity']).",";
-			$update .= "description='".mysql_real_escape_string($_POST['description'])."' ";
-			$update .= "WHERE (property_ID='".$_POST['id']."')";
+			$update .= "description='".mysql_real_escape_string($_POST['description'])."',";
+			$update .= "last_reviewed=$now";
+			$update .= " WHERE (property_ID='".$_POST['id']."')";
 			//echo $update;
 			$updateQuery = mysql_query($update,$db_connection);
 			if($updateQuery){ 
@@ -83,35 +102,13 @@ function checkRadiochanges($oldvalue,$newvalue){
 			}
 
 }
-
 ?>
-<?php 
-//Here gives the report of the editing. successful or fail
-if(isset($changeReport)){
-	$generalstyle = "width:20%; height: 35px;  color:white; border-radius:5px; margin-left:5px;";
-switch ($case){
-	case 1:
-	$specialstyle = " background-color: green; ";
-	$icon = "background-position:-288px 0px";
-	break;
-	case 3:
-	$specialstyle = " background-color: red;";
-	$icon =  "background-position: -312px 0px";
-	break;
-		default:
-	$specialstyle = " background-color: red; ";
-	$icon = "background-position:-312px 0px";
-	break;
-}
-echo "<br/><div style=\"".$generalstyle.$specialstyle."\"><i style=\"$icon\" class=\"white-icon\"></i> $changeReport</div>";
-}
-	?>
 	
 <?php
 //Here handles fetching of the records on page load
 	if(isset($_GET['action'])){
 		if(isset($_GET['id']) && !empty($_GET['id'])){
-				$getformerdetail = "SELECT * FROM properties WHERE (property_ID = '".$_GET['id']."')";
+				$getformerdetail = "SELECT * FROM properties WHERE (property_ID = '".$_GET['id']."' AND uploadby = '$profile_name')";
 				$getquery = mysql_query($getformerdetail);
 				if($getquery){
 					if(mysql_affected_rows($db_connection)==1){
@@ -134,9 +131,11 @@ echo "<br/><div style=\"".$generalstyle.$specialstyle."\"><i style=\"$icon\" cla
 						$editsocial = $detail['socialization'];
 						$editsecurity = $detail['security'];
 						$editdescription = $detail['description'];
+						$views = $detail['views'];
+						$LR = $detail['last_reviewed'];
 					}
-					}else{ $fetchReport = "ID is invalid or the property may have been deleted";}
-				}else{$fetchReport = "Couldn't get the property details";}
+					}else{ $fetchReport = "<div color:\" class=\"operation-fail-container\"><span class=\"black-icon warning-icon\"></span>ID is invalid or you do not have authorization to review this property</div>";}
+				}else{$fetchReport = "<div class=\"operation-fail-container\"><span class=\"black-icon warning-icon\"></span>Couldn't get the property details</div>";}
 			
 		}
 		else{
@@ -154,49 +153,133 @@ if(isset($fetchReport)){
 		mysql_close($db_connection);
 		exit();
 	}
-	
-function checkbox($source,$condition){
-		if($source==$condition){
-			return "checked=\"checked\"";
-		}else{ return null;}
-	}
-	
-function checkForImage($dir,$imgName){
-	if(file_exists("../properties/$dir/$imgName")){
-		$image = "<img alt=\"Not Available\" class=\"property-photo\" src=\"../properties/$dir/$imgName\" />";
-		
-		}else
-		{
-			$image = "<img alt=\"Not Available\" class=\"property-photo\" src=\"../properties/$dir/$imgName\" />";
-		}
-		return $image;
-	}
-?>
-<br/>
-<div id="images-area">
-<?php 	echo checkForImage($editdir,$editid."_01.png"); 
-		echo checkForImage($editdir,$editid."_02.png"); 
-		echo checkForImage($editdir,$editid."_03.png"); 
-		echo checkForImage($editdir,$editid."_04.png"); 
 
+	
+//Get all the available images
+$lastImage = 0;
+$newimage = 1;
+$allImages = "";
+for($image = 1; $image<=10; $image++){
+if(checkForImage($editdir,$editid."_0$image.png") != ""){
+	$allImages .= checkForImage($editdir,$editid."_0$image.png");
+	$lastImage = $image;
+	$newimage = $lastImage+1;
+}
+}
+
+	//here handles upload of photo
+if(isset($_FILES['photo'])){
+	$allowed = array ('image/pjpeg','image/jpeg', 'image/JPG','image/X-PNG', 'image/PNG','image/png', 'image/x-png');
+$mb = ($_FILES['photo']['size'])/1000000;
+if(in_array(($_FILES['photo']['type']),$allowed)){
+	if (move_uploaded_file ($_FILES['photo']['tmp_name'],"../properties/$editdir/$editid"."_0$newimage".".png")) {
+	$photoupload_report = " One new Photo added successfully";
+	$image_upload_status =1;
+	//update the last reviewed
+	mysql_query("UPDATE properties SET last_reviewed = $now WHERE property_ID= '$editid'");
+	//add the new image 
+	$allImages .= checkForImage($editdir,$editid."_0$newimage.png");
+}
+else{
+	$photoupload_report = "upload unsuccesful try again: ".$_FILES['photo']['error'];
+	$image_upload_status=0;
+}	
+}
+else{
+	$photoupload_report = "Unsupported file format";
+	$image_upload_status=0;
+}
+}
+
+
+?>
+
+<div id="all-edit-wrapper">
+  <?php 
+//Here gives the report of the editing. successful or fail
+if(isset($changeReport)){
+switch ($case){
+	case 1:
+	$icon = "tick-icon";
+	$class = "operation-report-container";
+	break;
+	case 3:
+	$icon =  "cross-icon";
+	$class = "operation-fail-container";
+	break;
+		default:
+	$icon = "cross-icon";
+	$class = "operation-fail-container";
+	break;
+}
+echo "<div style=\"font-size:150%\" class=\"$class\"><span class=\"black-icon $icon\"></span> $changeReport</div>";
+}
+	?>
+  
+<h3><?php echo "<a id=\"legend\" href=\"$root/properties/$editdir\">".$editid .": ".$edittype."</a>" ?></h3>
+
+<div class="edit-box-container">
+<p><span class="black-icon location-icon"></span><?php echo $editlocation ?></p>
+
+  </div>
+<div>
+<div><span class="black-icon eye-icon"></span><?php echo $views ?> views</div>
+<div class="time">Last reviewed : <?php echo (Timestamp($LR)=='sometime ago' ? "<span style=\"color:red\">Not reviewed yet</span>" : Timestamp($LR)) ?></div>
+</div>
+
+<div id="images-area">
+<?php 
+//if there is no any photo
+if($allImages == ""){
+echo "<div style=\"border:1px solid #e3e3e3; padding:2%;text-align:center\">
+<p style=\"color:red\"><span class=\"black-icon warning-icon\"></span>You have not added any photo to this pproperty</p>
+<p style=\"color:grey\">Adding photo to your properties impress clients more and give them clue on what the property looks like.</p>
+</div>";
+}
+else{
+echo $allImages;
+}
 ?>	
+<div>
+<?php
+//The photo upload report is printed here
+if(isset($photoupload_report) && !empty($photoupload_report)){
+	if($image_upload_status == 1){
+echo "<div style=\" width:60%;color:green; margin:1%; padding:1%; border:1px solid green; text-align:center;\">$photoupload_report</div>";
+	}
+	else{
+echo "<div style=\"width:60%; color:red;  margin:1%; padding:1%; border:1px solid red;text-align:center;\">$photoupload_report</div>";
+	}
+}
+?>
+<a id="add-photo-link"><span class="black-icon camera-icon"></span><?php echo ($allImages =="" ? "Add photo" : "Add more photo")?></a>
+<div class ="edit-box" id="add-photo-box">
+
+<div class="edit-box-container">
+<form enctype="multipart/form-data" action="<?php $_PHP_SELF ?>" method="POST" >
+<input type="hidden" name="photoname" value="<?php echo $ID."_0$image";?>" />
+<input type="file" name="photo" size="30" style="background-color:#eee;"/>
+<input type="submit" value="upload" size="50" class="deepblue-inline-block-link" style="border:none">
+</form>
+</div>
+
+</div>
+</div>
+
 	</div>
 
 <div id="edit-area">
 <fieldset>
-<legend style="color:#6D0AAA"><strong><?php echo "<a href=\"$root/properties/$editdir\">".$editid .": ".$edittype." at ".$editlocation."</a>" ?></strong></legend>
-
-<form action="delete.php" method="POST">
-<input name="deleteid" type="hidden" value="<?php echo $editid ?>"/>
- <button name="submitdelete" id="deletebtn"type="submit" value="delete"><i class="white-icon" id="delete-icon"></i> Delete</button>
-  </form>
-  
 <form action="<?php $_PHP_SELF ?>" method="POST">
 <input name="id" type="hidden" value="<?php echo $editid ?>" />
-<p class="stay-on-a-line">Rent: <?php echo number_format($editrent)?> <span id="editrent_link" class="edit-link"><i class="icon"></i> edit</span></p>
-<div class ="edit-box" id="editrent_box"><input placeholder="Rent" name="rent" type="number" value="<?php echo $editrent ?>"/></div>
 
-<p>Minimum Payment required: <?php echo $editmp?> <span id="editmp_link" class="edit-link"><i class="icon"></i> edit</span></p>
+<div class="edit-box-container">
+<p class="stay-on-a-line">Rent: <?php echo number_format($editrent)?> <span id="editrent_link" class="edit-link"><span class="black-icon edit-icon"></span></span></p>
+<div class ="edit-box" id="editrent_box"><input placeholder="Rent" name="rent" type="number" value="<?php echo $editrent ?>"/></div>
+</div>
+
+<div class="edit-box-container">
+<p>Minimum Payment required: <?php echo $editmp?> <span id="editmp_link" class="edit-link"><span class="black-icon edit-icon"></span></span></p>
 <div div class ="edit-box" id="editmp_box">
 <input name="oldminPay" type="hidden" value="<?php echo $editmp?>"/>
 <input class="dumb-input" name="newminPay" checked="true" type="radio" value="0"/>
@@ -204,35 +287,62 @@ function checkForImage($dir,$imgName){
 <input name="newminPay"  type="radio" value="1 Year, 6 Months"/>1 Year 6 Months
 <input name="newminPay"  type="radio" value="2 Years"/>2 Years
 </div>
+</div>
+
+<div class="edit-box-container">
 <p>Bathroom(s): <?php echo $editbath ?></p>
 <p>Toilet(s): <?php echo $edittoilet ?></p>
-<p><i>check for presence or uncheck if absent</i></p>
-<p><strong>Water Supply</strong></p>
-<p>Pumping Machine: <span> <input name="oldpm" type="hidden" value="<?php echo $editpm?>"/>
-<input name="newpm" type="checkbox" value="Yes" <?php echo checkbox($editpm,'Yes') ?>/></span>
+</div>
 
-Borehole:<span><input name="oldbh" type="hidden" value="<?php echo $editbh?>"/>
-<input name="newbh" type="checkbox" value="Yes" <?php echo checkbox($editbh,'Yes') ?> /></span>
 
-Well:<span><input name="oldwell" type="hidden" value="<?php echo $editwell?>"/>
-<input name="newwell" type="checkbox" value="Yes" <?php echo checkbox($editwell,'Yes') ?> /></span>
-</p>
+<h3 class="headings">Water Supply</h3>
+<div class="edit-box-container">
+<p style="color:grey">Check if presence or uncheck if absent</p>
 
-<p><strong>Others</strong></p>
-<p>Tiles:<span><input name="oldtiles" type="hidden" value="<?php echo $edittiles?>"/>
-<input name="newtiles" type="checkbox" value="Yes" <?php echo checkbox($edittiles,'Yes') ?> /></span>
+<div>
+<input name="oldpm" type="hidden" value="<?php echo $editpm?>"/>
+<input name="newpm" type="checkbox" value="Yes" <?php echo checkbox($editpm,'Yes') ?>/>  Pumping Machine
+</div><br/>
 
-Parking Space: <span><input name="oldps" type="hidden" value="<?php echo $editps?>"/>
-<input name="newps" type="checkbox" value="Yes" <?php echo checkbox($editps,'Yes') ?>/></span>
-</p>
+<div> 
+<input name="oldbh" type="hidden" value="<?php echo $editbh?>"/>
+<input name="newbh" type="checkbox" value="Yes" <?php echo checkbox($editbh,'Yes') ?> />  Borehole
+</div><br/>
 
-<p>Description: <i>"<?php echo $editdescription ?>"</i> <span id="editdescription_link" class="edit-link"><i class="icon"></i> edit</span></p>
-<div class ="edit-box" id="editdescription_box"><textarea name="description" rows="4" cols="16"><?php echo $editdescription ?></textarea></div>
+<div>
+<input name="oldwell" type="hidden" value="<?php echo $editwell?>"/>
+<input name="newwell" type="checkbox" value="Yes" <?php echo checkbox($editwell,'Yes') ?> />   Well
+</div>
 
-<h4>Property Rating</h4>
+</div>
 
+<h3 class="headings">Others</h3>
+<div class="edit-box-container">
+<p style="color:grey">Check if presence or uncheck if absent</p>
+
+<div>
+<input name="oldtiles" type="hidden" value="<?php echo $edittiles?>"/>
+<input name="newtiles" type="checkbox" value="Yes" <?php echo checkbox($edittiles,'Yes') ?> />   Tiles
+</div><br/>
+
+<div>
+<input name="oldps" type="hidden" value="<?php echo $editps?>"/>
+<input name="newps" type="checkbox" value="Yes" <?php echo checkbox($editps,'Yes') ?>/>   Parking Space
+</div><br/>
+
+</div>
+
+<h3 class="headings">Property Description</h3>
+<div class="edit-box-container" id="edit-box-container-description">
+<?php echo (empty($editdescription) ? "<span style=\"color:red\"><span class=\"black-icon warning-icon\"></span>No description</span>" : "$editdescription" ) ?> <span id="editdescription_link" class="edit-link"><span class="black-icon edit-icon"></span></span>
+<div class ="edit-box" id="editdescription_box"><textarea name="description" placeholder="Give a brief description of the property" id="description-textarea"><?php echo $editdescription ?></textarea></div>
+</div>
+
+<h3 class="headings">Property Rating</h3>
+
+<div class="edit-box-container">
 <p>Electricity:<input type="hidden" name="oldElectricity" value="<?php echo $editelectricity ?>" />
- <?php echo $editelectricity."%" ?> <span id="editelectricity_link" class="edit-link"><i class="icon"></i> change</span></p>
+ <?php echo $editelectricity."%" ?> <span id="editelectricity_link" class="edit-link"><span class="black-icon edit-icon"></span></span></p>
 <div class ="edit-box" id="editelectricity_box">Electricity <select name="newElectricity">
 <option value="0">0%</option>
 <option value="10">10%</option>
@@ -247,9 +357,11 @@ Parking Space: <span><input name="oldps" type="hidden" value="<?php echo $editps
 <option value="90">90%</option>
 <option value="100">100%</option>
 </select></div>
+</div>
 
+<div class="edit-box-container">
 <p>Road:<input type="hidden" name="oldRoad" value="<?php echo $editroad ?>" />
- <?php echo $editroad."%" ?> <span id="editroad_link" class="edit-link"><i class="icon"></i> change</span></p>
+ <?php echo $editroad."%" ?> <span id="editroad_link" class="edit-link"><span class="black-icon edit-icon"></span></span></p>
 <div class ="edit-box" id="editroad_box">Road <select name="newRoad">
 <option value="0">0%</option>
 <option value="10">10%</option>
@@ -264,9 +376,11 @@ Parking Space: <span><input name="oldps" type="hidden" value="<?php echo $editps
 <option value="90">90%</option>
 <option value="100">100%</option>
 </select></div>
+</div>
 
+<div class="edit-box-container">
 <p>Socialization: <input type="hidden" name="oldSocial" value="<?php echo $editsocial ?>" />
-<?php echo $editsocial."%" ?> <span id="editsocial_link" class="edit-link"><i class="icon"></i> change</span></p>
+<?php echo $editsocial."%" ?> <span id="editsocial_link" class="edit-link"><span class="black-icon edit-icon"></span></span></p>
 <div class ="edit-box" id="editsocial_box">Socialization <select name="newSocial">
 <option value="0">0%</option>
 <option value="10">10%</option>
@@ -281,9 +395,11 @@ Parking Space: <span><input name="oldps" type="hidden" value="<?php echo $editps
 <option value="90">90%</option>
 <option value="100">100%</option>
 </select></div>
+</div>
 
+<div class="edit-box-container">
 <p>Security: <input type="hidden" name="oldSecurity" value="<?php echo $editsecurity ?>" />
-<?php echo $editsecurity."%" ?> <span id="editsecurity_link" class="edit-link"><i class="icon"></i> change</span></p>
+<?php echo $editsecurity."%" ?> <span id="editsecurity_link" class="edit-link"><span class="black-icon edit-icon"></span></p>
 <div class ="edit-box" id="editsecurity_box">Security <select name="newSecurity">
 <option value="0">0%</option>
 <option value="10">10%</option>
@@ -298,9 +414,18 @@ Parking Space: <span><input name="oldps" type="hidden" value="<?php echo $editps
 <option value="90">90%</option>
 <option value="100">100%</option>
 </select></div>
+</div>
+
 </fieldset>
-<input id="submit-btn" type="submit" name="edit" value="Save changes"/>
+
+<input id="submit-edit-btn" type="submit" name="edit" value="Save changes"/>
 </form>
+<form style="padding:0px;margin:0px;" action="delete.php" method="POST">
+<input name="deleteid" type="hidden" value="<?php echo $editid ?>"/>
+ <button name="submitdelete" id="deletebtn" type="submit" value="delete"><span class="white-icon delete-icon"></span> Delete this property</button>
+  </form>
+ </div>
+ 
  </div>
 <div>
 <?php 
