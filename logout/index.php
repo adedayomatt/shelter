@@ -1,7 +1,8 @@
 <?php
-require('../phpscripts/masterScript.php'); 
+require('../resources/php/master_script.php'); 
 ?>
 <html>
+<?php require('../resources/html/meta-head.html'); ?>
 <link href="../css/general.css" type="text/css" rel="stylesheet" />
 <link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
 <header>
@@ -46,11 +47,11 @@ h1{
 </style>
 <?php
 //$root = "http://192.168.173.1/shelter";
-if($general->check_cookie('user_agent')==true){
+if($status == 1){
 	$general->unset_cookie('user_agent');
 	$confirmation = "<h2>Logged out</h2><p>Your account has been logged out successfully <a class=\"inline-block-link l\" href=\"$root/login\">Login</a></p>";
 }
-else if($general->check_cookie('user_cta')==true) {
+else if($status==9) {
 	$general->unset_cookie('user_cta');
 		$confirmation = "<h2>Checked out</h2><p>Your CTA has been checked out successfully, <a class=\"inline-block-link l\" href=\"$root/cta/checkin.php\"><b>here</b></a></p>";
 }
@@ -67,4 +68,7 @@ else{
 <h1 align="center">Shelter</h1>
 <div class="box-shadow-1" id="logout-prompt" align="center"><?php echo $confirmation; ?></div>	</body>
 
+<?php 
+require('../resources/php/footer.php'); 
+ ?>
 </html>

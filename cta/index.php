@@ -1,187 +1,122 @@
 <?php 
-$connect = true;
-require('../require/connexion.php'); 
+require('../resources/php/master_script.php');  
 ?>
 
 <!DOCTYPE html>
 <html>
-<?php require('../require/meta-head.html'); ?>
+<?php require('../resources/html/meta-head.html'); ?>
 <link href="../css/general.css" type="text/css" rel="stylesheet" />
 <link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
 <link href="../css/ctastyles.css" type="text/css" rel="stylesheet" />
 <link href="../css/propertybox_styles.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript" src="../js/propertybox.js"></script>
 
-<header>
+<head>
 <?php
 $pagetitle = "CTA";
-require('../require/header.php');
+require('../resources/php/header.php');
 ?>
-</header>
+</head>
 
 <body class="no-pic-background">
 
 <?php
 //if user is logged in as an agent
 if($status==1){
-	$denialMessage = "You cannot use Client Temporary Account because you are currently logged in as <br/><a href=\"$root/$profile_name\">$Business_Name</a> <br/><a href=\"../logout\">Logout</a> first";
+echo "<br/></br/><div class=\"box-shadow-1 denial\">
+		You cannot use Client Temporary Account because you are currently logged in as <br/><a href=\"$root/$profile_name\">$Business_Name</a> <br/><a href=\"../logout\">Logout</a> first
+		</div>";
+$general->halt_page();
 }
+
 //if user is a visitor
 else if($status==0){
-//close the opened connection and redirect to the checkin page
-/*	mysql_close($db_connection);
-	header('location: checkin.php?_rdr=1');
-	exit();*/
 	if(isset($_GET['checkin']) && isset($_GET['acct']) ){
-		echo "<div class=\"box-shadow-1 denial\">
-			<span style=\"\">This CTA you are attempting to checkin has expired since <span style=\"color:red\">".Timestamp($_GET['exp'])."</span>You can create new CTA.</span><br/><br/>
-			<a class=\"deepblue-inline-block-link\"  href=\"checkin.php\">create new CTA</a>
-		</div>";
-		exit();
+		?>
+		<div class="box-shadow-1 denial">
+			<span style=\"\">This CTA you are attempting to checkin has expired since <span style="color:red"><?php echo $general->since($_GET['exp']) ?></span>You can create new CTA.</span><br/><br/>
+			<a class="deepblue-inline-block-link"  href="checkin.php">create new CTA</a>
+		</div>
+		<?php
 }
 else{
-	echo "<div class=\"box-shadow-1 denial\">
-			<span style=\"font-size:120%\">You are currently not checked in.</span><br/><br/>
-			<a class=\"deepblue-inline-block-link\" href=\"checkin.php\">checkin</a>
-			<a class=\"deepblue-inline-block-link \" href=\"checkin.php\">create new CTA</a>
-		</div>";
-		exit();
+	?>
+	<div class="box-shadow-1 denial">
+			<span style="font-size:120%">You are currently not checked in.</span><br/><br/>
+			<a class="deepblue-inline-block-link" href="checkin.php">checkin</a>
+			<a class="deepblue-inline-block-link" href="checkin.php">create new CTA</a>
+		</div>
+		<?php
+		
 }
-}
+$general->halt_page();			
+		}
 
 ?>
 
 <?php
-if(isset($denialMessage)){ echo "<br/></br/><div class=\"box-shadow-1 denial\">$denialMessage</div></body></html>";
-mysql_close($db_connection);
-exit();
-}
-else{
-	require('../require/sidebar.php');
-}
+	require('../resources/php/sidebar.php');
 ?>
 
 <div class="main-content cta-content">
 
 <?php 
-//if there is notification of remaining days. This variable is set from header.php
-if(isset($remainingDaysNotice) && !empty($remainingDaysNotice) ){
-	echo "<div class=\"cta-expiry-notice\">$remainingDaysNotice</div>";
-}
-
-$req = (isset($_GET['src']) ? $_GET['src'] : 'matches');
-$count = 0;
-
-$max = 4;
-if(isset($_GET['next']) && $_GET['next']>0){
-	$start = $_GET['next'];
-	$end = $_GET['next'] + $max;
-}
- else{
-	 $start = 0;
-	 $end = $max;
- }
+$req = (isset($_GET['src']) ? $_GET['src'] :'matches');
 
 if($req=='matches' || $req==""){
+	?>
+<h3 class="major-headings" >Matched properties</h3>
+	<?php
 //if there are preferences request
-if($rqstatus==1 && isset($rqtype) && isset($rqpricemax) && isset($rqlocation)){
-	echo "<h3 class=\"major-headings\" >Matched properties</h3>";
-echo "<p>You have requested for <strong>$rqtype</strong> with rent not more than <strong>N".number_format($rqpricemax)."</strong> preferably around <strong>$rqlocation</strong>  <a href=\"request.php?p=$rqstatus\">change</a></p>";
-$query =  "SELECT property_ID,directory,type,location,min_payment,bath,toilet,rent,description,uploadby,date_uploaded,timestamp,views,last_reviewed,status 
-            FROM properties WHERE (type='$rqtype' AND rent<=$rqpricemax AND location LIKE '%$rqlocation%') ORDER BY date_uploaded DESC LIMIT $start,$end";
-$executequery = mysql_query($query);
-if($executequery){
-	
-	while($property = mysql_fetch_array($executequery,MYSQL_ASSOC)){
-	$propertyId[$count] = $property['property_ID'];
-	$propertydir[$count] = $property['directory'];
-	$type[$count] = $property['type'];
-	$location[$count] = $property['location'];
-	$rent[$count] = $property['rent'];
-	$min_payment[$count] = $property['min_payment'];
-	$bath[$count] = $property['bath'];
-	$toilet[$count] = $property['toilet'];
-	$description[$count] = $property['description'];
-	$date_uploaded[$count] = $property['date_uploaded'];
-	$uploadby[$count] = $property['uploadby'];
-	$howlong[$count] = $property['timestamp'];
-	$views[$count] = $property['views'];
-	$lastReviewed[$count] = $property['last_reviewed'];
-	$avail[$count] = $property['status'];
-	$count++;
-//last value of count will eventually equals to the total records fetched.
-		}
-$ref = "ctaPage";	
-	require('../require/propertyboxes.php');
-if(!empty($propertyId)){
-	echo "<a class=\"show-more-link\" href =\"?src=matches&next=$end\">show more >></a>";	
+if($request_status==1){
+	?>
+<p>You have requested for <strong><?php echo $request_type ?></strong> with rent not more than <strong>N <?php echo number_format($request_maxprice) ?></strong> preferably around <strong><?php echo $request_location ?></strong>  <a href="request.php?p=<?php echo $request_status ?>">change</a></p>
+<?php
+if($matches != 0){
+	?>
+<?php
+$final_property_query = property::$property_query." WHERE (type='$request_type' AND rent <=$request_maxprice AND location LIKE '%$request_location%') ORDER BY since DESC LIMIT ".properties_config::$max_display;
+require('../resources/php/property_display.php');
+
 }
 else{
-if($start==0){
-	echo "<div class=\"no-property\" align=\"center\">There is no property that match your preference for now</div>";
+	?>
+<div class="no-property">There are no matches for your request</div>
+<?php
 }
-else if($start>0){
-	echo "<div class=\"no-property\" align=\"center\">No more matches</div>";
+//mysql_close($db_connection);
+}
+else{
+	?>
+<div class="no-property">You have not specify your request
+<a class="inline-block-link white-on-purple" href="request.php?p=0">Specify now</a></div>
+<?php	
+			}
 	}
-}
-		
-	}
-	
-else{
-	echo "<div class=\"no-property\"><b>An error occured!!</b></div>";
-	mysql_close($db_connection);
-	exit();
-			}			
-}
-else{
-	echo "<div class=\"no-property\">You have not specified your preferences.
-	<a class=\"inline-block-link white-on-purple\" href=\"request.php?p=0\">Specify now</a></div>";
-}
-mysql_close($db_connection);
-}
 
 else if($req=='clipped'){
-echo "<h3 class=\"major-headings\">Clipped properties</h3>";
-while($count<$clipcounter){
-$getclipped = mysql_query("SELECT property_ID,directory,type,location,min_payment,bath,toilet,rent,description,uploadby,date_uploaded,timestamp,views,last_reviewed,status 
-         FROM properties WHERE (property_ID='".$clippedproperty[$count]."') ORDER BY date_uploaded DESC");
-if($getclipped){
-	$property = mysql_fetch_array($getclipped,MYSQL_ASSOC);
-	$propertyId[$count] = $property['property_ID'];
-	$propertydir[$count] = $property['directory'];
-	$type[$count] = $property['type'];
-	$location[$count] = $property['location'];
-	$rent[$count] = $property['rent'];
-	$min_payment[$count] = $property['min_payment'];
-	$bath[$count] = $property['bath'];
-	$toilet[$count] = $property['toilet'];
-	$description[$count] = $property['description'];
-	$date_uploaded[$count] = $property['date_uploaded'];
-	$uploadby[$count] = $property['uploadby'];
-	$howlong[$count] = $property['timestamp'];
-	$views[$count] = $property['views'];
-	$lastReviewed[$count] = $property['last_reviewed'];
-	$avail[$count] = $property['status'];
-		 $count++;
+	?>
+<h3 class="major-headings">Clipped properties</h3>
+<?php
+//if there are preferences request
+if($clipped != 0){
+$max_display = properties_config::$max_display;
+$final_property_query = "SELECT property.property_ID AS id, property.directory AS dir,
+        property.type AS type, property.location AS location, property.rent AS rent,
+        property.min_payment AS mp, property.bath AS bath, property.toilet AS toilet,
+        property.description AS description, property.timestamp AS since,property.last_reviewed AS lastReviewed,
+        property.views AS views, property.status AS status, agent.Business_Name AS agentBussinessName,
+        agent.User_ID AS agentUserName , agent.Office_Address AS agentOfficeAdd, agent.Office_Tel_No AS agentOfficeNo,
+        agent.Phone_No AS agentNo,agent.Alt_Phone_No AS agentAltNo,agent.token AS agenttoken
+        FROM clipped INNER JOIN properties AS property ON (clipped.propertyid = property.property_ID) 
+		INNER JOIN profiles AS agent ON (agent.User_ID = property.uploadby) WHERE (clipped.clippedby = $ctaid) LIMIT $max_display";
+require('../resources/php/property_display.php');
 }
 else{
-	break;
-	echo "<div class=\"no-property\"><b>An error occured!!</b></div>";
-	mysql_close($db_connection);
-	exit();
-			}	
+	?>
+<div class="no-property">You have no clipped properties</div>
+<?php
 }
-if(empty($propertyId)){
-	echo "<div class=\"no-property\">No clipped property</div>";
-}
-else{
-	$ref = "ctaPage";
-require('../require/propertyboxes.php');
-
-
-	
-}
-mysql_close($db_connection);
 }
 ?>
 </div>

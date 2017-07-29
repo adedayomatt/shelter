@@ -90,8 +90,9 @@ li.agent-stats-list,li.other-agents-list{
 }
 
 div#other-agents-wrapper{
-	width:50%;
+	width:100%;
 	border:1px solid #E5E5E5;
+
 }
 ul{
 	margin:0px;
@@ -102,7 +103,7 @@ li.other-agents-list{
 	display:block;
 	background-color:white;
 	list-style-type:none;
-	padding:10px;
+	padding:20px;
 	color:black;
 	margin-bottom:2px;
 }

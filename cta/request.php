@@ -1,46 +1,40 @@
-<?php if(!isset($_COOKIE['CTA'])){
-	header('location: checkin.php?_rdr=1');
-	exit();
-}
-?>
+
 <?php 
-$connect = true;
-require('../require/connexion.php'); ?>
+require('../resources/php/master_script.php'); 
+if($status != 9){
+	$general->redirect('cta/checkin.php?_rdr=1');
+}
 
-<!DOCTYPE html>
-<html>
-<link href="../css/general.css" type="text/css" rel="stylesheet" />
-<link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
-<head>
-<?php
-$pagetitle = "Request";
-$ref='ctarequest';
-$getuserName=true;
-require('../require/header.php');
-//if not no CTA is checked in
-?>
-
-<?php
 if(isset($_POST['request'])){
-	if(!empty($_POST['maxprice']) && is_numeric($_POST['maxprice']) && !empty($_POST['type']) && !empty($_POST['location'])){
-		$requestingtype = $_POST['type'];
-		$requestingmaxprice = $_POST['maxprice'];
-		$requestinglocation = mysql_real_escape_string($_POST['location']);
 
-$placerequest = mysql_query("INSERT INTO cta_request (ctaid,type,maxprice,location) VALUE ('$ctaid','$requestingtype',$requestingmaxprice,'$requestinglocation')");
-$updatecta = mysql_query("UPDATE cta SET request=1 WHERE ctaid='$ctaid' ");
-//if request placing is successful and updating of cta
-			if(($placerequest) && ($updatecta)){
-	$requestplacementReport = "Dear $ctaname, Your request has been placed, you will be notified as soon as there is any match for your preferences.<br/><br/><strong>Thank You</strong>";
+	$query = "INSERT INTO cta_request (ctaid,type,maxprice,location) VALUES (?,?,?,?)";
+	$p_query = $connection->prepare($query);
+	$p_query->bind_param('isis',$param_ctaid,$param_type,$param_maxprice,$param_location);
+
+if(!empty($_POST['maxprice']) && is_numeric($_POST['maxprice']) && !empty($_POST['type']) && !empty($_POST['location'])){
+		$param_ctaid = $ctaid;
+		$param_type = $_POST['type'];
+		$param_maxprice = $_POST['maxprice'];
+		$param_location = $connection->real_escape_string(htmlentities(trim($_POST['location'])));
+$p_query->execute();
+if($p_query->affected_rows ==1){
+$updatecta = $db->query_object("UPDATE cta SET request=1 WHERE ctaid=$ctaid");
+if(is_string($updatecta)){	error::report_error($updatecta,__FILE__,__CLASS__,__FUNCTION__,__LINE__);}
+else{
+	//if request placing is successful and updating of cta
+if($connection->affected_rows == 1){
+	$requestplacementReport = "<b> $cta_name </b>, Your request has been placed, you will be notified as soon as there is any match for your preferences.<br/><br/><strong>Thank You</strong>";
 	$sent = true;
+		}
 	}
+}
 else{
 	$requestplacementReport = "Your placement could not be placed, try again later";
 	$sent = false;
 }
 	
 }
-//if maxprice is not number
+//invalid field
 else{
 $requestplacementReport = "Some fields are empty or filled incorrectly";	
 	$sent = false;
@@ -48,32 +42,52 @@ $requestplacementReport = "Some fields are empty or filled incorrectly";
 	}
 	
 else if(isset($_POST['change'])){
+
 	if(!empty($_POST['type']) && is_numeric($_POST['maxprice']) && !empty($_POST['type']) && !empty($_POST['location'])){
+	
+		$param_ctaid = $ctaid;
+		$param_type = ($_POST['type'] == 'nil' ? $_POST['former_type'] : $_POST['type']);
+		$param_maxprice = $_POST['maxprice'];
+		$param_location = $connection->real_escape_string(htmlentities(trim($_POST['location'])));
+
 		
-		$changetype = $_POST['type'];
-		$changemaxprice = $_POST['maxprice'];
-		$changelocation = mysql_real_escape_string($_POST['location']);
-		
-   $updatecta = mysql_query("UPDATE cta SET request=1 WHERE ctaid='$ctaid'");
-	$changerequest = mysql_query("UPDATE cta_request SET type='$changetype',maxprice=$changemaxprice,location='$changelocation' WHERE ctaid='$ctaid'");
+	$change_request = $db->query_object("UPDATE cta_request SET type='$param_type',maxprice=$param_maxprice,location='$param_location' WHERE ctaid=$ctaid");
+if(is_string($change_request)){
+	error::report_error($change_request,__FILE__,__CLASS__,__FUNCTION__,__LINE__);
+}
+else{
 //if request changing is successful
-			if($changerequest){
-	$changeReport = "Dear $ctaname, <br/>Your request has been <i>changed</i>, you will be notified as soon as there is any match for your preferences.<br/><br/><strong>Thank You</strong>";
+ if($connection->affected_rows == 1){
+	$changeReport = "<strong>$cta_name</strong>, <br/>Your request has been <i>changed</i>, you will be notified as soon as there is any match for your preferences.<br/><br/><strong>Thank You</strong>";
 	$change = true;
 	}
 else{
-	$changeReport = "Dear $ctaname, <br/>Your placement could not be changed, try again later";
+	$changeReport = "<strong>$cta_name</strong>, <br/>No change was made to your request";
 	$change = false;
+}
 }
 	
 }
-//if maxprice is not number
+//invalid inputs
 else{
 $changeReport = "Some fields are empty or filled incorrectly";	
 	$change = false;
 		}
 	}
 ?>
+<!DOCTYPE html>
+<html>
+<?php require('../resources/html/meta-head.html'); ?>
+<link href="../css/general.css" type="text/css" rel="stylesheet" />
+<link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
+<head>
+<?php
+$pagetitle = "Request";
+$ref='ctarequest';
+require('../resources/php/header.php');
+?>
+
+
 
 </head>
 <style>
@@ -85,9 +99,12 @@ $changeReport = "Some fields are empty or filled incorrectly";
 }
 #request-error-container,#request-sent-container{
 	width:98%;
-	padding:1%;
-	font-size:150%;
+	padding:2%;
+	font-size:120%;
 	border-radius:5px;
+	background-color:#F5F5F5;
+	border:1px solid #E3E3E3;
+	border-radius:2px;
 }
 #request-error-container{
 	color:red;
@@ -181,8 +198,11 @@ legend{
 <?php 
 //if no request has been made
 if(isset($_GET['p']) && $_GET['p']==0) {
-	if(!isset($_POST['request'])){
-	echo "<div id=\"request-not-specified-container\"><p>Hello <strong>$ctaname</strong>, you have not specified your preferences of your choice of property.
+	if(!isset($_POST['request']) && !isset($_POST['change'])){
+		if(empty($client->get_request($ctaid,$cta_name))){
+
+		}
+	echo "<div id=\"request-not-specified-container\"><p><strong>$cta_name</strong>, you have not specified your preferences of your choice of property.
 	Kindly specify now or proceed to <a href=\"$root\">Home page</a></p>
 	</div>";
 	}
@@ -199,11 +219,11 @@ $placeOrChange = ((isset($_GET['p']) && $_GET['p']==0) ? "request":((isset($_GET
 }
 else if(isset($requestplacementReport) && $sent==true){
 	echo "<div id=\"request-sent-container\"><p>$requestplacementReport<br/><a href=\"index.php\">continue</a></p></div>";
-	exit();
+	$general->halt_page();
 }
 else if(isset($changeReport) && $change==true){
 	echo "<div id=\"request-sent-container\"><p>$changeReport<br/><a href=\"index.php\">continue</a></p></div>";
-	exit();
+	$general->halt_page();
 }
 else if(isset($changeReport) && $change==false){
 	echo "<div id=\"request-error-container\"><p>$changeReport</p></div>";
@@ -215,9 +235,10 @@ function setType(value){
 	typeInput.value = value;
 }
 </script>
-<label>Property type :<?php echo (isset($_POST['type'])? $_POST['type'] : isset($rqtype)? $rqtype:'Not specified')?> </label>
+<label>Property type :<?php echo (isset($_POST['type'])? $_POST['type'] : isset($request_type)? $request_type:'Not specified')?> </label>
+<input type="hidden" name="former_type" value="<?php echo $request_type ?>"/>
 <select id="type-select" name="type">
-<option value="All types" ><?php echo ($placeOrChange == "request" ? "Select Property type" : ($placeOrChange == "change" ? "Change" : "Invalid action"))?></option>
+<option value="nil" ><?php echo ($placeOrChange == "request" ? "Select Property type" : ($placeOrChange == "change" ? "Change" : "Invalid action"))?></option>
 <option value="Boys Quater" >Boys Quater</option>
 <option value="Bungalow" >Bungalow</option>
 <option value="Duplex">Duplex</option>
@@ -231,10 +252,10 @@ function setType(value){
 <option value="Warehouse">Warehouse</option>
 </select>
 <label class="input-labels" for="maxprice">Maximum rent:</label>
-<input class="request-input" name="maxprice" type="text" maxlength="10" value="<?php echo (isset($_POST['maxprice'])? $_POST['maxprice'] : isset($rqpricemax)? $rqpricemax:'')
+<input class="request-input" name="maxprice" type="text" maxlength="10" value="<?php echo (isset($_POST['maxprice'])? $_POST['maxprice'] : isset($request_maxprice)? $request_maxprice:'')
 ?>" placeholder="Rent should not be more than..."/>
 <label class="input-labels" for="location">Location:</label>
-<input class="request-input" name="location" type="text" value="<?php echo (isset($_POST['location'])? $_POST['location'] : isset($rqlocation)? $rqlocation:'')
+<input class="request-input" name="location" type="text" value="<?php echo (isset($_POST['location'])? $_POST['location'] : isset($request_location)? $request_location:'')
  ?>"  placeholder="around where?"/>
 <input id="submit-button" name="<?php echo (isset($_GET['p'])? ($_GET['p']==1 ? 'change' : ($_GET['p']==0 ? 'request' : '')): '')?>" 
 	  value="<?php echo (isset($_GET['p'])? ($_GET['p']==1 ? 'change' : ($_GET['p']==0 ? 'request' : '')): '') ?>"

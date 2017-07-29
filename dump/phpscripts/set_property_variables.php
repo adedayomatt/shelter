@@ -34,7 +34,7 @@
     $front_image = (empty($all_images) ? '' : $all_images[0]);
 
 //set the clipbutton
-if($client->check_status()=='active'){
+if($status == 9){
     $clipbutton_id = $id.'clipbtton';
     $ctaid = $client->get_ctaProfile()['ctaid'];
 	$clipbutton = "<a  class=\"options\"  href=\"$root/cta/c.php?p=$id&cb=$ctaid&ref=$page\" id=\"$clipbutton_id\" onclick=\"makeclip('$clipbutton_id',$ctaid,'$page')\"><span class=\"black-icon clip-icon\"></span>".clip($propertyId[$i],$ctaid)."</a>";
@@ -46,8 +46,8 @@ else {
 }
 
 //set the review link
-if($agent->check_status()=='active' && $agent->get_agentProfile()['Business_Name']==$agent_businessname){
-	$review = "<a class=\"review-link\" href=\"$root/manage/property.php?id=$id&action=change\"><span class=\"black-icon edit-icon\"></span></a>";
+if($status == 1 && $Business_Name == $agent_businessname){
+	$review = "<a class=\"review-link\" href=\"$root/manage/property.php?id=$propertyId&action=change\"><span class=\"black-icon edit-icon\"></span></a>";
 }	
 else{
 	$review ="";

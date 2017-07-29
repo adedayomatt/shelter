@@ -49,7 +49,7 @@ if(xmlhttp.readyState == 4){
 		alert("things did not go well:404!");
 	}
 }
-var url = "http://192.168.173.1/shelter/cta/c.php?p="+propertyid+"&cb="+clipper+"&ref="+ref;
+var url = "http://192.168.173.1/shelter/resources/php/ajax_scripts/clip.php?p="+propertyid+"&cb="+clipper+"&ref="+ref;
 xmlhttp.open("GET",url, true);
 xmlhttp.send();
   

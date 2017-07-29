@@ -1,31 +1,21 @@
 <?php 
-$connect = true;
-require('../require/connexion.php'); 
+require('../resources/php/master_script.php'); 
  //confirm if user is still logged in 
 if($status != 1){
-	redirect();
+	$general->redirect('login');
 }
 	
 function checkbox($source,$condition){
 		if($source==$condition){
 			return "checked=\"checked\"";
-		}else{ return null;}
+		}else
+	{ return null;}
 	}
 	
-function checkForImage($dir,$imgName){
-	if(file_exists("../properties/$dir/$imgName")){
-		$image = "<img alt=\"Not Available\" class=\"property-photo\" src=\"../properties/$dir/$imgName\" />
-		";
-		}else
-		{
-			$image = "";
-		}
-		return $image;
-	}
 ?>
 
 <html>
-<?php require('../require/meta-head.html'); ?>
+<?php require('../resources/html/meta-head.html'); ?>
 <head>
 <link href="../css/general.css" type="text/css" rel="stylesheet" />
 <link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
@@ -34,15 +24,15 @@ function checkForImage($dir,$imgName){
 	$pagetitle = "Change Detail";
 	$ref='editproperty';
 $getuserName=true;
-	require('../require/header.php');
+	require('../resources/php/header.php');
 	?>
 <script type="text/javascript" src="../js/editscript.js"></script>
 	</head>
 <body class="pic-background">
 <?php
 // Here handles editing of record
-if(isset($_POST['edit'])){
-	//If it is 0, it means it was no changed because the value is ) by default, therefore, return the old value
+if(isset($_POST['edit']) && $status==1){
+	//If it is 0, it means it was not changed because the value is 0 by default, therefore, return the old value
 function checkRadiochanges($oldvalue,$newvalue){
 		if($newvalue==0){
 			return $oldvalue;
@@ -50,7 +40,7 @@ function checkRadiochanges($oldvalue,$newvalue){
 			return $newvalue;
 		}
 	}
-//If it is 0, it means it was no changed because the value is ) by default, therefore, return the old value
+//If it is 0, it means it was no changed because the value is 0 by default, therefore, return the old value
 	function changefacility($oldvalue,$newvalue){
 	if($newvalue==0){
 		return $oldvalue;
@@ -59,7 +49,11 @@ function checkRadiochanges($oldvalue,$newvalue){
 		return $newvalue;
 	}
 	}
-			$newpm = (isset($_POST['newpm']) ? $_POST['newpm'] : 'No');
+	if(!is_numeric($_POST['rent'])){
+$changeReport = "Invalid amount for rent";
+				$case = 5;
+	}
+else{			$newpm = (isset($_POST['newpm']) ? $_POST['newpm'] : 'No');
 			$newbh = (isset($_POST['newbh']) ? $_POST['newbh'] : 'No');
 			$newwell = (isset($_POST['newwell']) ? $_POST['newwell'] : 'No');
 			$newtiles = (isset($_POST['newtiles']) ? $_POST['newtiles'] : 'No');
@@ -77,17 +71,17 @@ function checkRadiochanges($oldvalue,$newvalue){
 			$update .= "road=".changefacility($_POST['oldRoad'],$_POST['newRoad']).",";
 			$update .= "socialization=".changefacility($_POST['oldSocial'],$_POST['newSocial']).",";
 			$update .= "security=".changefacility($_POST['oldSecurity'],$_POST['newSecurity']).",";
-			$update .= "description='".mysql_real_escape_string($_POST['description'])."',";
+			$update .= "description='".$connection->real_escape_string($_POST['description'])."',";
 			$update .= "last_reviewed=$now";
 			$update .= " WHERE (property_ID='".$_POST['id']."')";
 			//echo $update;
-			$updateQuery = mysql_query($update,$db_connection);
-			if($updateQuery){ 
-				if(mysql_affected_rows($db_connection)==1){
+			$updateQuery = $db->query_object($update);
+			if(!$connection->error){ 
+				if($connection->affected_rows==1){
 					$changeReport = "Changes saved successfully";
 					$case = 1;
 				}
-				else if(mysql_affected_rows($db_connection)>1){
+				else if($connection->affected_rows>1){
 					$changeReport = "Oops!, Something went wrong";
 					$case = 2;
 				}
@@ -100,19 +94,21 @@ function checkRadiochanges($oldvalue,$newvalue){
 				$changeReport = "Changes could not be saved due to some errors";
 				$case = 4;
 			}
+}		
 
 }
 ?>
 	
 <?php
-//Here handles fetching of the records on page load
-	if(isset($_GET['action'])){
+/**Here handles fetching of the records on page load. the agent token stored in the cookies is verified with the token of
+**of agent that uploaded the property**/
+	if(isset($_GET['action']) && isset($_GET['agent']) && isset($_GET['agent']) && $_GET['agent'] == $_COOKIE['user_agent']){
 		if(isset($_GET['id']) && !empty($_GET['id'])){
 				$getformerdetail = "SELECT * FROM properties WHERE (property_ID = '".$_GET['id']."' AND uploadby = '$profile_name')";
-				$getquery = mysql_query($getformerdetail);
-				if($getquery){
-					if(mysql_affected_rows($db_connection)==1){
-					while($detail = mysql_fetch_array($getquery,MYSQL_ASSOC)){
+				$getquery = $db->query_object($getformerdetail);
+				if(!$connection->error){
+					if($connection->affected_rows==1){
+					while($detail = $getquery->fetch_array(MYSQLI_ASSOC)){
 						$editdir = $detail['directory'];
 						$editid = $detail['property_ID'];
 						$edittype = $detail['type'];
@@ -143,42 +139,54 @@ function checkRadiochanges($oldvalue,$newvalue){
 		}
 	}
 	else{
-		header('location: index.php');
-		mysql_close($db_connection);
-		exit();
+		$general->redirect('manage');	
 	}
 	
 if(isset($fetchReport)){
-		echo "<p align=\"center\">$fetchReport</p>";
-		mysql_close($db_connection);
-		exit();
+	?>
+	<div class="operation-report-container" style="text-align:center; margin-top:10%"><?php echo $fetchReport ?></div>
+	<?php
+		$general->halt_page();
 	}
 
-	
+	function checkForImage($dir,$imgName){
+	if(file_exists("../properties/$dir/$imgName")){
+		$image = "<img alt=\"Not Available\" class=\"property-photo\" src=\"../properties/$dir/$imgName\" />
+		";
+		}else
+		{
+			$image = "";
+		}
+		return $image;
+	}
+
 //Get all the available images
 $lastImage = 0;
 $newimage = 1;
 $allImages = "";
-for($image = 1; $image<=10; $image++){
-if(checkForImage($editdir,$editid."_0$image.png") != ""){
-	$allImages .= checkForImage($editdir,$editid."_0$image.png");
-	$lastImage = $image;
-	$newimage = $lastImage+1;
-}
-}
+$allImages_array = $general->get_images("../properties/$editdir");
+$lastImage = count($allImages_array);
+$newimage = $lastImage+1;
 
 	//here handles upload of photo
 if(isset($_FILES['photo'])){
-	$allowed = array ('image/pjpeg','image/jpeg', 'image/JPG','image/X-PNG', 'image/PNG','image/png', 'image/x-png');
+$max_upload = upload_config::$max_photo;
+
+	if($lastImage >= $max_upload){
+$photoupload_report = "You have reached the limit of $max_upload photos!";
+$image_upload_status =0;
+	}
+else{
 $mb = ($_FILES['photo']['size'])/1000000;
-if(in_array(($_FILES['photo']['type']),$allowed)){
-	if (move_uploaded_file ($_FILES['photo']['tmp_name'],"../properties/$editdir/$editid"."_0$newimage".".png")) {
+if($general->is_upload_image(($_FILES['photo']['type']))=='clean'){
+$format = '.'.substr($_FILES['photo']['type'],1+strpos($_FILES['photo']['type'],'/'));
+	if (move_uploaded_file ($_FILES['photo']['tmp_name'],"../properties/$editdir/$editid"."_0$newimage".$format)) {
 	$photoupload_report = " One new Photo added successfully";
 	$image_upload_status =1;
 	//update the last reviewed
-	mysql_query("UPDATE properties SET last_reviewed = $now WHERE property_ID= '$editid'");
-	//add the new image 
-	$allImages .= checkForImage($editdir,$editid."_0$newimage.png");
+	$db->query_object("UPDATE properties SET last_reviewed = $now WHERE property_ID= '$editid'");
+	//Rescan and get all the images again so that the new image is included 
+	$allImages_array = $general->get_images("../properties/$editdir");
 }
 else{
 	$photoupload_report = "upload unsuccesful try again: ".$_FILES['photo']['error'];
@@ -188,6 +196,7 @@ else{
 else{
 	$photoupload_report = "Unsupported file format";
 	$image_upload_status=0;
+}
 }
 }
 
@@ -224,20 +233,24 @@ echo "<div style=\"font-size:150%\" class=\"$class\"><span class=\"black-icon $i
   </div>
 <div>
 <div><span class="black-icon eye-icon"></span><?php echo $views ?> views</div>
-<div class="time">Last reviewed : <?php echo (Timestamp($LR)=='sometime ago' ? "<span style=\"color:red\">Not reviewed yet</span>" : Timestamp($LR)) ?></div>
+<div class="time">Last reviewed : <?php echo ($general->since($LR)=='invalid time' ? "<span style=\"color:red\">Not reviewed yet</span>" : $general->since($LR)) ?></div>
 </div>
 
 <div id="images-area">
 <?php 
 //if there is no any photo
-if($allImages == ""){
+if(count($allImages_array)==0){
 echo "<div style=\"border:1px solid #e3e3e3; padding:2%;text-align:center\">
 <p style=\"color:red\"><span class=\"black-icon warning-icon\"></span>You have not added any photo to this pproperty</p>
 <p style=\"color:grey\">Adding photo to your properties impress clients more and give them clue on what the property looks like.</p>
 </div>";
 }
 else{
-echo $allImages;
+	foreach($allImages_array as $photo){
+	?>
+<img alt="<?php echo $editid.' image' ?>" class="property-photo" src="<?php echo $photo ?>" />
+<?php
+	}
 }
 ?>	
 <div>
@@ -275,7 +288,7 @@ echo "<div style=\"width:60%; color:red;  margin:1%; padding:1%; border:1px soli
 
 <div class="edit-box-container">
 <p class="stay-on-a-line">Rent: <?php echo number_format($editrent)?> <span id="editrent_link" class="edit-link"><span class="black-icon edit-icon"></span></span></p>
-<div class ="edit-box" id="editrent_box"><input placeholder="Rent" name="rent" type="number" value="<?php echo $editrent ?>"/></div>
+<div class ="edit-box" id="editrent_box"><input placeholder="Rent" name="rent" type="number" value="<?php echo $editrent ?>" style="padding:7px;"/></div>
 </div>
 
 <div class="edit-box-container">
@@ -429,7 +442,6 @@ echo "<div style=\"width:60%; color:red;  margin:1%; padding:1%; border:1px soli
  </div>
 <div>
 <?php 
-mysql_close($db_connection);
-require('../require/footer.html'); ?></div>
+require('../resources/php/footer.php'); ?></div>
 </body>
 </html>

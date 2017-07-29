@@ -1,20 +1,7 @@
 <?php 
-$connect = true;
-require('../require/connexion.php'); ?>
-
-<?php  
-function checkfollow($follower,$following){
-$getfollows = mysql_query("SELECT * FROM follow WHERE (follower='$follower' AND following='$following')");
-	if(mysql_num_rows($getfollows)>=1){
-		return 'positive';
-	}
-	else{
-	return 'negative';	
-	}
-}
-?>
+require('../resources/php/master_script.php'); ?>
 <html>
-<?php require('../require/meta-head.html'); ?>
+<?php require('../resources/html/meta-head.html'); ?>
 <link href="../css/general.css" type="text/css" rel="stylesheet" />
 <link href="../css/profile_styles.css" type="text/css" rel="stylesheet" />
 <link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
@@ -22,13 +9,12 @@ $getfollows = mysql_query("SELECT * FROM follow WHERE (follower='$follower' AND 
 <head>
 <?php 
 		$pagetitle = $Aid;
-		$getuserName = true;
 		$ref = "profile_page";
-		require('../require/header.php');
+		require('../resources/php/header.php');
 		//get the agent with $key(from index.php) detail
-$getprofile = mysql_query("SELECT * FROM profiles WHERE ID='".$key."'");
-if($getprofile and mysql_num_rows($getprofile)==1){
-while($user = mysql_fetch_array($getprofile,MYSQL_ASSOC)){
+$getprofile = $db->query_object("SELECT * FROM profiles WHERE ID=$key");
+if(is_object($getprofile) and $getprofile->num_rows ==1){
+while($user = $getprofile->fetch_array(MYSQLI_ASSOC)){
 		$ID = $user['ID'];
 		$BizName = $user['Business_Name'];
 		$OAddress = $user['Office_Address'];
@@ -44,32 +30,21 @@ while($user = mysql_fetch_array($getprofile,MYSQL_ASSOC)){
 	}
 	else{
 	echo 'Profile was unable to reach';
-	exit();
+	$general->halt_page();
 }	
-?>
-<?php
-/*theis javascript source url is like this because this profile.php is dependent on another which
-is outside this directory, since it'll be included, the url of followAjax has to be relative to the 
-parent file where this would be included
-*/
-?>
-<script src="../js/profile.js" type="text/javascript"></script>
-<script src="../js/propertybox.js" type="text/javascript"></script>
 
-<?php
 //if current user is logged in as an agen or a client
 $followup = '';
 $sendmessage ='';
 $editprofile='';
-$followStatus = '';
 if($status==1 || $status==9){
 	//check if conversation has existed between the users 
+	$myid = ($status==1 ? $agentId : $ctaid);
 $possible1 = $myid + $key;
-$mutual = mysql_query("SELECT conversationid FROM messagelinker WHERE (conversationid='$possible1')");
+$mutual = $db->query_object("SELECT conversationid FROM messagelinker WHERE (conversationid=$possible1)");
 //if conversation has exited before, get the conversationid and take as the token
-if(mysql_num_rows($mutual) ==1){
-	$x = mysql_fetch_array($mutual,MYSQL_ASSOC);
-	$token = $x['conversationid'];
+if($mutual->num_rows ==1){
+	$token = $mutual->fetch_array(MYSQLI_ASSOC)['conversationid'];
 }
 //if there exist any conversation before, create a conversation id
 else{
@@ -81,55 +56,29 @@ switch($status){
 case 1:
 	if($BizName != $Business_Name)
 	{
-		if (checkfollow($Business_Name,$BizName)=='positive'){
-			$followStatus = 'yes';
-			$text = 'unfollow';
-			$f = 'unfollow-button';
-			$ficon = 'white-icon unfollow-icon';
-		}
-	else if (checkfollow($Business_Name,$BizName)=='negative'){
-		$followStatus = 'no';
-		$text = 'follow';
-	   $f = 'follow-button';
-	   $ficon = 'black-icon follow-icon';	
-		}
 	$sendmessage = "<a href=\"$root/messages/compose.php?cv=".$token."&i=$Business_Name&rcpt=$key\"><button class=\"profile-buttons\" id=\"sendmessage-button\"><i class=\"black-icon message-icon\"></i>send message</button></a>";
-	$followup = "<button class=\"$f\" id=\"follow-button\" onclick=\"follow('follow-button','$Business_Name','$profile_name','$BizName','A4A')\"><i class=\"$ficon\"></i>  $text</button>";
+	$followup = $agent->follow($agentId, $Business_Name,$profile_name,$key,$BN,$Aid,'A4A');
 	}
 	else{
-
 	$editprofile = "<a href=\"$root/manage/account.php\"><button class=\"profile-buttons\" id=\"editprofile-button\"><i class=\"black-icon edit-icon\"></i> Edit profile</button></a>";
 	}
 break;
 //if a client is logged in
-	case 9:
-if (checkfollow($ctaname,$BizName)=='positive'){
-			$followStatus = 'yes';
-			$text = 'unfollow';
-			$f = 'unfollow-button';
-			$ficon = 'white-icon unfollow-icon';
-		}
-	else if (checkfollow($ctaname,$BizName)=='negative'){
-		$followStatus = 'no';
-		$text = 'follow';
-	$f = 'follow-button';
-	$ficon = 'black-icon follow-icon';	
-		}
-		
-$sendmessage = "<a href=\"$root/messages/compose.php?cv=".$token."&i=$ctaname&rcpt=$key\"><button class=\"profile-buttons\" id=\"sendmessage-button\"><span class=\"black-icon message-icon\"></span>message</button></a>";
-	$followup = "<button class=\"$f\" id=\"follow-button\" onclick=\"follow('follow-button','$ctaname','$ctaid','$BizName','C4A')\"><span class=\"$ficon\"></span>  $text</button>";
-	break;
+	case 9:	
+$sendmessage = "<a href=\"$root/messages/compose.php?cv=".$token."&i=$cta_name&rcpt=$key\"><button class=\"profile-buttons\" id=\"sendmessage-button\"><span class=\"black-icon message-icon\"></span>message</button></a>";
+	$followup = $agent->follow($ctaid, $cta_name,null,$key,$BN,$Aid,'C4A');
+		break;
 //for visitors
 default:
 $sendmessage = "<a href=\"$root/cta/checkin.php?_rdr=1\"><button class=\"profile-buttons\" id=\"sendmessage-button\"><span class=\"black-icon message-icon\"></span>message</button></a>";
-	$followup =  "<a href=\"$root/cta/checkin.php?_rdr=1\"><button class=\"follow-button\" id=\"follow-button\"><i class=\"black-icon follow-icon\"></i> follow</button></a>";
+$followup =  "<a href=\"$root/cta/checkin.php?_rdr=1\"><button class=\"follow-button\" id=\"follow-button\"><i class=\"black-icon follow-icon\"></i> follow</button></a>";
 	break;
 }
 ?>
 
 </head>
 <body class="no-pic-background">
-<?php require('../require/sidebar.php') ?>
+<?php require('../resources/php/sidebar.php') ?>
 <div class="profile-main-content">
 
 <div id="profile-wrapper">
@@ -137,23 +86,11 @@ $sendmessage = "<a href=\"$root/cta/checkin.php?_rdr=1\"><button class=\"profile
 <?php echo "<h1 id=\"avatar\">".substr($BizName,0,1)."</h1> "?>
 <div id="BizName-and-buttons">
 <?php
-echo "<h3 id=\"bizname\" >$BizName</h3>";
-if($followStatus=='yes'){
-	//echo "<div class=\"following-status\" id=\"following-status\" style=\"font-weight:normal; font-size:80%;color:grey;\">you are currently following $BizName</div>
-	echo "<div class=\"follow-message-container\">".$followup.$sendmessage."</div>";
-}
-else if ($followStatus=='no'){
-	//echo "<div class=\"following-status\" id=\"following-status\"  style=\"font-weight:normal; font-size:80%;color:grey;\">you are currently <i>NOT</i> following $BizName </div>
-	echo "<div class=\"follow-message-container\">".$followup.$sendmessage."</div>";
-}
-else{
+echo "<h3 id=\"bizname\" >$BizName $followup</h3>";
 	//echo "<div class=\"following-status\" id=\"following-status\" style=\"font-weight:normal; font-size:80%;color:grey;\"><a href=\"login\">login</a> to follow $BizName </div>
-	echo "<div class=\"follow-message-container\">".$followup.$sendmessage."</div>";
-}
+	echo "<div class=\"follow-message-container\">".$sendmessage."</div>";
 echo $editprofile;
-if($BizName != @$Business_Name){
-	echo "<p id=\"follow-status\">".($followStatus=='yes' ? "You are currently following $BizName" : "Follow $BizName to see their latest properties in your feed")."</p>";
-}
+
 ?>
  </div>
 </div>
@@ -166,20 +103,15 @@ if($BizName != @$Business_Name){
 </div>
 <h4 class="container-headers">STATS</h4>
 <div id="stat-wrapper">
-<?php
-$totalUplpoads = mysql_num_rows(mysql_query("SELECT property_ID FROM  properties WHERE (uploadby='$Aid')"));
-	$clientFollower = mysql_num_rows(mysql_query("SELECT * FROM follow WHERE following='$BizName' AND followtype='C4A'"));	
-	$agentFollower = mysql_num_rows(mysql_query("SELECT * FROM follow WHERE following='$BizName' AND followtype='A4A'"));
-	$Following = mysql_num_rows(mysql_query("SELECT * FROM follow WHERE follower='$BizName'"));	
-?>
+
 
 <div class="all-corners-border" id="stats-container">
 <ul class="no-padding-ul">
-<li class="agent-stats-list" style="display:block">Shelter agent since: <?php echo Timestamp($regDate)?> </li>
-<li class="agent-stats-list" >Total Uploads: <?php echo $totalUplpoads ?> </li>
-<li class="agent-stats-list" >Follower [Clients]: <?php echo $clientFollower ?> </li>
-<li class="agent-stats-list" >Follower [Agents]: <?php echo $agentFollower ?> </li>
-<li class="agent-stats-list" >Following: <?php echo $Following ?> </li>
+<li class="agent-stats-list" style="display:block">Shelter agent since: <?php echo $general->since($regDate)?> </li>
+<li class="agent-stats-list" >Total Uploads: <?php  echo count($data->get_uploads($ID,$Agent_Id)) ?> </li>
+<li class="agent-stats-list" >Follower [Clients]: <?php echo count($data->client_followers($ID)) ?> </li>
+<li class="agent-stats-list" >Follower [Agents]: <?php echo count($data->agent_followers($ID)) ?> </li>
+<li class="agent-stats-list" >Following: <?php echo count($data->agent_followings($ID)) ?> </li>
 </ul>
 </div>
 </div>
@@ -187,80 +119,25 @@ $totalUplpoads = mysql_num_rows(mysql_query("SELECT property_ID FROM  properties
 <h4 class="container-headers">RECENT UPLOADS</h4>
 <div id="recent-uploads">
 <?php
-$max = 7;
-if(isset($_GET['next']) && $_GET['next']>0){
-	$start = $_GET['next'];
-	$end = $_GET['next'] + $max;
-}
- else{
-	 $start = 0;
-	 $end = $max;
- }
-$x = $start+1;
- $y = $start;
- 
-$totalproperties = mysql_num_rows(mysql_query("SELECT property_ID FROM properties WHERE (uploadby='$Aid')"));
-$fetchproperties = mysql_query("SELECT property_ID,directory,type,location,rent,min_payment,bath,toilet,description,uploadby,date_uploaded,timestamp,views,last_reviewed,status FROM
-                               properties WHERE (uploadby='$Aid')ORDER BY date_uploaded DESC LIMIT $start,$end");
-//if there is any record fetched
-if($fetchproperties){
-	
-	$count=0;
-	while($property = mysql_fetch_array($fetchproperties,MYSQL_ASSOC)){
-	$propertyId[$count] = $property['property_ID'];
-	$propertydir[$count] = $property['directory'];
-	$type[$count] = $property['type'];
-	$location[$count] = $property['location'];
-	$rent[$count] = $property['rent'];
-	$min_payment[$count] = $property['min_payment'];
-	$bath[$count] = $property['bath'];
-	$toilet[$count] = $property['toilet'];
-	$description[$count] = $property['description'];
-	$date_uploaded[$count] = $property['date_uploaded'];
-	$uploadby[$count] = $property['uploadby'];
-	$howlong[$count] = $property['timestamp'];
-	$views[$count] = $property['views'];
-	$lastReviewed[$count] = $property['last_reviewed'];
-	$avail[$count] = $property['status'];
-	$count++;
-	$y++;
-//last value of count will eventually equals to the total records fetched.
-		}
-	$ref ='profile_page';
-require("../require/propertyboxes.php");
-if(!empty($propertyId)){
-	echo "<p style=\"display:block\">showing $x - $y of $totalproperties</p>";
-echo "<div class=\"next-prev-container\">";
-	if(isset($_GET['next']) && $_GET['next'] > 0 ){
-		echo "<a class=\"previous\" href=\"?next=".($y-2*$max)."\" >« prev</a>";
-	}
-if( !isset($_GET['next']) || (isset($_GET['next']) && ($_GET['next'] < ($totalproperties-$max))) ){
-	echo "<a class=\"next\" href=\"?next=$y\" >next »</a>";
-}	
-echo "</div>";
-}
-else{
-if($start==0){
-	if($status == 1 && $Business_Name == $BizName){
-		echo "<div class=\"no-property\" align=\"center\"><span class=\"black-icon warning-icon\"></span>You have not uploaded any property 
-		<a class=\"skyblue-inline-block-link\" href=\"$root/upload\"><span class=\"white-icon outbox-icon\"></span>upload now</a>
-		</div>";
+
+   $final_property_query = property::$property_query." WHERE agent.User_Id = '$Agent_Id'";
+   if($db->query_object($final_property_query)->num_rows ==0){
+if($status == 1 && $Business_Name == $BizName){
+	?>
+	<div class="no-property" align="center"><span class="black-icon warning-icon"></span>You have not uploaded any property 
+	<a class="skyblue-inline-block-link" href="<?php echo $root.'/upload' ?>"><span class="white-icon outbox-icon"></span>upload now</a>
+		</div>
+	<?php
 	}
 	else{
-		echo "<div class=\"no-property\" align=\"center\"><span class=\"black-icon warning-icon\"></span>$BizName have not uploaded any property</div>";
+		?>
+	<div class="no-property" align="center"><span class="black-icon warning-icon\"></span><?php echo $BizName ?> have not uploaded any property</div>
+	<?php
 	}
-	
-}
-else if($start>0){
-	echo "<div class=\"no-property\" align=\"center\">There are no more properties by $BizName</div>";
-	}
-}
-	}
-
-else{
-	echo "<div class=\"no-property\" align=\"center\"><b>An error occured!!</b></div>";
-			}
-
+   }
+   else{
+   require('../resources/php/property_display.php');
+   }
 
 ?>
 </div>
@@ -268,48 +145,63 @@ else{
 <div id="bottom-links-container">
 <?php
 if(($status ==1 && $BizName != $Business_Name) || $status !=1){
-	echo "<a class=\"bottom-links report\" href=\"../signup\"><span class=\"white-icon flag-icon\"></span>Report this agent</a>";	
+	//links for visitors,client and other agents aside this one
+	?>
+<a class="bottom-links report" href="../signup"><span class="white-icon flag-icon"></span>Report this agent</a>	
+<?php
 }
 if($status!=1){
-	echo "<a class=\"bottom-links create\" href=\"../signup\">create your own account</a>";
+	//links for non agent  -  either visitor or client
+	?>
+	<a class="bottom-links create" href="../signup">create your own account</a>
+	<?php
 }
 if($status == 1 && $BizName == $Business_Name){
-	echo "<a class=\"bottom-links logout\" href=\"../logout\">Logout</a>";
+	//link for the owner
+	?>
+<a class="bottom-links logout" href="../logout">Logout</a>
+	<?php
 }
 ?>
-
 </div>
 
-<div id="other-agents-wrapper">
 <h4 class="container-headers">OTHER AGENTS</h4>
+<div id="other-agents-wrapper">
 <div id="other-agents-container">
 <?php 
 /*i want to get other agents that are in the same locality as this one
 //$getRelatedAgents = mysql_query("SELECT * FROM profiles WHERE(Office_Address LIKE '%$OAddress%')");*/
-$getRelatedAgents = mysql_query("SELECT * FROM profiles LIMIT 10");
-if(mysql_num_rows($getRelatedAgents)==0){
-	echo "<p style=\"font-size:120%; color:red;\">No agent is found around $BizName</p>
-		  <p>You may <a href=\"../agents\">check other agents</as></p>";
+$get_related_agents = $db->query_object("SELECT * FROM profiles WHERE(ID != $ID) LIMIT 10");
+if($get_related_agents->num_rows==0){
+	?>
+<p style="font-size:120%; color:red;">No agent is found around <?php echo $BizName ?></p>
+ <p>You may <a href="../agents">check other agents</a></p>
 	
+	<?php
 }
 else{
-	echo "<ul class=\"no-padding-ul\">";
-	while($otherAgent = mysql_fetch_array($getRelatedAgents,MYSQL_ASSOC)){
-		echo "<li class=\"other-agents-list\"><a class=\"list-link\" href=\"../".$otherAgent['User_ID']."\">".$otherAgent['Business_Name']."</a>
-		<p class=\"other-agents-address\">".$otherAgent['Office_Address']."</p></li>";
-	}
-	
-echo "</ul>";
+	?>
+	<ul class="no-padding-ul">
+<?php
+	while($otherAgent = $get_related_agents->fetch_array(MYSQLI_ASSOC)){
+		?>
+<li class="other-agents-list"><a class="list-link" href="../<?php echo $otherAgent['User_ID'] ?>"><?php echo $otherAgent['Business_Name'] ?></a>
+<span style=""><?php echo ($status==1 ? $agent->follow($ID,$BizName,$Agent_Id,$otherAgent['ID'],$otherAgent['Business_Name'],$otherAgent['User_ID'],'A4A') : $agent->follow($ctaid,$cta_name,null,$otherAgent['ID'],$otherAgent['Business_Name'],$otherAgent['User_ID'],'C4A')) ?></span>
+<p class="other-agents-address"><?php echo $otherAgent['Office_Address']  ?> </p></li>
+<?php 
+}
+	?>
+</ul>
+<?php
 }
 ?>
 <div>
-<a class="skyblue-block-link" style=" display:block;text-align:center" href="../agents">see all agents</a>
+<a class="skyblue-inline-block-link" style=" display:block;text-align:center" href="../agents">see all agents</a>
 </div>
 </div>
 </div>
+<?php require('../resources/php/footer.php'); ?>
 
 </div>
-
 </body>
-<?php mysql_close($db_connection); ?>
 </html>

@@ -305,16 +305,25 @@ div.fixed-rhs-content{
 div.content-before-footer{
 	min-height:500px;
 }
-.follow-button,.unfollow-button{
-	padding:2%;
-	border:1px solid #E3E3E3;
-	border-radius:5px;
+.clip-button,.unclip-button,.waiting-clip{
+	padding-left: 20px; 
+	text-align: center;
+	color:black;
+	text-decoration: none;
+	font-size: 14px;
 }
-.follow-button:hover,.unfollow-button:hover{
-	font-size:105%;
+.clip-button:hover,.unclip-button:hover,.waiting-clip:hover{
+	text-decoration: none;
 }
 
-	
+.clip-disabled{
+	cursor:not-allowed;
+	color:rgba(0,0,0,0.3);
+}
+.waiting-clip{
+	background: white url('../resrc/gifs/lazy-loading.gif') center no-repeat;
+}
+
 /*Colors*/
 .site-color-background{
 	background-color:purple;
@@ -337,11 +346,7 @@ div.content-before-footer{
 	padding:1%;
 }
 .follow-button,.unfollow-button{
-	cursor:pointer;
-	margin-top:5px;
-	text-align:center;
-	margin-right:5px;
-	border:2px solid #F5F5F5;
+	
 }
 .follow-button{
 	background-color:white;
@@ -351,6 +356,25 @@ div.content-before-footer{
 	background-color:#0d47a1;
 	color:white;
 }
+.follow-button,.unfollow-button,.waiting-follow-button{
+	cursor:pointer;
+	margin-top:5px;
+	text-align:center;
+	margin-right:5px;
+	border:2px solid #F5F5F5;
+	padding:5px 15px 5px 15px;
+	border:1px solid #E3E3E3;
+	border-radius:5px;
+	font-size: 15px;
+}
+.follow-button:hover,.unfollow-button:hover,.waiting-follow-button:hover{
+	font-size:17px;
+}
+
+.waiting-follow-button{
+	background: white url('../resrc/gifs/lazy-loading.gif') center no-repeat;
+}
+
 
 .time{
 	color:grey;
@@ -588,10 +612,10 @@ background-position: -240px 0px;
 #flat-icon,#sc-icon,#wing-icon,#others-icon{
 background-position: 0px -24px;
 }
-.follow-icon{
+.follow-icon,.plus-icon{
 	background-position: 0px -96px;
 }
-.unfollow-icon{
+.unfollow-icon,.minus-icon{
 	background-position: -24px -96px;
 }
 .user-icon{
@@ -615,7 +639,7 @@ background-position: 0px -24px;
 .see-more-icon{
 	background-position: -120px -72px;
 }
-.clip-icon{
+.love-icon{
 	background-position: -96px 0px;
 }
 .report-icon{
@@ -675,6 +699,9 @@ background-position: 0px -24px;
 .upload-icon{
 background-position: -288px -144px;
 }
+.not-allowed-icon{
+background-position: -216px -96px;	
+}
 /*smartphone*/
 @media only screen and (max-width: 800px){
 #sidebar-wrapper{
@@ -703,7 +730,7 @@ background-position: -288px -144px;
 @media only screen and (min-device-width: 800px){
 	/*In Tab or desktop, width should no be minimized less than 300px, overflow the body otherwise*/
 	html{
-		min-width:300px;
+		min-width:500px;
 	}
 	.cta-expiry-notice{
 			display:none;

@@ -1,37 +1,32 @@
 <?php session_start();
 
-$connect = true;
-require('../require/connexion.php');
-//create object for classes
-$property_obj = new property();
-$master_class = new general();
-$upload_config = new upload_config();
+require('../resources/php/master_script.php');
 
 //check if user is logged in
 if($status != 1){
-		$master_class->redirect('login');
+		$general->redirect('login');
 	}
 	
 if(isset($_SESSION['id']) && isset($_SESSION['directory']) && $_GET['ptk']==$_COOKIE['PHPSESSID'] && $_GET['sHptk']==SHA1($_COOKIE['PHPSESSID'])){
+//The relative url of the uploaded is in this session variable already
 $imgurl = $_SESSION['directory'];
 	$pid = $_SESSION['id'];
 }
 else{
-	mysql_close($db_connection);
-	header("location: $root/upload");
-	exit();
+	$general->redirect('upload');
 }
-
+$max_upload = upload_config::$max_photo;
 //This handles photo upload
 if(isset($_FILES['photo'])){
-	if($_POST['imgIndex'] > 10){
-$photoUploadReport = "You have reached the limit of 10 photos!";
+
+	if($_POST['imgIndex'] > $max_upload){
+$photoUploadReport = "You have reached the limit of $max_upload photos!";
 	}
 	else{
 $mb = ($_FILES['photo']['size'])/1000000;
 
-//The function is_upload_image() is in connexion.php
-if($master_class->is_upload_image($_FILES['photo']['type']) == 'clean'){
+//The function is_upload_image() is in master_script.php
+if($general->is_upload_image($_FILES['photo']['type']) == 'clean'){
 	$format = '.'.substr($_FILES['photo']['type'],1+strpos($_FILES['photo']['type'],'/'));
 	if (!move_uploaded_file ($_FILES['photo']['tmp_name'],$imgurl."/".$_POST['picname'].$format)) {
 	$photoUploadReport = 'upload unsuccesful try again: '.$_FILES['photo']['error'];
@@ -50,7 +45,7 @@ else{
 }
  ?>
 <html>
-<?php require('../require/meta-head.html'); ?>
+<?php require('../resources/html/meta-head.html'); ?>
 <link href="../css/general.css" type="text/css" rel="stylesheet" />
 <link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
 <link href="../css/upload_styles.css" type="text/css" rel="stylesheet" />
@@ -58,7 +53,7 @@ else{
 <head>
 	<title>Shelter | Add Photo</title>
 <?php
-require('../require/plain-header.html');
+require('../resources/html/plain-header.html');
 
 ?>
 </head>
@@ -70,11 +65,11 @@ if (isset($_GET['cmpLt']) && $_GET['cmpLt']==MD5('OK')){
 	session_unset();
 	session_destroy();
 	setcookie('PHPSESSID',"",time()-60,"/","",0);
-echo "<div class=\"upload-section\" style=\"text-align:center\">
-<h3 style=\"font-size:200%;font-weight:normal\">Upload complete!</h3>
-<p>View property <a href=\"$imgurl\">here</a></p>
-</div>";
-	exit();
+echo "<div class=\"upload-section\" style=\"text-align:center; margin-top:10%\">
+		<h3 style=\"font-size:200%;font-weight:normal\">Upload complete!</h3>
+		<p>View property <a href=\"$imgurl\">here</a></p>
+		</div>";
+	$general->halt_page();
 }
 ?>
 <div class="add-photo-section">
@@ -86,9 +81,9 @@ echo "<div class=\"upload-section\" style=\"text-align:center\">
 	<?php
 	$uploadedPhotos = "";
 //get_images() returns an array of all the images in the directory
-		$existedImages_array = $master_class->get_images($imgurl);
+		$existedImages_array = $general->get_images($imgurl);
 		foreach($existedImages_array as $img){
-			$uploadedPhotos .= "<img class=\"uploaded-photos\" alt=\"Photo_01\" src=\"$img\" />";
+			$uploadedPhotos .= "<img class=\"uploaded-photos\" alt=\"$pid image\" src=\"$img\" />";
 			}
 	//count images in the array
 	$existedImages_no = count($existedImages_array);
@@ -98,16 +93,18 @@ echo "<div class=\"upload-section\" style=\"text-align:center\">
 	echo "<div class=\"upload-error-wrapper\" style=\"color:red\">$photoUploadReport</div>";
 }
 
-echo "<p>$existedImages_no photos uploaded  (Max: ".$upload_config->max_photo." photos)</p>";
+echo "<p>$existedImages_no photos uploaded  (Max: $max_upload photos)</p>";
 echo $uploadedPhotos;
 
-if($existedImages_no==$upload_config->max_photo){
-	echo "<style>
+if($existedImages_no==$max_upload){
+	?>
+<style>
 	#add-more-photo-area,#add-more-photo-area>form>input{
 		cursor:not-allowed;
 		opacity:0.4;
 	}
-	</style>";
+	</style>
+<?php
 }
 ?>
 
@@ -128,7 +125,7 @@ if($existedImages_no > 0){
 </div>
 
 </div>
-<a href="../manage/property.php?id=<?php echo $_SESSION['id'] ?>&action=change"><span class="black-icon edit-icon"></span>Edit details</a>
+<a href="../manage/property.php?id=<?php echo $pid ?>&action=change"><span class="black-icon edit-icon"></span>Edit details</a>
 <div id="finish-box">
 
 <a  href="<?php echo "?ptk=".$_COOKIE['PHPSESSID']."&cmpLt=".MD5('OK')."&sHptk=".SHA1($_COOKIE['PHPSESSID']) ?>" >
@@ -142,6 +139,6 @@ if($existedImages_no == 0){
 </div>
 </div>
 
-<?php mysql_close($db_connection); ?>
+<?php require('../resources/php/footer.php') ?>
 </body>
 </html>

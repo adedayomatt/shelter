@@ -1,23 +1,15 @@
 <?php session_start();
-$connect = true;
-require('../require/connexion.php');
+require('../resources/php/master_script.php');
 
 //if agent is not logged in want to access this page
 	if($status != 1){
-		redirect();
+		$general->redirect('login');
 	}
 
 //create object for the property class
 $property_obj = new property();
 
-	function status($form_field){
-	if(isset($form_field) AND !empty($form_field)){
-	return $form_field;
-}
-else{
-	return 'No';
-			}
-		}
+
 
 /*
 if upload is submitted
@@ -44,35 +36,37 @@ if(empty($missing)){
 	//Receiving information from the submitted form
 $propertyId = $property_obj->generate_property_id();
 $type = $_POST['type'];
-$location =mysql_real_escape_string(trim(htmlentities($_POST['location'])));
+$location =$connection->real_escape_string(trim(htmlentities($_POST['location'])));
 $rent = $_POST['rent'];
-$min_payment = @$_POST['min_payment'];
-$bath = $_POST['bath'];
-$loo = $_POST['loo'];
-$pmachine = @status($_POST['pmachine']);
-$borehole = @status($_POST['borehole']);
-$well = @status($_POST['well']);
-$tiles = @status($_POST['tiles']);
-$pspace = @status($_POST['pspace']);
+$min_payment = (isset($_POST['min_payment']) ? $_POST['min_payment'] : 'No');
+$bath = (isset($_POST['bath']) ? $_POST['bath'] :'No');
+$loo = (isset($_POST['loo']) ? $_POST['loo'] : 'No') ;
+$pmachine = (isset($_POST['pmachine']) ? $_POST['pmachine'] : 'No' ) ;
+$borehole = (isset($_POST['borehole']) ? $_POST['borehole'] : 'No');
+$well = (isset($_POST['well']) ? $_POST['well'] : 'No');
+$tiles = (isset($_POST['tiles']) ? $_POST['tiles'] : 'No');
+$pspace = (isset($_POST['pspace']) ? $_POST['pspace'] : 'No');
+
 $electricity = $_POST['electricity'];
 $road = $_POST['road'];
 $social = $_POST['social'];
 $security = $_POST['security'];
-$description = mysql_real_escape_string(trim(htmlentities($_POST['description'])));
-$timestamp = $now;
+$description = $connection->real_escape_string(trim(htmlentities($_POST['description'])));
+$timestamp = time();
 $dirName = $propertyId." ".$type." ".$location;
 //replace space with -
+$dirName = trim(str_replace(array(",","-",".")," ",$dirName));
 $dirName = str_replace(" ","-",$dirName);
 
-$upload = "INSERT INTO properties"; 
-$upload .= "(property_ID,directory,type,location,rent,min_payment,bath,toilet,pumping_machine,borehole,well,tiles,parking_space,electricity,road,socialization,security,description,uploadby,date_uploaded,timestamp,status)";
-$upload .="VALUES('$propertyId',trim('$dirName'),'$type','$location',$rent,'$min_payment',$bath,$loo,'$pmachine','$borehole','$well','$tiles','$pspace',$electricity,$road,$social,$security,'$description','$profile_name',NOW(),$timestamp,'available')";
+$uploadQuery = "INSERT INTO properties 
+		(property_ID,directory,type,location,rent,min_payment,bath,toilet,pumping_machine,borehole,well,tiles,parking_space,electricity,road,socialization,security,description,uploadby,date_uploaded,timestamp,status)
+		VALUES('$propertyId','$dirName','$type','$location',$rent,'$min_payment',$bath,$loo,'$pmachine','$borehole','$well','$tiles','$pspace',$electricity,$road,$social,$security,'$description','$profile_name',NOW(),$timestamp,'available')";
 //echo $upload;
-$uploadQuery = mysql_query($upload);
+$upload = $db->query_object($uploadQuery);
 //if record added successfully
-if($uploadQuery){
+if(!$connection->error && $connection->affected_rows == 1){
 	$activityID = uniqid(time());
-@mysql_query("INSERT INTO activities (activityID, action, subject, subject_ID, subject_Username, status,otherlink,timestamp) VALUES('$activityID','upload','$Business_Name','$profile_name','$myid','unseen',trim('$dirName'),$timestamp)");
+$db->query_object("INSERT INTO activities (activityID, action, subject, subject_ID, subject_Username, status,otherlink,timestamp) VALUES('$activityID','upload','$Business_Name','$profile_name','$myid','unseen','$dirName',$timestamp)");
 
 	//create a directory for new property 
 $propertydir = '../properties/'.$dirName;
@@ -81,16 +75,17 @@ $_SESSION['directory'] = $propertydir;
 	$_SESSION['id'] = $propertyId;
 		if(mkdir($propertydir)){
 //This is a prepared statement for a new php file that will be the index of the new directory
-			$prepared = "<?php \$connect = true;
-			require('../../require/connexion.php'); ?>
-			<html>
-			<?php require('../../require/meta-head.html'); ?>
+$prepared = "
+<?php 
+require('../../resources/php/master_script.php'); ?>
+		<html>
+<?php require('../../resources/html/meta-head.html') ?>
 <head>
 <link href=\"../../css/general.css\" type=\"text/css\" rel=\"stylesheet\" />
 <link href=\"../../css/header_styles.css\" type=\"text/css\" rel=\"stylesheet\" />
 <link href=\"../../css/details_styles.css\" type=\"text/css\" rel=\"stylesheet\" />
 <?php \$pagetitle=\"$propertyId - $type for rent\"; 
-require('../../require/header.php') ?>
+require('../../resources/php/header.php') ?>
 <script type=\"text/javascript\" language=\"javascript\" src=\"../../js/detailsscript.js\"></script>
 </head>
 <body class=\"pic-background\">
@@ -113,9 +108,6 @@ else{
 	echo"<script>alert(\"There was an error\"); \"</script>";
 	//window.location=\"http://localhost/shelter/upload
 		}
-		mysql_close($db_connection);
-	
-
 }
 else{
 $uploadError = "<h3 style=\"color:red; font-weight:normal;font-size:150%\">Cannot continue with upload</h3>
@@ -129,7 +121,7 @@ $uploadError .= "</ul>";
  ?>
  <!DOCTYPE html>
 <html>
-<?php require('../require/meta-head.html'); ?>
+<?php require('../resources/html/meta-head.html'); ?>
 <head>
 <link href="../css/general.css" type="text/css" rel="stylesheet" />
 <link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
@@ -138,7 +130,7 @@ $uploadError .= "</ul>";
 <?php
 //$pagetitle = "upload";
 	//$ref = 'upload';
-	require('../require/plain-header.html');
+	require('../resources/html/plain-header.html');
 	
 ?>
 
@@ -239,7 +231,7 @@ window.scrollTo(0,Yoffset);
 	?>
 <fieldset>
 <h2 class="upload-heading">Basic Details</h2>
-
+<p class="instruction">Provide the basic information about the property, all the fields in this section are necessary</p>
 <div class="upload-input-wrapper basic-info">
 <label>Select the property type</label>
 <select name="type">
@@ -259,7 +251,7 @@ window.scrollTo(0,Yoffset);
 </div>
 
 <div class="upload-input-wrapper basic-info">
-<label for="rent">Rent</label><input id="rent-input" name="rent" type="text" placeholder="Actual rent" maxlength="7"/>/annum
+<label for="rent">Rent</label><input id="rent-input" name="rent" type="text" value="<?php echo (isset($_POST['rent']) ? $_POST['rent'] : '') ?>" placeholder="Actual rent" maxlength="7"/> per year
 </div>
 
 <div class="upload-input-wrapper basic-info">
@@ -267,7 +259,7 @@ window.scrollTo(0,Yoffset);
 </div>
 
 <div class="upload-input-wrapper basic-info">
-<label for="location">Location </label><input id="location-input" name="location" type="text" size="50" placeholder="Address of the property"/><br/><br/>
+<label for="location">Location </label><input id="location-input" name="location" type="text" size="50" value="<?php echo (isset($_POST['location']) ? $_POST['location'] : '') ?>" placeholder="Address of the property"/><br/><br/>
 </div>
 
 </fieldset>

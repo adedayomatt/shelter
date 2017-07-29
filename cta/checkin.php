@@ -1,7 +1,8 @@
  <?php 
-$connect = true;
-require('../require/connexion.php'); 
+require('../resources/php/master_script.php'); 
 
+if($status==9){
+}
 //if attempt to checkin
 if(isset($_POST['checkin'])){
 //if either or both of the name and password field is empty
@@ -11,35 +12,37 @@ if(empty($_POST['checkinName']) || empty($_POST['checkinPassword']) ){
 }
 //if either or both of the name and password field is not empty
 else{
-$user = mysql_real_escape_string($_POST['checkinName']);
+$user = htmlentities(trim($_POST['checkinName']));
 $pass = $_POST['checkinPassword'];
 
 //if user want to checkin with number...
 if(is_numeric($user)){
-	$getCTA = "SELECT ctaid, phone,request,password,expiryTime FROM cta WHERE (phone=$user AND password='$pass')";
+	$getCTAquery = "SELECT ctaid, phone,request,password,expiryTime,token FROM cta WHERE (phone=$user AND password='$pass')";
 }
 //...or name
 else{
-	$getCTA = "SELECT ctaid,name,request,password,expiryTime FROM cta WHERE (name='$user' AND password='$pass')";
+	$getCTAquery = "SELECT ctaid,name,request,password,expiryTime,token FROM cta WHERE (name='$user' AND password='$pass')";
 }
-$getCTAquery = @mysql_query($getCTA);
+$getCTA = $db->query_object($getCTAquery);
 //if query is correct
-if($getCTAquery && mysql_num_rows($getCTAquery)==1){
+if(is_object($getCTA)){
 //if a match is found
-	$ctaid = @mysql_fetch_array($getCTAquery,MYSQL_ASSOC);
-	$id = $ctaid['ctaid'];
-	$name = $ctaid['name'];
-	$requeststatus = $ctaid['request'];
-	$CTAexpires = $ctaid['expiryTime'];
+if($getCTA->num_rows == 1){
+	$cta = $getCTA->fetch_array(MYSQLI_ASSOC);
+	$id = $cta['ctaid'];
+	$name = $cta['name'];
+	$requeststatus = $cta['request'];
+	$CTAexpires = $cta['expiryTime'];
+	$token = $cta['token'];
 //this is just to create distraction on the url
 	$dummy = uniqid(SHA1($name));
 //if cta has expired
 	if($CTAexpires <= time()){
 		header("location: $root/cta/?checkin=false&acct=xyz&exp=$CTAexpires&dMy=$dummy");
-		exit();
+		$general->halt_page();
 	}
 	else{
-		setcookie('CTA',$id,time()+2592000,"/","",0);
+		setcookie('user_cta',$token,time()+2592000,"/","",0);
 //if there is request already, redirect to homepage else redirect to the request page
 		switch($requeststatus){
 			case '1':
@@ -52,13 +55,18 @@ if($getCTAquery && mysql_num_rows($getCTAquery)==1){
 		}
 	}
 		
-		
-	}
+}
 //if no match is found for the account trying to be logged in
 	else{
 	$checkinReport = "<h3 class=\"error-flags\"><span class=\"black-icon\" id=\"error-icon\"></span> Checkin Failed!</h3>
 						<p>Incorrect name/phone number and password, check your input or <a href=\"#createnew\">create a new CTA</a></p>";
 	}
+}
+else{
+	echo "error";
+}
+
+
 	
 		}	
 }
@@ -75,31 +83,48 @@ if(isset($_POST['create'])){
 	}
 //if necessary fields are not empty
 	else{
-$ctaname = $_POST['newname'];
-$ctaphone = $_POST['newphone'];
-$ctamail = $_POST['newmail'];
 //verify if passwords match
 $ctapass = (($_POST['newpass1']==$_POST['newpass2']) ? $_POST['newpass2'] : null);
 //if verifypassword does not return null, then add info to database
 if($ctapass != null){
-//assign id
-$ctaid = time() - rand(1000,9999);
+//scan name for illegal character
+$scanned_ctaname = htmlentities($_POST['newname']);
 //check if there is no account with this name
-if(mysql_num_rows(mysql_query("SELECT * FROM cta WHERE name='$ctaname'"))==0){
-	$timeCreated = time();
-//add 30 days
-	$expiryTime = time() + 2592000;
-	$createnewCTA = @mysql_query("INSERT INTO cta (ctaid,name,phone,email,request,password,datecreated,timeCreated,expiryTime) VALUES('$ctaid','$ctaname',$ctaphone,'$ctamail',0,'$ctapass',NOW(),$timeCreated,$expiryTime)");
+if($db->query_object("SELECT * FROM cta WHERE name='$scanned_ctaname'")->num_rows==0){
+$prepared_q = "INSERT INTO cta (ctaid,name,phone,email,request,password,datecreated,timeCreated,expiryTime,token)
+				VALUES (?,?,?,?,?,?,?,?,?,?)";
+$create_cta = $connection->prepare($prepared_q);
+$create_cta->bind_param('isisissiis',$_ctaid,$_ctaname,$_ctaphone,$_ctamail,$_ctarequest,$_ctapassword,$_ctadatecreated,$_ctatimecreated,$_ctaexpirytime,$_ctatoken);
+
+$_ctaid = time() - rand(1000,9999);
+$_ctaname = $scanned_ctaname;
+$_ctaphone = $_POST['newphone'];
+$_ctamail = $_POST['newmail'];
+$_ctarequest = 0;
+$_ctapassword = $ctapass;
+$_ctadatecreated = date('Y-m-l',time());
+$_ctatimecreated = time($_POST['newname']);
+$_ctaexpirytime = time() + 2592000;
+$_ctatoken = SHA1($scanned_ctaname);
+
+$create_cta->execute();
+if($create_cta->affected_rows == 1){
+	$createCTAReport = "<h3>CTA created successfully</h3>
+			<p>You can now request your property with preferences and get notifications when they are available
+			<a href=\"#checkin\">checkin now</a> to explore!</p>";
+		$success = 1;
+}
+
+
+/*
 //if query is correct
 if($createnewCTA){
 	@mysql_query("INSERT INTO notifications (notificationid,subject,subjecttrace,receiver,action,status,time) VALUE ('".uniqid('CTAcreate')."','$ctaname','$ctaid','$ctaname','CTA created','unseen',".time().")");
 	$activityID = uniqid(time());
 	@mysql_query("INSERT INTO activities (activityID, action, subject, subject_ID, subject_Username, status, timestamp) VALUES('$activityID','CAO','$ctaname','$ctaid','$ctaname','unseen',$timeCreated)");
-			$createCTAReport = "<h3>CTA created successfully</h3>
-			<p>You can now request your property with preferences and get notifications when they are available
-			<a href=\"#checkin\">checkin now</a> to explore!</p>";
-		$success = 1;
-}
+			}
+			*/
+			
 else{
 	$createCTAReport = "<h3 class=\"error-flags\"><span class=\"black-icon\" id=\"error-icon\"></span> Failed!</h3>
 							<p>CTA could not be created, please try again later</p>";
@@ -108,7 +133,7 @@ else{
 	}
 else{
 	$createCTAReport = "<h3 class=\"error-flags\"><span class=\"black-icon\" id=\"error-icon\"></span> CTA name already exist!</h3>
-							<p>Another user is using this name '$ctaname', please use another name for your CTA</p>";
+							<p>Another user is using this name '$scanned_ctaname', please use another name for your CTA</p>";
 		$success = 0;
 	}
 }
@@ -117,7 +142,7 @@ else{
 	$createCTAReport = "<h3 class=\"error-flags\"><span class=\"black-icon\" id=\"error-icon\"></span> Password Inconsistency!</h3>
 							<p>passwords do not match</p>";
 	$success = 0;
-}
+		}
 	
 	}
 }
@@ -127,7 +152,7 @@ else{
 
 <!DOCTYPE html>
 <html>
-<?php require('../require/meta-head.html'); ?>
+<?php require('../resources/html/meta-head.html'); ?>
 <link href="../css/general.css" type="text/css" rel="stylesheet" />
 <link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
 <link href="../css/ctastyles.css" type="text/css" rel="stylesheet" />
@@ -135,19 +160,18 @@ else{
 <?php
 $pagetitle = "CTA";
 $ref = "ctaPage";
-$connect = true;
-require('../require/header.php');
+require('../resources/php/header.php');
 //if a visitor has attempted an action, and redirect to this page $_GET['_rdr'] would be set
 $checkinreminder =((isset($_GET['_rdr'])&&$_GET['_rdr']==1 && !isset($_POST['checkin'])&& !isset($_POST['create'])) ? "You need to checkin first or <a href=\"$root/login\">login</a> as an agent":'');
 
 if($status==1){
 	$denialMessage = "<h3 class=\"error-flags\"><span class=\"black-icon\" id=\"error-icon\"></span> Access Denied!</h3>
-						<p>You cannot use Client Temporary Account because you are currently logged in as an agent logout first
+						<p>You cannot use Client Temporary Account because you are currently logged in as an agent [$Business_Name] logout first
 						<a class=\"inline-block-link white-on-red\" href=\"../logout\">Logout</a> </p>";
 }
 else if($status==9){
 $denialMessage = "<h3 class=\"error-flags\"><span class=\"black-icon\" id=\"error-icon\"></span> Already checked in!</h3>
-				<p>A CTA is already checked in as <strong>".$ctaname."</strong> <a class=\"inline-block-link white-on-red\" href=\"../logout\">checkout</a></p>";
+				<p>A CTA is already checked in as <strong>".$cta_name."</strong> <a class=\"inline-block-link white-on-red\" href=\"../logout\">checkout</a></p>";
 }
 ?>
 </head>
@@ -225,9 +249,12 @@ else if(isset($createCTAReport) && $success == 1){
 </form>
 </fieldset>
 </div>
+<?php 
+require('../resources/php/footer.php');
+?>
 </div>
 
 
 </body>
-<?php mysql_close($db_connection) ?>
+
 </html>

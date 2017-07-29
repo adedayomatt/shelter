@@ -1,7 +1,7 @@
 
 <?php 
-$connect = true;
-require('../require/connexion.php');
+
+require('../resources/php/master_script.php');
 
 //if submitted		
 if(isset($_POST['register'])){			
@@ -34,15 +34,15 @@ if($_POST['pass1'] != $_POST['pass2']){
 }
 //if there is no any error
 if(empty($error)){
-	$Business_Name = mysql_real_escape_string(trim($_POST['Business_name']));
-	$Office_Address = mysql_real_escape_string(trim($_POST['Office_Address']));
+	$Business_Name = $connection->real_escape_string(trim($_POST['Business_name']));
+	$Office_Address = $connection->real_escape_string(trim($_POST['Office_Address']));
 	$Office_Tel = $_POST['Office_No'];
-	$Office_mail = mysql_real_escape_string(trim($_POST['Office_mail']));
-	$CEO = mysql_real_escape_string(trim($_POST['personal_name']));
+	$Office_mail = $connection->real_escape_string(trim($_POST['Office_mail']));
+	$CEO = $connection->real_escape_string(trim($_POST['personal_name']));
 	$Phone_No =$_POST['personal_No'];
 	$Phone_No2 =$_POST['personal_No2'];
-	$email = mysql_real_escape_string(trim($_POST['personal_mail']));
-	$UserId = mysql_real_escape_string(trim($_POST['userID']));
+	$email = $connection->real_escape_string(trim($_POST['personal_mail']));
+	$UserId = $connection->real_escape_string(trim($_POST['userID']));
 	$password = $_POST['pass2'];
 	$id = time() + rand(1000,9999); 
 	$timeCreated = time();
@@ -52,16 +52,40 @@ if(empty($error)){
 	}
 //if user check the agreement box
 	if(isset($_POST['agreement'])){
+
+	//if there is no other account with the business name
+if($db->query_object("SELECT Business_Name FROM profiles WHERE Business_Name='$Business_Name'")->num_rows==0){
+
 //if there is no any account or user with the same username, create account and make directory for the new user
-		if(!file_exists("../$UserId") || mysql_num_rows(mysql_query("SELECT User_ID FROM profiles WHERE User_ID='$UserId'"))==0){
-//if there is no other account with the business name
-if(mysql_num_rows(mysql_query("SELECT Business_Name FROM profiles WHERE Business_Name='$Business_Name'"))==0){
+if(!file_exists("../$UserId") && $db->query_object("SELECT User_ID FROM profiles WHERE User_ID='$UserId'")->num_rows ==0){
+
+	/*
+//before the use of prepared statement
 $data = "INSERT INTO profiles(ID,Business_Name,Office_Address,Office_Tel_No,Business_email,CEO_Name,Phone_No,Alt_Phone_No,email, User_ID,password,timestamp)";
 	$data .="VALUES('$id','$Business_Name','$Office_Address',$Office_Tel,'$Office_mail','$CEO',$Phone_No,$Phone_No2,'$email','$UserId','$password',$timeCreated)";
 	$reg = mysql_query($data);
-	if($reg) {
-	//create a directory for new user 
-		if(mkdir("../$UserId")){
+**/
+$prepare_query =  "INSERT INTO profiles(ID,Business_Name,Office_Address,Office_Tel_No,Business_email,CEO_Name,Phone_No,Alt_Phone_No,email, User_ID,password,timestamp,token)
+					VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+$prepared_signup = $connection->prepare($prepare_query);
+$prepared_signup->bind_param('ississiisssis',$A,$B,$C,$D,$E,$F,$G,$H,$I,$J,$K,$L,$M);
+$A = $id;
+$B = $Business_Name;
+$C = $Office_Address;
+$D = $Office_Tel;
+$E = $Office_mail;
+$F = $CEO;
+$G = $Phone_No;
+$H = $Phone_No2;
+$I = $email;
+$J = $UserId;
+$K = $password;
+$L = $timeCreated;
+$M = SHA1($UserId);
+
+$prepared_signup->execute();
+//create a directory for new user 
+	if($prepared_signup->affected_rows == 1 && mkdir("../$UserId")) {
 //This is a prepared statement for a new php file that will be the index of the new directory
 			$prepared ="<?php ";
 			$prepared .="\$BN = \"".$Business_Name."\";";
@@ -77,13 +101,8 @@ $data = "INSERT INTO profiles(ID,Business_Name,Office_Address,Office_Tel_No,Busi
 			$case = 1;
 	//insert in activity log
 	$activityID = uniqid(time());
-	@mysql_query("INSERT INTO activities (activityID, action, subject, subject_ID, subject_Username, status, timestamp) VALUES('$activityID','AAO','$Business_Name','$id','$UserId','unseen',$timeCreated)");
-
-			}
-else{
-	$registerationReport = "Sorry, You can not use the username <strong>'$UserId'</strong>. It has been used by another agent";
-	$case = 2;
-}			
+	$db->query_object("INSERT INTO activities (activityID, action, subject, subject_ID, subject_Username, status, timestamp) VALUES('$activityID','AAO','$Business_Name','$id','$UserId','unseen',$timeCreated)");
+			
 	}
 else{
 	$registerationReport = "There was an error while registering your account, please bear with us and try again";
@@ -92,18 +111,18 @@ else{
 				}
 			}
 else{
-	$registerationReport = "Sorry, you cannot use the Business name <strong>'$Business_Name'</strong> because a user is using it already. <br/><br/>
+//if there is already a user/account with the username submitted
+	$registerationReport = "There is already an account with the username <strong>'$UserId'</strong> please choose another<br/>
+		If you own the account but forgot the password, you can <a href=\"#\">Recover Password</a> <br/>";
+		$case = 4;
+			}
+	}
+else{
+		$registerationReport = "Sorry, you cannot use the Business name <strong>'$Business_Name'</strong> because a user is using it already. <br/><br/>
 	If you own the account but forgot the password, you can <a href=\"#\">Recover Password</a> <br/><br/>
 	If this is an error, <a href=\"#\">Report Now</a>";
 	$case = 3;
-}
-	}
-//if there is already a user/account with the username submitted
-	else{
-		$registerationReport = "There is already an account with the username <strong>'$UserId'</strong> please choose another<br/>
-		If you own the account but forgot the password, you can <a href=\"#\">Recover Password</a> <br/>";
-	
-		$case = 4;
+		
 	}
 		}
 //if user did not check the agreement box
@@ -125,7 +144,7 @@ else{
 
 <!DOCTYPE html>
 <html>
-<?php require('../require/meta-head.html'); ?>
+<?php require('../resources/html/meta-head.html'); ?>
 <link href="../css/general.css" type="text/css" rel="stylesheet" />
 <link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
 <link href="../css/style_for_signup.css" type="text/css" rel="stylesheet">
@@ -138,7 +157,7 @@ setcookie('CTA',"",time()-60,"/","",0);
 setcookie('name',"",time()-60,"/","",0);
 $pagetitle = 'signup';
 $ref='signup';
-require('../require/plain-header.html');
+require('../resources/html/plain-header.html');
 ?>
 <script>
 //This verify if the two paswords match		
@@ -220,7 +239,7 @@ window.scrollTo(0,Yoffset);
 	echo "<div id = \"registration-successful\">
 	<h1>Sucessful!</h1>
 	$registerationReport</div>";
-	exit();
+	$general->halt_page();
 	}
 	?>
 
@@ -345,12 +364,10 @@ echo "</ul>check your input and try again</div>";
 			</div>
 			</form>
 		</div>	
-			
-			
+		<?php require('../resources/php/footer.php');	?>
 			</div>
-</div>
+
+			</div>
 			</body>
-			<?php
-			mysql_close($db_connection);
-			?>
+			
 			</html>

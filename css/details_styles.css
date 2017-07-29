@@ -2,47 +2,67 @@
 	display:block;
 	padding:2%;
 	background-color:white;
+	margin-bottom: 10px;
 }
 #image-tray{
-	
-		margin-bottom:10px;
+		
 	}
-	div.photo-container{
-		margin:2px;
+div.photo-container{
+		display:inline-block;	
+}
+	div.photo-container>img{
+		width:200px;
 		height:200px;
-	
-	
+
 }
-.property-photo{
-width:100%;
-height:100%;
-}
+
 div#detail-tray{
-	margin-top:20px;
 	width:100%;
 	font-size:100%;
 }
 #image-tray,#info-container,#facilities-container,#rating-container,#agent-info-container{
 	font-size:100%;
-	padding:1%;
-	margin-bottom:10px;
-	box-shadow:0px 2px 2px rgba(0,0,0,0.05) inset;
+	margin:5px;
 	border:1px solid #E3E3E3;
 	
 }
 .container-inside{
-	background-color: #F5F5F5;
+	background-color: white;
+	padding:5px;
 }
-#image-tray{
-	width: 96%;
+
+.esss{
+	display:inline-block;
+	padding:10px 20px 10px 20px;
+	margin:20px;
+	color:purple;
+	background-color:rgba(236, 87, 236, 0.2);
+	border-radius:3px;
+	font-size:120%;
+}
+ul.facilities{
+	width:80%;
+	padding:0px;
 	margin:auto;
 }
-#agent-contacts{
-	
-}
 li.info-list,li.facilities-list,li.contact-list{
-	list-style-type:none;
-	padding:2%;
+	list-style-type: none;
+	padding:5px 10px 5px 10px;
+	margin:0px 5px 0px 5px;
+}
+li.info-list,li.facilities-list{
+	display:inline-block;
+}
+li.facilities-list{
+	background-color:yellow;
+	color:purple;
+	border-radius:2px;
+	margin:5px;
+}
+h4#descr{
+	padding:20px;
+	font-size:120%;
+	font-weight:normal;
 }
 #bars-box{
 	width:70%;
@@ -66,11 +86,6 @@ li.info-list,li.facilities-list,li.contact-list{
 	border-radius:2px;
 }
 
-.fixed-rhs-content{
-	margin-top:0px;
-	background-color:rgba(236, 87, 236, 0.2);
-	padding:2%;
-}
 
 #see-also-container{
 	background-color:#F5F5F5;
@@ -92,8 +107,8 @@ li.info-list,li.facilities-list,li.contact-list{
 }
 .related-property-image{
 	float:left;
-	width:25%;
-	height:100%;
+	width:70px;
+	height: 70px;
 }
 .related-property-info{
 	float:left;
@@ -143,44 +158,32 @@ p.bar-label{
 width:100%;
 	}
 #info-container,#facilities-container,#rating-container,#agent-info-container{
-	float: left;
-	width:47%;
-	margin:5px;
-	height:450px;
+	width:80%;
+	margin:auto;
+margin-bottom: 5px;
 	}
 div.photo-container{
 		display:inline-block;
-		width:19%;
 		
 }
-.other-properties{
-	
-}
-#see-also-container{
-	
-}
+
 .related-property{
 	display:inline-block;
 	width: 30%;
 	margin:5px;
 }
-#agents-container{
-	
-}
+
 }
 @media all and (max-device-width:800px),
 (max-width: 800px){
 .main-content{
 	width:100%;
 }
-div.photo-container{
-		display:inline-block;
-		width:48%;
-		
-}
+
 #info-container,#facilities-container,#rating-container,#agent-info-container{
-	float:none;
-	width:100%;
+	width:90%;
+	margin:auto;
+	margin-bottom:5px;
 }
 .other-properties{
 	width:100%;
@@ -192,6 +195,9 @@ div.photo-container{
 }
 @media all and (max-width:350px){
 div.photo-container{
+		width:100%;	
+}
+div.photo-container>img{
 		width:100%;	
 }
 }

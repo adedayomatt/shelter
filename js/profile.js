@@ -37,7 +37,7 @@ else{
 		alert("things did not go well:404!");
 	}
 };
-var url = "http://192.168.173.1/shelter/profile/follow.php?flwer="+follower+"&flwerId="+followerid+"&flwing="+following+"&t="+type;
+var url = "http://192.168.173.1/shelter/resources/php/ajax_scripts/follow.php?flwer="+follower+"&flwerId="+followerid+"&flwing="+following+"&t="+type;
 xmlhttp.open("GET",url, true);
 xmlhttp.send();
 

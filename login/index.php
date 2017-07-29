@@ -1,18 +1,15 @@
 <?php 
-
-require('../phpscripts/masterScript.php'); 
-
-//$general_obj->unset_cookie('user_agent');
+require('../resources/php/master_script.php'); 
 
 class login{
 	function verify_account($username,$password,$remember){
 		GLOBAL $general;
 		GLOBAL $db;
-$user = $db->select('profiles','User_ID',"User_ID ='$username'",null);
-if(count($user)==1){
-if($db->select('profiles','password',"User_ID ='$username'",null)[0]['password']==$password){
+$user = $db->query_object("SELECT User_ID FROM profiles WHERE User_ID = '$username'");
+if($user->num_rows==1){
+if($db->query_object("SELECT password FROM profiles WHERE User_ID = '$username'")->fetch_array(MYSQLI_ASSOC)['password']==$password){
 //log CTA out immediadely agent account is logged in
-$general->unset_cookie('CTA');
+$general->unset_cookie('user_cta');
 //if user want to remained logged, set the cookie for longer period
 if($remember == true){
 					setcookie('user_agent',SHA1($_POST['username']),time()+2592000,"/","",0);
@@ -57,7 +54,7 @@ else if($login_feedback=='error102'){
 
 <!DOCTYPE html>
 <html>
-<?php require('../require/meta-head.html'); ?>
+<?php require('../resources/html/meta-head.html'); ?>
 <link href="../css/general.css" type="text/css" rel="stylesheet" />
 <link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
 <link href="../css/login_styles.css" type="text/css" rel="stylesheet">
@@ -67,7 +64,7 @@ else if($login_feedback=='error102'){
 $pagetitle="Log in";
 $ref ='loginpage';
 $getuserName=true;
-require('../require/plain-header.html');
+require('../resources/html/plain-header.html');
 
 ?>
 </head>
