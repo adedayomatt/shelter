@@ -18,8 +18,8 @@ $getAgents = $connection->query("SELECT * FROM profiles WHERE (Business_Name LIK
 			echo "<ul style=\"padding:0px;margin:0px;\">";
 		while($agent = $getAgents->fetch_array(MYSQLI_ASSOC)){
 			echo "<a href=\"$root/".$agent['User_ID']."\" class=\"suggestion-box-link\">
-			<li class=\"suggestion-box-list\">
-			<span class=\"black-icon search-result-icon\"></span>".$agent['Business_Name']."
+			<li class=\"suggestion-box-list grey\">
+			<span class=\"glyphicon glyphicon-briefcase  e3-border padding-10\" style=\"border-radius:50%;\"></span>".$agent['Business_Name']."
 			</li></a>";
 		}
 		echo"</ul>";
@@ -29,5 +29,5 @@ $getAgents = $connection->query("SELECT * FROM profiles WHERE (Business_Name LIK
 		echo "<div class=\"search-whatsup\">There was an error fetch agents profiles</div>";
 	}
 
-
+$connection->close();
 ?>

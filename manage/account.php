@@ -1,47 +1,36 @@
 <?php 
-$connect = true;
-require('../require/connexion.php'); 
- //confirm if user is still logged in 
-if(!isset($_COOKIE['name'])){
-	header("Location: ../login");
+require('../resources/php/master_script.php'); 
+if($status != 1){
+	$general->redirect('login?return='.$thisPage);
 }
 ?>
 <html>
-<?php require('../require/meta-head.html'); ?>
 <head>
-<link href="../css/general.css" type="text/css" rel="stylesheet" />
-<link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
-<link href="../css/management_styles.css" type="text/css" rel="stylesheet" />
-<?php 
-	$pagetitle = "Account";
-	$ref='editaccount';
-$getuserName=true;
-require('../require/header.php');
-?>
-</head>
-<body class="pic-background">
-<br/>
+<?php
+ $pagetitle = "Account";
+	$ref='editaccount_page';
+	require('../resources/global/meta-head.php'); ?>
 <?php
 // Here handles editing of record
 if(isset($_POST['edit'])){
 
 			$update = "UPDATE profiles SET "; 
-			$update .= "Office_Address='".mysql_real_escape_string($_POST['OfficeAddress'])."',";
+			$update .= "Office_Address='".($_POST['OfficeAddress'])."', ";
 			$update .= "Office_Tel_No=".$_POST['OfficeTelNo'].",";
-			$update .= "Business_email='".mysql_real_escape_string($_POST['Businessmail'])."',";
-			$update .= "CEO_Name='".mysql_real_escape_string($_POST['CEOName'])."',";
-			$update .= "Phone_No=".$_POST['Phone1'].",";
-			$update .= "Alt_Phone_No=".$_POST['Phone2'].",";
-			$update .= "email='".mysql_real_escape_string($_POST['email'])."' ";
+			$update .= "Business_email='".($_POST['Businessmail'])."', ";
+			$update .= "CEO_Name='".($_POST['CEOName'])."', ";
+			$update .= "Phone_No=".$_POST['Phone1'].", ";
+			$update .= "Alt_Phone_No=".$_POST['Phone2'].", ";
+			$update .= "email='".($_POST['email'])."' ";
 			$update .= "WHERE (ID=".$_POST['id'].")";
 			
-			$updateQuery = mysql_query($update);
-			if($updateQuery){ 
-				if(mysql_affected_rows($db_connection)==1){
+			$updateQuery = $db->query_object($update);
+			
+				if($connection->affected_rows==1){
 					$editresult = "Changes saved successfully";
 					$case = 1;
 				}
-				else if(mysql_affected_rows($db_connection)>1){
+				else if($connection->affected_rows > 1){
 					$editresult = "Oops!, Something went wrong";
 					$case = 2;
 				}
@@ -49,43 +38,15 @@ if(isset($_POST['edit'])){
 					$editresult = "No changes were made";
 					$case = 3;
 				}
-			}
-			else{
-				$editresult = "Changes could not be saved due to some errors";
-				$case = 4;
-			}
 			
 			}
-?>
-<?php 
-//Here gives the repoort of the editing. successful or fail
-if(isset($editresult)){
-	$generalstyle = "width:20%; height: 35px;  color:white; border-radius:5px; margin-left:5px;";
-switch ($case){
-	case 1:
-	$specialstyle = " background-color: green; ";
-	$icon = "background-position:-288px 0px";
-	break;
-	case 3:
-	$specialstyle = " background-color: red;";
-	$icon =  "background-position: -312px 0px";
-	break;
-		default:
-	$specialstyle = " background-color: red; ";
-	$icon = "background-position:-312px 0px";
-	break;
-}
-echo "<div style=\"".$generalstyle.$specialstyle."\"><i style=\"$icon\" class=\"white-icon\"></i>  $editresult</div>";
-}
-	?>
-	<?php
+
 	//Here fetches the account detail on page load
 		
 				$getformerdetail = "SELECT * FROM profiles WHERE (User_ID = '".$profile_name."')";
-				$getquery = mysql_query($getformerdetail);
-				if($getquery){
-					if(mysql_affected_rows($db_connection)==1){
-					while($account = mysql_fetch_array($getquery,MYSQL_ASSOC)){
+				$getquery = $db->query_object($getformerdetail);
+					if($getquery->num_rows ==1){
+					while($account = $getquery->fetch_array(MYSQLI_ASSOC)){
 						$editid = $account['ID'];
 						$editBN = $account['Business_Name'];
 						$editOfficeAddress = $account['Office_Address'];
@@ -98,52 +59,103 @@ echo "<div style=\"".$generalstyle.$specialstyle."\"><i style=\"$icon\" class=\"
 						$editUsername = $account['User_ID'];
 					}
 					}else{echo $accountreport = "Account is invalid or might have been blocked or deactivated"; }
-				}else{$accountreport="Invalid Account";}
-		
+				
 	
+	?>
+
+</head>
+<body class="plain-colored-background">
+<?php 
+$altHeaderContent ="Edit Account";
+require('../resources/global/alt_static_header.php');
+?>
+<div class="container-fluid body-content" style="padding-top:60px">
+<div class="center-content">
+<div class="white-background padding-10 e3-border box-shadow-1">
+<?php
 if(isset($accountreport) && !empty($accountreport)){
-	echo "<p style=\"color:red\" align=\"center\">  $accountreport</p>";
-	echo "<p align=\"center\"><a href=\"#\">Report this</a> or <a href=\"#\">Sign up</a> a new account</p>";
-	exit();
+	?>
+<div class="operation-report-container fail"><?php echo $accountreport ?></div>
+	<?php
+} 
+//Here gives the repoort of the editing. successful or fail
+if(isset($editresult)){
+	?>
+<div class="operation-report-container success"><?php echo $editresult ?></div>
+	<?php
 }
 	?>
-<div id="edit-area">
+
 <fieldset>
-<legend style="color:#6D0AAA"><strong><?php echo "<a href=\"$root/$editUsername\">".$editBN."</a>" ?></strong></legend>
-<form action="delete.php" method="POST">
-<input name="deleteid" type="hidden" value="<?php echo $editid ?>"/>
- <button name="submitdelete" id="deactivatebtn"type="submit" value="delete"><i class="black-icon delete-icon"></i> Deactivate account</button>
-  </form>
-  
+<a href="<?php echo "$root/$editUsername" ?>"><h3 class="major-headings"><?php echo $editBN ?></h3></a>  
 <form action="<?php $_PHP_SELF ?>" method="POST">
 <input name="id" type="hidden" value="<?php echo $editid ?>" />
-Office Address:
-<input placeholder="Office Address" name="OfficeAddress" type="text" size="50" required="required" value="<?php echo $editOfficeAddress ?>"/><br/><br/>
 
-Office Tel Number:
-<input placeholder="office Telephone Number" name="OfficeTelNo" type="text" maxlength="11"  required="required" value="<?php echo $editOfficeTelNo?>"/><br/><br/>
+<div class="form-group">
+<label><span class="glyphicon glyphicon-map-marker red"></span>Office Address</label>
+<input class="form-control" placeholder="Office Address" name="OfficeAddress" type="text" size="50" required="required" value="<?php echo $editOfficeAddress ?>"/>
+</div>
 
-Business email: 
-<input placeholder="Business email address" name="Businessmail" type="email" size="30" value="<?php echo $editBusinessmail ?>"/><br/><br/>
-<p><strong>Manager's Profile</strong></p>
-Name: 
-<input placeholder="CEO's full name" name="CEOName" type="text" size="40" required="required" value="<?php echo $editCEO ?>"  /><br/><br/>
+<div class="form-group">
+<label><span class="glyphicon glyphicon-phone red"></span>Office Tel Number</label>
+<input class="form-control" placeholder="office Telephone Number" name="OfficeTelNo" type="text" maxlength="11"  required="required" value="<?php echo $editOfficeTelNo?>"/>
+</div>
 
-Phone No: 
-<input placeholder="CEO's active phone number" name="Phone1" type="text" maxlength="11" required="required" value="<?php echo $editPhoneno ?>" /><br/><br/>
+<div class="form-group">
+<label><span class="glyphicon bold red">@</span>Business email </label>
+<input class="form-control" placeholder="Business email address" name="Businessmail" type="email" size="30" value="<?php echo $editBusinessmail ?>"/>
+</div>
 
-Alternative Phone No: 
-<input placeholder="CEO's alternative active phone number" name="Phone2" type="text" maxlength="11" value="<?php echo $editAltPhoneno ?>" /><br/><br/>
+<h3 class="major-headings">Manager's Profile</h3>
 
-email: 
-<input placeholder="CEO's working email address" name="email" type="email" size="30" value="<?php echo $editemail ?>" /><br/><br/>
-<input id="submit-btn" type="submit" name="edit" value="Save changes"/>
+<div class="form-group">
+<label>Name</label> 
+<input class="form-control" placeholder="CEO's full name" name="CEOName" type="text" required="required" value="<?php echo $editCEO ?>"  />
+</div>
+
+<div class="form-group">
+<label><span class="glyphicon glyphicon-phone red"></span>Phone No</label>
+<input class="form-control" placeholder="CEO's active phone number" name="Phone1" type="text" maxlength="11" required="required" value="<?php echo $editPhoneno ?>" />
+</div>
+
+<div class="form-group">
+<label><span class="glyphicon glyphicon-phone red"></span>Alternative Phone No</label> 
+<input class="form-control" placeholder="CEO's alternative active phone number" name="Phone2" type="text" maxlength="11" value="<?php echo $editAltPhoneno ?>" />
+</div>
+
+<div class="form-group">
+<label><span class="glyphicon bold red">@</span>email</label> 
+<input class="form-control" placeholder="CEO's working email address" name="email" type="email"  value="<?php echo $editemail ?>" />
+</div>
+
+<h3 class="major-headings">Login</h3>
+
+<div class="form-group">
+<label><span class="glyphicon bold red"></span>username</label> 
+<input class="form-control" placeholder="username" name="" type="email"  value="<?php echo $editUsername ?>" />
+</div>
+
+<div class="form-group">
+<label><span class="glyphicon bold red"></span>change password</label> 
+<input class="form-control" placeholder="old password" name="email" type="password"  />
+</div>
+
+<div class="form-group">
+<label><span class="glyphicon bold red"></span>new password</label> 
+<input class="form-control" placeholder="new password" name="" type="password"  />
+</div>
+<input class="btn btn-primary" type="submit" name="edit" value="Save changes"/>
 </form>
 </fieldset>
+
+<form action="delete.php" method="POST">
+<input name="deleteid" type="hidden" value="<?php echo $editid ?>"/>
+ <button name="submitdelete" class="btn btn-danger" type="submit" value="delete"><span class="glyphicon glyphicon-trash"></span> Deactivate account</button>
+  </form>
  </div>
- <br/><br/><br/>
+ </div>
+ </div>
 <?php 
-mysql_close($db_connection);
-require('../require/footer.html'); ?>
+require('../resources/global/footer.php'); ?>
 </body>
 </html>

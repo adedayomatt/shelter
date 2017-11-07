@@ -1,0 +1,161 @@
+#upload-form{
+    margin-top: 20px;
+}
+[class^=upload-section],.add-photo-section{
+    width:70%;
+    margin:auto;
+    padding: 10px;
+    background-color:white;
+    border-radius:3px;
+    border:1px solid #e3e3e3;
+}
+.major-headings{
+    color:yellow;
+    text-align: left;
+}
+#upload-progress-wrapper{
+    width:80%;
+    margin:auto;
+    text-align: center;
+}
+
+.active-step,.inactive-step{
+    cursor:pointer;
+}
+.active-step{
+font-size: 170%;
+color:yellow;
+}
+.inactive-step{
+font-size: 100%;
+color:#e0f2f1;
+}
+
+.active-step-no{
+background-color:white;
+color:#20435C;
+padding:5px 15px 5px 15px;
+}
+.inactive-step-no{
+background-color:grey;
+color:white;
+padding:5px 10px 5px 10px;
+}
+ .active-step-no,.inactive-step-no{
+        border-radius:50%;
+    }
+.upload-heading{
+    color:#20435C;
+    font-weight:normal;
+    font-size:250%;
+}
+.upload-sub-heading{
+     font-weight:normal;
+    font-size:120%;
+}
+.instruction{
+    color:grey;
+}
+fieldset{
+    width:80%;
+    margin:auto;
+}
+fieldset>div>select{
+    width:180px;
+}
+
+.upload-input-wrapper{
+    margin-bottom: 10px;
+}
+.basic-info>label{
+font-size: 17px;
+}
+input[type="text"]{
+    padding:5px;
+}
+#rent-input{
+     width:20%;
+}
+#location-input{
+    width:60%;
+}
+.facilities>label,.facilities>input,.rating>label,.rating>input[type="checkbox"]{
+    display:inline;
+    margin-left:5px;
+}
+.facilities>select,.rating>select{
+    width:80px;
+}
+input[type="checkbox"]{
+    padding:20px;
+    background-color:blue;
+}
+label[for="electricity"],
+label[for="road"],
+label[for="social"],
+label[for="security"],
+label[for="bath"],
+label[for="loo"]{
+    display:inline-block;
+    width:100px;
+}
+.description>textarea{
+    width:500px;
+    height:150px;
+    padding: 5px;
+}
+
+/*Add photo page*/
+.add-photo-section{
+    margin-top: 20px;
+}
+.uploaded-photos{
+    width:270px;
+    height:250px;
+    margin:4px;
+}
+#finish-box{
+    height:50px;
+}
+#finish-button{
+    float:right;
+    border:none;
+}
+
+@media all and (min-device-width: 800px),
+(min-width: 800px){
+
+}
+@media all and (max-device-width: 800px),
+ (max-width:800px){
+     #upload-progress-wrapper{
+    width:100%;
+   
+}
+#upload-progress-wrapper>.major-headings{
+text-align: left;
+}
+#upload-progress-wrapper>span[class$='step']{
+display:block;
+ text-align: right;
+ margin:15px;
+}
+.active-step-no{
+    padding:5px 12px 5px 12px;
+    }
+.active-step{
+font-size: 150%;
+}
+[class^=upload-section],.add-photo-section{
+    width:90%;
+}
+#location-input{
+    width:90%;
+}
+.description>textarea{
+    width:90%;
+    margin:auto;
+    height:150px;
+}
+
+ }

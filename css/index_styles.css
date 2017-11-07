@@ -1,18 +1,19 @@
 /* Desktop version
 @media screen and (min-width:1025px)*/
-img.front-image{
-	display:inline-block;
-	/*width:100px;
-	height:150px;*/
-	border:none;
+div#yes-you-can{
+	font-style:Georgia;
+	 background: white url('../resrc/yes-you-can-background.png') center;
 }
-#mini-notification{
-	width:99%;
-	margin:auto;
-	margin-bottom:2%;
-	line-height:100%;
-	border: 1px solid #E3E3E3;
-	box-shadow:0px 2px 2px rgba(0, 0, 0, 0.05) inset;
+div#yes-you-can>h1{
+color:#E4A9E4;
+ font-weight:bold;
+ font-size:300%;
+ z-index: 99;
+}
+div#yes-you-can>h3{
+color:white; 
+font-weight:normal;
+ text-align:right
 }
 .notice,.client-follow-notice{
 	display:block;
@@ -25,8 +26,19 @@ img.front-image{
 	background-color:white;
 	border-bottom: 1px solid #E5E5E5;
 }
-.client-follow-notice{
 
+div#cta-requests-stat-container{
+	padding:10px;
+	text-transform:uppercase;
+	text-align:center;
+	color:#20435C;
+	background-color: #e0f2f1;
+}
+div#cta-requests-stat-container>h3{
+		font-size:150%;
+}
+a.yrthg:hover{
+	text-decoration:none;
 }
 .no-notice{
 	text-align:center;
@@ -34,134 +46,71 @@ img.front-image{
 	padding:2%;
 	color:purple;
 }
-.since{
-	text-align:right;
-	color:grey;
-	font-size:80%;
-}
 
-#front-ad-wrapper{
-	width:100%;
-	margin:auto;
-	margin-top:10px;
-	color:#6D0AAA;
-	text-align:center;
+img.most-viewed-img{
+	width:100%; 
 }
-#front-ad{
-	display:block;
-	width:100%;
-	height:80px;
-	border:1px solid #E3E3E3;
-}
-.home-headings{
-		font-weight:normal;
-		letter-spacing:2px;
-		color:purple;
-		font-size:150%;
-		margin:0px;
-		padding:2%;
-	}
-#search-mv-agent-container,#search-box-ad-container,.agents-snipet{
-	height:320px;
-}
-
-#search-mv-agent-container{
-	width:99%;
-	border:1px solid #e8f5e9;
-}
-#search-box-ad-container{
-		float:left;
-		width:59%;
-}
-#search-box{
-	width:95%;
-	padding:2%;
-	margin:auto;
-	/*background-color:rgba(236, 87, 236, 0.2);*/
-	margin-top:5px;
-}
-
-#front-ad-wrapper{
-	width:100%;
-}
-#front-ad{
-	width:100%;
-	height:150px;
-}
-#about-container{
-	background-color:white;
-	font-family:Georgia;
-	text-align:center;
-	margin:auto;
-	padding-top:0px;
-	margin-top:2px;	
-	border: 1px solid #E3E3E3;
-	/*box-shadow:0px 1px 1px rgba(0, 0, 0, 0.05) inset;
-	background-color:rgba(129, 1, 129, 0.8);
-	padding:2% 2% 5% 2%;*/
-}
-/*Only in desktop*/
-div.agents-snipet{
-	float:left;
-	width:40%;
-	margin-left:1%;
-	background-color:inherit;
-}
-#most-viewed-wrapper{
-	height:250px;
-}
-
-.ul-wrapper{
-}
-div#agents-list-wrapper,div#most-viewed-wrapper{
-	 border: 1px solid #E3E3E3;
-	 background-color:white;
-}
-
-div#most-viewed-wrapper{
-	float:left;
-	width:100%;
-	min-height:100px;
+div.most-viewed-details{
+	height:20px;
 	overflow:hidden;
 }
-#search-heading,#most-viewed-heading,#agents-heading,#recent-uploads-heading{
-	display: block;
-	font-weight:normal;
-	font-size:150%;
-	text-align:left;
-	margin:0px;
-	height:30px;
+div.most-viewed-price,div.most-viewed-address{
+	height:40px;
+}
+div#client-shout-out{
+	font-style:Georgia;
+	height:100px;
+	overflow:hidden;
+	text-align: center;
+	line-height:30px;
+	font-size:200%;
+	font-weight:bold;
+	color:yellow;
+	background: #b2dfdb url('../resrc/visitor_sidebar_background.png') center repeat-x;
+}
+.client-Requests-container{
+	height:210px;
+}
+
+.client-request-box{
+	width:150px;
+	height:190px;
+	margin:2px;
 	padding:5px;
-	background-color:#e1bee7;
-	color:purple;
+	border:1px solid #e3e3e3;
+	text-align:center;
+	background-color:#f7f7f7;
 }
-.most-viewed-list{
-	width:99.5;
-	margin:auto;
-	padding-left: 0.5%;
-	background-color:white;
+.client-request-box>.request{
+	height:82%;
+	overflow:hidden;
 }
-.most-viewed-list>div>img{
-	vertical-align:text-bottom;
-	border-radius:3px;
-	width:60px;
-	height:60px;
+.client-request-box>.suggest-button{
+	height:15%;
+	margin-top:2px;
 }
+.request>p{
+	margin:1px;
+}
+div#advertise-with-us{
+	padding:20px;
+	text-align:center;
+	font-style: italic;
+	font-size:30px;
+	background: #b2dfdb  url('../resrc/tiny_strips.png') center repeat-x;
+	color:white;
+}
+
 div#agents-list-wrapper{
-	width:96%;
+	width:99%;
 	margin:auto;
 	margin-bottom:20px;
 }
 
-
-#agents-list-container{
-	padding:0px;
-}
 .agents-list{
 background-color:white;
 	display:block;
 	padding:10px;
-
 	
 }
 .most-viewed-list,.agents-list{
@@ -199,88 +148,31 @@ a.agents-list:hover{
 /*Only in desktop ends*/
 
 
-#suggested-agents-search-container-desktop{
-	width:250px;
-	max-height:250px;
-}
 
-@media screen and (min-width:1000px) and (min-device-width: 1000px) {
-	#most-viewed-container:hover{
-	width:31%;
-	height:80%;
-	position:absolute;
-	overflow-y:scroll;
-	box-shadow:1px 5px 5px 2px rgba(0,0,0,0.5);
+@media all and (min-width:900px){
+img.most-viewed-img{
+	height: 200px;
 }
 }
-@media all and (min-device-width: 800px),
-(min-width: 800px){
-		div.recent-uploads-container{
-	width:79%;
-	padding-left: 1%;
-}
-#top-nav-bar-content-on-scroll-content{
-	display:none;
-}
-	}
-
-@media all and (max-device-width: 800px),
- (max-width:800px){
-		div.recent-uploads-container{
-	width:100%;
-	padding: 0px;
-}
-#top-nav-bar-content-on-scroll,#top-nav-bar-content-on-scroll-content{
-	width:100%;
-	background-color:white;
-}
-#top-nav-bar-content-on-scroll{
-	display:none;
-	box-shadow: 5px 5px 2px 2px rgba(0,0,0,0.4);
-}
-span.on-scrolltop-menu{
-	display:inline-block;
-	color:black;
-	width:21%;
-	margin:0px;
-	padding:2% 5% 2% 5%;
-	text-align:center;
-}
-#search-mv-agent-container{
-	height:800px;
-	margin-bottom: 20px;
-}
-
-#search-box-ad-container,.agents-snipet{
-	height:42%;
-}
-div.agents-snipet{
-	float:none;
-	display:block;
-	width:95%;
-	height: 56%;
-	margin:auto;
-	margin-bottom: 10px;
-}
-#most-viewed-container:hover{
-	position:absolute;
-	width:95%;
-	margin:auto;
-	height:80%;
-	overflow-y:scroll;
-	box-shadow:1px 5px 5px 2px rgba(0,0,0,0.5);
-}
-#most-viewed-wrapper{
-	height: 100%;
-}
-.most-viewed-list>div>img{
-	width:80px;
-	height:80px;
-}
-#search-box-ad-container{
-		width:100%;
+@media all and (max-width:900px){
+img.most-viewed-img{
+	height: 180px;
 }
 }
 
+@media all and (max-width:700px){
+img.most-viewed-img{
+	height: 140px;
+}
+}
+@media all and (max-width:600px){
+img.most-viewed-img{
+	height: 120px;
+}
+}
+@media all and (max-width:500px){
 
-
+img.most-viewed-img{
+	height: 100px;
+}
+}

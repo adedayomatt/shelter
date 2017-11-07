@@ -3,7 +3,7 @@ require('../resources/php/master_script.php');
 
 //if agent is not logged in want to access this page
 	if($status != 1){
-		$general->redirect('login');
+		$general->redirect('login?return='.$thisPage);
 	}
 
 //create object for the property class
@@ -59,14 +59,14 @@ $dirName = trim(str_replace(array(",","-",".")," ",$dirName));
 $dirName = str_replace(" ","-",$dirName);
 
 $uploadQuery = "INSERT INTO properties 
-		(property_ID,directory,type,location,rent,min_payment,bath,toilet,pumping_machine,borehole,well,tiles,parking_space,electricity,road,socialization,security,description,uploadby,date_uploaded,timestamp,status)
-		VALUES('$propertyId','$dirName','$type','$location',$rent,'$min_payment',$bath,$loo,'$pmachine','$borehole','$well','$tiles','$pspace',$electricity,$road,$social,$security,'$description','$profile_name',NOW(),$timestamp,'available')";
+		(property_ID,directory,type,location,rent,min_payment,bath,toilet,pumping_machine,borehole,well,tiles,parking_space,electricity,road,socialization,security,description,uploadby,date_uploaded,timestamp,status,last_reviewed)
+		VALUES('$propertyId','$dirName','$type','$location',$rent,'$min_payment',$bath,$loo,'$pmachine','$borehole','$well','$tiles','$pspace',$electricity,$road,$social,$security,'$description','$profile_name',NOW(),$timestamp,'Available',$timestamp)";
 //echo $upload;
 $upload = $db->query_object($uploadQuery);
 //if record added successfully
 if(!$connection->error && $connection->affected_rows == 1){
 	$activityID = uniqid(time());
-$db->query_object("INSERT INTO activities (activityID, action, subject, subject_ID, subject_Username, status,otherlink,timestamp) VALUES('$activityID','upload','$Business_Name','$profile_name','$myid','unseen','$dirName',$timestamp)");
+//$db->query_object("INSERT INTO activities (activityID, action, subject, subject_ID, subject_Username, status,otherlink,timestamp) VALUES('$activityID','upload','$Business_Name','$profile_name','$myid','unseen','$dirName',$timestamp)");
 
 	//create a directory for new property 
 $propertydir = '../properties/'.$dirName;
@@ -79,16 +79,13 @@ $prepared = "
 <?php 
 require('../../resources/php/master_script.php'); ?>
 		<html>
-<?php require('../../resources/html/meta-head.html') ?>
 <head>
-<link href=\"../../css/general.css\" type=\"text/css\" rel=\"stylesheet\" />
+<?php \$pagetitle=\"$propertyId - $type for rent\"; 
+require('../../resources/global/meta-head.php') ?>
 <link href=\"../../css/header_styles.css\" type=\"text/css\" rel=\"stylesheet\" />
 <link href=\"../../css/details_styles.css\" type=\"text/css\" rel=\"stylesheet\" />
-<?php \$pagetitle=\"$propertyId - $type for rent\"; 
-require('../../resources/php/header.php') ?>
-<script type=\"text/javascript\" language=\"javascript\" src=\"../../js/detailsscript.js\"></script>
 </head>
-<body class=\"pic-background\">
+<body class=\"no-pic-background\">
 <?php
 \$ID = \"$propertyId\";
 require('../detail.php');
@@ -121,27 +118,49 @@ $uploadError .= "</ul>";
  ?>
  <!DOCTYPE html>
 <html>
-<?php require('../resources/html/meta-head.html'); ?>
 <head>
-<link href="../css/general.css" type="text/css" rel="stylesheet" />
-<link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
-<link href="../css/upload_styles.css" type="text/css" rel="stylesheet" />
-<title>Shelter | Upload property</title>
 <?php
-//$pagetitle = "upload";
-	//$ref = 'upload';
-	require('../resources/html/plain-header.html');
-	
-?>
-
+$ref = "upload_page";
+$pagetitle = "Upload Property";
+ require('../resources/global/meta-head.php'); ?>
+<link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript" src="verify.js" ></script>
 
 <style type="text/css" rel="stylesheet">
-	.upload-section-showing{
+.upload-section-showing{
 		display:block;
 	}
-	.upload-section-hidden{
+.upload-section-hidden{
 		display:none;
+	}
+	
+.active-step,.inactive-step{
+    cursor:pointer;
+}
+.active-step{
+font-size: 170%;
+color:yellow;
+}
+.inactive-step{
+font-size: 100%;
+color:#e0f2f1;
+}
+
+.active-step-no{
+background-color:white;
+color:#20435C;
+padding:5px 15px 5px 15px;
+}
+.inactive-step-no{
+background-color:grey;
+color:white;
+padding:5px 10px 5px 10px;
+}
+ .active-step-no,.inactive-step-no{
+        border-radius:50%;
+    }
+	.step{
+	margin-bottom:20px;
 	}
 </style>
 
@@ -154,7 +173,22 @@ $uploadError .= "</ul>";
 </noscript>
 
 <script>
-
+function check(){
+if(document.details.rent.value<0){
+	alert("Rent cannot be negative");
+	document.details.rent.focus();
+	return false;
+}
+else if(document.details.type.value=="Select type"){
+	alert("Select the type of property");
+	document.details.type.focus();
+	return false;
+}
+else{
+	return true;
+}
+	
+}
 	function nextStep(currentStep,nextStep,progressStatus){
 		if(currentStep == 'jumpTo'){
 		//hide all section ...
@@ -190,51 +224,66 @@ window.scrollTo(0,Yoffset);
 	}
 	</script>
 </head>
-<body class="pic-background">
+<body class="plain-colored-background">
+<?php
+$altHeaderContent ="Upload Property";
+require('../resources/global/alt_static_header.php');
+?>
 
-
-<div id="upload-progress-wrapper">
-	<h3 class="major-headings">Upload property</h3><br/>
-	<span  class="active-step" id="upload-progress-basic-info" title="Jump to Basic Details">
+<div class="container-fluid body-content" style="padding-top:70px">
+<div class="width-80p margin-auto" style="margin-bottom:30px">
+<div class="row">
+<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 text-center step">
+<span  class="active-step " id="upload-progress-basic-info" title="Basic Details">
 		<span class="active-step-no" id="basic-info-step-no">1</span>
-		« Basic Details »
+		« Basics »
 		</span>
+	</div>
 	
-	<span  class="inactive-step" id="upload-progress-facilities" title="Jump to Facilites">
+<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 text-center step">
+	<span  class="inactive-step" id="upload-progress-facilities" title="Facilites">
 	<span class="inactive-step-no" id="facilities-step-no">2</span>
 		« Facilities »
 		</span>
+</div>
 
-	<span  class="inactive-step" id="upload-progress-rating" title="Jump to Rating">
+<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 text-center step">
+	<span  class="inactive-step" id="upload-progress-rating" title="Rating">
 		<span class="inactive-step-no" id="rating-step-no">3</span>
 		« Rating »
 		</span>
+</div>
 
+<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 text-center step">
 	<span class="inactive-step" id="upload-progress-addphoto">
 		<span class="inactive-step-no" id="photo-step-no">4</span>
 		« Photos »
 		</span>
-
+		</div>
+</div>
 </div>
 
-<div id="ad-wrapper">
-<img src="" id="ad-in-upload" alt="A graphic will appear here"/>
-</div>
-<div id="upload-form">
+<div class="center-content white-background padding-20">
 <form name="details" action="<?php $_PHP_SELF ?>" method="POST"onsubmit="">
 
 <div class="upload-section-showing" id="basic-info">
 	<?php
 	if(isset($uploadError)){
-		echo "<div class=\"upload-error-wrapper\">$uploadError</div>";
+		echo "<div class=\"operation-report-container fail\" style=\"text-align:left\">$uploadError</div>";
 	}
 	?>
 <fieldset>
 <h2 class="upload-heading">Basic Details</h2>
-<p class="instruction">Provide the basic information about the property, all the fields in this section are necessary</p>
-<div class="upload-input-wrapper basic-info">
+<hr class="grey">
+<p class="help-block">Provide the basic information about the property, all the fields in this section are necessary</p>
+
+<div class="form-group">
+<div class="row">
+<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 <label>Select the property type</label>
-<select name="type">
+</div>
+<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+<select class="form-control" name="type">
 <option value="Select type">Select type</option>
 <option value="Boys Quater">Boys Quater</option>
 <option value="Bungalow">Bungalow</option>
@@ -249,18 +298,52 @@ window.scrollTo(0,Yoffset);
 <option value="Warehouse">Warehouse</option>
 </select>
 </div>
-
-<div class="upload-input-wrapper basic-info">
-<label for="rent">Rent</label><input id="rent-input" name="rent" type="text" value="<?php echo (isset($_POST['rent']) ? $_POST['rent'] : '') ?>" placeholder="Actual rent" maxlength="7"/> per year
+</div>
 </div>
 
-<div class="upload-input-wrapper basic-info">
-<label for="duration">Minimum payment required </label><input name="min_payment" type="radio" value="1 year"/>1 year <input name="min_payment" type="radio" value="1 year, 6 months"/>1Year, 6 Months <input name="min_payment" type="radio" value="2 years"/>2 Years<br/><br/>
+<hr class="grey" />
+
+<div class="form-group">
+<div class="row">
+
+<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+<label for="rent"><span class="glyphicon glyphicon-tags"></span>Rent</label>
 </div>
 
-<div class="upload-input-wrapper basic-info">
-<label for="location">Location </label><input id="location-input" name="location" type="text" size="50" value="<?php echo (isset($_POST['location']) ? $_POST['location'] : '') ?>" placeholder="Address of the property"/><br/><br/>
+<div class="col-lg-7 col-md-7 col-sm-7 col-xs-12">
+<input class="form-control inline" name="rent" type="text" value="<?php echo (isset($_POST['rent']) ? $_POST['rent'] : '') ?>" placeholder="Actual rent per year" maxlength="7"/>
 </div>
+
+</div>
+
+</div>
+
+<hr class="grey" />
+
+<label for="duration"><span class="glyphicon glyphicon-equalizer"></span>Minimum payment required </label>
+<div class="form-group">
+<label class="radio-inline">
+<input name="min_payment" type="radio" value="1 year"/>1 year
+</label> 
+
+<label class="radio-inline">
+<input name="min_payment" type="radio" value="1 year, 6 months"/>1 Year, 6 Months
+</label>
+
+<label class="radio-inline">
+<input name="min_payment" type="radio" value="2 years"/>2 Years
+</label>
+</div>
+
+<hr class="grey" />
+
+
+<div class="form-group">
+<label for="location"><span class="glyphicon glyphicon-map-marker"></span>Location </label>
+<input class="form-control" name="location" type="text" size="50" value="<?php echo (isset($_POST['location']) ? $_POST['location'] : '') ?>" placeholder="Address of the property"/><br/><br/>
+</div>
+
+<hr class="grey" />
 
 </fieldset>
 
@@ -273,24 +356,31 @@ window.scrollTo(0,Yoffset);
 <div class="upload-section-hidden" id="facilities">
 <fieldset>
 <h2 class="upload-heading">Facilities</h2>
-<h3 class="upload-sub-heading">Water supply</h3>
-<p class="instruction" >Check for presence of facility</p>
+<hr class="grey">
 
-<div class="upload-input-wrapper facilities">
- <input name="pmachine" type="checkbox" value="Yes"/><label for="pmachine">Pumping Machine</label>
+<h3><span class="glyphicon glyphicon-tint"></span>Water supply</h3>
+<p class="help-block" >Check for presence of facility</p>
+
+<div class="checkbox">
+<label for="pmachine">
+ <input name="pmachine" type="checkbox" value="Yes"/>Pumping Machine</label>
 </div>
 
-<div class="upload-input-wrapper facilities">
-<input name="borehole" type="checkbox" value="Yes"/><label for="borehole">Borehole</label>
+<div class="checkbox">
+<label for="borehole">
+<input name="borehole" type="checkbox" value="Yes"/>Borehole</label>
 </div>
 
-<div class="upload-input-wrapper facilities">
-<input name="well" type="checkbox" value="Yes"/><label for="well">Well</label>
+<div class="checkbox">
+<label for="well">
+<input name="well" type="checkbox" value="Yes"/>Well</label>
 </div>
 
-<div class="upload-input-wrapper facilities">
+<hr class="grey" />
+<div class="row">
+<div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-6">
 <label for="bath">Bathroom</label>
-<select name="bath">
+<select class="form-control" name="bath">
 <option value="1">1</option>
 <option value="2">2</option>
 <option value="3">3</option>
@@ -299,9 +389,9 @@ window.scrollTo(0,Yoffset);
 </select>
 </div>
 
-<div class="upload-input-wrapper facilities">
+<div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-6">
 <label for="loo">Toilet</label>
-<select name="loo">
+<select class="form-control" name="loo">
 <option value="1">1</option>
 <option value="2">2</option>
 <option value="3">3</option>
@@ -309,16 +399,20 @@ window.scrollTo(0,Yoffset);
 <option value="5">more than 4</option>
 </select>
 </div>
+</div>
+<hr class="grey" />
 
-<h3 class="upload-sub-heading">Other Facilities</h3>
-<p class="instruction" >Check for presence of facility</p>
-<div class="upload-input-wrapper facilities">
-<input  name="tiles" type="checkbox" value="Yes"/><label for="tiles">Tiles</label>
+<div class="checkbox">
+<label for="tiles">
+<input  name="tiles" type="checkbox" value="Yes"/>Tiles</label>
 </div>
 
-<div class="upload-input-wrapper facilities">
-<input  name="pspace" type="checkbox" value="Yes"/><label for="pspace">Parking space</label>
+<div class="checkbox">
+<label for="pspace">
+<input  name="pspace" type="checkbox" value="Yes"/>Parking space</label>
 </div>
+
+<hr class="grey" />
 
 </fieldset>
 
@@ -332,11 +426,12 @@ window.scrollTo(0,Yoffset);
 <div class="upload-section-hidden" id="rating">
 <fieldset>
 <h2 class="upload-heading">Rating</h2>
-<p class="instruction">Rate this property and it's amenities on a scale of 0% - 100% <a href="">learn about property rating</a></p>
-
-<div class="upload-input-wrapper rating">
+<hr class="grey" />
+<p class="help-block">Rate this property and it's amenities on a scale of 0% - 100% <a href="">learn about property rating</a></p>
+<div class="row">
+<div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
 <label for="electricity">Electricity</label>
-<select name="electricity">
+<select class="form-control" name="electricity">
 <option value="0">N/A</option>
 <option value="0">0%</option>
 <option value="10">10%</option>
@@ -353,9 +448,9 @@ window.scrollTo(0,Yoffset);
 </select>
 </div>
 
-<div class="upload-input-wrapper rating">
+<div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
 <label for="road">Road</label>
-<select name="road">
+<select class="form-control" name="road">
 <option value="0">N/A</option>
 <option value="0">0%</option>
 <option value="10">10%</option>
@@ -372,9 +467,9 @@ window.scrollTo(0,Yoffset);
 </select>
 </div>
 
-<div class="upload-input-wrapper rating">
+<div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
 <label for="social">Socialization</label>
-<select name="social">
+<select class="form-control" name="social">
 <option value="0">N/A</option>
 <option value="0">0%</option>
 <option value="10">10%</option>
@@ -391,9 +486,9 @@ window.scrollTo(0,Yoffset);
 </select>
 </div>
 
-<div class="upload-input-wrapper rating">
+<div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
 <label for="security">Security</label>
-<select name="security">
+<select class="form-control" name="security">
 <option value="0">N/A</option>
 <option value="0">0%</option>
 <option value="10">10%</option>
@@ -410,27 +505,28 @@ window.scrollTo(0,Yoffset);
 </select>
 </div>
 
-<div class="description">
-	<h3 class="upload-sub-heading">Description</h3>
-<p class="instruction">Brief description of property</p>
-<textarea name="description"  placeholder="comment...(150 characters or less)"></textarea>
+<div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+	<h3 class="">Description</h3>
+<p class="help-block">Brief description of property</p>
+<textarea class="form-control" name="description"  placeholder="comment...(150 characters or less)"></textarea>
 </div>
 
+
+</div>
 </fieldset>
+
+<hr class="grey" />
 <div class="continue-or-back-button-wrapper">
 <a class="continue-or-back-button go-back" onclick="javascript: nextStep('rating','facilities','upload-progress-facilities')">« Go back</a>
 
 <input class="continue-or-back-button continue" name="upload" type="submit" value="continue »"/>
 </div>
-
-<div style="height:15px">
-	<p class="instruction" style="float:right">Continue to add photos</p>
-</div>
-
+<p class="text-right">Continue to add photos</p>
 
 </div>
 
 </form>
+</div>
 </div>
 </body>
 </html>

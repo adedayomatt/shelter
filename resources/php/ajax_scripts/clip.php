@@ -1,28 +1,36 @@
 <?php
+
 if(isset($_GET['p']) && isset($_GET['cb']) && isset($_GET['ref'])){
+
 	$property = $_GET['p'];
 	$by = $_GET['cb'];
 	$ref = $_GET['ref'];
-	
-	$dbhost = '127.0.0.1';
-$dbuser = 'adedayo';
-$dbpass = 'matthew';
-$db_connection = @mysql_connect($dbhost, $dbuser, $dbpass);
-if($db_connection) {
-mysql_select_db('shelter');
+	$client_token = $_GET['tkn'];
 
-	$RemainingClips = "SELECT * FROM clipped where (clippedby=$by)" ;
-	$getclipped = mysql_query("SELECT * FROM clipped WHERE (propertyId='$property' AND clippedby=$by)");
+//if cta is checked in
+if(isset($_COOKIE['user_cta']) && $_COOKIE['user_cta']==$client_token){
+	require('../site_config.php');
+$HOST = database_config::$HOST;
+$USER = database_config::$USER;
+$PASSWORD = database_config::$PASSWORD;
+$DBN = database_config::$DATABASE_NAME;
+
+$connection = new MySQLi($HOST,$USER,$PASSWORD,$DBN);
+ 
+if(!$connection->connect_error) {
+
+	$RemainingClips_Q = "SELECT * FROM clipped where (clippedby=$by)" ;
+	$getclipped = $connection->query("SELECT * FROM clipped WHERE (propertyId='$property' AND clippedby=$by)");
 //if clipped already
-	if(mysql_num_rows($getclipped)==1){
-		$unclip = mysql_query("DELETE FROM clipped WHERE (clipped.propertyId='$property' AND clipped.clippedby=$by)");
-		if($unclip){
-	$remains = mysql_num_rows(mysql_query($RemainingClips));
+	if($getclipped->num_rows==1){
+		$unclip = $connection->query("DELETE FROM clipped WHERE (clipped.propertyId='$property' AND clipped.clippedby=$by)");
+		if($connection->affected_rows==1){
+	$remains = $connection->query($RemainingClips_Q)->num_rows;
 			if($ref=='ctaPage'){
 				echo "removed/".$remains;
 			}
 			else{
-				echo "clip/".$remains;
+				echo "unclipped/".$remains;
 			}
 		}
 		//if unclipping is unsuccessfull
@@ -30,41 +38,29 @@ mysql_select_db('shelter');
 	}
 //if not clipped before
 	else{
-		$clip = mysql_query("INSERT INTO clipped (propertyId,clippedby) VALUE ('$property',$by)");
-		if($clip){
-			$remains = mysql_num_rows(mysql_query($RemainingClips));
-			echo "unclip/".$remains;
+		$now = time();
+		$clip_id = $by + rand(1000000,9999999);
+		$clip = $connection->query("INSERT INTO clipped (clip_id,propertyId,clippedby,timestamp) VALUES ($clip_id,'$property',$by,$now)");
+		if(!$connection->error){
+			$remains = $connection->query($RemainingClips_Q)->num_rows;
+			echo "clipped/".$remains;
 			}
 			else{
-				echo "failed!";
+				echo "failed! ".$connection->error;
+					}
 			}
-		}
-		mysql_close($db_connection);
-		
-//redirect back to the prevoius page
-/*if(isset($ref) )
-	if($ref=='home_page' && isset($_GET['next'])){
-		$jump = $_GET['next'];
-		header("location: ../?next=$jump");
-	}
-	else if ($ref=='home_page' && !isset($_GET['next'])){
-		header("location: ../");
-	}
-	else if ($ref=='search_page' && isset($_GET['next'])){
-		$jump = $_GET['next'];
-		header("location: ../search/?next=$jump");
-	}
-	else if ($ref=='search_page' && !isset($_GET['next'])){
-		$jump = $_GET['next'];
-		header("location: ../search");
-	}
-	else if ($ref=='match_page' && !isset($_GET['next'])){
-		$jump = $_GET['next'];
-		header("location: ../cta");
-	}
-	*/
 	
+	}
+$connection->close();
 }
+//if cta is not logged in
+else{
+	require('../../global/mini-checkin-form.html');
+}
+
+
+
+//if GET conttent are not set
 }
 else{
 	header('http://192.168.173.1/shelter');

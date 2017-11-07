@@ -1,31 +1,140 @@
 
 /**
+ * This function animate background of element, just pass the element selector (id, class, or other element selector)
+ * as the arguement.
+ * 
+ * CAN'T BELIEVE I MADE THIS MYSELF, 5-Aug-2017, 11:24 PM
+ * 
+ * @param {*} selector 
+ */
+function animateBackgroundColor(selector){
+	var r = Math.round(Math.random() * 200);
+	var g = Math.round(Math.random() * 200);
+	var b = Math.round(Math.random() * 200);
+	var i = setInterval(animate,500);
+
+function animate(){
+if((r >= 180 && g>=180 && b >= 180) || (r <= 180 && g>=180 && b > 180) || (r <= 180 && g<=180 && b >= 10)){
+	shrinkRGB();												
+	}
+else {
+exhaustRGB();
+	}
+									
+function exhaustRGB(){
+if(r < 200){
+r += 5;
+	}
+else{		
+	if(g < 200){
+		g += 5;
+				}
+			   else{
+					if(b < 200){
+								b += 5;
+										}
+										
+							}
+						}
+					}
+
+function shrinkRGB(){
+if(r>10){
+r -= 5;
+	}
+	else{
+		if(g>10){
+			g -= 5;
+		}
+		else{
+			if(b>=10){
+				b -= 5;
+			}
+			
+		}
+	}
+}
+document.querySelector(selector).style.backgroundColor = "rgb("+r+","+g+","+b+")";
+	}
+
+}
+	
+	
+
+/**
  * This function is to toggle sidebar especially in mobile
  */
 function togglemenu(){
 var sidebar = document.getElementById('sidebar-wrapper');
 var menu = document.getElementById('menuicon');
+/*
 var headerunder = document.getElementById('top-nav-bar-under');
 var headertop = document.getElementById('top-nav-bar-content');
 var body = document.getElementById('linear-layout-content');
 var hangingHead = document.getElementById('top-nav-bar-content-on-scroll');
+*/
 
 if(sidebar.style.display != 'block'){
-	headerunder.style.display = 'block';
-	headertop.style.position = 'fixed';
 	sidebar.style.display = 'block';
-	//sidebar.style.width = '95%';
-	sidebar.style.marginTop = '0px';
-	sidebar.style.overflow = 'scroll';
+	sidebar.style.height = '95%';
+	sidebar.style.position = 'fixed';
 	menu.innerHTML = "<span style=\"font-size:150%\">&times</span>";
+	document.querySelector('body').style.overflow = 'hidden';
 	sidebar.focus();
-	hangingHead.style.display = 'none';
-	document.getElementById('suggested-agents-search-list-mobile').style.display ='none';
 		}
 else{
 	sidebar.style.display = 'none';
 	menu.innerHTML = "<span class=\"menu-lines\"></span><span class=\"menu-lines\"></span><span class=\"menu-lines\"></span>";
+	document.querySelector('body').style.overflow = 'scroll';
 		}
+	}
+
+/**
+ * __________________________________________________________________________________________________________________________
+ */
+/**
+ * This function toggles
+ */
+ 
+ function toggle(trigger,toggleElement){
+	 trigger.onclick = function(event){
+		 if(toggleElement.style.display == 'block'){
+	 toggleElement.style.display = 'none';
+	 }else{
+toggleElement.style.display = 'block';	
+		}
+		 
+	 }
+	 
+ }
+ 
+ 
+/**
+ * __________________________________________________________________________________________________________________________
+ */
+
+//this function returns the element that contains the popup message
+function popUpContent(){
+var popupContentElement = document.querySelector('.custom-modal-content');
+return popupContentElement;
+}
+
+	//opening pop up
+function showPopup(){
+		var popupParent = document.querySelector('.modal-container');
+		popupParent.style.display = 'block';
+		popupParent.focus();
+		document.querySelector('body').style.overflow = 'hidden';
+
+	}
+//closing pop up
+function closePopup(){
+		var popupParent = document.querySelector('.modal-container');
+	//clear its content
+	popUpContent().innerHTML= "";
+	popupParent.style.display = 'none';
+			document.querySelector('body').style.overflow = 'scroll';
+
 	}
 /*_________________________________________________________________________________________________________________________ */
 
@@ -95,21 +204,46 @@ function countdown(){
 /*_________________________________________________________________________________________________________________________ */
 
 /**
- * This functions is resposible for displaying agent brief info when clicked on in the home page
- * @param {*} box 
+ * This function create and return object of AJAX with different trials
  */
-function showAgentBrief(box){
-event.preventDefault();
-//alert(event.target);
-var agentBox = document.getElementById(box);
-agentBox.style.display = 'block';
+function ajaxObject(){
+	ajax = null;
+		try{
+		//opera 8+, firefox,safari
+		ajax = new XMLHttpRequest();
+	}
+	catch(e){
+		//Internet Explorer
+		try{
+			ajax = new ActiveXObject('Msxml2.XMLHTTP');
+		}
+	catch(e){
+		try{
+		ajax = new ActiveXObject('Microsoft.XMLHTTP');
+		}
+		catch(e){
+			alert('This browser is crazy!');
+			}
+		}	
+	}	
+	return ajax;
 }
-function hideAgentBrief(box){
-event.preventDefault();
-var agentBox = document.getElementById(box);
-agentBox.style.display = 'none';
-}
-/*_________________________________________________________________________________________________________________________ */
+
+	function check_connection(ajaxObject,reportContainer){
+		var url = "http://192.168.173.1/shelter";
+		ajaxObject.open("GET",url, true);
+	if(!ajaxObject.send()){
+		reportContainer.innerHTML = '<h1 class=\"red text-center\">Looks like there is no connection, check your internet</h1>';
+		return false;
+			}
+			else{
+				return true;
+			}
+	}
+
+
+
+	/*_________________________________________________________________________________________________________________________ */
 /**
  * This function uses AJAX to get agents asynchronously
  * @param {*} key 
@@ -122,24 +256,9 @@ function getAgents(key,inputId,container,list){
 	var containerBox = document.getElementById(container);
 	if(agentSearchField.value != ''){
 		containerBox.style.display = 'block';
-try{
-		//opera 8+, firefox,safari
-		xmlhttp = new XMLHttpRequest();
-	}
-	catch(e){
-		//Internet Explorer
-		try{
-			xmlhttp = new ActiveXObject('Msxml2.XMLHTTP');
-		}
-	catch(e){
-		try{
-		xmlhttp = new ActiveXObject('Microsoft.XMLHTTP');
-		}
-		catch(e){
-			alert('This browser is crazy!');
-		}
-	}	
-	}
+
+xmlhttp = ajaxObject();
+
 var thelist = document.getElementById(list);
 	xmlhttp.onreadystatechange = function(){
 	if(xmlhttp.status == 200){
@@ -154,7 +273,7 @@ thelist.innerHTML += xmlhttp.responseText;
 	}
 }
 
-thelist.innerHTML = "<p class=\"loading-data\"> searching '"+key+"'</p>";
+thelist.innerHTML = "<p class=\"text-center blue\"> searching '"+key+"'</p>";
 
 var url = "http://192.168.173.1/shelter/resources/php/ajax_scripts/getagents.php?key="+key;
 xmlhttp.open("GET",url, true);
@@ -176,24 +295,9 @@ function getLocations(key){
 var locationSearchField = document.getElementById('location-input');
 	if(locationSearchField.value != ''){
 		theLocationList.style.display = 'block';
-try{
-		//opera 8+, firefox,safari
-		xmlhttp = new XMLHttpRequest();
-	}
-	catch(e){
-		//Internet Explorer
-		try{
-			xmlhttp = new ActiveXObject('Msxml2.XMLHTTP');
-		}
-	catch(e){
-		try{
-		xmlhttp = new ActiveXObject('Microsoft.XMLHTTP');
-		}
-		catch(e){
-			alert('This browser is crazy!');
-		}
-	}	
-	}
+
+xmlhttp = ajaxObject();
+
 	xmlhttp.onreadystatechange = function(){
 	if(xmlhttp.status==200){
 if(xmlhttp.readyState == 4){
@@ -210,7 +314,7 @@ theLocationList.innerHTML += xmlhttp.responseText;
 		alert("things did not go well:404!");
 	}
 }
-theLocationList.innerHTML = "<div><img class=\"gif stairs-loading\" src=\"resrc/gifs/loading.gif\" /></div>";
+theLocationList.innerHTML = "<p class=\"text-center blue\">looking up '"+key+"'</p>";
 
 var url = "http://192.168.173.1/shelter/resources/php/ajax_scripts/getLocations.php?key="+key;
 xmlhttp.open("GET",url, true);
@@ -239,31 +343,15 @@ function setLocation(location){
  * @param {*} following 
  * @param {*} type 
  */
+
 function follow(buttonid,followerid,follower_name,follower_username,followingid,following_name,following_username,type){
 	var button = document.getElementById(buttonid);
 	//	button.innerHTML = '';
 		button.className = 'waiting-follow-button';
 	setTimeout(f,2000);
 function f(){	
-	try{
-		//opera 8+, firefox,safari
-		xmlhttp = new XMLHttpRequest();
-	}
-	catch(e){
-		//Internet Explorer
-		try{
-			xmlhttp = new ActiveXObject('Msxml2.XMLHTTP');
-		}
-	catch(e){
-		try{
-		xmlhttp = new ActiveXObject('Microsoft.XMLHTTP');
-		}
-		catch(e){
-			alert('This browser is crazy!');
-			}
-		}	
-	}
-	
+	//get the Ajax object
+xmlhttp = ajaxObject();
 xmlhttp.onreadystatechange = function(){
 //if the script is OK
 	if(xmlhttp.status==200){
@@ -272,11 +360,13 @@ if(xmlhttp.readyState == 4){
 	changeStuffs(xmlhttp.responseText);
 }
 else{
-		button.innerHTML = "<span class=\"black-icon warning-icon\"></span>" ;
+		button.innerHTML = "<span class=\"glyphicon glyphicon-warning-sign\"></span>" ;
+		button.style.backgroundImage = "" ;
 	}
 }
 	else if(xmlhttp.status==404){
-		button.innerHTML = "<span class=\"black-icon warning-icon\"></span>" ;
+		button.innerHTML = "<span class=\"glyphicon glyphicon-warning-sign\"></span>" ;
+		button.style.backgroundImage = "" ;
 	}
 };
 var url = "http://192.168.173.1/shelter/resources/php/ajax_scripts/follow.php?flwerId="+followerid+"&flwer="+follower_name+"&flwerUname="+follower_username+"&flwingId="+followingid+"&flwing="+following_name+"&flwingUname="+following_username+"&t="+type;
@@ -286,12 +376,12 @@ xmlhttp.send();
 function changeStuffs(response){
 	if(response == 'positive'){
 		button.className = 'unfollow-button';
-	button.innerHTML = "<span class=\"white-icon unfollow-icon\"></span> unfollow";
-	document.getElementById(followingid+'-follow-status').innerHTML = "Following";
+	button.innerHTML = "<span class=\"glyphicon glyphicon-minus-sign\"></span> unfollow";
+	//document.getElementById(followingid+'-follow-status').innerHTML = "<span class=\"glyphicon glyphicon-ok-sign\"></span>Following";
 	}
 	else if(response == 'negative'){
 		button.className = 'follow-button';
-	button.innerHTML = "<span class=\"black-icon follow-icon\"></span> follow";
+	button.innerHTML = "<span class=\"glyphicon glyphicon-plus-sign\"></span> follow";
 	document.getElementById(followingid+'-follow-status').innerHTML = "";
 				}
 			}
@@ -306,44 +396,23 @@ function changeStuffs(response){
  * @param {*} clipper 
  * @param {*} ref 
  */
-function makeclip(propertyclipbutton,clipper,ref){
-	event.preventDefault();
-	var propertyid = propertyclipbutton.substring(0,propertyclipbutton.indexOf('clipbutton'));
-
-	var clipbutton = document.getElementById(propertyclipbutton);
-	clipbutton.className = 'waiting-clip';
-//if the page is the homepage where the sidebar is...
-	if(ref=='home_page' || ref=='ctaPage'){
-	var sidebar = document.getElementById('clipstring');
-	var clipcounterstatement = sidebar.innerHTML.substring(3,sidebar.innerHTML.length);
-	}
-	var response = "";
-	setTimeout(clip,2000);
+function makeclip(propertyclipbutton,clipper,ref,token){
+	//event.preventDefault();
 	
+//strip off the propertyid from the button id
+	var propertyid = propertyclipbutton.substring(0,propertyclipbutton.indexOf('clipbutton'));
+	var clipCounter = document.getElementById('clip-counter');
+	var clipbutton = document.getElementById(propertyclipbutton);
+	var response = "";
+	clipbutton.className = 'waiting-clip';
+	clipbutton.setAttribute('title','just a moment...');
+	//2 secs delay
+	setTimeout(clip,2000);
 
 function clip(){
 	
-	//create the XMLHttpRequest object
-	try{
-		//opera 8+, firefox,safari
-		xmlhttp = new XMLHttpRequest();
-	}
-	catch(e){
-		//Internet Explorer
-		try{
-			xmlhttp = new ActiveXObject('Msxml2.XMLHTTP');
-		}
-	catch(e){
-		alert("XMLHttpRequest('Msxml2.XMLHTTP')did not work");
-		try{
-		xmlhttp = new ActiveXObject('Microsoft.XMLHTTP');
-		}
-		catch(e){
-			alert('This browser is crazy!');
-		}
-	}	
-	}
-	
+	xmlhttp = ajaxObject();
+
 	xmlhttp.onreadystatechange = function(){
 //if the script is OK
 	if(xmlhttp.status==200){
@@ -352,43 +421,67 @@ if(xmlhttp.readyState == 4){
 	sync(xmlhttp.responseText);
 		}
 		else{
-			clipbutton.innerHTML = "<span class=\"black-icon warning-icon\" ></span>";
+			clipbutton.innerHTML = "<span class=\"glyphicon glyphicon-alert\"></span>";
+			clipbutton.setAttribute('title','An error occured');
 		}
 }
 	else if(xmlhttp.status==404){
 		alert("things did not go well:404!");
 	}
 }
-var url = "http://192.168.173.1/shelter/resources/php/ajax_scripts/clip.php?p="+propertyid+"&cb="+clipper+"&ref="+ref;
+var url = "http://192.168.173.1/shelter/resources/php/ajax_scripts/clip.php?p="+propertyid+"&cb="+clipper+"&ref="+ref+"&tkn="+token;
 xmlhttp.open("GET",url, true);
 xmlhttp.send();
   
   }
   
   function sync(response){
-if(response.substring(0,2)=='cl'){
-	if(ref=='home_page' || ref=='ctaPage'){
-		sidebar.innerHTML = "(" + response.substring(response.indexOf('/')+1) + ")" + clipcounterstatement;
+	  //if the element the number of clipped is accesssible
+if(clipCounter != null){
+	//set the new number of clipped if clipped or unclip was successful
+	if(response.substring(0,2)=='cl' || response.substring(0,2)=='un'){
+clipCounter.innerHTML =  response.substring(response.indexOf('/')+1);
 	}
-	clipbutton.className = 'clip-button';
-clipbutton.innerHTML = "<span class=\"black-icon plus-icon\" ></span>"+response.substring(0,response.indexOf('/'));
-
+	else{
+clipCounter.innerHTML = "<span class=\"glyphicon glyphicon-alert\"></span>";
+	}
 }
+//if clipped
+if(response.substring(0,2)=='cl'){ 
+clipbutton.className = 'unclip-button';
+clipbutton.innerHTML = "<span class=\"glyphicon glyphicon-paperclip\"></span>unclip";
+clipbutton.setAttribute('title','clipped');
+}
+//if unclipped
 else if(response.substring(0,2)=='un'){
-	if(ref=='home_page' || ref=='ctaPage'){
-		sidebar.innerHTML = "(" + response.substring(response.indexOf('/')+1) + ")" + clipcounterstatement;	
+clipbutton.className = 'clip-button';
+clipbutton.innerHTML = "<span class=\"glyphicon glyphicon-paperclip\"></span>clip";
+clipbutton.setAttribute('title','unclipped');
 	}
-	clipbutton.className = 'unclip-button';
-clipbutton.innerHTML = "<span class=\"black-icon minus-icon\"></span>"+response.substring(0,response.indexOf('/'));
-	}
-	
+/*if neither clipped nor unclipped, then it must be that client is not checked in and the checkin form
+**is returned, then pop it up!,...
+**Debug:see the clip.php script */
+else{
+	showPopup();
+	popUpContent().innerHTML = response;
+}
+}
+
+/* I want to hide the unclipped if unclipped from the cta page
 else if(response.substring(0,2) == 're'){
+		clipbutton.setAttribute('title','unclipped');
 	if(ref=='home_page' || ref=='ctaPage'){
 	sidebar.innerHTML = "(" + response.substring(response.indexOf('/')+1) + ")" + clipcounterstatement;
-	}
+}
 	document.getElementById(propertyid).style.display = "none";
 	
-}
+			}
+	*/		
 
-  }
-}
+	  }
+	  
+
+
+
+
+

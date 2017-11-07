@@ -1,0 +1,67 @@
+
+/*The hidden box*/
+div#my-properties-container{
+    display:none;
+    position:fixed;
+    width:100%;
+    height:100vh;
+    background-color:rgba(0,0,0,0.7);
+	z-index:1030;
+}
+div#properties-list-wrapper{
+    width:50%;
+	max-height:95%;
+    margin:auto;
+    margin-top:2%;
+    padding:15px;
+    background-color: white;
+    border-radius:3px;
+	 overflow:auto;
+}
+#property-list-wrapper-head-inside{
+    font-weight:normal;
+    height:15%;
+}
+
+div.agent-properties{
+    border:1px solid #e3e3e3;
+    padding: 7px;
+    margin:2px;
+}
+
+
+/****************************************/
+
+.client-follower-list,.clientbox{
+margin-bottom: 4px;
+padding: 5px;
+border:1px solid #e3e3e3;
+background-color: white;
+}
+
+.already-suggested{
+    background-color: green;
+}
+.request-wrapper{
+padding: 3px;
+margin:5px;
+background-color: #F5F5F5;
+border: 1px solid rgba(0, 0, 0, 0.15);
+border-radius: 4px;
+line-height:25px;
+}
+.request-wrapper>ul>li{
+    display:inline-block;
+}
+
+@media only screen and (max-width:768px){
+div#properties-list-wrapper{
+    width:90%;
+    }
+    #property-list-wrapper-head-inside{
+    height:20%;
+}
+div#properties-list{
+    height:80%;
+}
+}

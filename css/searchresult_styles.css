@@ -1,0 +1,21 @@
+
+.result-displaying{
+    font-size:15px;
+    background-color: white;
+    border:1px solid #e3e3e3;
+    border-radius: 7x;
+    margin:auto;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+.related-results-wrapper{
+	background-color:white;
+}
+#related-results>ul>li{
+padding:7px;
+	list-style-type:none;
+    padding:10px 5px;
+    margin-bottom: 2px;
+	border-bottom:1px solid #e3e3e3;
+}
+

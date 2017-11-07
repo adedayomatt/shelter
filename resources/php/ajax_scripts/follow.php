@@ -8,27 +8,25 @@
 		$following_username = $_GET['flwingUname'];
 
 		$type = $_GET['t'];
-
+$now = time();
 switch($type){
 	case 'A4A':
 $check_follow_query = "SELECT * FROM agent_agent_follow WHERE (agent_follower_id = $follower_id AND agent_following_id = $following_id)";
 
-$follow_query = "INSERT INTO agent_agent_follow (agent_follower_id,agent_follower_business_name,agent_follower_username,agent_following_id,agent_following_business_name,agent_following_username) 
-					VALUES ($follower_id,'$follower_name','$follower_username',$following_id,'$following_name','$following_username')";
+$follow_query = "INSERT INTO agent_agent_follow (agent_follower_id,agent_follower_business_name,agent_follower_username,agent_following_id,agent_following_business_name,agent_following_username,timestamp) 
+					VALUES ($follower_id,'$follower_name','$follower_username',$following_id,'$following_name','$following_username',$now)";
 
 $unfollow_query = "DELETE FROM agent_agent_follow WHERE(agent_follower_id=$follower_id AND agent_following_id =$following_id)";
 
-//$prepared_notice = "INSERT INTO notifications (notificationid,subject,subjecttrace,receiver,action,status,time) VALUES ('?','?','?','?','?','?','?')";
 break;
 case 'C4A':
 $check_follow_query = "SELECT * FROM client_agent_follow WHERE (client_id = $follower_id AND agent_id = $following_id)";
 
-$follow_query = "INSERT INTO client_agent_follow (client_id,client_name,agent_id,agent_business_name,agent_username) 
-					VALUES ($follower_id,'$follower_name',$following_id,'$following_name','$following_username')";
+$follow_query = "INSERT INTO client_agent_follow (client_id,client_name,agent_id,agent_business_name,agent_username,timestamp) 
+					VALUES ($follower_id,'$follower_name',$following_id,'$following_name','$following_username',$now)";
 
 $unfollow_query = "DELETE FROM client_agent_follow WHERE(client_id=$follower_id AND agent_id =$following_id)";
 
-//$prepared_notice = "INSERT INTO notifications (notificationid,subject,subjecttrace,receiver,action,status,time) VALUES ('?','?','?','?','?','?','?')";
 break;
 }
 
@@ -44,7 +42,7 @@ if($connection->connect_error){
 	return '<br/>connection failed!';
 }
 else{
-
+require('../notification_handler.php');
 $check_follow = $connection->query($check_follow_query);
 	if($connection->error){
 echo "can't check for follow";
@@ -55,6 +53,12 @@ echo "can't check for follow";
 			//follow
 $follow = $connection->query($follow_query);
 if(!$connection->error){
+	if($type=='C4A'){
+		send_agent_notification($connection,$follower_name,'nil',$follower_id,$following_name,$following_id,$type,'nil');
+	}
+	else if($type=='A4A'){
+		send_agent_notification($connection,$follower_name,$follower_username,$follower_id,$following_name,$following_id,$type,'nil');
+	}
 				echo 'positive';
 			}
 			else{

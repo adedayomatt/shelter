@@ -144,20 +144,18 @@ else{
 
 <!DOCTYPE html>
 <html>
-<?php require('../resources/html/meta-head.html'); ?>
-<link href="../css/general.css" type="text/css" rel="stylesheet" />
-<link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
-<link href="../css/style_for_signup.css" type="text/css" rel="stylesheet">
-
 <head>
-<title>Shelter | sign up</title>
+<?php 
+$pagetitle = "Sign up";
+$ref = "signup_page";
+require('../resources/global/meta-head.php'); ?>
+<link href="../css/signup_styles.css" type="text/css" rel="stylesheet">
+
+
 <?php
 //first log out current account to sign up for new one
 setcookie('CTA',"",time()-60,"/","",0);
 setcookie('name',"",time()-60,"/","",0);
-$pagetitle = 'signup';
-$ref='signup';
-require('../resources/html/plain-header.html');
 ?>
 <script>
 //This verify if the two paswords match		
@@ -232,7 +230,20 @@ window.scrollTo(0,Yoffset);
 	</noscript>	
 			</head>			
 <body class="no-pic-background">
+<?php
+$altHeaderContent ="
+<div class=\"row\">
+<div class=\"col-lg-4 col-md-4 col-sm-4 col-xs-12\">
+Sign up
+</div>
+<div class=\"col-lg-8 col-md-8 col-sm-8 col-xs-12\">
+<p class=\"font-16\">Already have an account?  <a  href=\"../login\"><button class=\"btn btn-primary\">login</button></a></p>
+</div>
+</div>";
+require('../resources/global/alt_static_header.php');
+?>
 
+<div class="container-fluid body-content" id="all-wrapper">
 <?php
 	if(isset($case) and $case == 1){
 	$icon = "background-position:-288px 0px";
@@ -242,15 +253,13 @@ window.scrollTo(0,Yoffset);
 	$general->halt_page();
 	}
 	?>
-
-<div id="all-wrapper">
-<div id="LHS">
-<p>A graphic will appear here</p>
+<div class="row">
+<div class="col-lg-3 col-md-3 col-sm-3 hidden-xs LHS">
+<img src="" width="100%" height="100%" alt="A graphic will appear here"/>
 </div>
 
-<div id="mainsignup">
+<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12 mainsignup">
 
-<h3 class="major-headings">Sign up</h3>
 <div id="signup-progress-wrapper">
 	<span  class="active-step" id="signup-progress-business-info" title="Provide information regarding your business">
 		<span class="active-step-no" id="business-info-step-no">1</span>
@@ -270,14 +279,9 @@ window.scrollTo(0,Yoffset);
 </div>
 
 	
-
-
-	<p align="center">Already have an account? You can <a href="../login">login</a></p>
-			<div id="yes-js-mainsignup" >
-		
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
 		<form name="signupform" action="<?php $_PHP_SELF ?>" method="POST" onsubmit="return(verify())">
-
-
+		
 <div class="signup-tab-showing" id="business-info-tab">
 		<fieldset class="Business" >
 		
@@ -312,15 +316,33 @@ echo "</ul>check your input and try again</div>";
 			<h3 class="legend">Business Information</h3>
 			<p class="instruction">Let people know your business name, address and contacts. It makes it easier for clients and potential clients to locate or contact you.</p>
 			<p class="instruction"><b>Fields asterisks (<span style="color: red">*</span>) are necessary</b></p>
-			<label><span style="color: red">*</span>Business Registered Name: <input name="Business_name" placeholder="Enter business name here" size="60" maxlength="50" type="text" required="required" value="<?php if(isset($_POST['Business_name'])){echo $_POST['Business_name']; }?>"/></label>
-			<label><span style="color: red">*</span>Office Address: <input name="Office_Address" placeholder="Enter office address here "  size="100" maxlength="150" type="text" required="required" value="<?php if(isset($_POST['Office_Address'])){echo $_POST['Office_Address']; }?>"></label>
-			<label><span style="color: red">*</span>Office Tel No: <input placeholder="Enter office Tel here"  name="Office_No" size="30" maxlength="11" type="text" required="required" value="<?php if(isset($_POST['Office_No'])){echo $_POST['Office_No']; }?>"></label>
-			<label>Business's e-mail: <input name="Office_mail" placeholder="Enter business e-mail here" size="30" maxlength="30" type="email" required="required" value="<?php if(isset($_POST['Office_mail'])){echo $_POST['Office_mail']; }?>"></label>
 			
+			<div class="form-group">
+			<label><span style="color: red">*</span>Business Registered Name: </label>
+			<input class="form-control" name="Business_name" placeholder="Enter business name here"  maxlength="50" type="text" required="required" value="<?php if(isset($_POST['Business_name'])){echo $_POST['Business_name']; }?>"/>
+			</div>
+			
+			<div class="form-group">
+			<label><span style="color: red">*</span>Office Address: </label>
+			<input class="form-control" name="Office_Address" placeholder="Enter office address here "  maxlength="150" type="text" required="required" value="<?php if(isset($_POST['Office_Address'])){echo $_POST['Office_Address']; }?>">
+			</div>
+			
+			<div class="form-group">
+			<label><span style="color: red">*</span>Office Tel No: </label>
+			<input class="form-control" placeholder="Enter office Tel here"  name="Office_No"  maxlength="11" type="text" required="required" value="<?php if(isset($_POST['Office_No'])){echo $_POST['Office_No']; }?>">
+			</div>
+			
+			<div class="form-group">
+			<label>Business's e-mail: </label>
+			<input class="form-control" name="Office_mail" placeholder="Enter business e-mail here" maxlength="30" type="email" required data-validate-required-message="Enter a valid email" value="<?php if(isset($_POST['Office_mail'])){echo $_POST['Office_mail']; }?>">
+			</div>
+			
+			<div class="row">
 			<div class="continue-or-back-button-wrapper">
 			<a class="continue-or-back-button continue" onclick="javascript: nextSignupStep('business-info-tab','personal-info-tab','signup-progress-personal-info')">Continue »</a>
 			</div>
-
+			</div>
+			
 				</fieldset>
 			
 			</div>
@@ -332,11 +354,28 @@ echo "</ul>check your input and try again</div>";
 			<h3 class="legend">Business Owner Information</h3>
 			<p class="instruction">Provide us with the business owner's information. Be assured that this information will not be shared publicly. For more information, you can <a href="">read our privacy policy</a> or <a href="">contact us</a></p>
 			<p class="instruction"><b>Fields asterisks (<span style="color: red">*</span>) are necessary</b> </p>
-			<label><span style="color: red">*</span>CEO Name: <input name="personal_name" placeholder="Enter business owner's name here" size="60" maxlength="50" type="text" required="required" value="<?php if(isset($_POST['personal_name'])){echo $_POST['personal_name']; }?>"></label>
-			<label><span style="color: red">*</span>Phone No: <input name="personal_No" placeholder="Enter business owner's phone no here" size="40" maxlength="11" type="text" required="required" value="<?php if(isset($_POST['personal_No'])){echo $_POST['personal_No']; }?>"></label>
-			<label>Alternative Phone No: <input name="personal_No2" size="40" placeholder="Enter business owner's alternative phone no here" maxlength="11" type="text" value="<?php if(isset($_POST['personal_No2'])){echo $_POST['personal_No2']; }?>"/></label>
-			<label><span style="color: red">*</span>e-mail: <input name="personal_mail" placeholder="Enter business owner's e-mail address here" size="30" maxlength="30" type="email" required="required" value="<?php if(isset($_POST['personal_mail'])){echo $_POST['personal_mail']; }?>"></label>
+			
+			<div class="form-group">
+			<label><span style="color: red">*</span>CEO Name:</label> 
+			<input class="form-control" name="personal_name" placeholder="Enter business owner's name here" maxlength="50" type="text" required="required" value="<?php if(isset($_POST['personal_name'])){echo $_POST['personal_name']; }?>">
+			</div>
+			
+			<div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+			<label><span style="color: red">*</span>Phone No: </label>
+			<input class="form-control" name="personal_No" placeholder="Enter business owner's phone no here" maxlength="11" type="text" required="required" value="<?php if(isset($_POST['personal_No'])){echo $_POST['personal_No']; }?>">
+			</div>
+			
+			<div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+			<label>Alternative Phone No: </label>
+			<input class="form-control" name="personal_No2" placeholder="Enter business owner's alternative phone no here" maxlength="11" type="text" value="<?php if(isset($_POST['personal_No2'])){echo $_POST['personal_No2']; }?>"/>
+			</div>
+			
+			<div class="form-group">
+			<label><span style="color: red">*</span>e-mail: </label>
+			<input class="form-control" name="personal_mail" placeholder="Enter business owner's e-mail address here"  maxlength="30" type="email" required data-validated-required-message="Enter a valid email" value="<?php if(isset($_POST['personal_mail'])){echo $_POST['personal_mail']; }?>">
+			</div>
 
+			<div class="row">
 	<div class="continue-or-back-button-wrapper">				
 	<a class="continue-or-back-button continue" onclick="javascript: nextSignupStep('personal-info-tab','login-info-tab','signup-progress-login-info')">Continue »</a>
 	<a class="continue-or-back-button go-back" onclick="javascript: nextSignupStep('personal-info-tab','business-info-tab','signup-progress-business-info')">« Go Back</a>
@@ -344,30 +383,52 @@ echo "</ul>check your input and try again</div>";
 			</fieldset>
 			</div>
 			
+			</div>
+			
+			
 	<div class="signup-tab-hidden" id="login-info-tab">
 			<fieldset class="personal">
 	
 			<h3 class="legend">Login Details</h3>
 			<p class="instruction">Choose a username and created password. Make sure this password is secured. The combination of your username and password would be used for subsequent logins</p>
 			<p class="instruction"><b>Fields asterisks (<span style="color: red">*</span>) are necessary</b></p>
-			<label><span style="color: red">*</span>User ID: <input name="userID" placeholder="Choose a username" size="30" maxlength="20" type="text" required="required" value="<?php if(isset($_POST['userID'])){echo $_POST['userID']; }?>"/></label>
-			<label><span style="color: red">*</span>Password: <input name="pass1" placeholder="Input password" size="30" maxlength="25" type="password" required="required"/></label>
-			<label><span style="color: red">*</span>Repeat Password: <input name="pass2" placeholder="Repeat password" size="30" maxlength="25" type="password" required="required"/></label>
 			
+			<div class="form-group">
+			<label><span style="color: red">*</span>User ID: </label>
+			<input class="form-control" name="userID" placeholder="Choose a username" maxlength="20" type="text" required="required" value="<?php if(isset($_POST['userID'])){echo $_POST['userID']; }?>"/>
+			</div>
+			
+			<div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+			<label><span style="color: red">*</span>Password: </label>
+			<input class="form-control" name="pass1" placeholder="Input password"  maxlength="25" type="password" required/>
+			</div>
+			
+			<div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+			<label><span style="color: red">*</span>Repeat Password: </label>
+			<input class="form-control" name="pass2" placeholder="Repeat password"  maxlength="25" type="password" required/>
+			</div>
+			
+			<div class="row">
 			<div class="continue-or-back-button-wrapper">
 				<a class="continue-or-back-button go-back" onclick="javascript: nextSignupStep('login-info-tab','personal-info-tab','signup-progress-personal-info')">« Go Back</a>
 			</div>
+			</div>
 
-			<div > <input name="agreement" value="<?php if(isset($_POST['agreement'])) echo 'yes'; else echo 'no';?>"  type="checkbox" checked="checked">I agree with the <a href="#">terms and conditions</a> of shelter.com</div>
-			<input name="register" value="sign up"  type="submit" id="signupbutton" align="right"/>
+			<div class="checkbox">
+			<label>
+ <input name="agreement" value="<?php if(isset($_POST['agreement'])) echo 'yes'; else echo 'no';?>"  type="checkbox" checked="checked">I agree with the <a href="#">terms and conditions</a> of shelter.com
+ </label>
+ </div>
+			<input class="btn signupbutton" name="register" value="sign up"  type="submit" align="right"/>
 			</fieldset>
 			</div>
 			</form>
-		</div>	
-		<?php require('../resources/php/footer.php');	?>
 			</div>
-
-			</div>
+			
+			</div><!--mainsignup-->
+			
+			</div><!--parent row-->
+			</div><!--container-fluid-->
 			</body>
 			
 			</html>

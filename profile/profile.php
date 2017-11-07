@@ -1,16 +1,17 @@
 <?php 
 require('../resources/php/master_script.php'); ?>
 <html>
-<?php require('../resources/html/meta-head.html'); ?>
-<link href="../css/general.css" type="text/css" rel="stylesheet" />
+<head>
+
+<?php 
+	$pagetitle = $Aid;
+	$ref = "profile_page";
+require('../resources/global/meta-head.php'); ?>
 <link href="../css/profile_styles.css" type="text/css" rel="stylesheet" />
 <link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
 <link href="../css/propertybox_styles.css" type="text/css" rel="stylesheet" />
-<head>
 <?php 
-		$pagetitle = $Aid;
-		$ref = "profile_page";
-		require('../resources/php/header.php');
+		
 		//get the agent with $key(from index.php) detail
 $getprofile = $db->query_object("SELECT * FROM profiles WHERE ID=$key");
 if(is_object($getprofile) and $getprofile->num_rows ==1){
@@ -56,68 +57,233 @@ switch($status){
 case 1:
 	if($BizName != $Business_Name)
 	{
-	$sendmessage = "<a href=\"$root/messages/compose.php?cv=".$token."&i=$Business_Name&rcpt=$key\"><button class=\"profile-buttons\" id=\"sendmessage-button\"><i class=\"black-icon message-icon\"></i>send message</button></a>";
+	$sendmessage = "<a href=\"$root/messages/compose.php?cv=".$token."&i=$Business_Name&rcpt=$key\"><button class=\"btn btn-default\"><span class=\"glyphicon glyphicon-envelope\"></span>message</button></a>";
 	$followup = $agent->follow($agentId, $Business_Name,$profile_name,$key,$BN,$Aid,'A4A');
 	}
 	else{
-	$editprofile = "<a href=\"$root/manage/account.php\"><button class=\"profile-buttons\" id=\"editprofile-button\"><i class=\"black-icon edit-icon\"></i> Edit profile</button></a>";
+	$editprofile = "<a href=\"$root/manage/account.php\"><button class=\"btn btn-default\"><span class=\"glyphicon glyphicon-pencil\"></span> Edit profile</button></a>";
 	}
 break;
 //if a client is logged in
 	case 9:	
-$sendmessage = "<a href=\"$root/messages/compose.php?cv=".$token."&i=$cta_name&rcpt=$key\"><button class=\"profile-buttons\" id=\"sendmessage-button\"><span class=\"black-icon message-icon\"></span>message</button></a>";
+$sendmessage = "<a href=\"$root/messages/compose.php?cv=".$token."&i=$cta_name&rcpt=$key\"><button class=\"btn btn-default\"><span class=\"glyphicon glyphicon-envelope\"></span>message</button></a>";
 	$followup = $agent->follow($ctaid, $cta_name,null,$key,$BN,$Aid,'C4A');
 		break;
 //for visitors
 default:
-$sendmessage = "<a href=\"$root/cta/checkin.php?_rdr=1\"><button class=\"profile-buttons\" id=\"sendmessage-button\"><span class=\"black-icon message-icon\"></span>message</button></a>";
-$followup =  "<a href=\"$root/cta/checkin.php?_rdr=1\"><button class=\"follow-button\" id=\"follow-button\"><i class=\"black-icon follow-icon\"></i> follow</button></a>";
+$sendmessage = "<a href=\"$root/cta/checkin.php?_rdr=1\"><button class=\"btn btn-default\"><span class=\"glyphicon glyphicon-envelope\"></span>message</button></a>";
+$followup =  $agent->dummy_follow();
 	break;
 }
 ?>
 
 </head>
 <body class="no-pic-background">
-<?php require('../resources/php/sidebar.php') ?>
-<div class="profile-main-content">
+<?php 
+$showStaticHeader = true;
+$staticHead = "<div class=\"col-sm-offset-3\">
+<div class=\"row hidden-lg hidden-md hidden-sm static-head-primary\">
+<h2 class=\"site-color font-20\"><span class=\"glyphicon glyphicon-briefcase padding-10 border-round e3-border\"></span>$BizName</h2>
+</div>
+</div>";
+require('../resources/global/header.php');?>
 
-<div id="profile-wrapper">
-<div id="logo-and-name">
-<?php echo "<h1 id=\"avatar\">".substr($BizName,0,1)."</h1> "?>
-<div id="BizName-and-buttons">
-<?php
-echo "<h3 id=\"bizname\" >$BizName $followup</h3>";
-	//echo "<div class=\"following-status\" id=\"following-status\" style=\"font-weight:normal; font-size:80%;color:grey;\"><a href=\"login\">login</a> to follow $BizName </div>
-	echo "<div class=\"follow-message-container\">".$sendmessage."</div>";
-echo $editprofile;
 
+	<div class="container-fluid body-content">
+	<div class="row">
+<?php require('../resources/global/sidebar.php') ?>
+
+<div class="col-lg-10 col-md-10 col-sm-9 col-xs-12 main-content">
+<div class="row  white-background pp">
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-left:5px;">
+<h3 id="bizname" ><span class="glyphicon glyphicon-briefcase agent-avatar"></span><span class="bn"><?php echo $BizName ?> </span></h3>
+</div>
+<style>
+@media all and (max-width:778px){
+	.pp{
+		background-color:#20435C;
+	}
+	.bn{
+		color:white;
+	}
+}
+</style>
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+<div class="row" style="padding:10px">
+<div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+<?php echo $followup ?>
+</div>
+<div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+<?php echo $sendmessage ?>
+</div>
+<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+<?php echo $editprofile ?>
+</div>
+
+</div>
+</div>
+ 
+ 
+</div>
+
+<div class="padded-main-content">
+<div class="row">
+<div  class="col-lg-12 col-md-12 col-sm-12 col-xs-12 white-background grey padding-10 address-wrapper" style="">
+<span><span class="glyphicon glyphicon-map-marker"></span><span class="text-center"><?php echo $OAddress?></span></span>
+</div>
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding-10 contacts-wrapper">
+ <div>
+<span class="col-lg-4 col-md-4 col-sm-4 col-xs-12"> <span class="glyphicon glyphicon-earphone"></span><?php echo $OTel?></span>
+<span class="col-lg-4 col-md-4 col-sm-4 col-xs-12"> <span class="glyphicon bold">@</span><?php echo $email?></span>
+</div>
+</div>
+<p class="grey text-right margin-5"><span class="glyphicon glyphicon-time"></span>User since: <?php echo $general->since($regDate)?></p>
+</div>
+
+<div class="row">
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+<?php 
+$agent_followers_id = $data->agent_followers($ID);
+$total_agent_followers = count($agent_followers_id);
 ?>
+<div class="grey font-18 bold margin-10">Agent Followers (<?php echo $total_agent_followers ?>)</div>
+<div class="scrollable-x">
+<div class="<?php echo ($total_agent_followers>=3 ? 'scrollable-x-inner':'') ?>">
+<?php
+if($total_agent_followers == 0){
+	?>
+	<div class="white-background padding-10 e3-border text-center">No agent follower</div>
+	<?php
+}
+else{
+for($a=0;$a<$total_agent_followers;$a++){
+if($a>=10){
+	break;
+}
+$get_agent_follower_detail = $db->query_object("SELECT * FROM profiles WHERE ID = $agent_followers_id[$a]");
+$af = $get_agent_follower_detail->fetch_array(MYSQLI_ASSOC);
+	?>
+	<div class="inline-block white-background padding-5 e3-border text-center agent-followers-box">
+	<div class="margin-5"><span class="glyphicon glyphicon-briefcase agent-avatar"></span></div>
+	<div class="margin-5"><a href="<?php echo '../'.$af['User_ID'] ?>" > <?php echo $general->substring($af['Business_Name'],'abc',16) ?></a></div>
+	<div class="margin-5 text-left grey font-12"><span class="glyphicon glyphicon-map-marker"></span><?php echo $general->substring($af['Office_Address'],'xyz',16) ?> </div>
+	<div class="margin-5">
+	<?php 
+if($status==1){
+echo $agent->follow($ID,$BizName,$Agent_Id,$af['ID'],$af['Business_Name'],$af['User_ID'],'A4A');
+}
+else if($status==9){
+ echo $agent->follow($ctaid,$cta_name,null,$af['ID'],$af['Business_Name'],$af['User_ID'],'C4A');
+}
+else{
+	echo $agent->dummy_follow();
+}
+ ?>
  </div>
+	</div>
+	<?php
+	$get_agent_follower_detail->free();
+}
+}
+?>
 </div>
- <div id="biz-contacts-wrapper">
-<h2 style="color: purple">Contacts</h2>
-<p><span class="black-icon location-icon"></span><?php echo $OAddress?></p>
-<p><?php echo $OTel?></p>
-<p> <?php echo $email?></p>
 </div>
-</div>
-<h4 class="container-headers">STATS</h4>
-<div id="stat-wrapper">
-
-
-<div class="all-corners-border" id="stats-container">
-<ul class="no-padding-ul">
-<li class="agent-stats-list" style="display:block">Shelter agent since: <?php echo $general->since($regDate)?> </li>
-<li class="agent-stats-list" >Total Uploads: <?php  echo count($data->get_uploads($ID,$Agent_Id)) ?> </li>
-<li class="agent-stats-list" >Follower [Clients]: <?php echo count($data->client_followers($ID)) ?> </li>
-<li class="agent-stats-list" >Follower [Agents]: <?php echo count($data->agent_followers($ID)) ?> </li>
-<li class="agent-stats-list" >Following: <?php echo count($data->agent_followings($ID)) ?> </li>
-</ul>
 </div>
 </div>
 
-<h4 class="container-headers">RECENT UPLOADS</h4>
-<div id="recent-uploads">
+<div class="row">
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+<?php 
+$client_followers_id = $data->client_followers($ID);
+$total_client_followers = count($client_followers_id);
+?>
+<div class="grey font-18 bold margin-10">Client Followers (<?php echo $total_client_followers ?>)</div>
+<div class="scrollable-x">
+<div class="<?php echo ($total_client_followers>=3 ? 'scrollable-x-inner':'') ?>">
+<?php
+if($total_client_followers == 0){
+	?>
+	<div class="white-background padding-10 e3-border text-center">No client follower</div>
+	<?php
+}
+else{
+for($c=0;$c<$total_client_followers;$c++){
+if($c>=10){
+	break;
+}
+$get_client_follower_detail = $db->query_object("SELECT * FROM cta WHERE ctaid = $client_followers_id[$c]");
+$cf = $get_client_follower_detail->fetch_array(MYSQLI_ASSOC);
+$client_follower_name = $cf['name'];
+$get_client_request = $client->get_request($cf['ctaid'],$cf['name']);
+	?>
+	<div class="inline-block white-background padding-5 e3-border text-center client-followers-box">
+	<div class="margin-5"><span class="glyphicon glyphicon-user client-avatar"></span></div>
+	<div class="margin-5"><?php echo (strlen($client_follower_name) >= 16 ? substr($client_follower_name,0,15).'...' : $client_follower_name) ?></div>
+	<div class="client-follower-request-container grey f7-background border-radius-3 e3-border margin-5">
+	<?php
+	if(empty($get_client_request)){
+		?>
+		<p class="grey font-12"><span class="glyphicon glyphicon-question-sign site-color font-20"></span>No Request Yet</p>
+		<?php
+	}else{
+	?>
+	<div>
+	<div><span class="glyphicon glyphicon-question-sign site-color font-20"></span><?php echo $get_client_request['type'] ?></div>
+	<div><?php echo $get_client_request['maxprice'] ?></div>
+	<div><?php echo (strlen($get_client_request['location'])>=16 ? '...'.substr($$get_client_request['location'],(strlen($$get_client_request['location'])-16),strlen($get_client_request['location'])) : $get_client_request['location']) ?></div>
+	</div>
+	<?php
+	}
+	?>
+	</div>
+	<div class="margin-5">
+	<?php 
+	if($status == 1){
+		echo $property_obj->suggestProperty($agentId,$Business_Name,$profile_name,$agent_token,$cf['name'],$cf['ctaid']);
+	}
+	else{
+		echo $property_obj->suggestProperty(null,null,null,null,$cf['name'],$cf['ctaid']);
+	}
+ ?>
+ </div>
+	</div>
+	<?php
+$get_client_follower_detail->free();
+unset($get_client_request);
+}
+}
+?>
+</div>
+</div>
+</div>
+</div>
+
+<style>
+.agent-followers-box{
+	width:150px;
+	height:170px;
+	}
+.agent-followers-box,.client-followers-box,.followings-box{
+	border-radius: 5px;
+}
+.client-follower-request-container{
+	height:80px;
+	line-height:25px;
+}
+</style>
+<div class="row e3-border padding-5 stats-wrapper">
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+<div class="row" style="line-height:30px">
+<span class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left" ><span class="glyphicon glyphicon-briefcase"></span><sup>+</sup>Following: <?php echo count($data->agent_followings($ID)) ?> </span>
+<span class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left" ><span class="glyphicon glyphicon-send"></span>Total Uploads: <?php  echo count($data->get_uploads($ID,$Agent_Id)) ?> </span>
+</div>
+</div>
+</div>
+
+<div class="row uploads-wrapper">
 <?php
 
    $final_property_query = property::$property_query." WHERE agent.User_Id = '$Agent_Id'";
@@ -125,83 +291,116 @@ echo $editprofile;
 if($status == 1 && $Business_Name == $BizName){
 	?>
 	<div class="no-property" align="center"><span class="black-icon warning-icon"></span>You have not uploaded any property 
-	<a class="skyblue-inline-block-link" href="<?php echo $root.'/upload' ?>"><span class="white-icon outbox-icon"></span>upload now</a>
+	<a class="btn btn-primary" href="<?php echo $root.'/upload' ?>">upload now</a>
 		</div>
 	<?php
 	}
 	else{
 		?>
-	<div class="no-property" align="center"><span class="black-icon warning-icon\"></span><?php echo $BizName ?> have not uploaded any property</div>
+	<div class="no-property"><?php echo $BizName ?> have not uploaded any property</div>
 	<?php
 	}
    }
    else{
-   require('../resources/php/property_display.php');
+   require('../resources/global/property_display.php');
    }
 
 ?>
 </div>
 
-<div id="bottom-links-container">
+<div class="row white-background e3-border padding-5">
 <?php
 if(($status ==1 && $BizName != $Business_Name) || $status !=1){
 	//links for visitors,client and other agents aside this one
 	?>
-<a class="bottom-links report" href="../signup"><span class="white-icon flag-icon"></span>Report this agent</a>	
+<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 margin-5">
+<a href="../signup"><button class="btn btn-danger" ><span class="white-icon flag-icon"></span>Report this agent</button></a>
+</div>	
 <?php
 }
 if($status!=1){
 	//links for non agent  -  either visitor or client
 	?>
-	<a class="bottom-links create" href="../signup">create your own account</a>
+	<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 margin-5">
+	<a  href="../signup" class="btn btn-primary">create your own account</a>
+	</div>
 	<?php
 }
 if($status == 1 && $BizName == $Business_Name){
 	//link for the owner
 	?>
-<a class="bottom-links logout" href="../logout">Logout</a>
+	<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 margin-5">
+<a href="../logout" class="btn btn-danger">Logout</a></div>
 	<?php
 }
 ?>
 </div>
 
-<h4 class="container-headers">OTHER AGENTS</h4>
-<div id="other-agents-wrapper">
-<div id="other-agents-container">
+<div class="row">
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+<h4 class="container-headers">Other Agents</h4>
 <?php 
 /*i want to get other agents that are in the same locality as this one
 //$getRelatedAgents = mysql_query("SELECT * FROM profiles WHERE(Office_Address LIKE '%$OAddress%')");*/
 $get_related_agents = $db->query_object("SELECT * FROM profiles WHERE(ID != $ID) LIMIT 10");
 if($get_related_agents->num_rows==0){
 	?>
-<p style="font-size:120%; color:red;">No agent is found around <?php echo $BizName ?></p>
+	<div class="white-background text-center padding-10 e3-border">
+<p class="" >No agent is found around <?php echo $BizName ?></p>
  <p>You may <a href="../agents">check other agents</a></p>
-	
+ </div>
 	<?php
 }
 else{
 	?>
-	<ul class="no-padding-ul">
+<div class="scrollable-x">
+<div class="scrollable-x-inner" style="width:1600px">
 <?php
 	while($otherAgent = $get_related_agents->fetch_array(MYSQLI_ASSOC)){
 		?>
-<li class="other-agents-list"><a class="list-link" href="../<?php echo $otherAgent['User_ID'] ?>"><?php echo $otherAgent['Business_Name'] ?></a>
-<span style=""><?php echo ($status==1 ? $agent->follow($ID,$BizName,$Agent_Id,$otherAgent['ID'],$otherAgent['Business_Name'],$otherAgent['User_ID'],'A4A') : $agent->follow($ctaid,$cta_name,null,$otherAgent['ID'],$otherAgent['Business_Name'],$otherAgent['User_ID'],'C4A')) ?></span>
-<p class="other-agents-address"><?php echo $otherAgent['Office_Address']  ?> </p></li>
+<div class="inline-block white-background margin-3 padding-5 border-radius-2 e3-border text-center" style="width:150px; height:160px; margin-top:0px">
+<div><span class="glyphicon glyphicon-briefcase agent-avatar"></span></div>
+<div><a href="../<?php echo $otherAgent['User_ID'] ?>"><?php echo ((strlen($otherAgent['Business_Name']) > 15) ? substr($otherAgent['Business_Name'],0,14).'...' : $otherAgent['Business_Name'] ) ?></a></div>
+<div class="grey font-12"><?php echo ((strlen($otherAgent['Office_Address']) > 20) ? substr($otherAgent['Office_Address'],0,19).'...' : $otherAgent['Office_Address'] )  ?> </div>
+<div>
+<style>
+.follow-status{
+	display:none;
+}</style>
+<?php 
+if($status==1){
+echo $agent->follow($ID,$BizName,$Agent_Id,$otherAgent['ID'],$otherAgent['Business_Name'],$otherAgent['User_ID'],'A4A');
+}
+else if($status==9){
+ echo $agent->follow($ctaid,$cta_name,null,$otherAgent['ID'],$otherAgent['Business_Name'],$otherAgent['User_ID'],'C4A');
+}
+else{
+	echo $agent->dummy_follow();
+}
+ ?></div>
+ 
+</div>
 <?php 
 }
 	?>
-</ul>
+</div>
+</div>
 <?php
 }
 ?>
-<div>
-<a class="skyblue-inline-block-link" style=" display:block;text-align:center" href="../agents">see all agents</a>
+<div class="text-right">
+<a href="../agents" class="btn btn-primary"> see more agents </a>
 </div>
-</div>
-</div>
-<?php require('../resources/php/footer.php'); ?>
 
 </div>
+</div>
+
+<?php require('../resources/global/footer.php'); ?>
+
+</div>
+</div><!--main-content-->
+
+</div><!--parent row-->
+</div><!--container-fluid-->
 </body>
 </html>

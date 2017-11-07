@@ -3,7 +3,7 @@
 <title>Admin | Activities</title>
 <?php
 $connect = true;
-require('../require/connexion.php');
+require('../resources/php/master_script.php');
 ?>
 </head>
 <style>
@@ -107,10 +107,10 @@ function activityTime($timestamp){
 return $since;
 		}
 
-$getActivities = mysql_query("SELECT * FROM activities ORDER BY timestamp DESC");
+$getActivities = mysqli_query("SELECT * FROM activities ORDER BY timestamp DESC");
 if($getActivities){
-	if(mysql_num_rows($getActivities) !=0){
-while($log = mysql_fetch_array($getActivities,MYSQL_ASSOC)){
+	if(mysqli_num_rows($getActivities) !=0){
+while($log = mysqli_fetch_array($getActivities,MYSQLI_ASSOC)){
 	$AID = $log['activityID'];
 	$subject = $log['subject'];
 	$subject_ID = $log['subject_ID'];

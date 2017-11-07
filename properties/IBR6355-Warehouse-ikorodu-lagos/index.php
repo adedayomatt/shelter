@@ -1,18 +1,16 @@
+
 <?php 
-			require('../../resources/php/master_script.php'); ?>
-			<html>
-			<?php require('../../resources/html/meta-head.html'); ?>
+require('../../resources/php/master_script.php'); ?>
+<html>
 <head>
-<link href="../../css/general.css" type="text/css" rel="stylesheet" />
+<?php $pagetitle="IBR6355 - Warehouse for rent"; 
+require('../../resources/global/meta-head.php') ?>
 <link href="../../css/header_styles.css" type="text/css" rel="stylesheet" />
 <link href="../../css/details_styles.css" type="text/css" rel="stylesheet" />
-<?php $pagetitle="IBR6355 - Warehouse for rent"; 
-require('../../resources/php/header.php') ?>
-<script type="text/javascript" language="javascript" src="../../js/detailsscript.js"></script>
 </head>
-<body class="pic-background">
+<body class="no-pic-background">
 <?php
-$ID = "IBR6355";
+$ID ="IBR6355";
 require('../detail.php');
 ?>
 </body>

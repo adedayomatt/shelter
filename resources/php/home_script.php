@@ -1,7 +1,7 @@
 <?php
 
 class home{
-    function mini_notification(){
+    /*function mini_notification(){
     GLOBAL $general;
     GLOBAL $db;
     GLOBAL $status;
@@ -33,15 +33,16 @@ else{
          return $NOTIFICATIONS;
     }
     
+    */
 function most_viewed(){
     GLOBAL $db;
     GLOBAL $general;
     $most_viewed = null;
 $most_viewed_query = "SELECT property.property_ID AS propertyid, property.directory AS dir,
         property.type AS type, property.location AS location, property.rent AS rent, 
-        property.uploadby AS agentUserName, property.timestamp AS since, property.views AS views, agent.Business_Name AS agentBussinessName  
+        property.uploadby AS agentUserName, property.timestamp AS since, property.views AS views,property.display_photo AS dp, agent.Business_Name AS agentBussinessName  
         FROM properties AS property INNER JOIN profiles AS agent ON (agent.User_ID = property.uploadby) 
-         ORDER BY views DESC LIMIT 10";
+         ORDER BY views DESC LIMIT 6";
 
 $most_viewed = $db->query_object($most_viewed_query);
   //if  error error string was returned

@@ -1,64 +1,30 @@
 
-div.maincontent{
-	background-color:#eeeeee;
-	width:70%;
-}
-div.mainlist{
-	background-color:inherit;
-}
-
-
-.Agentbox{
+.Agentbox-inner{
 	background-color:white;
-	width:98%;
-	margin:5px;
-	padding:5px;
+	margin-bottom: 4px;
 	border:1px solid #E3E3E3;
 	border-radius:2px;
-	
+	line-height: 30px;
+	padding:5px;
 }
 li{
 	list-style-type:none;
 }
+
 .Bname{
-	color:purple;
-}
-.ad{
-	display:block;
-	height:100px;
-	width:100%;
-}
-div.contacts-container{
-	width:100%;
-	height:75%;
+	color:#20435C;
+	font-weight:normal;
+	font-size:130%;
 }
 
-.follow-unfollow-button{
-	float:right;
-	border:2px solid #E3E3E3;
-	border-radius:5px;
-	padding:1% 2% 1% 2%;
-}
 
-@media all and (min-device-width: 800px),
-(min-width:800px){
-	div.maincontent{
-	background-color:#eeeeee;
-	width:79%;
-	padding-left: 0.5%;
-	float:left;
+@media all and (min-width: 768px)
+{
+.Agentbox-inner{
+	margin:4px 10px;
 }
 }
 
-@media all and (min-device-width: 300px) and (max-device-width: 800px),
-(max-width: 800px){
-	
-div.maincontent{
-	background-color:#eeeeee;
-	width:100%;
-	padding-left: 0px;
-}
-}
 
 
 

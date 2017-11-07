@@ -1,18 +1,16 @@
-<?php $connect = true;
-			require('../../require/connexion.php'); ?>
-			<html>
-			<?php require('../../require/meta-head.html'); ?>
+
+<?php 
+require('../../resources/php/master_script.php'); ?>
+<html>
 <head>
-<link href="../../css/general.css" type="text/css" rel="stylesheet" />
+<?php $pagetitle="PQU3148 - Flat for rent"; 
+require('../../resources/global/meta-head.php') ?>
 <link href="../../css/header_styles.css" type="text/css" rel="stylesheet" />
 <link href="../../css/details_styles.css" type="text/css" rel="stylesheet" />
-<?php $pagetitle="PQU3148 - Flat for rent"; 
-require('../../require/header.php') ?>
-<script type="text/javascript" language="javascript" src="../../js/detailsscript.js"></script>
 </head>
-<body class="pic-background">
+<body class="no-pic-background">
 <?php
-$ID = "PQU3148";
+$ID ="PQU3148";
 require('../detail.php');
 ?>
 </body>

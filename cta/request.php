@@ -7,15 +7,17 @@ if($status != 9){
 
 if(isset($_POST['request'])){
 
-	$query = "INSERT INTO cta_request (ctaid,type,maxprice,location) VALUES (?,?,?,?)";
+	$query = "INSERT INTO cta_request (ctaid,ctaname,type,maxprice,location,timestamp) VALUES (?,?,?,?,?,?)";
 	$p_query = $connection->prepare($query);
-	$p_query->bind_param('isis',$param_ctaid,$param_type,$param_maxprice,$param_location);
+	$p_query->bind_param('issisi',$param_ctaid,$param_ctaname,$param_type,$param_maxprice,$param_location,$param_time);
 
 if(!empty($_POST['maxprice']) && is_numeric($_POST['maxprice']) && !empty($_POST['type']) && !empty($_POST['location'])){
 		$param_ctaid = $ctaid;
+		$param_ctaname = $cta_name;
 		$param_type = $_POST['type'];
 		$param_maxprice = $_POST['maxprice'];
 		$param_location = $connection->real_escape_string(htmlentities(trim($_POST['location'])));
+		$param_time = time();
 $p_query->execute();
 if($p_query->affected_rows ==1){
 $updatecta = $db->query_object("UPDATE cta SET request=1 WHERE ctaid=$ctaid");
@@ -77,167 +79,79 @@ $changeReport = "Some fields are empty or filled incorrectly";
 ?>
 <!DOCTYPE html>
 <html>
-<?php require('../resources/html/meta-head.html'); ?>
-<link href="../css/general.css" type="text/css" rel="stylesheet" />
-<link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
+
 <head>
 <?php
 $pagetitle = "Request";
-$ref='ctarequest';
-require('../resources/php/header.php');
+$ref='ctarequest_page';
+require('../resources/global/meta-head.php'); 
 ?>
-
-
-
+<link href="../css/general.css" type="text/css" rel="stylesheet" />
+<link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
 </head>
-<style>
-#all-header-container{
-	display:none;
-}
-#request-form-container{
-	background-color:white;
-}
-#request-error-container,#request-sent-container{
-	width:98%;
-	padding:2%;
-	font-size:120%;
-	border-radius:5px;
-	background-color:#F5F5F5;
-	border:1px solid #E3E3E3;
-	border-radius:2px;
-}
-#request-error-container{
-	color:red;
-}
-#request-sent-container{
-}
 
-input.request-input,.input-labels{
-	display:block;
-}
-#type-input,#type-select{
-	display:inline;
-}
-#request-not-specified-container{
-
-}
-#submit-button{
-	background-color:#6D0AAA;
-	color:white;
-	border:none;
-}
-#submit-button:hover{
-	background-color:grey;
-	color:white;
-}
-@media only screen and (min-device-width: 300px) and (max-device-width: 1000px){
-	#request-form-container{
-		width:80%;
-		margin:auto;
-		padding:5%;
-	margin-top:5%;
-	line-height:300%;
-	box-shadow:3px 3px 3px 3px #DDD;
-}
-legend{
-	font-weight:normal;
-	font-size:250%;
-	letter-spacing:2px;
-}
-select{
-	width:96%;
-	padding:2%;
-	
-}
-.request-input{
-	width:90%;
-	padding:3%;
-}
-#submit-button{
-	width:90%;
-	margin:auto;
-	padding:5%;
-	border-radius:10px;
-	margin-top:50px;
-}
-}
-@media only screen and (min-device-width: 1000px){
-	#request-form-container{
-	width:40%;
-	margin:auto;
-	margin-top:5%;
-	padding:5%;
-	line-height:200%;
-	border-radius:5px;
-}
-fieldset{
-	padding:5%;
-}
-legend{
-	font-weight:normal;
-	font-size:250%;
-	letter-spacing:2px;
-}
-.request-input{
-	width:94%;
-	padding:2%;
-}
-
-#submit-button{
-	width:30%;
-	padding:2%;
-	margin-top:20px;
-	border-radius:5px;
-}
-}
-
-</style>
-<body class="mixedcolor-background">
-<h1 align="center" style="font-size:300%; font-weight:normal; color:white;margin:0px">Shelter</h1>
-<div class="box-shadow-1" id="request-form-container">
+<body class="plain-colored-background">
+<?php
+$altHeaderContent ="Request";
+require('../resources/global/alt_static_header.php');
+?>
+<div  class="container-fluid body-content" style="padding-top:70px">
 <?php 
 //if no request has been made
-if(isset($_GET['p']) && $_GET['p']==0) {
+$requests_pref = $client->get_request($ctaid,$cta_name);
+if(empty($requests_pref)) {
 	if(!isset($_POST['request']) && !isset($_POST['change'])){
-		if(empty($client->get_request($ctaid,$cta_name))){
-
-		}
-	echo "<div id=\"request-not-specified-container\"><p><strong>$cta_name</strong>, you have not specified your preferences of your choice of property.
+	echo "<div class=\"center-content white-background padding-10 e3-border text-center\" style=\"margin-bottom:5%\">
+	<span class=\"glyphicon glyphicon-info-sign  icon-size-30 site-color\"></span>
+	<p><strong>$cta_name</strong>, you have not specified your preferences of your choice of property.
 	Kindly specify now or proceed to <a href=\"$root\">Home page</a></p>
 	</div>";
 	}
 }
 ?>
+<div class="center-content white-background padding-10 box-shadow-1">
 <form action="<?php $_PHP_SELF ?>" method="POST">
 <?php 
-$placeOrChange = ((isset($_GET['p']) && $_GET['p']==0) ? "request":((isset($_GET['p']) && $_GET['p']==1) ? "change" : "invalid"))
+$placeOrChange = ((empty($requests_pref)) ? "request" : "change" )
 ?>
 <fieldset>
-<legend> <?php echo ($placeOrChange == "request" ? "Place Request" : ($placeOrChange == "change" ? "Change Request" : "Invalid action"))?> </legend>
 <?php if(isset($requestplacementReport) && $sent==false){
-	echo "<div id=\"request-error-container\"><p>$requestplacementReport</p></div>";
+	echo "<div class=\"operation-report-container fail\"><p>$requestplacementReport</p></div>";
 }
 else if(isset($requestplacementReport) && $sent==true){
-	echo "<div id=\"request-sent-container\"><p>$requestplacementReport<br/><a href=\"index.php\">continue</a></p></div>";
+	echo "<div class=\"operation-report-container success\"><p>$requestplacementReport<br/><a href=\"index.php\">continue</a></p></div>";
 	$general->halt_page();
 }
 else if(isset($changeReport) && $change==true){
-	echo "<div id=\"request-sent-container\"><p>$changeReport<br/><a href=\"index.php\">continue</a></p></div>";
+	echo "<div class=\"operation-report-container success\"><p>$changeReport<br/><a href=\"index.php\">continue</a></p></div>";
 	$general->halt_page();
 }
 else if(isset($changeReport) && $change==false){
-	echo "<div id=\"request-error-container\"><p>$changeReport</p></div>";
+	echo "<div class=\"operation-report-container fail\"><p>$changeReport</p></div>";
 }
 ?>
+
+<h3 class="font-26">
+ <?php echo ($placeOrChange == "request" ? "Place Request" : ($placeOrChange == "change" ? "Change Request" : "Unrecognized action"))?>
+ </h3>
+ <hr class="grey" />
 <script type="text/javascript" >
 function setType(value){
 	var typeInput = document.getElementById('type-input');
 	typeInput.value = value;
 }
 </script>
-<label>Property type :<?php echo (isset($_POST['type'])? $_POST['type'] : isset($request_type)? $request_type:'Not specified')?> </label>
+
+<div class="row">
+
+<div class="row">
+<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 text-right">
+<p>Property type : <span class="site-color bold"><?php echo (isset($_POST['type'])? $_POST['type'] : isset($request_type)? $request_type:'Not specified')?> </span></p>
 <input type="hidden" name="former_type" value="<?php echo $request_type ?>"/>
-<select id="type-select" name="type">
+</div>
+
+<div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12 text-left">
+<select class="form-control" name="type">
 <option value="nil" ><?php echo ($placeOrChange == "request" ? "Select Property type" : ($placeOrChange == "change" ? "Change" : "Invalid action"))?></option>
 <option value="Boys Quater" >Boys Quater</option>
 <option value="Bungalow" >Bungalow</option>
@@ -251,19 +165,27 @@ function setType(value){
 <option value="Shop">Shop</option>
 <option value="Warehouse">Warehouse</option>
 </select>
-<label class="input-labels" for="maxprice">Maximum rent:</label>
-<input class="request-input" name="maxprice" type="text" maxlength="10" value="<?php echo (isset($_POST['maxprice'])? $_POST['maxprice'] : isset($request_maxprice)? $request_maxprice:'')
+</div>
+</div>
+ <hr class="grey" />
+<div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12" style="float:none">
+<label for="maxprice">Maximum rent:</label>
+<input class="form-control more-padding" name="maxprice" type="text" maxlength="10" value="<?php echo (isset($_POST['maxprice'])? $_POST['maxprice'] : isset($request_maxprice)? $request_maxprice:'')
 ?>" placeholder="Rent should not be more than..."/>
-<label class="input-labels" for="location">Location:</label>
-<input class="request-input" name="location" type="text" value="<?php echo (isset($_POST['location'])? $_POST['location'] : isset($request_location)? $request_location:'')
+</div>
+ <hr class="grey" />
+<div class="form-group">
+<label for="location"><span class="glyphicon glyphicon-map-marker"></span>Location:</label>
+<input class="form-control more-padding" name="location" type="text" value="<?php echo (isset($_POST['location'])? $_POST['location'] : isset($request_location)? $request_location:'')
  ?>"  placeholder="around where?"/>
-<input id="submit-button" name="<?php echo (isset($_GET['p'])? ($_GET['p']==1 ? 'change' : ($_GET['p']==0 ? 'request' : '')): '')?>" 
-	  value="<?php echo (isset($_GET['p'])? ($_GET['p']==1 ? 'change' : ($_GET['p']==0 ? 'request' : '')): '') ?>"
-type="submit" size="30" 
- />
-
+ </div>
+ 
+<input class="btn btn-lg btn-block btn-primary site-color-background" name="<?php echo $placeOrChange ?>"  value="<?php echo $placeOrChange ?>" type="submit" />
+ 
+</div>
 </fieldset>
 </form>
+</div>
 </div>
 </body>
 </html>

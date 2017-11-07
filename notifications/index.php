@@ -1,116 +1,26 @@
 <?php 
-$connect = true;
-require('../require/connexion.php'); 
+require('../resources/php/master_script.php'); 
  //confirm if user is still logged in 
 if($status==0){
-	redirect();
+	$general->redirect('login');
 }
 ?>
+
 <!DOCTYPE html>
 <html>
-<?php require('../require/meta-head.html'); ?>
-<link href="../css/general.css" type="text/css" rel="stylesheet" />
-<link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
 <head>
 <?php
 $pagetitle = "Notifications";
-$ref='notificatons';
-$getuserName=true;
-require('../require/header.php');
-?>
+$ref='notificatons_page';
+require('../resources/global/meta-head.php');?>
+<link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
 </head>
-<style>
-#notification-top-bar{
-	height:50px;
-}
-#total-notification{
-	font-weight:bold;
-	background-color:yellow;
-	color:purple;
-	padding:5px 10px 5px 10px;
-	border-radius:30%;
-	box-shadow:0px 3px 3px rgba(0,0,0,0.2) inset;
-}
-.clear-options{
-	float:right;
-	display:inline-block;
-	padding:1% 2% 1% 2%;
-	margin:2px;
-	background-color:rgba(200,0,0,0.2);
-	color:red;
-	box-shadow: 0px 2px 2px rgba(0,0,0,0.05) inset;
-	border-radius:2px;
-}
-.clear-options:hover{
-	text-decoration:none;
-	opacity:0.8;
-	color:red;
-}
-#notifications-content{
-	width:70%;
-	background-color:white;
-	padding:5px;
-	margin:auto;
-	min-height:400px;
-	border:1px solid #E3E3E3;
-}
-.notice,.client-follow-notice,.no-nofication{
-	display:block;
-	list-style-type:none;
-	margin:auto;
-	margin-bottom:4px;
-	padding-left:5px;
-	width:98%;
-	padding:1%;
-	cursor:default;
-	background-color:#F7F7F7;
-}
-.no-nofication{
-	width:90%;
-	text-align:center;
-	background-color:rgba(200,0,0,0.05);
-	color:red;
-	padding:5%;
-	border:1px solid #E3E3E3;
-}
-.notice:not(.no-nofication):hover,.client-follow-notice:hover{
-	opacity:0.8;
-}
-.period{
-	display:block;
-	padding:5px;
-	color:purple;
-	font-weight:normal;
-	font-size:150%;
-}
-.time{
-	text-align:right;
-}
-ul{
-	padding:0px;
-	margin:0px;
-}
-
-@media all and (max-width:800px){
-	#notifications-content{
-	width:95%;
-	}
-	#confirm-clearing-box{
-	width:90%;
-	margin-top:20px;
-}
-}
-@media all and (min-width:800px){
-	#notifications-content{
-	width:70%;
-	}
-	#confirm-clearing-box{
-	width:30%;
-	margin-top:20px;
-}
-}
-</style>
 <body class="no-pic-background">
+<?php require('../resources/global/header.php'); ?>
+<div class="container-fluid body-content">
+<div class="main-content00">
+<div class="row">
+
 <?php
 //Notifications clearing
 if(isset($_GET['token']) && isset($_GET['target']) && isset($_GET['action'])){
@@ -180,71 +90,63 @@ else if($_GET['action']=='clearold'){
 					<h2>Forbidden!</h2>
 				Notifications cannot be cleared
 					</div>";
-			mysql_close($db_connection);
-			exit();
 		}
 }
 //Neither an agent or a logged in client
 else{
-	redirect();
+	$general->redirect('login');
 		}
 	}
 }
 ?>
 
+
+
+
 <?php
-//include the noticefunction, i put the function in another file because i want to use on the homepage too,to avoid code replication
-require('functionNotice.php');
 if($status==1){
-	$getnotifications = mysql_query("SELECT * FROM notifications WHERE (receiver='$Business_Name' OR receiver='allAgents') ORDER BY time DESC");
-	$clearAllNotification = "<a href=\"?token=$myid&target=$Business_Name&action=clearall&confirm=".SHA1('no')."\" class=\"clear-options\"><span class=\"black-icon delete-icon\"></span>clear all notifications</a>";
-	$clearOldNotification = "<a href=\"?token=$myid&target=$Business_Name&action=clearold&confirm=".SHA1('no')."\" class=\"clear-options\"><span class=\"black-icon delete-icon\"></span>clear older notifications</a>";
+	$getnotifications_q = "SELECT * FROM agent_notifications WHERE (receiver='$Business_Name' OR receiver='allAgents') ORDER BY timestamp DESC";
+	$clearAllNotification = "<a href=\"?token=$agent_token&target=$Business_Name&action=clearall&confirm=".SHA1('no')."\" class=\"btn btn-danger options\"><span class=\"glyphicon glyphicon-trash\"></span>clear all notifications</a>";
+	$clearOldNotification = "<a href=\"?token=$agent_token&target=$Business_Name&action=clearold&confirm=".SHA1('no')."\" class=\"btn btn-danger options\"><span class=\"glyphicon glyphicon-trash\"></span>clear older notifications</a>";
 }
 else if($status==9){
-	$getnotifications = mysql_query("SELECT * FROM notifications WHERE (receiver='$ctaname' OR receiver='allClients') ORDER BY time DESC");
-	$clearAllNotification = "<a id=\"top-bar-table-link-clearall\" href=\"?token=$myid&target=$ctaname&action=clearall&confirm=".SHA1('no')."\" class=\"clear-options\"><span class=\"black-icon delete-icon\"></span>clear all notifications</a>";
-	$clearOldNotification = "<a id=\"top-bar-table-link-clearold\" href=\"?token=$myid&target=$ctaname&action=clearold&confirm=".SHA1('no')."\" class=\"clear-options\"><span class=\"black-icon delete-icon\"></span>clear older notifications</a>";
+	$getnotifications_q = "SELECT * FROM client_notifications WHERE (receiver='$cta_name' OR receiver='allClients') ORDER BY timestamp DESC";
+	$clearAllNotification = "<a href=\"?token=$client_token&target=$cta_name&action=clearall&confirm=".SHA1('no')."\" class=\"btn btn-danger options\"><span class=\"black-icon delete-icon\"></span>clear all notifications</a>";
+	$clearOldNotification = "<a href=\"?token=$client_token&target=$cta_name&action=clearold&confirm=".SHA1('no')."\" class=\"btn btn-danger options\"><span class=\"black-icon delete-icon\"></span>clear older notifications</a>";
 }
-$totalnotifications = mysql_num_rows($getnotifications);
-$topbar = "<div id=\"notification-top-bar\">
-			 Total notifications: <span id=\"total-notification\">$totalnotifications</span><br/>
-			$clearOldNotification
-			$clearAllNotification
-			</div>";
-?>
-<?php	
-if(($totalnotifications)==0){
-	//echo "<ul><li class=\"notice\">No notifications for now</li></ul>";
+$getnotifications = $db->query_object($getnotifications_q);
+	
+if($getnotifications->num_rows == 0){
+	?>
+<div class="padding-20 width-80p margin-auto e3-border white-background  text-center" style="margin-top:5%">No notifications for now</div>
+	<?php
 }
 else{
-	$todaysnotifications='';
+	$todaynotifications='';
 	$yesterdaysnotifications='';
 	$oldernotifications='';
-while($n = mysql_fetch_array($getnotifications,MYSQL_ASSOC)){
+while($n = $getnotifications->fetch_array(MYSQLI_ASSOC)){
 	
 //if notification was received on the same date with the date of checking notifications
-if(date('dmy',$n['time'])== date('dmy',time())){
-	$todaysnotifications .= notify($n['subject'],$n['subjecttrace'],$n['action'],$n['time'],'today');
+if(date('dmy',$n['timestamp'])== date('dmy',time())){
+	$todaynotifications .= $general->display_notification($n['notificationid'],$n['subject'],$n['subject_username'],$n['subject_id'],$n['receiver_id'],$n['action'],$n['link'],$n['timestamp'],'today',$n['status']);
 }
 //if notification was received a day before date of checking notifications
 
-else if((date('d',time())- date('d',$n['time']))==1){
-	$yesterdaysnotifications .=notify($n['subject'],$n['subjecttrace'],$n['action'],$n['time'],'yesterday');
+else if((date('d',time())- date('d',$n['timestamp']))==1){
+	$yesterdaysnotifications .=$general->display_notification($n['notificationid'],$n['subject'],$n['subject_username'],$n['subject_id'],$n['receiver_id'],$n['action'],$n['link'],$n['timestamp'],'yesterday',$n['status']);
 	}
 else{
-	$oldernotifications .=notify($n['subject'],$n['subjecttrace'],$n['action'],$n['time'],'older');
+	$oldernotifications .=$general->display_notification($n['notificationid'],$n['subject'],$n['subject_username'],$n['subject_id'],$n['receiver_id'],$n['action'],$n['link'],$n['timestamp'],'older',$n['status']);
 	}
 
 	}
-
-}
-mysql_close($db_connection);
 ?>
 
-<div id="notifications-content">
+<div>
 
 <?php
-	echo $topbar;
+
 if(isset($deletionReport) && $deletionReport != ''){
 	echo "<div class=\"operation-report-container\">
 	$deletionReport
@@ -252,38 +154,73 @@ if(isset($deletionReport) && $deletionReport != ''){
 }
 ?>
 
-<ul>
-<h3 class="period">Today</h3>
+<div>
+<h3 class="container-headers">Today</h3>
 <?php
-if(isset($todaysnotifications) && $todaysnotifications!=''){
-echo $todaysnotifications;
+if(isset($todaynotifications) && $todaynotifications!=''){
+echo $todaynotifications;
 }
 else{
-	echo "<li class=\"notice no-nofication\"><span class=\"black-icon warning-icon\"></span>No notifications today</li>";
+	?>
+ <div class="padding-10 e3-border white-background text-center">No notifications today</div>
+ <?php
 }
-?></ul>
+?>
+</div>
 
-<ul>
-<h3 class="period">Yesterday</h3>
+<div>
+<h3 class="container-headers">Yesterday</h3>
 <?php
 if(isset($yesterdaysnotifications) && $yesterdaysnotifications!=''){
 echo $yesterdaysnotifications;
 }
 else{
-	echo "<li class=\"notice no-nofication\"><span class=\"black-icon warning-icon\"></span>There was no notifications yesterday</li>";
+	?>
+	<div class="padding-10 e3-border white-background text-center">There was no notifications yesterday</div>
+<?php
 }
-?></ul>
+?></div>
 
-<ul>
-<h3 class="period">Older</h3>
+<div>
+<h3 class="container-headers">Older</h3>
 <?php
 if(isset($oldernotifications) && $oldernotifications!=''){
 echo $oldernotifications;
 }
 else{
-	echo "<li class=\"notice no-nofication\"><span class=\"black-icon warning-icon\"></span>There are no older notifications</li>";
+?>
+<div class="padding-10 e3-border white-background text-center">There are no older notifications</div>
+<?php
 }
-?></ul>
+
+
+?></div>
+
 </div>
+
+<?php
+}
+?>
+</div>
+</div>
+<?php require('../resources/global/footer.php') ?>
+
+</div>
+
 </body>
+<style>
+.notice{
+	margin-bottom:5px;
+}
+@media all and (min-width:778px){
+.main-content00{
+	margin:0px 20px;
+}
+}
+</style>
+
 </html>
+
+
+
+

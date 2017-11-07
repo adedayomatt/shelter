@@ -16,12 +16,12 @@ $getLocs = $connection->query("SELECT location FROM properties WHERE (location L
 		}
 		else{ 
 		echo "<ul style=\"padding:0px;margin:0px;\">
-		<p style=\"color:blue;margin:0px;display:block; width:96%; padding:2%;background-color:white; box-shadow:0px 5px 5px #555;\">
+		<p style=\"color:blue;margin:0px;display:block; padding:5px;background-color:white; box-shadow:0px 5px 5px #555;\">
 		Do you mean: </p>";
 		while($loc = $getLocs->fetch_array(MYSQLI_ASSOC)){
 			$l = $loc['location'];
-	echo "<li onclick=\"setLocation('$l')\" class=\"suggestion-box-list\">
-	<span class=\"black-icon search-result-icon\"></span>$l</li>";
+	echo "<li onclick=\"setLocation('$l')\" class=\"suggestion-box-list grey\">
+	<span class=\"glyphicon glyphicon-map-marker e3-border padding-10\" style=\"border-radius:50%;\"></span>$l</li>";
 		}
 		echo"</ul>";
 	}
@@ -30,5 +30,6 @@ $getLocs = $connection->query("SELECT location FROM properties WHERE (location L
 		echo "<div class=\"search-whatsup\">could not get suggestion</div>";
 	}
 
+$connection->close();
 
 ?>

@@ -1,192 +1,30 @@
-#profile-wrapper,#stat-wrapper{
-	width:100%;
-	border:1px solid #E5E5E5;
-	margin-top:5px;
-}
-#profile-wrapper{
-	background-color:white;
-}
-#logo-and-name{
-	display:inline-block;
-	width:58%;
-	padding:2%;
-}
-h1#avatar{
-	display:inline-block;
-	padding:5% 6% 5% 6%;
-	background-color:purple;
-	border-radius:50%;
-	color:white;
-	vertical-align:top;
-}
-#BizName-and-buttons{
-	display:inline-block;
-	width:75%;
-	padding:2%;
-	margin-left:2%;
-}
-#bizname{
-	color:purple;
-	font-size:150%;
-	font-weight:normal;
-	padding:0px;
-	margin-bottom:10px;
-}
-.follow-message-container{
-	margin:0px;
-	width:100%;
-}
 
-#sendmessage-button,#editprofile-button{
-	margin-top:2%;
-	padding:2%;
-	border:1px solid #E3E3E3;
-	border-radius:5px;
-}
-#follow-button{
-	width:40%;
-}
-#sendmessage-button{
-	width:50%;
-	background-color:white;
-	color:grey;	
-	}
-
-#editprofile-button{
-	width:150px;
-	background-color:white;
-	color:grey;	
-}
-#sendmessage-button:hover,#follow-button:hover,#editprofile-button:hover{
-	box-shadow:0px 2px 2px #DDD inset;
-}
-.profile-buttons{
-	cursor:pointer;	
-}
-#follow-status{
-	margin:0px;
-	color:grey;
-	font-size:80%;
-}
-
-
-#stat-wrapper{
-	background-color:white;
-}
-
-#biz-contacts-wrapper{
-	display:inline-block;
-	width:30%;
-	padding-left:2%;
-	background-color: rgba(236, 87, 236, 0.2);
-}
-
-
-li.agent-stats-list,li.other-agents-list{
-	display: inline-block;
-	list-style-type:circle;
-	padding:10px;
-	color:black;
-}
-
-div#other-agents-wrapper{
-	width:100%;
-	border:1px solid #E5E5E5;
-
-}
 ul{
 	margin:0px;
 	padding:0px;
 }
 
 li.other-agents-list{
-	display:block;
-	background-color:white;
 	list-style-type:none;
-	padding:20px;
+	padding:10px 2px;
 	color:black;
 	margin-bottom:2px;
 }
 
-.editbutton{
-	width:100%;
-	color:white;
-	border:0px;
-	cursor:pointer;
-}
-.editbutton:hover{
-	background-color:purple;
-	color:white;
-}
-.other-agents-address{
-	display:block;
-	color:grey;
-	font-size:80%;
-	margin:0px;
-}
-.container-headers{
-	text-align:left;
-}
-#bottom-links-container{
-	height:70px;
-}
-.bottom-links{
-	display:inline-block;
-	padding:1% 2% 1% 2%;
-	margin:10px;
-	color:white;
-	border-radius:3px;
-	box-shadow: 0px 5px 5px rgba(0,0,0,0.2) inset;
-}
-.bottom-links:hover{
-	text-decoration:none;
-}
-.create{
-	background-color:purple;
-}
-.report{
-	background-color:orange;
-}
-.logout{
-	background-color: red;
-}
-@media only screen and (max-width: 800px){
-.profile-main-content{
-width:100%;
-}
-#logo-and-name{
-	display:block;
-	width:98%;
-	padding:1%;
-}
-#BizName-and-buttons{
-	width:70%;
-	height:150px;
-	padding:1%;
-}
-#biz-contacts-wrapper{
-	display:block;
-	width:100%;
-	padding-left:2%;
-	background-color: rgba(236, 87, 236, 0.2);
-}
-div#other-agents-wrapper{
-	width:100%;
-}
-}
-@media only screen and (min-width: 800px){
-	.profile-main-content{
-	float:left;
-width:78%;
-margin-left:1%;
-}
-#profile-wrapper,#biz-contacts-wrapper,#logo-and-name{
-	height:200px;
-}
-#biz-contacts-wrapper,#logo-and-name{
-	float:left;
-}
-}
+	.contacts-wrapper,.stats-wrapper,.address-wrapper{
+		background-color:white;
+		color:grey;
+		margin-top:10px;
+	}
+.uploads-wrapper{
+		margin-top:10px;	
+	}
+@media all and (max-width:992px){
 
+	.contacts-wrapper>div>span,.stats-wrapper>div>div>span{
+border-bottom:1px solid #e3e3e3;
+padding:5px;
+	}
+}
 
 

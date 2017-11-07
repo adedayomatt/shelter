@@ -28,10 +28,12 @@ class agent_config{
 	
 }
 class ads{
-static $ad001 = '';
-static $ad002 = '';
+static $ad001 = 'resrc/ads/samsung.jpg';
+static $ad002 = 'resrc/ads/keep_to_time.jpg';
+static $ad003 = 'resrc/ads/lg.jpg';
+static $ad004 = 'resrc/ads/super_saver.jpg';
 }
 
 $root = general_config::$root;
-//$general_config_obj = new general_config();
+ $doc_root = $_SERVER['DOCUMENT_ROOT'].'/shelter/';
 
