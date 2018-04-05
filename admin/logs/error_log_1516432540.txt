@@ -1,0 +1,16 @@
+[2018 : 01 : 20 : 08 : 15 : 40] 
+	
+		*** error: 
+		
+SCRIPT ERROR: 
+
+Error code: [8] 
+
+Technical Message: Undefined variable: connection 
+
+File: C:\xampp\htdocs\shelter\manage\property.php 
+
+Line: 76 
+
+Page Accessing: /shelter/manage/property.php 
+		Reported From: [C:\xampp\htdocs\shelter\resources\mato\lib\php\global.php >>  :: handleError >> at line 17] ***

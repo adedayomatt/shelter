@@ -1,0 +1,16 @@
+[2018 : 01 : 25 : 01 : 05 : 37] 
+	
+		*** error: 
+		
+SCRIPT ERROR: 
+
+Error code: [8] 
+
+Technical Message: Undefined variable: city 
+
+File: C:\xampp\htdocs\shelter\resources\master_script.php 
+
+Line: 448 
+
+Page Accessing: /shelter/cta/index.php 
+		Reported From: [C:\xampp\htdocs\shelter\resources\mato\lib\php\global.php >>  :: handleError >> at line 17] ***

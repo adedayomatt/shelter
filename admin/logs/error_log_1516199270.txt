@@ -1,0 +1,16 @@
+[2018 : 01 : 17 : 15 : 27 : 50] 
+	
+		*** error: 
+		
+SCRIPT ERROR: 
+
+Error code: [8] 
+
+Technical Message: Array to string conversion 
+
+File: C:\xampp\htdocs\shelter\resources\master_script.php 
+
+Line: 372 
+
+Page Accessing: /shelter/clients/index.php 
+		Reported From: [C:\xampp\htdocs\shelter\resources\mato\lib\php\global.php >>  :: handleError >> at line 17] ***

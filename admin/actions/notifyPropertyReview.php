@@ -3,11 +3,14 @@
 $agentId = $_GET['agid'];
 $propertyDir = $_GET['p'];
 */
-require('../../resources/php/site_config.php');
-$HOST = database_config::$HOST;
-$USER = database_config::$USER;
-$PASSWORD = database_config::$PASSWORD;
-$DBN = database_config::$DATABASE_NAME;
+	require('../../resources/mato/lib/php/config.php');
+	require('../../resources/mato/lib/php/param.php');
+
+$HOST = config::$db_host;
+$USER = config::$db_user;
+$PASSWORD = config::$db_password;
+$DBN = config::$db_name;
+
 
 $oneDay = 86400;
 $now = time();

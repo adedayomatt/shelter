@@ -1,7 +1,5 @@
-
 <?php 
-
-require('../resources/php/master_script.php');
+require('../resources/master_script.php');
 
 //if submitted		
 if(isset($_POST['register'])){			
@@ -34,15 +32,15 @@ if($_POST['pass1'] != $_POST['pass2']){
 }
 //if there is no any error
 if(empty($error)){
-	$Business_Name = $connection->real_escape_string(trim($_POST['Business_name']));
-	$Office_Address = $connection->real_escape_string(trim($_POST['Office_Address']));
+	$Business_Name = $db->connection->real_escape_string(trim($_POST['Business_name']));
+	$Office_Address = $db->connection->real_escape_string(trim($_POST['Office_Address']));
 	$Office_Tel = $_POST['Office_No'];
-	$Office_mail = $connection->real_escape_string(trim($_POST['Office_mail']));
-	$CEO = $connection->real_escape_string(trim($_POST['personal_name']));
+	$Office_mail = $db->connection->real_escape_string(trim($_POST['Office_mail']));
+	$CEO = $db->connection->real_escape_string(trim($_POST['personal_name']));
 	$Phone_No =$_POST['personal_No'];
 	$Phone_No2 =$_POST['personal_No2'];
-	$email = $connection->real_escape_string(trim($_POST['personal_mail']));
-	$UserId = $connection->real_escape_string(trim($_POST['userID']));
+	$email = $db->connection->real_escape_string(trim($_POST['personal_mail']));
+	$UserId = $db->connection->real_escape_string(trim($_POST['userID']));
 	$password = $_POST['pass2'];
 	$id = time() + rand(1000,9999); 
 	$timeCreated = time();
@@ -57,7 +55,7 @@ if(empty($error)){
 if($db->query_object("SELECT Business_Name FROM profiles WHERE Business_Name='$Business_Name'")->num_rows==0){
 
 //if there is no any account or user with the same username, create account and make directory for the new user
-if(!file_exists("../$UserId") && $db->query_object("SELECT User_ID FROM profiles WHERE User_ID='$UserId'")->num_rows ==0){
+if(!file_exists("../agents/$UserId") && $db->query_object("SELECT User_ID FROM profiles WHERE User_ID='$UserId'")->num_rows ==0){
 
 	/*
 //before the use of prepared statement
@@ -67,7 +65,7 @@ $data = "INSERT INTO profiles(ID,Business_Name,Office_Address,Office_Tel_No,Busi
 **/
 $prepare_query =  "INSERT INTO profiles(ID,Business_Name,Office_Address,Office_Tel_No,Business_email,CEO_Name,Phone_No,Alt_Phone_No,email, User_ID,password,timestamp,token)
 					VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
-$prepared_signup = $connection->prepare($prepare_query);
+$prepared_signup = $db->prepare_statement($prepare_query);
 $prepared_signup->bind_param('ississiisssis',$A,$B,$C,$D,$E,$F,$G,$H,$I,$J,$K,$L,$M);
 $A = $id;
 $B = $Business_Name;
@@ -85,24 +83,22 @@ $M = SHA1($UserId);
 
 $prepared_signup->execute();
 //create a directory for new user 
-	if($prepared_signup->affected_rows == 1 && mkdir("../$UserId")) {
+	if($prepared_signup->affected_rows == 1 && mkdir("../agents/$UserId")) {
 //This is a prepared statement for a new php file that will be the index of the new directory
-			$prepared ="<?php ";
-			$prepared .="\$BN = \"".$Business_Name."\";";
-			$prepared .="\$Aid =\"".$UserId."\";";
-			$prepared .="\$key = \"".$id."\";";
-			$prepared .="require('../profile/profile.php');";
-			$prepared .= "?>";
+			$prepared ="<?php 
+							\$key = $id;
+							require('../profile.php');
+						?>";
 			//create the index.php file
-			$open = fopen("../".$UserId."/index.php",'w');
+			$open = fopen("../agents/".$UserId."/index.php",'w');
 			$write = fwrite($open,$prepared);
 			fclose($open);
 		$registerationReport = "Your Account as been registered successfully as <b>$UserId</b><br/> Click <a href=\"../login\"> here </a> to continue</h3>" ;
 			$case = 1;
 	//insert in activity log
-	$activityID = uniqid(time());
+	/*$activityID = uniqid(time());
 	$db->query_object("INSERT INTO activities (activityID, action, subject, subject_ID, subject_Username, status, timestamp) VALUES('$activityID','AAO','$Business_Name','$id','$UserId','unseen',$timeCreated)");
-			
+	*/		
 	}
 else{
 	$registerationReport = "There was an error while registering your account, please bear with us and try again";
@@ -149,8 +145,6 @@ else{
 $pagetitle = "Sign up";
 $ref = "signup_page";
 require('../resources/global/meta-head.php'); ?>
-<link href="../css/signup_styles.css" type="text/css" rel="stylesheet">
-
 
 <?php
 //first log out current account to sign up for new one
@@ -211,6 +205,53 @@ window.scrollTo(0,Yoffset);
 	.signup-tab-hidden{
 		display:none;
 	}
+	
+#signup-progress-wrapper{
+	padding:20px;
+	margin-bottom: 10px;
+    text-align: center;
+	line-height:30px;
+}
+#signup-progress-wrapper>span[class $= 'step']{
+ color:rgb(32, 67, 92);
+}
+.active-step,.inactive-step{
+    cursor:pointer;
+}
+.active-step{
+font-size: 170%;
+}
+.inactive-step{
+font-size: 100%;
+}
+
+.active-step-no{
+background-color:purple;
+color:yellow;
+padding:5px 15px 5px 15px;
+}
+.inactive-step-no{
+background-color:grey;
+color:white;
+padding:5px 10px 5px 10px;
+}
+ .active-step-no,.inactive-step-no{
+        border-radius:50%;
+    }
+
+@media only screen and (max-width: 768px){
+#signup-progress-wrapper{
+    width:90%;
+	padding:5%;
+}
+#signup-progress-wrapper>span[class$='step']{
+display:block;
+ text-align: right;
+ margin:15px;
+ color:white;
+	}
+}
+
 </style>
 
 <!--if javascript is not active on the browser, just display all the steps-->		
@@ -228,13 +269,14 @@ window.scrollTo(0,Yoffset);
 	}
 	</style>
 	</noscript>	
+	
 			</head>			
-<body class="no-pic-background">
+<body>
 <?php
 $altHeaderContent ="
 <div class=\"row\">
 <div class=\"col-lg-4 col-md-4 col-sm-4 col-xs-12\">
-Sign up
+Agent | Sign up
 </div>
 <div class=\"col-lg-8 col-md-8 col-sm-8 col-xs-12\">
 <p class=\"font-16\">Already have an account?  <a  href=\"../login\"><button class=\"btn btn-primary\">login</button></a></p>
@@ -242,23 +284,27 @@ Sign up
 </div>";
 require('../resources/global/alt_static_header.php');
 ?>
-
-<div class="container-fluid body-content" id="all-wrapper">
+<style>
+@media all and (max-width: 768px),(max-device-width: 768px){
+.container-fluid{
+	padding-top:120px;
+}
+</style>
+<div class="container-fluid">
+	<div class="center-content">
 <?php
 	if(isset($case) and $case == 1){
-	$icon = "background-position:-288px 0px";
-	echo "<div id = \"registration-successful\">
-	<h1>Sucessful!</h1>
-	$registerationReport</div>";
-	$general->halt_page();
+	?>
+	<div class="operation-report-container success">
+	<h1>Successful!</h1>
+	<?php
+	echo $registerationReport;
+	?>
+	</div>
+	<?php
+	$tool->halt_page();
 	}
 	?>
-<div class="row">
-<div class="col-lg-3 col-md-3 col-sm-3 hidden-xs LHS">
-<img src="" width="100%" height="100%" alt="A graphic will appear here"/>
-</div>
-
-<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12 mainsignup">
 
 <div id="signup-progress-wrapper">
 	<span  class="active-step" id="signup-progress-business-info" title="Provide information regarding your business">
@@ -279,7 +325,11 @@ require('../resources/global/alt_static_header.php');
 </div>
 
 	
-			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+			<div class="contain remove-side-margin-xs" >
+			<div class="head f7-background">
+				<h3 class="site-color"><span class="glyphicon glyphicon-folder-open">  New Account</h3>
+			</div>
+			<div class="body white-background">
 		<form name="signupform" action="<?php $_PHP_SELF ?>" method="POST" onsubmit="return(verify())">
 		
 <div class="signup-tab-showing" id="business-info-tab">
@@ -291,8 +341,7 @@ if(isset($registerationReport)){
 switch ($case){
 //case 6: Form is not completed correctly
 	case 6:
-	$icon = "background-position:-312px 0px";
-	echo "<div class=\"operation-fail-container\" id=\"registration-not-successful\" >
+	echo "<div class=\"operation-report-container fail\">
 	<h1>Failed!</h1>
 	$registerationReport<br/>";
 //List the invalid data
@@ -303,8 +352,7 @@ foreach($error as $e){
 echo "</ul>check your input and try again</div>";
 	break;
 	default:
-	$icon = "background-position:-312px 0px";
-	echo "<div class=\"operation-fail-container\" id=\"registration-not-successful\">
+	echo "<div class=\"operation-report-container fail\">
 	<h1>Failed!</h1>
 	$registerationReport</div>";
 	break;
@@ -318,17 +366,17 @@ echo "</ul>check your input and try again</div>";
 			<p class="instruction"><b>Fields asterisks (<span style="color: red">*</span>) are necessary</b></p>
 			
 			<div class="form-group">
-			<label><span style="color: red">*</span>Business Registered Name: </label>
+			<label><span class="red">*</span>Business Registered Name: </label>
 			<input class="form-control" name="Business_name" placeholder="Enter business name here"  maxlength="50" type="text" required="required" value="<?php if(isset($_POST['Business_name'])){echo $_POST['Business_name']; }?>"/>
 			</div>
 			
 			<div class="form-group">
-			<label><span style="color: red">*</span>Office Address: </label>
+			<label><span class="red"">*</span>Office Address: </label>
 			<input class="form-control" name="Office_Address" placeholder="Enter office address here "  maxlength="150" type="text" required="required" value="<?php if(isset($_POST['Office_Address'])){echo $_POST['Office_Address']; }?>">
 			</div>
 			
 			<div class="form-group">
-			<label><span style="color: red">*</span>Office Tel No: </label>
+			<label><span class="red">*</span>Office Tel No: </label>
 			<input class="form-control" placeholder="Enter office Tel here"  name="Office_No"  maxlength="11" type="text" required="required" value="<?php if(isset($_POST['Office_No'])){echo $_POST['Office_No']; }?>">
 			</div>
 			
@@ -336,13 +384,9 @@ echo "</ul>check your input and try again</div>";
 			<label>Business's e-mail: </label>
 			<input class="form-control" name="Office_mail" placeholder="Enter business e-mail here" maxlength="30" type="email" required data-validate-required-message="Enter a valid email" value="<?php if(isset($_POST['Office_mail'])){echo $_POST['Office_mail']; }?>">
 			</div>
-			
-			<div class="row">
-			<div class="continue-or-back-button-wrapper">
-			<a class="continue-or-back-button continue" onclick="javascript: nextSignupStep('business-info-tab','personal-info-tab','signup-progress-personal-info')">Continue »</a>
+			<div class="text-center">
+			<a class="btn btn-primary" onclick="javascript: nextSignupStep('business-info-tab','personal-info-tab','signup-progress-personal-info')">Continue »</a>
 			</div>
-			</div>
-			
 				</fieldset>
 			
 			</div>
@@ -374,15 +418,11 @@ echo "</ul>check your input and try again</div>";
 			<label><span style="color: red">*</span>e-mail: </label>
 			<input class="form-control" name="personal_mail" placeholder="Enter business owner's e-mail address here"  maxlength="30" type="email" required data-validated-required-message="Enter a valid email" value="<?php if(isset($_POST['personal_mail'])){echo $_POST['personal_mail']; }?>">
 			</div>
-
-			<div class="row">
-	<div class="continue-or-back-button-wrapper">				
-	<a class="continue-or-back-button continue" onclick="javascript: nextSignupStep('personal-info-tab','login-info-tab','signup-progress-login-info')">Continue »</a>
-	<a class="continue-or-back-button go-back" onclick="javascript: nextSignupStep('personal-info-tab','business-info-tab','signup-progress-business-info')">« Go Back</a>
-		</div>					
+	<div class="text-center">
+	<a class="text-left btn btn-primary margin-10" onclick="javascript: nextSignupStep('personal-info-tab','business-info-tab','signup-progress-business-info')">« Go Back</a>
+	<a class="text-right btn btn-primary margin-10" onclick="javascript: nextSignupStep('personal-info-tab','login-info-tab','signup-progress-login-info')">Continue »</a>
+		</div>
 			</fieldset>
-			</div>
-			
 			</div>
 			
 			
@@ -408,12 +448,10 @@ echo "</ul>check your input and try again</div>";
 			<input class="form-control" name="pass2" placeholder="Repeat password"  maxlength="25" type="password" required/>
 			</div>
 			
-			<div class="row">
-			<div class="continue-or-back-button-wrapper">
-				<a class="continue-or-back-button go-back" onclick="javascript: nextSignupStep('login-info-tab','personal-info-tab','signup-progress-personal-info')">« Go Back</a>
+			<div class="text-center">
+				<a class="btn btn-primary" onclick="javascript: nextSignupStep('login-info-tab','personal-info-tab','signup-progress-personal-info')">« Go Back</a>
 			</div>
-			</div>
-
+				
 			<div class="checkbox">
 			<label>
  <input name="agreement" value="<?php if(isset($_POST['agreement'])) echo 'yes'; else echo 'no';?>"  type="checkbox" checked="checked">I agree with the <a href="#">terms and conditions</a> of shelter.com
@@ -422,12 +460,11 @@ echo "</ul>check your input and try again</div>";
 			<input class="btn signupbutton" name="register" value="sign up"  type="submit" align="right"/>
 			</fieldset>
 			</div>
+			
 			</form>
 			</div>
-			
-			</div><!--mainsignup-->
-			
-			</div><!--parent row-->
+			</div>		
+			</div><!--center content-->
 			</div><!--container-fluid-->
 			</body>
 			

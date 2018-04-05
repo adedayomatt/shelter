@@ -1,0 +1,16 @@
+[2018 : 01 : 18 : 03 : 08 : 32] 
+	
+		*** error: 
+		
+SCRIPT ERROR: 
+
+Error code: [8] 
+
+Technical Message: Undefined variable: property 
+
+File: C:\xampp\htdocs\shelter\agents\index.php 
+
+Line: 138 
+
+Page Accessing: /shelter/agents/index.php 
+		Reported From: [C:\xampp\htdocs\shelter\resources\mato\lib\php\global.php >>  :: handleError >> at line 17] ***

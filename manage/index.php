@@ -1,69 +1,60 @@
 <?php 
-require('../resources/php/master_script.php'); 
+require('../resources/master_script.php'); 
 if($status != 1){
-	$general->redirect('login?return='.$thisPage);
+	$tool->redirect_to('../login?return='.$current_url);
 }
+
 if(isset($_POST['changeBusinessInfo'])){
-	if(!is_numeric($_POST['OfficeTelNo'])){
+	$update_business_info = $loggedIn_agent->update_business_info($tool->clean_input($_POST['OfficeAddress']),$tool->clean_input($_POST['OfficeTelNo']),$tool->clean_input($_POST['Businessmail']));
+	if($update_business_info == 99){
 		$bussinessInfoUpdateResult = "Invalid office Tel Number";
 		$success = false;
 	}
-	else{
-	$db->query_object("UPDATE profiles SET Office_Address = '".$_POST['OfficeAddress']."', Office_Tel_No=".$_POST['OfficeTelNo'].", Business_email='".$_POST['Businessmail']."' WHERE (ID = $agentId AND token = '$agent_token')");
-if($connection->affected_rows == 1){
-	$bussinessInfoUpdateResult = "Business Info updated successfully";
-	$success = true;
-}
-else{
-	$bussinessInfoUpdateResult = "Business Info update failed";
-	$success = false;
-}
+	else if($update_business_info == 900){
+			$bussinessInfoUpdateResult = "Business Info update failed";
+			$success = false;
+	}
+	else if($update_business_info == 100){
+		$bussinessInfoUpdateResult = "Business Info updated successfully";
+		$success = true;
 	}
 }
+
 if(isset($_POST['changePersonalInfo'])){
-	if(!is_numeric($_POST['Phone1']) || !is_numeric($_POST['Phone2'])){
-	$personalInfoUpdateResult = "Invalid Phone Number(s)";
-	$success = false;
+	$update_personal_info = $loggedIn_agent->update_personal_info($tool->clean_input($_POST['CEOName']),$tool->clean_input($_POST['Phone1']),$tool->clean_input($_POST['Phone2']),$tool->clean_input($_POST['email']));
+	if($update_personal_info == 99){
+		$personalInfoUpdateResult = "Invalid Phone Number(s)";
+		$success = false;
 	}
-	else{
-$updateQuery = $db->query_object("UPDATE profiles SET CEO_Name='".$_POST['CEOName']."', Phone_No=".$_POST['Phone1'].", Alt_Phone_No=".$_POST['Phone2'].", email='".($_POST['email'])."'  WHERE (ID = $agentId AND token = '$agent_token')");
-if($connection->affected_rows == 1){
-	$personalInfoUpdateResult = "Personal Info updated successfully";
-	$success = true;
-}
-else{
-	$personalInfoUpdateResult = "Personal Info update failed";
-	$success = false;
-}
+	else if($update_personal_info == 900){
+		$personalInfoUpdateResult = "Personal Info update failed";
+		$success = false;
+	}
+	else if($update_personal_info == 100){
+		$personalInfoUpdateResult = "Personal Info updated successfully";
+		$success = true;
 	}
 }
+
+
 if(isset($_POST['changePassword'])){
-	$oldPassword = $_POST['oldPassword'];
-//if old password matches
-if($db->query_object("SELECT password FROM profiles WHERE ID = $agentId AND token = '$agent_token'")->fetch_array(MYSQLI_ASSOC)['password'] == $oldPassword){
-		
-		if($_POST['newPassword1'] == $_POST['newPassword2']){
-		$finalNewPassword = $_POST['newPassword2'];
-			$updateQuery = $db->query_object("UPDATE profiles SET password = '$finalNewPassword' WHERE (password = '$oldPassword' AND ID = $agentId AND token = '$agent_token')");
-	if($connection->affected_rows == 1){
-	$passwordUpdateResult = "Password successfully changed";
-	$success = true;
-}
-else{
-	$passwordUpdateResult = "Password change failed";
-	$success = false;
-}
+	$change_password = $loggedIn_agent->change_password($_POST['oldPassword'],$_POST['newPassword1'],$_POST['newPassword2']);
+	if($change_password == 99){
+		$passwordUpdateResult = "Incorrect Old Password";
+		$success = false;
 	}
-	else{
+	else if($change_password == 69){
 		$passwordUpdateResult = "Passwords do not match. Try again";
 		$success = false;
-	}	
 	}
-	else{
-$passwordUpdateResult = "Incorrect Old Password";
-$success = false;
+	else if($change_password == 900){
+		$passwordUpdateResult = "Password change failed";
+		$success = false;
 	}
-	
+	else if($change_password == 100){
+		$passwordUpdateResult = "Password successfully changed";
+		$success = true;
+	}
 }
 ?>
 
@@ -75,10 +66,10 @@ $success = false;
 	$ref='manage_page';
 require('../resources/global/meta-head.php'); 
 ?>
-<link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
 <style>
 .settings-section{
 	border:1px solid #e3e3e3;
+	margin:3px 0px; 
 }
 .settings-section>li{
 	list-style-type:none;
@@ -91,42 +82,43 @@ require('../resources/global/meta-head.php');
 	padding:5px;
 }
 @media only screen and (min-width:768px){
-.body-content{
-	padding-left:20px;
-	padding-right:20px;
+.container-fluid{
+	padding-left:30px;
+	padding-right:30px;
 }
 }
 </style>
 
 </head>
-<body class="no-pic-background">
+<body>
 <?php
 require('../resources/global/header.php');
 ?>
 <?php
 if(isset($_POST['deactivateAccount'])){
 	?>
-	<script>
-	showPopup();
-	popUpContent().innerHTML = "<?php echo "Account '$Business_Name' will be deactivated!"  ?>";
-	</script>
+	
 <?php
 }
 ?>
 
-<div class="container-fluid body-content padding-5">
-
+<div class="container-fluid pad-lg pad-md pad-sm no-pad-xs">
+<div class="row">
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 body-content">
 <div class="row hidden-lg hidden-md hidden-sm visible-xs red-background" style="margin-bottom:5px">
 <div class="col-xs-6 padding-5 text-center e3-border"><a href="#properties" class="white font-20">Properties</a></div>
 <div class="col-xs-6 padding-5 text-center e3-border"><a href="#account" class="white font-20">Account</a></div>
 </div>
-<input type="hidden" id="agent-username" value="<?php echo $profile_name ?>" />
+<input type="hidden" id="agent-username" value="<?php echo $loggedIn_agent->username ?>" />
 <div class="row">
 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 e3-border" id="properties">
 <div class="padding-5 white-background " style="border-right:5px solid red">
 <h3>Properties</h3>
 </div>
 <div class="f7-background padding-10">
+<?php
+$total_uploads = count($loggedIn_agent->uploads());
+?>
 <p>Total Uploads: <?php echo $total_uploads ?></p>
 <div class="form-group white-background e3-border padding-10">
 <label class="grey">Manage your properties</label>
@@ -142,60 +134,45 @@ else{
 ?>
 <div>
 <?php
-$fiveDaysAgo = time() - 5 * $oneDay;
-$recentUpdate = $db->query_object("SELECT * FROM properties WHERE (uploadby='$profile_name' AND last_reviewed <= $fiveDaysAgo) ORDER BY last_reviewed DESC LIMIT 10");
-if(is_object($recentUpdate)){
-	if($recentUpdate->num_rows > 0){
+$fiveDaysAgo = time() - (5 * 86400);
+$needsUpdate = $db->query_object("SELECT property_ID FROM properties WHERE (uploadby='".$loggedIn_agent->username."' AND last_reviewed <= $fiveDaysAgo) ORDER BY last_reviewed DESC LIMIT 10");
+	if($needsUpdate->num_rows > 0){
 	?>
 		<h4 class="text-center red"><span class="glyphicon glyphicon-info-sign"></span>You need to update the following properties</h4>
 <?php
-	while($ru = $recentUpdate->fetch_array(MYSQLI_ASSOC)){
+	while($ru = $needsUpdate->fetch_array(MYSQLI_ASSOC)){
+		$p = new property($ru['property_ID']);
 		?>
 	<div class="row white-background e3-border" style="margin-bottom:5px">
-	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-	<img src="<?php echo $property_obj->get_property_dp('../properties/'.$ru['directory'],$ru['display_photo'])?>" class="mini-property-photo"/>
-	</div>
-		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-		<div class="font-20 margin-5"><a href="<?php echo "../properties/".$ru['directory']?>"><?php echo $ru['type'] ?></a></div>
-		<div class="margin-5 grey"><span class="glyphicon glyphicon-map-marker red"></span><?php echo $ru['location'] ?></div>
-		<div class="margin-5 grey"><span class="glyphicon glyphicon-calendar red"></span>updated <?php echo $general->since($ru['last_reviewed']) ?></div>
-		<div class="margin-5 grey"><a class="btn btn-primary" href="<?php echo 'property.php?id='.$ru['property_ID'].'&action=change&agent='.$agent_token ?>"><span class="glyphicon glyphicon-pencil"></span>update</a> <a class="text-right float-right " href=""><span class="glyphicon glyphicon-trash red"></span></a></div>
+		<div class="padding-5">
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+		<img src="<?php echo $p->display_photo_url() ?>" class="mini-property-image size-100"/>
 		</div>
-	</div>	
+			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+			<div class="font-20 margin-5"><a href="<?php echo "../properties/".$p->p_directory?>"><?php echo $p->type ?></a></div>
+			<div class="margin-5 grey"><span class="glyphicon glyphicon-map-marker red"></span><?php echo $p->location ?></div>
+			<div class="margin-5 grey"><span class="glyphicon glyphicon-calendar red"></span>updated <?php echo $tool->since($p->last_reviewed) ?></div>
+			<div class="margin-5 grey"><a class="btn btn-primary" href="<?php echo 'property.php?id='.$p->id.'&action=change&agent='.$p->agent_token ?>"><span class="glyphicon glyphicon-pencil"></span>update</a> <a class="text-right float-right " href=""><span class="glyphicon glyphicon-trash red"></span></a></div>
+			</div>
+		</div>
+	</div>
 		<?php
 	}
 }
 else{
 	
 }
-}
-}
 ?>
 </div>
+<?php
+}
+?>
 </div>
 </div>
 </div>
 
 <div class="col-lg-5 col-lg-offset-1 col-md-5 col-md-offset-1 col-sm-6 col-xs-12 e3-border" id="account" >
 <div class="padding-5 white-background " style="border-right:5px solid red">
-
-<?php
-$getformerdetail = "SELECT * FROM profiles WHERE (User_ID = '".$profile_name."')";
-				$getquery = $db->query_object($getformerdetail);
-					if($getquery->num_rows ==1){
-					$account = $getquery->fetch_array(MYSQLI_ASSOC);
-						$editid = $account['ID'];
-						$editBN = $account['Business_Name'];
-						$editOfficeAddress = $account['Office_Address'];
-						$editOfficeTelNo = $account['Office_Tel_No'];
-						$editBusinessmail = $account['Business_email'];
-						$editCEO = $account['CEO_Name'];
-						$editPhoneno = $account['Phone_No'];
-						$editAltPhoneno = $account['Alt_Phone_No'];
-						$editemail = $account['email'];
-						$editUsername = $account['User_ID'];
-					}
-?>
 <h3 >Account</h3>
 </div>
 <?php if(isset($success)){
@@ -223,23 +200,23 @@ else if(isset($passwordUpdateResult)){
 <div class="padding-5 f7-background">
 <ul class="no-padding">
 
-<div class="settings-section">
-<li><a href="account.php">Edit Business Information</a> <span class="float-right"><span class="glyphicon glyphicon-collapse-down"></span></span></li>
-<div class="main-form">
+<div class="settings-section" data-action="toggle">
+<li data-toggle-role="toggle-trigger" data-toggle-off="Edit Business Information" data-toggle-on="Hide Business Information Settings">Edit Business Information<span class="float-right"><span class="glyphicon glyphicon-collapse-down"></span></span></li>
+<div class="main-form" data-toggle-role="main-toggle">
 <form action="../manage/#account" method="POST">
 <div class="form-group">
 <label><span class="glyphicon glyphicon-map-marker red"></span>Office Address</label>
-<input class="form-control" placeholder="Office Address" name="OfficeAddress" type="text" required="required" value="<?php echo $editOfficeAddress ?>"/>
+<input class="form-control" placeholder="Office Address" name="OfficeAddress" type="text" required="required" value="<?php echo $loggedIn_agent->address ?>"/>
 </div>
 
 <div class="form-group">
 <label><span class="glyphicon glyphicon-phone red"></span>Office Tel Number</label>
-<input class="form-control" placeholder="office Telephone Number" name="OfficeTelNo" type="text" maxlength="11"  required="required" value="<?php echo $editOfficeTelNo?>"/>
+<input class="form-control" placeholder="office Telephone Number" name="OfficeTelNo" type="text" maxlength="11"  required="required" value="<?php echo $loggedIn_agent->office_contact ?>"/>
 </div>
 
 <div class="form-group">
 <label><span class="glyphicon bold red">@</span>Business email </label>
-<input class="form-control" placeholder="Business email address" name="Businessmail" type="email" size="30" value="<?php echo $editBusinessmail ?>"/>
+<input class="form-control" placeholder="Business email address" name="Businessmail" type="email" size="30" value="<?php echo $loggedIn_agent->business_mail ?>"/>
 </div>
 
 <input type="submit" name="changeBusinessInfo" class="btn btn-primary" value="save"/>
@@ -248,28 +225,28 @@ else if(isset($passwordUpdateResult)){
 </div>
 </div>
 
-<div class="settings-section">
-<li><a href="account.php">Edit Business Owner Information</a><span class="float-right"><span class="glyphicon glyphicon-collapse-down"></span></span></li>
-<div class="main-form">
+<div class="settings-section" data-action="toggle">
+<li data-toggle-role="toggle-trigger" data-toggle-off="Edit Business Owner Info" data-toggle-on="Hide Business Owner Info">Edit Business Owner Information<span class="float-right"><span class="glyphicon glyphicon-collapse-down"></span></span></li>
+<div class="main-form" data-toggle-role="main-toggle">
 <form action="../manage/#account" method="POST">
 <div class="form-group">
 <label>Name</label> 
-<input class="form-control" placeholder="CEO's full name" name="CEOName" type="text" required="required" value="<?php echo $editCEO ?>"  />
+<input class="form-control" placeholder="CEO's full name" name="CEOName" type="text" required="required" value="<?php echo $loggedIn_agent->CEO ?>"  />
 </div>
 
 <div class="form-group">
 <label><span class="glyphicon glyphicon-phone red"></span>Phone No</label>
-<input class="form-control" placeholder="CEO's active phone number" name="Phone1" type="text" maxlength="11" required="required" value="<?php echo $editPhoneno ?>" />
+<input class="form-control" placeholder="CEO's active phone number" name="Phone1" type="text" maxlength="11" required="required" value="<?php echo $loggedIn_agent->contact1 ?>" />
 </div>
 
 <div class="form-group">
 <label><span class="glyphicon glyphicon-phone red"></span>Alternative Phone No</label> 
-<input class="form-control" placeholder="CEO's alternative active phone number" name="Phone2" type="text" maxlength="11" value="<?php echo $editAltPhoneno ?>" />
+<input class="form-control" placeholder="CEO's alternative active phone number" name="Phone2" type="text" maxlength="11" value="<?php echo $loggedIn_agent->contact2 ?>" />
 </div>
 
 <div class="form-group">
 <label><span class="glyphicon bold red">@</span>email</label> 
-<input class="form-control" placeholder="CEO's working email address" name="email" type="email"  value="<?php echo $editemail ?>" />
+<input class="form-control" placeholder="CEO's working email address" name="email" type="email"  value="<?php echo $loggedIn_agent->CEO_mail ?>" />
 </div>
 
 <input type="submit" name="changePersonalInfo" class="btn btn-primary" value="save"/>
@@ -277,9 +254,9 @@ else if(isset($passwordUpdateResult)){
 </div>
 </div>
 
-<div class="settings-section">
-<li><a href="account.php">Change Account Password</a> <span class="float-right"><span class="glyphicon glyphicon-collapse-down"></span></span></li>
-<div class="main-form">
+<div class="settings-section" data-action="toggle">
+<li data-toggle-role="toggle-trigger" data-toggle-off="Change Account Password" data-toggle-on="Hide Password Settings">Change Account Password</li>
+<div class="main-form" data-toggle-role="main-toggle">
 <form action="../manage/#account" method="POST">
 
 <div class="form-group">
@@ -301,9 +278,9 @@ else if(isset($passwordUpdateResult)){
 </form>
 </div>
 </div>
-<div class="settings-section">
-<li><a href="" class="red">Deactivate Account</a></li>
-<div class="main-form" id="deactivate">
+<div class="settings-section" data-action="toggle">
+<li data-toggle-role="toggle-trigger" data-toggle-off="Deactivate Account" data-toggle-on="Deactivate Account">Deactivate Account</li>
+<div class="main-form" id="deactivate" data-toggle-role="main-toggle">
 <form action="" method="POST">
 <p class="text-center font-20 red bold"> Are you sure you want to deactivate this account</p>
 <ul>
@@ -339,42 +316,20 @@ pid.onkeyup = function(){
 properties.innerHTML = 	propertyList;
 }
 else{
-	properties.innerHTML = "<div class=\"text-center font-18 blue\" id=\"searching\"><p>searching for your property with PID <strong>'"+pid.value+"'</strong></p><img src=\"../resrc/gifs/progress-circle.gif\" width=\"50px\" height=\"50px\" style=\"border:none; background-image:none\"/></div>";
+	properties.innerHTML = "<div class=\"white-background text-center font-18 blue\" id=\"searching\" data-loading-content =\"loading\" style=\"height:200px\"><p>searching for your property with PID <strong>'"+pid.value+"'</strong></p></div>";
 	
-ajax = ajaxObject();
-	ajax.onreadystatechange = function(){
-//if the script is OK
-	if(ajax.status==200){
-//if communication was successfull and response is gotten successfully
-if(ajax.readyState == 4){
-properties.innerHTML = ajax.responseText;
+	var getProperty = new useAjax(doc_root+"/resources/php/api/searchpropertybyid.php?pid="+pid.value+'&agent='+agent);
+	getProperty.go(function(code,response){
+		if(code == 204){
+properties.innerHTML = response;
 		}
-		else{
-properties.innerHTML = "something went wrong while searching for the property with the PID "+ pid.value+"<br/><br/>"+ajax.responseText;
-		}
-}
-	else if(ajax.status==404){
-		
-	}
-}
-url = "http://192.168.173.1/shelter/resources/php/ajax_scripts/searchpropertybyid.php?pid="+pid.value+'&agent='+agent;
-ajax.open("GET",url,true);
-ajax.send();
+	});
 }
 }
 
-
-var settingHeaders = document.querySelectorAll('.settings-section');
-for(i = 0 ;i < settingHeaders.length;i++){
-	//settingHeaders[i].querySelector('div.main-form').style.display = 'none';
-	toggleSetting(settingHeaders[i]);
-}
-function toggleSetting(section){
-	var trigger = section.querySelector('li');
-	var form = section.querySelector('div.main-form');
-	toggle(trigger,form);
-	}
 </script>
+</div>
+</div>
 </div>
 </body>
 </html>

@@ -1,0 +1,16 @@
+[2018 : 01 : 20 : 11 : 23 : 06] 
+	
+		*** error: 
+		
+SCRIPT ERROR: 
+
+Error code: [2] 
+
+Technical Message: func_get_arg() expects exactly 1 parameter, 0 given 
+
+File: C:\xampp\htdocs\shelter\resources\master_script.php 
+
+Line: 709 
+
+Page Accessing: /shelter/search/index.php 
+		Reported From: [C:\xampp\htdocs\shelter\resources\mato\lib\php\global.php >>  :: handleError >> at line 17] ***

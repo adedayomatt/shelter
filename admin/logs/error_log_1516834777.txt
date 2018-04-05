@@ -1,0 +1,5 @@
+[2018 : 01 : 24 : 23 : 59 : 37] 
+	
+		*** error: 
+		QUERY ERROR: Unknown column 'location' in 'where clause' 
+		Reported From: [C:\xampp\htdocs\shelter\resources\mato\lib\php\global.php >> database :: query_object >> at line 44] ***

@@ -1,0 +1,16 @@
+[2018 : 01 : 20 : 05 : 15 : 20] 
+	
+		*** error: 
+		
+SCRIPT ERROR: 
+
+Error code: [8] 
+
+Technical Message: Undefined property: property::$p_dir 
+
+File: C:\xampp\htdocs\shelter\manage\property.php 
+
+Line: 108 
+
+Page Accessing: /shelter/manage/property.php 
+		Reported From: [C:\xampp\htdocs\shelter\resources\mato\lib\php\global.php >>  :: handleError >> at line 17] ***

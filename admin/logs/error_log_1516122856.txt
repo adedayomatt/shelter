@@ -1,0 +1,16 @@
+[2018 : 01 : 16 : 18 : 14 : 16] 
+	
+		*** error: 
+		
+SCRIPT ERROR: 
+
+Error code: [8] 
+
+Technical Message: Undefined variable: a 
+
+File: C:\xampp\htdocs\shelter\agents\index.php 
+
+Line: 71 
+
+Page Accessing: /shelter/agents/index.php 
+		Reported From: [C:\xampp\htdocs\shelter\resources\mato\lib\php\global.php >>  :: handleError >> at line 17] ***

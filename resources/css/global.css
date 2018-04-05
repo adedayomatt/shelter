@@ -1,0 +1,116 @@
+.body-content{
+	padding:0px 2px;
+}
+
+
+.follow-button,.unfollow-button{
+padding: 5px 10px;
+border-radius:3px;
+border:none;
+}
+.follow-button{
+	background-color: white;
+	color: grey;
+	border:1px solid #e3e3e3;
+}
+.unfollow-button{
+	background-color: blue;
+	color:white;
+}
+
+.clip-button,.unclip-button{
+	border:none;
+	padding:5px 15px;
+	margin:5px;
+	border-radius:5px;
+}
+.clip-button{
+background-color: white;
+color:grey;
+}
+.unclip-button{
+background-color: rgba(32, 67, 92,0.9);
+color:white;
+}
+.rent-figure,.mv-rent-figure{
+	font-size:22px;
+	font-family:Georgia;
+	padding:5px;
+	color:white;
+	border-radius:5px;
+	padding:12px;
+	text-align: center;
+}
+.rent-figure{
+	box-shadow: 0px 10px 10px rgba(150,0,0,0.7);
+}
+.mv-rent-figure{
+	box-shadow: 0px 5px 5px rgba(0,0,0,0.1);
+}
+.result-container{
+	position:absolute;
+	width:300px;
+	min-height: 70px;
+	max-height:500px;
+	overflow-y:auto;
+	box-shadow: 0px 5px 5px rgba(0,0,0,0.01);
+	border-radius:3px;
+	z-index:2;
+}
+/*Desktop size*/
+@media all and (min-width: 992px),(min-device-width: 992px){
+.rent-figure{
+}
+}
+/*Tab size*/
+@media all and (max-width: 992px),(max-device-width: 992px){
+/*dashboard styles*/
+}
+
+/*Desktop and Tab size*/
+@media all and (min-width: 768px),(min-device-width: 768px){
+
+}
+/*Smartphone size*/
+@media all and (max-width: 768px),(max-device-width: 768px){
+
+}
+
+/*different smaller screen sizes*/
+@media all and (max-width: 500px),(max-device-width: 500px){
+
+
+}
+
+@media all and (max-width: 400px),(max-device-width: 400px){
+
+}
+
+@media all and (max-width: 250px),(max-device-width: 250px){
+
+
+}
+
+
+
+/*specifically for desktops only*/
+@media all and (min-device-width: 768px){
+	
+}
+/*specifically for tabs only*/
+@media all and (max-device-width: 992px){
+	
+}
+/*specifically for desktops and tabs only*/
+@media all and (max-device-width: 992px){
+	
+}
+/*specifically for smartphones only*/
+@media all and (max-device-width: 768px){
+	.body-content{
+		margin-left:0px;
+		margin-right:0px;
+		padding-left:0px;
+		padding-right:0px;
+	}
+}

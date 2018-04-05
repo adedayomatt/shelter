@@ -1,0 +1,157 @@
+/* Desktop version
+@media screen and (min-width:1025px)*/
+div#yes-you-can{
+	font-style:Georgia;
+	 background: white url('../resrc/yes-you-can-background.png') center;
+}
+div#yes-you-can>h1{
+color:#E4A9E4;
+ font-weight:bold;
+ font-size:300%;
+ z-index: 99;
+}
+div#yes-you-can>h3{
+color:white; 
+font-weight:normal;
+ text-align:right
+}
+.notice,.client-follow-notice{
+	display:block;
+	list-style-type:none;
+	width:98%;
+	margin:auto;
+	margin-bottom:4px;
+	padding:1%;
+	cursor:default;
+	background-color:white;
+	border-bottom: 1px solid #E5E5E5;
+}
+
+
+a.yrthg:hover{
+	text-decoration:none;
+}
+.no-notice{
+	text-align:center;
+	height:20px;
+	padding:2%;
+	color:purple;
+}
+
+img..mv-photo{
+	width:100%; 
+}
+div.most-viewed-details{
+	height:20px;
+	overflow:hidden;
+}
+
+div#client-shout-out{
+	font-style:Georgia;
+	height:100px;
+	overflow:hidden;
+	text-align: center;
+	line-height:30px;
+	font-size:200%;
+	font-weight:bold;
+	color:yellow;
+	background: #b2dfdb url('../resrc/visitor_sidebar_background.png') center repeat-x;
+}
+.client-Requests-container{
+	height:250px;
+}
+
+.client-request-box{
+	width:150px;
+}
+.client-request-box>.request{
+	height:82%;
+	overflow:hidden;
+}
+.client-request-box>.suggest-button{
+	height:15%;
+	margin-top:2px;
+}
+.request>p{
+	margin:1px;
+}
+div#advertise-with-us{
+	padding:20px;
+	text-align:center;
+	font-style: italic;
+	font-size:30px;
+	background: #b2dfdb  url('../resrc/tiny_strips.png') center repeat-x;
+	color:white;
+}
+
+
+.agents-list{
+background-color:#f7f7f7;
+	display:block;
+	padding:10px;
+	margin:2px 0px;
+	border:1px solid #E3E3E3;
+
+}
+
+a.agents-list{
+	color:black;	
+}
+
+a.agents-list:hover{
+	text-decoration:none;
+}
+
+.agent-avatar{
+	background-position:-432px 0px;
+}
+.suggested-agents-search-container{
+	margin:auto;
+	display:none;
+}
+.search-whatsup{
+	text-align:center;
+	margin-bottom:20%;
+	color:red;
+}
+
+.update-subscription-wrapper,.feedback-wrapper{
+	padding:10px 5px;
+	text-align: center;
+}
+.update-subscription-wrapper{
+	background: #F5F5F5 url('../resrc/visitor_sidebar_background.png') center repeat-x;
+}
+.update-subscription-wrapper>form>p{
+	font-weight:bold;
+	font-size:25px;
+	color:#20435C;
+}
+.update-subscription-wrapper>form>input[type="email"]{
+	padding:8px;
+}
+.update-subscription-wrapper>form>input[type="submit"]{
+background-color: #20435C;
+color:white;
+}
+
+/*Only in desktop ends*/
+
+
+
+@media all and (min-width:900px){
+
+}
+@media all and (max-width:900px){
+
+}
+
+@media all and (max-width:700px){
+
+}
+@media all and (max-width:600px){
+
+}
+@media all and (max-width:500px){
+
+}

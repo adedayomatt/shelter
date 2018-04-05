@@ -1,1 +1,0 @@
-<?php $BN = "Owl City";$Aid ="owl";$key = "1495661773";require('../profile/profile.php');?>

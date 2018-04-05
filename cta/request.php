@@ -1,191 +1,198 @@
 
 <?php 
-require('../resources/php/master_script.php'); 
+require('../resources/master_script.php'); 
 if($status != 9){
-	$general->redirect('cta/checkin.php?_rdr=1');
+	$tool->redirect_to('checkin.php');
 }
 
-if(isset($_POST['request'])){
-
-	$query = "INSERT INTO cta_request (ctaid,ctaname,type,maxprice,location,timestamp) VALUES (?,?,?,?,?,?)";
-	$p_query = $connection->prepare($query);
-	$p_query->bind_param('issisi',$param_ctaid,$param_ctaname,$param_type,$param_maxprice,$param_location,$param_time);
-
-if(!empty($_POST['maxprice']) && is_numeric($_POST['maxprice']) && !empty($_POST['type']) && !empty($_POST['location'])){
-		$param_ctaid = $ctaid;
-		$param_ctaname = $cta_name;
-		$param_type = $_POST['type'];
-		$param_maxprice = $_POST['maxprice'];
-		$param_location = $connection->real_escape_string(htmlentities(trim($_POST['location'])));
-		$param_time = time();
-$p_query->execute();
-if($p_query->affected_rows ==1){
-$updatecta = $db->query_object("UPDATE cta SET request=1 WHERE ctaid=$ctaid");
-if(is_string($updatecta)){	error::report_error($updatecta,__FILE__,__CLASS__,__FUNCTION__,__LINE__);}
-else{
-	//if request placing is successful and updating of cta
-if($connection->affected_rows == 1){
-	$requestplacementReport = "<b> $cta_name </b>, Your request has been placed, you will be notified as soon as there is any match for your preferences.<br/><br/><strong>Thank You</strong>";
-	$sent = true;
-		}
+if(isset($_POST['Request'])){
+	$placeRequest = $loggedIn_client->new_cta_request($_POST['type'],$_POST['maxprice'],$_POST['area'],$_POST['city']);
+	if($placeRequest == 99){
+		$requestplacementReport = "Some fields are empty or filled incorrectly";	
+		$sent = false;
+	}
+	else if($placeRequest == 900){
+		$requestplacementReport = "Your placement could not be placed, try again later";
+		$sent = false;
+	}
+	if($placeRequest == 100){
+		$requestplacementReport = "<b>".$loggedIn_client->name." </b>, Your request has been placed, you will be notified as soon as there is any match for your preferences.<br/><br/><strong>Thank You</strong>";
+		$sent = true;
 	}
 }
-else{
-	$requestplacementReport = "Your placement could not be placed, try again later";
-	$sent = false;
-}
 	
-}
-//invalid field
-else{
-$requestplacementReport = "Some fields are empty or filled incorrectly";	
-	$sent = false;
-		}
-	}
-	
-else if(isset($_POST['change'])){
+else if(isset($_POST['Change'])){
 
-	if(!empty($_POST['type']) && is_numeric($_POST['maxprice']) && !empty($_POST['type']) && !empty($_POST['location'])){
-	
-		$param_ctaid = $ctaid;
-		$param_type = ($_POST['type'] == 'nil' ? $_POST['former_type'] : $_POST['type']);
-		$param_maxprice = $_POST['maxprice'];
-		$param_location = $connection->real_escape_string(htmlentities(trim($_POST['location'])));
-
-		
-	$change_request = $db->query_object("UPDATE cta_request SET type='$param_type',maxprice=$param_maxprice,location='$param_location' WHERE ctaid=$ctaid");
-if(is_string($change_request)){
-	error::report_error($change_request,__FILE__,__CLASS__,__FUNCTION__,__LINE__);
-}
-else{
-//if request changing is successful
- if($connection->affected_rows == 1){
-	$changeReport = "<strong>$cta_name</strong>, <br/>Your request has been <i>changed</i>, you will be notified as soon as there is any match for your preferences.<br/><br/><strong>Thank You</strong>";
-	$change = true;
+	$changeRequest = $loggedIn_client->update_cta_request($_POST['type'],$_POST['maxprice'],$_POST['area'],$_POST['city']);
+	if($changeRequest == 99){
+		$changeReport = "Some fields are empty or filled incorrectly";	
+		$change = false;
 	}
-else{
-	$changeReport = "<strong>$cta_name</strong>, <br/>No change was made to your request";
-	$change = false;
-}
-}
-	
-}
-//invalid inputs
-else{
-$changeReport = "Some fields are empty or filled incorrectly";	
-	$change = false;
-		}
+	else if($changeRequest == 800){
+		$changeReport = "No change was made to your request";
+		$change = false;
 	}
+	if($changeRequest == 100){
+		$changeReport = "<b>".$loggedIn_client->name." </b>, Your request has been <i>changed</i>, you will be notified as soon as there is any match for your preferences.<br/><br/><strong>Thank You</strong>";
+		$change = true;
+	}
+}
 ?>
 <!DOCTYPE html>
 <html>
+	<head>
+		<?php
+		$pagetitle = "Request";
+		$ref='ctarequest_page';
+		require('../resources/global/meta-head.php'); 
+		?>
+	</head>
 
-<head>
-<?php
-$pagetitle = "Request";
-$ref='ctarequest_page';
-require('../resources/global/meta-head.php'); 
-?>
-<link href="../css/general.css" type="text/css" rel="stylesheet" />
-<link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
-</head>
+	<body>
+		<?php
+			$altHeaderContent ="CTA Request";
+			require('../resources/global/alt_static_header.php');
+			?>
+			<div  class="container-fluid">
+			<?php 
+			//if no request has been made
+			$request_type = $loggedIn_client->request_type;
+			$request_maxprice = $loggedIn_client->request_maxprice;
+			$request_area = $loggedIn_client->request_area;
+			$request_city = $loggedIn_client->request_city;
+			
+			if($request_type == "" && $request_maxprice==0 && $request_area=="" && $request_city=="" ) {
+				$requested = false;
+			}
+			else{
+				$requested = true;
+			}
+		?>
+			<div class="center-content">
+				<?php
+				if($request_type == "" && $request_maxprice==0 && $request_area=="" && $request_city=="") {
+					if(!isset($_POST['request']) && !isset($_POST['change'])){
+						?>
+					<div class="white-background padding-10 e3-border text-center" style="margin-bottom:5%">
+						<span class="glyphicon glyphicon-info-sign  icon-size-30 site-color"></span>
+						<p><strong><?php echo $loggedIn_client->name ?></strong>, you have not specified your preferences of your choice of property. Kindly specify now</p>
+					</div>
+					<?php
+					}
+				}
+				?>
+				<div class="contain border-radius-5 e3-border">
+					<div class="head f7-background">
+						<h3>
+						 <?php echo ($requested == true ? "Change Request" : "New CTA Request")?>
+						 </h3>
+					</div>
+					<div class="body white-background">
+						<form action="<?php $_PHP_SELF ?>" method="POST">
+							<div class="margin-5">
+								<?php if(isset($requestplacementReport) && $sent==false){
+									echo "<div class=\"operation-report-container fail\"><p>$requestplacementReport</p></div>";
+								}
+								else if(isset($requestplacementReport) && $sent==true){
+									echo "<div class=\"operation-report-container success\"><p>$requestplacementReport<br/><a href=\"index.php\">continue</a></p></div>";
+									$tool->halt_page();
+								}
+								else if(isset($changeReport) && $change==true){
+									echo "<div class=\"operation-report-container success\"><p>$changeReport<br/><a href=\"index.php\">continue</a></p></div>";
+									$tool->halt_page();
+								}
+								else if(isset($changeReport) && $change==false){
+									echo "<div class=\"operation-report-container fail\"><p>$changeReport</p></div>";
+								}
+								?>
+							</div>
+							<script type="text/javascript" >
+							function setType(value){
+								var typeInput = document.getElementById('type-input');
+								typeInput.value = value;
+							}
+							</script>
 
-<body class="plain-colored-background">
-<?php
-$altHeaderContent ="Request";
-require('../resources/global/alt_static_header.php');
-?>
-<div  class="container-fluid body-content" style="padding-top:70px">
-<?php 
-//if no request has been made
-$requests_pref = $client->get_request($ctaid,$cta_name);
-if(empty($requests_pref)) {
-	if(!isset($_POST['request']) && !isset($_POST['change'])){
-	echo "<div class=\"center-content white-background padding-10 e3-border text-center\" style=\"margin-bottom:5%\">
-	<span class=\"glyphicon glyphicon-info-sign  icon-size-30 site-color\"></span>
-	<p><strong>$cta_name</strong>, you have not specified your preferences of your choice of property.
-	Kindly specify now or proceed to <a href=\"$root\">Home page</a></p>
-	</div>";
-	}
-}
-?>
-<div class="center-content white-background padding-10 box-shadow-1">
-<form action="<?php $_PHP_SELF ?>" method="POST">
-<?php 
-$placeOrChange = ((empty($requests_pref)) ? "request" : "change" )
-?>
-<fieldset>
-<?php if(isset($requestplacementReport) && $sent==false){
-	echo "<div class=\"operation-report-container fail\"><p>$requestplacementReport</p></div>";
-}
-else if(isset($requestplacementReport) && $sent==true){
-	echo "<div class=\"operation-report-container success\"><p>$requestplacementReport<br/><a href=\"index.php\">continue</a></p></div>";
-	$general->halt_page();
-}
-else if(isset($changeReport) && $change==true){
-	echo "<div class=\"operation-report-container success\"><p>$changeReport<br/><a href=\"index.php\">continue</a></p></div>";
-	$general->halt_page();
-}
-else if(isset($changeReport) && $change==false){
-	echo "<div class=\"operation-report-container fail\"><p>$changeReport</p></div>";
-}
-?>
+							<div class="row">
+								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+									<div class="row">
+										<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 text-right">
+											<p>Property type : <span class="site-color bold"><?php echo (isset($_POST['type'])? $_POST['type'] : isset($request_type)? $request_type:'Not specified')?> </span></p>
+											<input type="hidden" name="former_type" value="<?php echo $request_type ?>"/>
+										</div>
+										<div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12 text-left">
+											<select class="form-control" name="type">
+												<option value="nil" ><?php echo ($requested == true ? "Change" : "Select Property type")?></option>
+												<option value="Boys Quater" >Boys Quater</option>
+												<option value="Bungalow" >Bungalow</option>
+												<option value="Duplex">Duplex</option>
+												<option value="Flat">Flat</option>
+												<option value="Hall">Hall</option>
+												<option value="Land">Land</option>
+												<option value="Office Space">Office Space</option>
+												<option value="Self Contain">Self Contain</option>
+												<option value="Semi detached House">Semi detached House</option>
+												<option value="Shop">Shop</option>
+												<option value="Warehouse">Warehouse</option>
+											</select>
+										</div>
+									</div>
+								</div>
 
-<h3 class="font-26">
- <?php echo ($placeOrChange == "request" ? "Place Request" : ($placeOrChange == "change" ? "Change Request" : "Unrecognized action"))?>
- </h3>
- <hr class="grey" />
-<script type="text/javascript" >
-function setType(value){
-	var typeInput = document.getElementById('type-input');
-	typeInput.value = value;
-}
-</script>
+								<div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+									<label for="maxprice">Maximum rent:</label>
+									<input class="form-control more-padding" name="maxprice" type="text" maxlength="10"
+									value="<?php echo (isset($_POST['maxprice'])? $_POST['maxprice'] : isset($request_maxprice)? $request_maxprice:'')?>"
+									placeholder="Rent should not be more than..."/>
+								</div>
 
-<div class="row">
+								<div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+									<label for="location"><span class="glyphicon glyphicon-map-marker"></span>Location:</label>
+									<div class="row">
+										<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+											<div class="padding-10">
+												<input class="form-control more-padding" name="city" type="text" 
+												value="<?php echo (isset($_POST['city'])? $_POST['city'] : isset($request_city)? $request_city:'')?>"
+												placeholder="around where?"/>	
+											</div>
+										</div>
+										<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+											<div class="padding-10">
+												<input class="form-control more-padding" name="area" type="text" 
+												value="<?php echo (isset($_POST['area'])? $_POST['area'] : isset($request_area)? $request_area:'')?>"
+												placeholder="Area"/>								
+											</div>
+										</div>
+									</div>
+									<script>
+										var city = document.querySelector("[name='city']");
+										var area = document.querySelector("[name='area']");
+										city.addEventListener('keyup',function(event){
+											if(city.value == ""){
+											area.setAttribute('placeholder', 'Area');
+											}
+											area.setAttribute('placeholder', 'Which area in '+city.value);
+										});
+										if(city.value == ""){
+											area.setAttribute('editable', 'true');
+										}else{
+											area.setAttribute('editable', 'false');
+										}
+									</script>
 
-<div class="row">
-<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 text-right">
-<p>Property type : <span class="site-color bold"><?php echo (isset($_POST['type'])? $_POST['type'] : isset($request_type)? $request_type:'Not specified')?> </span></p>
-<input type="hidden" name="former_type" value="<?php echo $request_type ?>"/>
-</div>
 
-<div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12 text-left">
-<select class="form-control" name="type">
-<option value="nil" ><?php echo ($placeOrChange == "request" ? "Select Property type" : ($placeOrChange == "change" ? "Change" : "Invalid action"))?></option>
-<option value="Boys Quater" >Boys Quater</option>
-<option value="Bungalow" >Bungalow</option>
-<option value="Duplex">Duplex</option>
-<option value="Flat">Flat</option>
-<option value="Hall">Hall</option>
-<option value="Land">Land</option>
-<option value="Office Space">Office Space</option>
-<option value="Self Contain">Self Contain</option>
-<option value="Semi detached House">Semi detached House</option>
-<option value="Shop">Shop</option>
-<option value="Warehouse">Warehouse</option>
-</select>
-</div>
-</div>
- <hr class="grey" />
-<div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12" style="float:none">
-<label for="maxprice">Maximum rent:</label>
-<input class="form-control more-padding" name="maxprice" type="text" maxlength="10" value="<?php echo (isset($_POST['maxprice'])? $_POST['maxprice'] : isset($request_maxprice)? $request_maxprice:'')
-?>" placeholder="Rent should not be more than..."/>
-</div>
- <hr class="grey" />
-<div class="form-group">
-<label for="location"><span class="glyphicon glyphicon-map-marker"></span>Location:</label>
-<input class="form-control more-padding" name="location" type="text" value="<?php echo (isset($_POST['location'])? $_POST['location'] : isset($request_location)? $request_location:'')
- ?>"  placeholder="around where?"/>
- </div>
- 
-<input class="btn btn-lg btn-block btn-primary site-color-background" name="<?php echo $placeOrChange ?>"  value="<?php echo $placeOrChange ?>" type="submit" />
- 
-</div>
-</fieldset>
-</form>
-</div>
-</div>
-</body>
+								 </div>
+
+								<div class="form-group">
+									 <input class="btn btn-lg btn-block site-color-background white border-radius-0" name="<?php echo ($requested == true ? "Change" : "Request")  ?>"  
+									 value="<?php echo ($requested == true ? "Change" : "Request") ?>" type="submit" />
+									 
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
 </html>

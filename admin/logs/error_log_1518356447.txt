@@ -1,0 +1,16 @@
+[2018 : 02 : 11 : 14 : 40 : 47] 
+	
+		*** error: 
+		
+SCRIPT ERROR: 
+
+Error code: [8] 
+
+Technical Message: Undefined variable: getnotifications_q 
+
+File: C:\xampp\htdocs\shelter\resources\php\api\loadNotifications.php 
+
+Line: 125 
+
+Page Accessing: /shelter/resources/php/api/loadNotifications.php 
+		Reported From: [C:\xampp\htdocs\shelter\resources\mato\lib\php\global.php >>  :: handleError >> at line 17] ***

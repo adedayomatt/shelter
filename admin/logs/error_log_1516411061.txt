@@ -1,0 +1,16 @@
+[2018 : 01 : 20 : 02 : 17 : 42] 
+	
+		*** error: 
+		
+SCRIPT ERROR: 
+
+Error code: [8] 
+
+Technical Message: Undefined variable: status 
+
+File: C:\xampp\htdocs\shelter\agents\profile.php 
+
+Line: 68 
+
+Page Accessing: /shelter/agents/owl/index.php 
+		Reported From: [C:\xampp\htdocs\shelter\resources\mato\lib\php\global.php >>  :: handleError >> at line 17] ***

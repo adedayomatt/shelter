@@ -1,0 +1,5 @@
+[2018 : 01 : 28 : 05 : 54 : 48] 
+	
+		*** error: 
+		QUERY ERROR: Unknown column 'JUQ6884' in 'where clause' 
+		Reported From: [C:\xampp\htdocs\shelter\resources\mato\lib\php\global.php >> database :: query_object >> at line 44] ***

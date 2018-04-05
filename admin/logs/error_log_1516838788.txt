@@ -1,0 +1,5 @@
+[2018 : 01 : 25 : 01 : 06 : 28] 
+	
+		*** error: 
+		QUERY ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 1 
+		Reported From: [C:\xampp\htdocs\shelter\resources\mato\lib\php\global.php >> database :: query_object >> at line 44] ***

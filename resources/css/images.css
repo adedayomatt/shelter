@@ -1,0 +1,120 @@
+
+[class ^= col]>img,.property-images{
+	width:100%;
+}
+.mini-property-image{
+    border-radius:50%;
+}
+.mini-property-image.size-50{
+    width:50px;
+    height: 50px;
+}
+.mini-property-image.size-80{
+    width:80px;
+    height: 80px;
+}
+.mini-property-image.size-100{
+    width:100px;
+    height: 100px;
+}
+.mini-property-image.size-120{
+    width:120px;
+    height: 120px;
+}
+.mini-property-image.size-150{
+    width:150px;
+    height: 150px;
+}
+
+.blog-post-image{
+    display:block;
+	width:100%;
+	border:1px solid #e3e3e3;
+		}
+
+/*Desktop size*/
+@media all and (min-width: 992px),(min-device-width: 992px){
+.recently-added-dp.property-images{
+    height:200px;
+} 
+.recently-added-other-images.property-images{
+    height:100px;
+    }
+.other-images-container{
+    height:150px;
+    }
+.blog-post-image{
+    height:400px;
+}
+}
+/*Tab size*/
+@media all and (max-width: 992px),(max-device-width: 992px){
+.recently-added-dp.property-images{
+    height:200px;
+} 
+.recently-added-other-images.property-images{
+    height:100px;
+    }
+.other-images-container{
+    height:120px;
+    }
+.blog-post-image{
+    height:300px;
+}
+}
+
+/*Desktop and Tab size*/
+@media all and (min-width: 768px),(min-device-width: 768px){
+}
+/*Smartphone size*/
+@media all and (max-width: 768px),(max-device-width: 768px){
+    .recently-added-dp.property-images{
+    height:350px;
+} 
+.recently-added-other-images.property-images{
+    height:150px;
+    }
+.other-images-container{
+    height:160px;
+    }
+.blog-post-image{
+    height:200px;
+}
+}
+
+/*different smaller screen sizes*/
+@media all and (max-width: 500px),(max-device-width: 500px){
+    .recently-added-dp.property-images{
+    height:280px;
+} 
+.recently-added-other-images.property-images{
+    height:100px;
+}
+}
+
+@media all and (max-width: 400px),(max-device-width: 400px){
+
+}
+
+@media all and (max-width: 250px),(max-device-width: 250px){
+
+}
+
+
+
+/*specifically for desktops only*/
+@media all and (min-device-width: 768px){
+	
+}
+/*specifically for tabs only*/
+@media all and (max-device-width: 992px){
+	
+}
+/*specifically for desktops and tabs only*/
+@media all and (max-device-width: 992px){
+	
+}
+/*specifically for smartphones only*/
+@media all and (max-device-width: 768px){
+	
+}

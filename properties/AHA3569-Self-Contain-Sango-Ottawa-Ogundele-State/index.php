@@ -1,7 +1,7 @@
 
 <?php 
-require('../../resources/php/master_script.php'); ?>
-		<html>
+require('../../resources/master_script.php'); ?>
+<html>
 <head>
 <?php $pagetitle="AHA3569 - Self Contain for rent"; 
 require('../../resources/global/meta-head.php') ?>
@@ -10,7 +10,7 @@ require('../../resources/global/meta-head.php') ?>
 </head>
 <body class="no-pic-background">
 <?php
-$ID = "AHA3569";
+$ID ="AHA3569";
 require('../detail.php');
 ?>
 </body>

@@ -1,0 +1,16 @@
+[2018 : 01 : 20 : 10 : 40 : 35] 
+	
+		*** error: 
+		
+SCRIPT ERROR: 
+
+Error code: [2] 
+
+Technical Message: substr() expects parameter 2 to be long, string given 
+
+File: C:\xampp\htdocs\shelter\resources\php\api\searchpropertybyid.php 
+
+Line: 23 
+
+Page Accessing: /shelter/resources/php/api/searchpropertybyid.php 
+		Reported From: [C:\xampp\htdocs\shelter\resources\mato\lib\php\global.php >>  :: handleError >> at line 17] ***

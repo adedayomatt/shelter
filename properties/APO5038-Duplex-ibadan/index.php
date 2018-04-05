@@ -1,6 +1,6 @@
 
 <?php 
-require('../../resources/php/master_script.php'); ?>
+require('../../resources/master_script.php'); ?>
 <html>
 <head>
 <?php $pagetitle="APO5038 - Duplex for rent"; 

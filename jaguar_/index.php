@@ -1,1 +1,0 @@
-<?php $BN = "Jaguar Enterprise II";$Aid ="jaguar_";$key = "1501236844";require('../profile/profile.php');?>

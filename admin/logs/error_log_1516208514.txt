@@ -1,0 +1,16 @@
+[2018 : 01 : 17 : 18 : 01 : 54] 
+	
+		*** error: 
+		
+SCRIPT ERROR: 
+
+Error code: [2] 
+
+Technical Message: Illegal string offset 'client_id' 
+
+File: C:\xampp\htdocs\shelter\agents\profile.php 
+
+Line: 201 
+
+Page Accessing: /shelter/agents/owliz/index.php 
+		Reported From: [C:\xampp\htdocs\shelter\resources\mato\lib\php\global.php >>  :: handleError >> at line 17] ***

@@ -1,81 +1,35 @@
  <?php 
-require('../resources/php/master_script.php'); 
+require('../resources/master_script.php'); 
 
-if($status==9){
-}
 //if attempt to checkin
 if(isset($_POST['checkin'])){
-//if either or both of the name and password field is empty
-if(empty($_POST['checkinName']) || empty($_POST['checkinPassword']) ){
-	$checkinReport = "<h3>Fields Missing!</h3>
-						<p>Please input your name/phone number and password</p>";
-}
-//if either or both of the name and password field is not empty
-else{
-$user = htmlentities(trim($_POST['checkinName']));
-$pass = $_POST['checkinPassword'];
+	$user = htmlentities(trim($_POST['checkinName']));
+	$pass = $_POST['checkinPassword'];
+	$remember = (isset($_POST['remember_me']) ? true : false);
 
-//if user want to checkin with number...
-if(is_numeric($user)){
-	$getCTAquery = "SELECT ctaid, phone,request,password,expiryTime,token FROM cta WHERE (phone=$user AND password='$pass')";
-}
-//...or name
-else{
-	$getCTAquery = "SELECT ctaid,name,request,password,expiryTime,token FROM cta WHERE (name='$user' AND password='$pass')";
-}
-$getCTA = $db->query_object($getCTAquery);
-//if query is correct
-if(is_object($getCTA)){
-//if a match is found
-if($getCTA->num_rows == 1){
-	$cta = $getCTA->fetch_array(MYSQLI_ASSOC);
-	$id = $cta['ctaid'];
-	$name = $cta['name'];
-	$requeststatus = $cta['request'];
-	$CTAexpires = $cta['expiryTime'];
-	$token = $cta['token'];
-//this is just to create distraction on the url
-	$dummy = uniqid(SHA1($name));
-//if cta has expired
-	if($CTAexpires <= time()){
-		header("location: $root/cta/?checkin=false&acct=xyz&exp=$CTAexpires&dMy=$dummy");
-		$general->halt_page();
-	}
-	else{
-		setcookie('user_cta',$token,time()+2592000,"/","",0);
-/*if there is request already, redirect to homepage else redirect to the request page
-		switch($requeststatus){
-			case '1':
-			header("location: $root");
-		exit();
-		break;
-		case '0':
-		header("location: $root/cta/request.php?p=$requeststatus");
-		exit();
-		}
-
-i've  used javascript to pop up prompt that the user that he hasn't made any request yet on the homepage,
-so just go straight to the home page;
-	*/
-		header("location: $root/?_rq=$requeststatus");
-		exit();
-
-	}
-		
-}
-//if no match is found for the account trying to be logged in
-	else{
-	$checkinReport = "<h3> Checkin Failed!</h3>
-						<p>Incorrect name/phone number and password, check your input or <a href=\"?a=create\">create a new CTA</a></p>";
-	}
-}
-else{
-	echo "error";
-}
-
-
+	$checkin = new checkin();
+	$checkin_response = $checkin->verify_cta($user,$pass,$remember);
 	
-		}	
+	if($checkin_response == 102){
+		$feedback = "<h2>CTA does not exist</h2><p>No CTA is found with the name <strong>\"$user\"</strong>, please check your input and try again</p>";
+	}
+	else if($checkin_response == 101){
+		$feedback = "<h2>Incorrect Password</h2><p>The password you entered is incorrect, please check your input and try again</p>";
+	}
+	else if($checkin_response == 99){
+		$feedback = "<h2>Missing Fields</h2><p>some fields are not filled properly, please enter your registered CTA name and password</p>";
+	}
+	else if ($checkin_response == 1000){
+		$feedback = "<h2>Expired CTA</h2><p>The CTA you are attempting to checkin has expired, <a href=\"\">create new CTA</a></p>";
+	}
+	else if($checkin_response == 100){
+		if(isset($_GET['return'])){
+				$tool->redirect_to($_GET['return']);
+		}
+		else{
+				$tool->redirect_to('home');
+		}
+	}
 }
 //CTA login ends here
 
@@ -95,12 +49,12 @@ $ctapass = (($_POST['newpass1']==$_POST['newpass2']) ? $_POST['newpass2'] : null
 //if verifypassword does not return null, then add info to database
 if($ctapass != null){
 //scan name for illegal character
-$scanned_ctaname = htmlentities($_POST['newname']);
+$scanned_ctaname = $db->connection->real_escape_string(htmlentities(trim($_POST['newname'])));
 //check if there is no account with this name
-if($db->query_object("SELECT * FROM cta WHERE name='$scanned_ctaname'")->num_rows==0){
-$prepared_q = "INSERT INTO cta (ctaid,name,phone,email,request,password,datecreated,timeCreated,expiryTime,token)
+if($db->query_object("SELECT ctaid FROM cta WHERE name='$scanned_ctaname'")->num_rows==0){
+$prepared_q = "INSERT INTO cta (ctaid,name,phone,email,request,password,datecreated,createdTimestamp,expiryTimestamp,token)
 				VALUES (?,?,?,?,?,?,?,?,?,?)";
-$create_cta = $connection->prepare($prepared_q);
+$create_cta = $db->prepare_statement($prepared_q);
 $create_cta->bind_param('isisissiis',$_ctaid,$_ctaname,$_ctaphone,$_ctamail,$_ctarequest,$_ctapassword,$_ctadatecreated,$_ctatimecreated,$_ctaexpirytime,$_ctatoken);
 
 $_ctaid = time() - rand(1000,9999);
@@ -109,8 +63,8 @@ $_ctaphone = $_POST['newphone'];
 $_ctamail = $_POST['newmail'];
 $_ctarequest = 0;
 $_ctapassword = $ctapass;
-$_ctadatecreated = date('Y-m-l',time());
-$_ctatimecreated = time($_POST['newname']);
+$_ctadatecreated = "NOW()";
+$_ctatimecreated = time();
 $_ctaexpirytime = time() + 2592000;
 $_ctatoken = SHA1($scanned_ctaname);
 
@@ -122,16 +76,6 @@ if($create_cta->affected_rows == 1){
 		$success = 1;
 }
 
-
-/*
-//if query is correct
-if($createnewCTA){
-	@mysql_query("INSERT INTO notifications (notificationid,subject,subjecttrace,receiver,action,status,time) VALUE ('".uniqid('CTAcreate')."','$ctaname','$ctaid','$ctaname','CTA created','unseen',".time().")");
-	$activityID = uniqid(time());
-	@mysql_query("INSERT INTO activities (activityID, action, subject, subject_ID, subject_Username, status, timestamp) VALUES('$activityID','CAO','$ctaname','$ctaid','$ctaname','unseen',$timeCreated)");
-			}
-			*/
-			
 else{
 	$createCTAReport = "<h3> Failed!</h3>
 							<p>CTA could not be created, please try again later</p>";
@@ -165,8 +109,13 @@ else{
 $pagetitle = "CTA";
 $ref = "ctaPage";
  require('../resources/global/meta-head.php'); ?>
-<link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
-<link href="../css/ctastyles.css" type="text/css" rel="stylesheet" />
+ <style>
+@media all and (min-width:768px){
+	.center-content{
+		width:80% !important;
+	}
+}
+</style>
 <script>
 function toggle_cta(from,to){
 	event.preventDefault();
@@ -183,23 +132,23 @@ $checkinreminder =((isset($_GET['_rdr'])&&$_GET['_rdr']==1 && !isset($_POST['che
 
 if($status==1){
 	$denialMessage = "<h3> Access Denied!</h3>
-						<p>You cannot use Client Temporary Account because you are currently logged in as an agent [$Business_Name] logout first
+						<p>You cannot use Client Temporary Account because you are currently logged in as an agent [".$loggedIn_agent->business_name."] logout first
 						<a  href=\"../logout\">Logout</a> </p>";
 }
 else if($status==9){
 $denialMessage = "<h3> Already checked in!</h3>
-				<p>A CTA is already checked in as <strong>".$cta_name."</strong> <a href=\"../logout\">checkout</a></p>";
+				<p>A CTA is already checked in as <strong>".$loggedIn_client->name."</strong> <a href=\"../logout\">checkout</a></p>";
 }
 ?>
 </head>
-<body class="plain-colored-background">
+<body>
 <?php
 $altHeaderContent ="
 <div class=\"row\">
 <div class=\"col-lg-4 col-md-4 col-sm-4 col-xs-12\">
-Checkin
+Client Temporary Account
 </div>
-<div class=\"col-lg-8 col-md-8 col-sm-8 col-xs-12\">
+<div class=\"col-lg-8 col-md-8 col-sm-8 col-xs-12 hidden-xs\">
 <p class=\"font-16\">Don't have a CTA yet?  <a  href=\"?a=create\"><button class=\"btn btn-primary\">create CTA</button></a></p>
 </div>
 </div>";
@@ -208,9 +157,9 @@ if(isset($_GET['a']) && $_GET['a']=='create'){
 $altHeaderContent ="
 <div class=\"row\">
 <div class=\"col-lg-4 col-md-4 col-sm-4 col-xs-12\">
-Create CTA
+Client Temporary Account
 </div>
-<div class=\"col-lg-8 col-md-8 col-sm-8 col-xs-12\">
+<div class=\"col-lg-8 col-md-8 col-sm-8 col-xs-12 hidden-xs\">
 <p class=\"font-16\">Already have a CTA?  <a  href=\"?a=checkin\"><button class=\"btn btn-primary\">checkin</button></a></p>
 </div>
 </div>";
@@ -218,16 +167,11 @@ Create CTA
 require('../resources/global/alt_static_header.php');
 ?>
 
-<div class="container-fluid body-content">
+<div class="container-fluid">
 
-<?php 
-if(isset($denialMessage)){
-	echo "<div class=\"operation-report-container success\" id=\"checkin-denial\">$denialMessage</div></body></html>";
-	exit();
-}?>
-
-<div class="center-content white-background padding-10 border-radius-5">
-
+<div class="center-content">
+<div class="row">
+<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 <style>
 <?php 
 if(isset($_GET['a']) && $_GET['a']=='checkin'){
@@ -265,33 +209,41 @@ else if(isset($_GET['a']) && $_GET['a']=='create'){
 </style>
 
 <div id="checkin">
+<div class="contain remove-side-margin-xs">
+<div class="head f7-background">
+<h2 class="site-color"><span class="glyphicon glyphicon-log-in"></span>  Checkin CTA</h2>
+</div>
+<div class="body white-background text-center">
+<?php 
+if(isset($denialMessage)){
+	echo "<div class=\"operation-report-container fail\" id=\"checkin-denial\">$denialMessage</div>";
+	$tool->halt_page();
+}?>
 
-<fieldset class="width-90p margin-auto">
 
+<form action="<?php $_PHP_SELF ?>" method="POST" style="padding:0px 20px">
+<span class="glyphicon glyphicon-user icon-size-40 site-color client-avatar"></span>
 <?php
-
 echo ((!isset($_GET['_rdr']) && !isset($_POST['checkin'])) ? "<div class=\"short-about\"> <p style=\"line-height:150%\" >Client Temporary Account, CTA allows client in need of property to request for their need and get update on availability...<a href=\"#\">learn more about CTA</a></div>": "");
 ?>
 <?php
 //if there is error while trying to checkin
-if(isset($checkinReport)){
-	echo "<div class=\"operation-report-container fail\"  >$checkinReport</div>";
+if(isset($feedback)){
+	echo "<div class=\"operation-report-container fail\">$feedback</div>";
 }
 
 ?>
 
-<div class="text-center">
+<div>
 	<?php
 if(!empty($checkinreminder) || $checkinreminder != ""){
 	echo "<div class=\"operation-report-container success\" ><p><span class=\"glyphicon glyphicon-info-sign red icon-size-25\"></span><br/> $checkinreminder</p></div>";
 }
 ?>
-<span class="glyphicon glyphicon-user icon-size-40 site-color client-avatar"></span>
 </div>
 
 
 <p style="color:grey">Provide your registered name or phone number and password</p>
-<form action="<?php $_PHP_SELF ?>" method="POST">
 <div class="form-group">
 <input class="form-control more-padding" name="checkinName" type="text" value="<?php if(isset($_POST['checkinName'])){ echo $_POST['checkinName'];}?>" size="30" placeholder="Name or Phone number"/>
 </div>
@@ -300,21 +252,36 @@ if(!empty($checkinreminder) || $checkinreminder != ""){
 <input class="form-control more-padding"  name="checkinPassword" type="password" size="20" maxlength="11" placeholder="Password"/>
 </div>
 
-<input class="btn btn-block btn-lg site-color-background white" name="checkin" type="submit" value="checkin"/>
+			<div class="checkbox">
+			<label>
+			<input name="remember_me" type="checkbox" checked="true" value="keepme"> keep me checked in
+			</label>
+			</div>
+<div class="form-group width-70p margin-auto">
+<input class="btn btn-block btn-lg site-color-background white" style="border-radius:0px" name="checkin" type="submit" value="checkin"/>
+</div>
+
+<p class="font-16 text-right margin-10">Don't have a CTA yet?  <a  href="?a=create" class="site-color">create CTA</a></p>
+
 </form>
-</fieldset>
+</div>
+</div>
 </div>
 
 <div id="createnew">
 
-<fieldset class="width-90p margin-auto">
+<div class="contain remove-margin-xs">
+<div class="head f7-background">
+<h2 class="site-color"><span class="glyphicon glyphicon-folder-open  client-avatar "></span>  New CTA</h2>
+</div>
+<div class="body white-background">
 	<?php
 //if cta creating is successful
  if(isset($createCTAReport) && $success == 1){
 	echo "<div class=\"operation-report-container success\"  >$createCTAReport</div>";
+	$tool->halt_page();
 }?>
 <div class="text-center">
-<span class="glyphicon glyphicon-folder-open icon-size-40 site-color client-avatar "></span>
 <?php
 //if there is error while trying to create new CTA
 if(isset($createCTAReport) && $success == 0){
@@ -360,17 +327,32 @@ if(isset($createCTAReport) && $success == 0){
 <input  name="mail" type="checkbox"/>Email</label>
 </div>
 
-<input class="btn btn-block btn-lg site-color-background white" name="create"  type="submit"  value="create"/>
+<div class="form-group width-70p margin-auto">
+<input class="btn btn-block btn-lg site-color-background white" style="border-radius:0px" name="create"  type="submit"  value="create"/>
+</div>
+
+<p class="font-16 text-right margin-10">Already have a CTA?  <a  href="?a=checkin" class="site-color">checkin</a></p>
+
 </form>
-</fieldset>
+</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+<div class="site-color-background padding-5 white border-radius-5">
+<h2 class="text-center">Why Client Temporary Account?</h2>
+</div>
+</div>
+</div>
 
 </div>
 <?php 
 require('../resources/global/footer.php');
 ?>
-</div>
 
-</div>
 </body>
 
 </html>

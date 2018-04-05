@@ -1,5 +1,5 @@
  <?php 
-require('../resources/php/master_script.php'); 
+require('../resources/master_script.php'); 
 
 function ifset($variable){
 	$final = (isset($variable)? $variable : null);
@@ -12,197 +12,279 @@ function ifset($variable){
 $pagetitle = 'Search';
 $ref='searchpage';
  require('../resources/global/meta-head.php'); ?>
-<link href="../css/header_styles.css" type="text/css" rel="stylesheet" />
-<link href="../css/searchresult_styles.css" type="text/css" rel="stylesheet" />
-<link href="../css/propertybox_styles.css" type="text/css" rel="stylesheet" />
+ <style>
+/******************This is for the fixing of the RHS, the JavaSceipt that controls it is in the header*******************************/						
+		
+ 
+ @media all and (min-width:768px){
+ [data-fix-rhs='true']{
+	top:130px;
+	left:58.33333333%;
+	}
+[data-fix-rhs='true']:hover{
+	overflow:auto;
+		}
+	}
+	
+/*********************************************/
+ 
+ 
+
+ 
+ </style>
 </head>
-<body class="no-pic-background">
+<body>
 
 <?php
 if(isset($_GET['type']) || isset($_GET['max']) || isset($_GET['location'])){
 ?>
-<div id="hidden-search-form" style="display:none">	
+<div id="temp-search">
+<div data-action="toggle" class="text-right">
+<button data-toggle-role="toggle-trigger" data-toggle-on="&times  Hide new search" data-toggle-off="<span class='glyphicon glyphicon-search'></span>Try new search" class="btn btn-primary"></button>
+<br/><div data-toggle-role="main-toggle">	
 <?php
 	require("searchform.php");
 	?>
 </div>
+</div>
+</div>
 <?php
 
 $showStaticHeader = true;
-$staticHead ="<div class=\"col-sm-offset-3\">
+$staticHead ="
 <div class=\"row hidden-lg hidden-md hidden-sm static-head-primary\">
-
-<span class=\"col-xs-7\">
-<h3 class=\"font-80 site-color\">Search Result</h3>
-</span>
-
-<span class=\"col-xs-5\">
-<button class=\"btn btn-primary new-search\"><span class=\"glyphicon glyphicon-search\"></span>Try new search</button>
-</span>
-
-<div class=\"f7-background padding-5 e3-border col-xs-12\" id=\"static-search-form\" style=\"display:none\"></div>
-
-</div>
+<div class=\"padding-5 col-xs-12\" id=\"static-search-form\"></div>
 </div>";
 }
 require("../resources/global/header.php");
 ?>
 <script>
-document.querySelector('.btn.btn-primary.new-search').onclick = function(event){
-	document.querySelector('#static-search-form').style.display = 'block';
-document.querySelector('#static-search-form').innerHTML = "<div style=\"height:20px\"><span class=\"close\">&times</span></div>"+document.querySelector('#hidden-search-form').innerHTML;
-document.querySelector('#static-search-form>div>.close').onclick = function(event){
-	document.querySelector('#static-search-form').innerHTML = "";
-		document.querySelector('#static-search-form').style.display = 'none';
-
-}
-//showPopup();
-//popUpContent().innerHTML = document.querySelector('#hidden-search-form').innerHTML;
-};
+document.getElementById('static-search-form').innerHTML = document.getElementById('temp-search').innerHTML;
+document.getElementById('temp-search').innerHTML = "";
 </script>
-<div class="container-fluid body-content">
+<div class="container-fluid">
 
 <div class="row">
-<?php require('../resources/global/sidebar.php') ?>
-
-<div class=" col-lg-10 col-md-10 col-sm-9 col-xs-12 main-content" >
-<div class="padded-main-content">
-<h3 class="major-headings"><?php echo ((isset($_GET['type']) || isset($_GET['max']) || isset($_GET['location'])) ? "Search Results":"Search")?></h3>
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+<div class="row">
 <?php
 //If nothing has been searched for , display the search form
 if(!isset($_GET['type']) || !isset($_GET['max']) || !isset($_GET['location'])){
 	?>
-<div class="row" >
-<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12" style="background-color:white; border:1px solid #e3e3e3">
-<p align="center" class="container-headers" >select your preference</p>
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+<div class="contain" >
+<div class="head f7-background">
+<h3 class="text-center">select your preference</h3>
+</div>
+<div class="body white-background">
 <?php require("searchform.php"); ?>
+</div>
 </div>
 </div>
 <?php
 	}
+//If nothing has been searched for , display the search form
+
 //...else use the information in the search field to filter results
 else{
+	?>
+<div class="col-lg-7 col-md-7 col-sm-7 col-xs-12" data-relative-lhs >
+
+<h4><?php echo ((isset($_GET['type']) || isset($_GET['max']) || isset($_GET['location'])) ? "Search Results":"Search")?></h4>
+	<?php
 	//if all the three param are set
 $propertytype = ($_GET['type']);
 $maxprice = ($_GET['max']);
 $loc = ($_GET['location']);
-require("../resources/php/get_search_results.php");
+$bath = (isset($_GET['bath']) ? $_GET['bath'] : '');
+$loo = (isset($_GET['loo']) ? $_GET['loo'] : '');
+$tiles = (isset($_GET['tiles']) ? $_GET['tiles'] : '');
+$pm = (isset($_GET['pm']) ? $_GET['pm'] : '');
+$bh = (isset($_GET['bh']) ? $_GET['bh'] : '');
 
+$search = new search($propertytype,$maxprice,$loc,$bath,$loo,$tiles,$pm,$bh);
+?>
 
-//if no match is found for the search, get related resultss
-if($totalFound==0){
+<div class="white-background padding-10 margin-5 e3-border text-center">
+		<p><?php echo $search->result_showing ?></p>
+<?php  
+		if(!empty($search->facilities)){
+			?>
+			<div style="line-height:40px">
+			<span>Facilities searched for: </span>
+			<?php
+			for($ff = 0;$ff< count($search->facilities); $ff++){
+			?>
+			<span class="e3-border f7-background border-radius-5 padding-5-10 margin-5"><?php echo $search->facilities[$ff] ?></span>
+			<?php
+			}
+			?>
+			</div>
+		<?php
+		}
 	?>
-<div class="row">
-<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-	<div align="center" style="padding:5px">There is no result for your search</div>
-	</div>
-	</div>
-	
-<div class="row">
-<h3 class="container-headers">Show other results on</h3> 
-<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
-<div>
-<ul class="no-padding">
+		<p>Total Results Found: <?php echo $search->total_result ?></p>
+
+</div>
+	<?php
+//if no match is found for the search, get related resultss
+if($search->total_result == 0){
+	?>
+<div class="white-background padding-10 margin-5 text-center">There is no result for your search</div>
+<div class="body white-background margin-5 padding-10">
+<h4 class="text-left">Show other results on</h4> 
+<ul>
 <?php
-if(isset($_GET['type']) && !empty($_GET['type']) && $_GET['type'] != "All types" && $_GET['type'] != 'all')
+if(isset($_GET['type']) && !empty($_GET['type']) && $_GET['type'] != "ns")
 	{
-echo "<li><a href=\"?type=".$_GET['type']."&max=0&location=everywhere\">".$_GET['type']."</a></li>";
+echo "<a href=\"?type=".$_GET['type']."&max=0&location=ns\"><li>".$_GET['type']."</li></a>";
 	}
 if(isset($_GET['max'])&& !empty($_GET['max']) && $_GET['max'] != 0)
-	{echo "<li><a href=\"?type=all&max=".$_GET['max']."&location=everywhere\">Properties less than ".$_GET['max']."</a></li>";}
-
-if(isset($_GET['location'])&& !empty($_GET['location']) && $_GET['location'] != "everywhere")
-	{echo "<li ><a href=\"?type=all&max=0&location=".$_GET['location']."\">Properties around ".$_GET['location']."</a></li>";}
-
-?>
-</ul>
-</div>
-</div>
-</div>
-<?php
-}
-?>
-
-<div class="row">
-<?php
-if(isset($_GET['type']) || isset($_GET['max']) || isset($_GET['location'])){
-?>	
-<h3 class="container-headers" align="left">Related Results</h3>
-<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 related-results-wrapper">
-<div id="related-results">
-<?php
-
-	if($propertytype != "All types"){
-	$getsuggestions = "SELECT property_ID,directory,type,location,rent,display_photo FROM properties WHERE (type = '$propertytype') AND ((location LIKE '%$loc%') OR (rent <= $maxprice)) ORDER BY date_uploaded DESC LIMIT 12";	
-	}
-	else{
-	$getsuggestions = "SELECT property_ID,directory,type,location,rent,display_photo FROM properties WHERE (location LIKE '%$loc%') OR (rent <= $maxprice) ORDER BY date_uploaded DESC LIMIT 12";		
-	}
-	$getsuggestions_query = $db->query_object($getsuggestions);
-	if(!$connection->error){
-//if number of fetch is one or more
-		if($getsuggestions_query->num_rows >= 1){
-			?>
-		<ul class="no-padding">
-	<?php		
-		while($suggest = $getsuggestions_query->fetch_array(MYSQLI_ASSOC)){
-		//regulate suggestions so it won't repeat original result as suggestion again
-		if(!in_array($suggest['property_ID'],$all_search_result_IDs)){
-?>
-<li>
-<a  href="<?php echo "$root/properties/".$suggest['directory'] ?>" >
-<img src="<?php echo $property_obj->get_property_dp('../properties/'.$suggest['directory'], $suggest['display_photo'])?>" width="100px" height="90px" style="vertical-align:baseline"/>
-<?php echo $suggest['type'].' at '. $suggest['location'].' for N '.number_format($suggest['rent']) ?></a>
-</li>
-<?php	
-	}
-}		
-?>
-</ul>
-<?php
-	}
-//if no related result is selected from db = 0
-	else
 	{
+	echo "<a href=\"?type=ns&max=".$_GET['max']."&location=ns\"><li>Properties less than ".number_format($_GET['max'])."</li></a>";
+	}
+
+if(isset($_GET['location'])&& !empty($_GET['location']) && $_GET['location'] != "ns")
+	{
+	echo "<a href=\"?type=ns&max=0&location=".$_GET['location']."\"><li>Properties around ".$_GET['location']."</li></a>";
+	}
+
 ?>
-<div class="text-center red padding-10">No related result</div>
+</ul>
+</div>
 <?php
- }
 }
-//if getsuggestions query return false
-	else { 
+else{
 	?>
-	<div style="padding:5px;text-align:center; color:red"><span class="black-icon void-icon"></span>could not get related results</div>
+	<div class="row">
+	<?php
+	$from = (isset($_GET['next']) ? ($_GET['next'] < 0 ? 0 : $_GET['next']): 0 );
+	$to = $from + 6;
+	$limited_result = $search->limited_result($from,$to);
+	$search_result_counter = 0;
+	$property_display_blocking = "col-lg-12 col-md-12 col-sm-12 col-xs-12";
+	while($search_result_counter < count($limited_result)){
+		$property = new property($limited_result[$search_result_counter]);
+		require('../resources/global/property_display.php');
+		unset($property);
+		$search_result_counter++;
+	}
+	?>
+	</div>
+<?php
+}
+?>
+				<div class="padding-5 margin-5 white-background e3-border hidden-xs" >
+					<h4>Try another search</h4>
+					<?php require("searchform.php"); ?>
+				</div>
+</div>
+
+<div class="col-lg-5 col-md-5 col-sm-5 col-xs-12" id="related-results" data-fix-rhs >
+<div class="row">
+	<?php
+	if(isset($_GET['type']) || isset($_GET['max']) || isset($_GET['location'])){
+		$related_results = $search->related_results(6);
+	?>	
+	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+		<div class="contain remove-side-margin-xs">
+			<div class="head f7-background">
+				<h4 class="text-left">Related Results</h4>
+			</div>
+			<div class="body white-background remove-side-padding-xs">
+				<?php
+				if(count($related_results) == 0){
+					?>
+				<div class="padding-10 white-background text-center"> No related result </div>	
+					<?php
+				}
+				else{
+					$related_results_counter = 0;
+					while($related_results_counter < count($related_results)){
+						$related_property = new property($related_results[$related_results_counter]);
+						$relation = "";
+						if($related_property->type == $propertytype){
+							$relation .= "<span class=\"f7-background e3-border padding-5-10 margin-5 border-radius-5\">Same type as your search</span>";
+						}
+						if($related_property->rent < $maxprice){
+							$relation .= "<span class=\"f7-background e3-border padding-5-10 margin-5 border-radius-5\">Rent less than your search</span>";
+						}
+						else if($related_property->rent == $maxprice){
+							$relation .= " Rent exactly what you searched for. ";
+						}
+						if($related_property->bath == $bath){
+							$relation .= "<span class=\"f7-background e3-border padding-5-10 margin-5 border-radius-5\">$bath baths</span>";
+						}				
+						if($related_property->loo == $loo){
+							$relation .= "<span class=\"f7-background e3-border padding-5-10 margin-5 border-radius-5\">$loo Toilets</span>";
+						}
+						if($related_property->tiles == 'Yes'){
+							$relation .= "<span class=\"f7-background e3-border padding-5-10 margin-5 border-radius-5\"><span class=\"glyphicon glyphicon-ok\"></span>  Tiles</span>";
+						}
+						if($related_property->pmachine == 'Yes'){
+							$relation .= "<span class=\"f7-background e3-border padding-5-10 margin-5 border-radius-5\"><span class=\"glyphicon glyphicon-ok\"></span>  Pumping Machine</span>";
+						}
+						if($related_property->borehole == 'Yes'){
+							$relation .= "<span class=\"f7-background e3-border padding-5-10 margin-5 border-radius-5\"><span class=\"glyphicon glyphicon-ok\"></span>  Borehole</span>";
+						}
+							$relation .= "<span class=\"f7-background e3-border padding-5-10 margin-5 border-radius-5\">$related_property->city</span>";
+						?>
+				<div class="row e3-border-bottom margin-5-0">
+					<div class="col-lg-5 col-md-5 col-sm-5 col-xs-4">
+						<img src="<?php echo $related_property->display_photo_url() ?>" class="mini-property-image property-images size-100" <?php echo $related_property->image_attributes($popup = true) ?>/>
+					</div>
+					<div class="col-lg-7 col-md-7 col-sm-7 col-xs-8">
+						<a  href="<?php echo "$root/properties/".$related_property->p_directory ?>" >
+							<?php echo $related_property->type ?>
+						</a>
+						<p><span class="glyphicon glyphicon-map-marker"></span><?php echo $related_property->location ?> </p>
+						 <p class="text-right">
+							<span class=" opac-3-site-color-background site-colr padding-5-10 border-radius-5 bold" >N <?php echo number_format($related_property->rent) ?>/year</span>
+						</p>
+					</div>
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<p style="line-height:40px" class="grey font-12">  <?php echo $relation ?></p>
+					</div>
+				</div>	<?php
+						unset($related_property);
+						$related_results_counter++;
+					}
+				}
+				?>
+			</div>
+		</div>
+	</div>
+</div>
+
 <?php
 	}
 }
+?>
+<div class="row">
+	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 contact-search-help-container">
+		<div class="text-center padding-10">
+	<?php
+	if($status == 0)	{
+		?>
+		 <a class="btn btn-primary btn-lg " href="../cta/request.php?p=1">Make a Request</a>
+		 <?php
+	}
+	else if($status==9){
+		?>
+		 <a class="btn btn-primary btn-lg " href="../cta/request.php?p=1">Adjust Your Request</a>
+		 <?php
+	}
 	?>
-</div>
+		 <p><b>Have any problem searching?</b> <a class="btn btn-primary site-color-background" href="">contact our help center</a></p>
+	</div>
+	</div>
 </div>
 
-<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 contact-search-help-container">
-	<div class="text-center padding-10">
-<?php
-if($status == 0)	{
-	?>
-	 <a class="btn btn-primary btn-lg btn-block" href="../cta/request.php?p=1">Make a Special Request</a>
-	 <?php
-}
-else if($status==9){
-	?>
-	 <a class="btn btn-primary btn-lg btn-block" href="../cta/request.php?p=1">Adjust Your Request</a>
-	 <?php
-}
-?>
-     <p><b>Have any problem searching?</b> <a class="btn btn-primary site-color-background" href="">contact our help center</a></p>
-</div>
-</div>
-</div>
-<?php
-}
- require('../resources/global/footer.php');?>
- </div><!--padded-main-content-->
-</div><!--main-content-->
+ </div>
+ 
+ </div>
+ <?php   require('../resources/global/footer.php');?>
+</div><!--body-content-->
 </div><!--parent row-->
 </div><!--container-fluid-->
 </body>

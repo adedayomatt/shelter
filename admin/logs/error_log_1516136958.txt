@@ -1,0 +1,16 @@
+[2018 : 01 : 16 : 22 : 09 : 19] 
+	
+		*** error: 
+		
+SCRIPT ERROR: 
+
+Error code: [8] 
+
+Technical Message: Undefined variable: loggedIn_agent 
+
+File: C:\xampp\htdocs\shelter\clients\index.php 
+
+Line: 155 
+
+Page Accessing: /shelter/clients/index.php 
+		Reported From: [C:\xampp\htdocs\shelter\resources\mato\lib\php\global.php >>  :: handleError >> at line 17] ***

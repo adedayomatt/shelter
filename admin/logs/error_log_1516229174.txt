@@ -1,0 +1,16 @@
+[2018 : 01 : 17 : 23 : 46 : 14] 
+	
+		*** error: 
+		
+SCRIPT ERROR: 
+
+Error code: [8] 
+
+Technical Message: Undefined variable: root 
+
+File: C:\xampp\htdocs\shelter\resources\master_script.php 
+
+Line: 717 
+
+Page Accessing: /shelter/index.php 
+		Reported From: [C:\xampp\htdocs\shelter\resources\mato\lib\php\global.php >>  :: handleError >> at line 17] ***

@@ -23,12 +23,14 @@ background-color:white;
 width:100%;
 z-index:98; 
 position:fixed; 
-border-bottom:2px solid #b2dfdb;
+box-shadow:0px 5px 5px #555;
 min-height:50px;
+line-height:25px;
 }
-.body-content{
-	padding-top:120px;
+.container-fluid{
+	padding-top:100px;
 }
+
 </style>
 <?php
 }

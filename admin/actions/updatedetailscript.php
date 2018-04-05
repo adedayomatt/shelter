@@ -1,5 +1,5 @@
 <?php
-require('../../resources/php/master_script.php');
+require('../../resources/master_script.php');
 $exist = 0;
 $lost = 0;
 //get all the ones in the database
@@ -12,7 +12,7 @@ $index = "../../properties/".$p['directory']."/index.php";
 if(file_exists($index)){
 $newscript ="
 <?php 
-require('../../resources/php/master_script.php'); ?>
+require('../../resources/master_script.php'); ?>
 <html>
 <head>
 <?php \$pagetitle=\"".$p['property_ID']." - ".$p['type']." for rent\"; 

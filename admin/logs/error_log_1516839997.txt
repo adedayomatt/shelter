@@ -1,0 +1,16 @@
+[2018 : 01 : 25 : 01 : 26 : 37] 
+	
+		*** error: 
+		
+SCRIPT ERROR: 
+
+Error code: [8] 
+
+Technical Message: Undefined index: location 
+
+File: C:\xampp\htdocs\shelter\upload\index.php 
+
+Line: 39 
+
+Page Accessing: /shelter/upload/index.php 
+		Reported From: [C:\xampp\htdocs\shelter\resources\mato\lib\php\global.php >>  :: handleError >> at line 17] ***

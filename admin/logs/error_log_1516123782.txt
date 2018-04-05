@@ -1,0 +1,16 @@
+[2018 : 01 : 16 : 18 : 29 : 42] 
+	
+		*** error: 
+		
+SCRIPT ERROR: 
+
+Error code: [8] 
+
+Technical Message: Undefined variable: thisPage 
+
+File: C:\xampp\htdocs\shelter\manage\index.php 
+
+Line: 4 
+
+Page Accessing: /shelter/manage/index.php 
+		Reported From: [C:\xampp\htdocs\shelter\resources\mato\lib\php\global.php >>  :: handleError >> at line 17] ***
